@@ -1,4 +1,4 @@
-// components/SpinWheel/FormStepMobile.jsx
+
 import React, { useState, useEffect } from "react"; // 💡 FIX 1: Import useState and useEffect
 
 const FormStepMobile = ({ formData, onChange, forceValidation }) => {
