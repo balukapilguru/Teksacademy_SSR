@@ -3,7 +3,7 @@ import heroImg from "../../../app/assets/hero-students.jpg";
 
 const HomepageBanner = () => {
   return (
-    <section id="home" className="relative min-h-[100svh] flex items-center pb-8 overflow-hidden bg-blue-600 text-white">
+    <section id="home" className="relative min-h-[100svh] flex items-center pb-8 pt-32 overflow-hidden bg-blue-600 text-white">
       {/* Background image */}
       <div className="absolute inset-0">
         <Image

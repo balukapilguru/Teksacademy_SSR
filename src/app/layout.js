@@ -9,6 +9,7 @@ import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
 
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
