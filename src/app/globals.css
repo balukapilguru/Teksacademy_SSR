@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+input,
+select,
+textarea {
+  color: #111827; /* gray-900 */
+}
+
+/* Fix Chrome autofill text color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.toast,
+.popup {
+  position: fixed;
+  inset: auto;
+}
+.hero {
+  min-height: 85vh;
+}
+
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@media (min-width: 1920px) {
+  .container {
+    max-width: 2000px !important;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1919px) and (min-width: 1440px) {
+  .container {
+    max-width: 1440px !important;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1440px) and (min-width: 768px) {
+  .container {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1920px) {
+  .main_container {
+    max-width: 2000px !important;
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+/* 1440px - 1919px - Standard Desktop */
+@media (max-width: 1919px) and (min-width: 1440px) {
+  .main_container {
+    max-width: 1440px !important;
+    width: 94%;
+    margin: 0 auto;
+  }
+}
+
+/* 768px - 1439px - Small Desktop/Tablet Landscape */
+@media (max-width: 1440px) and (min-width: 768px) {
+  .main_container {
+    width: 94%;
+    margin: 0 auto;
+  }
+}
+
+/* 481px - 767px - Tablet Portrait */
+@media (max-width: 767px) and (min-width: 481px) {
+  .main_container {
+    width: 96%;
+    margin: 0 auto;
+    padding: 0 2%;
+  }
+}
+
+/* 321px - 480px - Mobile Landscape */
+@media (max-width: 480px) and (min-width: 321px) {
+  .main_container {
+    width: 98%;
+    margin: 0 auto;
+    padding: 0 1%;
+  }
+}
+
+/* 320px and below - Mobile Portrait */
+@media (max-width: 320px) {
+  .main_container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 20s linear infinite;
+}
+
+.pause-on-hover:hover .animate-scroll-left {
+  animation-play-state: paused;
+}
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+  display: flex;
+  gap: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.pause-on-hover:hover .animate-scroll-left {
+  animation-play-state: paused;
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}
+
+.pause-on-hover:hover .animate-scroll-left {
+  animation-play-state: paused;
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slideInRight {
+  animation: slideInRight 0.5s ease-out;
+}
+.animate-slideInLeft {
+  animation: slideInLeft 0.5s ease-out;
+}
+.hide-main-navbar header {
+  display: none !important;
+}
+
+body.hide-main-navbar .top-navbar {
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.25s ease-out;
+}
+
+
+/* dropdown border */
+/* Dropdown Left Border Animation */
+.dropdown-border {
+  position: relative;
+}
+
+.dropdown-border::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;          /* Border width */
+  height: 0;           /* Start height 0 */
+  background-color: #c41e3a;
+  transition: height 0.3s ease;
+}
+
+.dropdown-border.open::before {
+  height: 100%;        /* Full height when open */
+}
