@@ -21,6 +21,7 @@ const INITIAL_FORM_DATA = {
   ProductId: "",
   productId: "", // Add this line
   sourceId: "",
+  source: "SpinWheel",
 };
 
 const MultiStepForm = ({ onSuccess, onClose }) => {
