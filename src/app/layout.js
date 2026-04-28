@@ -17,7 +17,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Teksversity | Empowering Students with Academic",
+  title: "Teksacademy",
   description: "Teksversity offers AI-powered IT courses and online UG & PG programs with expert mentors, certifications, real-time projects & career support.",
 
   verification: {
