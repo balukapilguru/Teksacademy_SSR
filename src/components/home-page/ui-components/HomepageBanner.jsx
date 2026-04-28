@@ -8,7 +8,7 @@ export default function HomepageBanner({ bannerData }) {
   return (
     <div className="pb-4 mt-4">
       <div className="container mx-auto bg-[#e1e7ec] rounded-lg overflow-hidden p-4 sm:p-6 md:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-center">
           {/* Left Section */}
           <div className="w-full">
             <BannerVideo
@@ -18,7 +18,7 @@ export default function HomepageBanner({ bannerData }) {
 
 
             {/* Logos */}
-            <div className="mt-5">
+            {/* <div className="mt-5">
               <div
                className="text-[#c41e3a] text-sm mb-3 font-medium">
                 {bannerData?.subHeading}
@@ -38,7 +38,7 @@ export default function HomepageBanner({ bannerData }) {
                 ))}
 
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Section: Form */}
