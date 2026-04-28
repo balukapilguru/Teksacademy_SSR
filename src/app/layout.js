@@ -5,10 +5,10 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
+import SpinWheel from "@/components/SpinWheel/SpinWheel";
 import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
-
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -90,7 +90,10 @@ export default async function RootLayout({ children }) {
             <Navbar />
             <main>{children}</main>
 
-        
+            <Suspense fallback={null}>
+              <SpinWheel />
+            </Suspense>
+
             <Footer />
           </NavbarProvider>
         </SelectedCourseProvider>

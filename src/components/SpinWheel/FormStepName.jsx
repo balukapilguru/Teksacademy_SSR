@@ -1,4 +1,4 @@
-
+// components/SpinWheel/FormStepName.jsx
 import React, { useState, useEffect } from "react";
 
 const FormStepName = ({ formData, onChange, forceValidation, error }) => {

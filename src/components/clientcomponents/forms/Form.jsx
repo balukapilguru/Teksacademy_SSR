@@ -81,6 +81,73 @@ export default function Form({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const spinWheel = async () => {
+    if (spinning || hasSpun) return;
+
+    setSpinning(true);
+    setHasSpun(true);
+
+    // ✅ Only allowed winning discounts
+    const allowedDiscounts = ["1000", "2000", "3000"];
+
+    // Find their indices on the wheel
+    const allowedIndices = values
+      .map((val, index) => (allowedDiscounts.includes(val) ? index : null))
+      .filter((v) => v !== null);
+
+    // Pick one index randomly
+    const randomIndex =
+      allowedIndices[Math.floor(Math.random() * allowedIndices.length)];
+
+    const selectedValue = values[randomIndex];
+    setRandomValue(selectedValue);
+
+    const slice = 360 / values.length;
+    const extraSpins = 8;
+
+    const newRotation =
+      extraSpins * 360 + (360 - (randomIndex * slice + slice / 2)) - 90;
+
+    setRotation(newRotation);
+
+    setTimeout(async () => {
+      const discountValue = Number(selectedValue);
+      const final = price - discountValue;
+
+      setDiscount(discountValue);
+      setFinalAmount(final);
+      setSpinning(false);
+
+      try {
+        const payload = {
+          discount: discountValue.toString(),
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          course: formData.ProductId,
+          university: formData.sourceId,
+          sourceType: 34,
+        };
+
+        const response = await fetch(`${baseUrl}/lead/spinwheel`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          setShowCongrats(true);
+          onDiscount?.({ discount: discountValue, finalAmount: final });
+        } else {
+          toast.error("Something went wrong.");
+          onClose();
+        }
+      } catch {
+        toast.error("Server error occurred.");
+        onClose();
+      }
+    }, 5000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -275,7 +342,21 @@ export default function Form({
                 ))}
               </div>
 
-              
+              <div
+                onClick={spinWheel}
+                className={`absolute inset-0 flex items-center justify-center cursor-pointer`}
+              >
+                <div
+                  className={`cursor-pointer w-20 h-20 bg-[#c41e3a] border-[4px] border-white text-white font-extrabold flex items-center justify-center rounded-full shadow-xl transition-all duration-300
+                  ${
+                    spinning || hasSpun
+                      ? " cursor-not-allowed scale-90"
+                      : "hover:scale-110"
+                  }`}
+                >
+                  {spinning ? "Spinning" : "SPIN"}
+                </div>
+              </div>
 
               {/* Pointer Arrow */}
               <div
