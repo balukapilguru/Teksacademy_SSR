@@ -66,7 +66,7 @@ const Page = ({ data }) => {
           </p>
         )}
 
-        {/* View All Button */}
+       
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
