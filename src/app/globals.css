@@ -1,12 +1,30 @@
 @import "tailwindcss";
 
+/* ---------------- BASE ---------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  min-width: 0; /* 🔥 prevents flex/grid overflow */
+}
+
+html,
+body {
+  overflow-x: hidden; /* final safety */
+}
+
+body {
+  margin: 0;
+}
+
 input,
 select,
 textarea {
-  color: #111827; /* gray-900 */
+  color: #111827;
 }
 
-/* Fix Chrome autofill text color */
+/* Fix Chrome autofill */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -14,26 +32,11 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+/* ---------------- THEME ---------------- */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-.toast,
-.popup {
-  position: fixed;
-  inset: auto;
-}
-.hero {
-  min-height: 85vh;
-}
-
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,89 +46,118 @@ input:-webkit-autofill:focus {
   }
 }
 
-@media (min-width: 1920px) {
+/* ---------------- LAYOUT ---------------- */
+
+.hero {
+  min-height: 85vh;
+}
+
+/* safer container */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* optional large screen control */
+@media (min-width: 1440px) {
   .container {
-    max-width: 2000px !important;
-    width: 100%;
-    margin: 0 auto;
+    max-width: 1440px;
   }
 }
 
-@media (max-width: 1919px) and (min-width: 1440px) {
-  .container {
-    max-width: 1440px !important;
-    width: 100%;
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 1440px) and (min-width: 768px) {
-  .container {
-    width: 100%;
-    margin: 0 auto;
-  }
+.main_container {
+  width: 94%;
+  margin: 0 auto;
 }
 
 @media (min-width: 1920px) {
   .main_container {
-    max-width: 2000px !important;
+    max-width: 1600px;
     width: 90%;
-    margin: 0 auto;
   }
 }
 
-/* 1440px - 1919px - Standard Desktop */
-@media (max-width: 1919px) and (min-width: 1440px) {
-  .main_container {
-    max-width: 1440px !important;
-    width: 94%;
-    margin: 0 auto;
+/* ---------------- MARQUEE (FIXED) ---------------- */
+
+.marquee-wrapper {
+  width: 100%;
+  overflow: hidden; /* 🔥 MUST be hidden */
+}
+
+.marquee {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.marquee-content {
+  display: flex;
+  min-width: 200%; /* 🔥 replaces max-content */
+  animation: marquee 25s linear infinite;
+  gap: 2rem;
+}
+
+/* prevent shrinking */
+.marquee-content span,
+.marquee-content img {
+  flex-shrink: 0;
+}
+
+/* smooth loop */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-/* 768px - 1439px - Small Desktop/Tablet Landscape */
-@media (max-width: 1440px) and (min-width: 768px) {
-  .main_container {
-    width: 94%;
-    margin: 0 auto;
+/* responsive tuning */
+@media (max-width: 1024px) {
+  .marquee-content {
+    animation-duration: 30s;
+    gap: 1.5rem;
   }
 }
 
-/* 481px - 767px - Tablet Portrait */
-@media (max-width: 767px) and (min-width: 481px) {
-  .main_container {
-    width: 96%;
-    margin: 0 auto;
-    padding: 0 2%;
+@media (max-width: 640px) {
+  .marquee-content {
+    animation-duration: 35s;
+    gap: 1rem;
   }
 }
 
-/* 321px - 480px - Mobile Landscape */
-@media (max-width: 480px) and (min-width: 321px) {
-  .main_container {
-    width: 98%;
-    margin: 0 auto;
-    padding: 0 1%;
-  }
-}
-
-/* 320px and below - Mobile Portrait */
-@media (max-width: 320px) {
-  .main_container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-}
-
-.animate-scroll-left {
-  animation: scroll-left 20s linear infinite;
-}
-
-.pause-on-hover:hover .animate-scroll-left {
+/* pause on hover */
+.marquee:hover .marquee-content {
   animation-play-state: paused;
 }
+
+/* fade edges (optional) */
+.marquee::before,
+.marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, white, transparent);
+}
+
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
+}
+
+/* ---------------- ANIMATIONS ---------------- */
+
 @keyframes scroll-left {
   0% {
     transform: translateX(0);
@@ -137,23 +169,12 @@ input:-webkit-autofill:focus {
 
 .animate-scroll-left {
   animation: scroll-left 30s linear infinite;
-  display: flex;
-  gap: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .pause-on-hover:hover .animate-scroll-left {
   animation-play-state: paused;
 }
 
-.animate-scroll-left {
-  animation: scroll-left 30s linear infinite;
-}
-
-.pause-on-hover:hover .animate-scroll-left {
-  animation-play-state: paused;
-}
 @keyframes slideInRight {
   from {
     transform: translateX(20px);
@@ -164,6 +185,7 @@ input:-webkit-autofill:focus {
     opacity: 1;
   }
 }
+
 @keyframes slideInLeft {
   from {
     transform: translateX(-20px);
@@ -174,41 +196,29 @@ input:-webkit-autofill:focus {
     opacity: 1;
   }
 }
+
 .animate-slideInRight {
   animation: slideInRight 0.5s ease-out;
 }
+
 .animate-slideInLeft {
   animation: slideInLeft 0.5s ease-out;
 }
-.hide-main-navbar header {
-  display: none !important;
+
+/* ---------------- UI HELPERS ---------------- */
+
+.toast,
+.popup {
+  position: fixed;
+  inset: auto;
 }
 
+.hide-main-navbar header,
 body.hide-main-navbar .top-navbar {
   display: none !important;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleUp {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-scaleUp {
-  animation: scaleUp 0.25s ease-out;
-}
-
-
-/* dropdown border */
-/* Dropdown Left Border Animation */
+/* dropdown border animation */
 .dropdown-border {
   position: relative;
 }
@@ -218,12 +228,27 @@ body.hide-main-navbar .top-navbar {
   position: absolute;
   left: 0;
   top: 0;
-  width: 3px;          /* Border width */
-  height: 0;           /* Start height 0 */
+  width: 3px;
+  height: 0;
   background-color: #c41e3a;
   transition: height 0.3s ease;
 }
 
 .dropdown-border.open::before {
-  height: 100%;        /* Full height when open */
+  height: 100%;
+}
+
+/* dropdown fix */
+.dropdown-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 9999;
+  max-width: 100vw; /* 🔥 prevent overflow */
+  overflow-x: hidden;
+}
+
+.parent-dropdown-trigger {
+  position: relative;
+  z-index: 1;
 }
