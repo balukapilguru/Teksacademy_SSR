@@ -9,15 +9,30 @@ import PrimaryButton from "@/utility/PrimaryButton";
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(
-    data?.category?.[0]?.value || ""
-  );
 
+  // ✅ Sort categories: PG → UG → Others
+  const categories = (data?.category || []).sort((a, b) => {
+    const order = ["Post Graduation", "Under Graduation"];
+    const aIndex = order.indexOf(a.name);
+    const bIndex = order.indexOf(b.name);
 
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+
+    return aIndex - bIndex;
+  });
+
+  // ✅ Default select PG
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const pg = categories.find((c) => c.name === "Post Graduation");
+    return pg?.value || categories?.[0]?.value || "";
+  });
 
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
   const [selectedCourseName, setselectedCourseName] = useState({
     id: 4,
     course: "UG",
@@ -51,41 +66,12 @@ const Page = ({ data }) => {
           },
         ],
       },
-      {
-        name: "Bachelor of Commerce in Corporate Accounting",
-        universities: [
-          {
-            ProductId: 40,
-            sourceId: 1,
-            universityname: "Jain University",
-            fee: "90,000",
-          },
-        ],
-      },
-      {
-        name: "Bachelor of Commerce in International Finance & Accounting",
-        universities: [
-          {
-            ProductId: 43,
-            sourceId: 1,
-            universityname: "Jain University",
-            fee: "2,28,000",
-          },
-          {
-            ProductId: 44,
-            sourceId: 5,
-            universityname: "Amity University",
-            fee: "2,50,000",
-          },
-        ],
-      },
     ],
   });
 
-  const categories = data?.category || [];
   const scrollRef = useRef(null);
 
-  // Fetch filtered courses
+  // ✅ Fetch courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -114,14 +100,6 @@ const Page = ({ data }) => {
     }
   }, [selectedCategory, allCourses]);
 
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -200, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 200, behavior: "smooth" });
-  };
-
   const handleOpenModal = (courseName, course) => {
     setSelectedCourse(courseName);
     setShowModal(true);
@@ -131,9 +109,7 @@ const Page = ({ data }) => {
   return (
     <section>
       <div className="max-w-8xl mx-auto mt-4 px-4 sm:px-6 pt-5 md:pt-0 pb-4 md:pb-0 lg:px-8">
-        
-       <Heading data={data?.heading} as="h1" />
-
+        <Heading data={data?.heading} as="h1" />
 
         {/* Category Tabs */}
         <div className="w-full my-4">
@@ -144,28 +120,15 @@ const Page = ({ data }) => {
                 const index = categories.findIndex(
                   (c) => c.value === selectedCategory
                 );
-                if (index > 0) setSelectedCategory(categories[index - 1].value);
+                if (index > 0)
+                  setSelectedCategory(categories[index - 1].value);
               }}
-              aria-label="Previous category"
-              className="p-2 bg-[#c41e3a] text-white cursor-pointer rounded-full"
+              className="p-2 bg-[#c41e3a] text-white rounded-full"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
+              ◀
             </button>
 
-            <span className="text-md font-medium whitespace-nowrap border-b-2 border-[#c41e3a] px-3">
+            <span className="text-md font-medium border-b-2 border-[#c41e3a] px-3">
               {categories.find((c) => c.value === selectedCategory)?.name}
             </span>
 
@@ -177,49 +140,33 @@ const Page = ({ data }) => {
                 if (index < categories.length - 1)
                   setSelectedCategory(categories[index + 1].value);
               }}
-              aria-label="Next category"
-              className="p-2 bg-[#c41e3a] text-white cursor-pointer rounded-full"
+              className="p-2 bg-[#c41e3a] text-white rounded-full"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                />
-              </svg>
+              ▶
             </button>
           </div>
 
           {/* Desktop Tabs */}
-          <div className="hidden md:flex gap-6 my-6 mb-8 items-start justify-start overflow-x-auto scrollbar-hide scroll-smooth">
+          <div className="hidden md:flex gap-6 my-6 mb-8 overflow-x-auto">
             {categories.map((category) => (
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                className={`cursor-pointer text-lg whitespace-nowrap pb-2 border-b-2 transition-colors ${selectedCategory === category.value
-                    ? "text-[#c41e3a] border-b-[#c41e3a] font-normal"
-                    : "text-black border-transparent"
-                  }`}
-                    
+                className={`text-lg pb-2 border-b-2 ${
+                  selectedCategory === category.value
+                    ? "text-[#c41e3a] border-[#c41e3a]"
+                    : "border-transparent"
+                }`}
               >
                 {category.name}
               </button>
             ))}
           </div>
         </div>
-        {
-          /* Scroll Buttons for Desktop */
-        }
 
+        {/* Popup */}
         <Popupform
-        source={28}
+          source={28}
           show={showModal}
           onClose={() => setShowModal(false)}
           course={selectedCourse}
@@ -239,11 +186,12 @@ const Page = ({ data }) => {
             ))}
           </div>
         ) : (
-          <p className="flex justify-center h-40 w-full">
+          <p className="flex justify-center h-40">
             No courses found for this category.
           </p>
         )}
 
+        {/* View All */}
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
@@ -252,7 +200,6 @@ const Page = ({ data }) => {
             onClick={() => {
               localStorage.setItem("selectedCategory", "academics");
               localStorage.setItem("selectedSubCategory", selectedCategory);
-              // localStorage.setItem("selectedProgram", "");
             }}
           />
         </div>
@@ -262,4 +209,3 @@ const Page = ({ data }) => {
 };
 
 export default Page;
-
