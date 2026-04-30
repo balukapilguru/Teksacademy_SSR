@@ -9,6 +9,7 @@ import SpinWheel from "@/components/SpinWheel/SpinWheel";
 import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
+import MobileFooter from "@/components/MobileFooter";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -95,6 +96,7 @@ export default async function RootLayout({ children }) {
             </Suspense>
 
             <Footer />
+            <MobileFooter />
           </NavbarProvider>
         </SelectedCourseProvider>
       </body>
