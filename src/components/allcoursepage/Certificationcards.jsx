@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Heading from "@/utility/Heading";
 import CourseCard from "./Coursecards";
 import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
@@ -9,6 +9,8 @@ const Page = ({ data }) => {
   const [courses, setCourses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const firstCategory = data?.subCategory?.[0]?.value || "";
 
   // ✅ Fetch ALL courses (no category)
   useEffect(() => {
@@ -34,6 +36,16 @@ const Page = ({ data }) => {
   const handleOpenModal = (course) => {
     setSelectedCourse(course);
     setShowModal(true);
+  };
+
+  const displayedCourses = filteredCourses.slice(0, 4);
+
+  const handlePrev = () => {
+    setMobileIndex((prev) => (prev > 0 ? prev - 1 : displayedCourses.length - 1));
+  };
+
+  const handleNext = () => {
+    setMobileIndex((prev) => (prev < displayedCourses.length - 1 ? prev + 1 : 0));
   };
 
   return (
@@ -66,7 +78,7 @@ const Page = ({ data }) => {
           </p>
         )}
 
-        {/* View All Button */}
+       
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"

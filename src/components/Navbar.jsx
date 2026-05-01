@@ -598,7 +598,7 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[750px] bg-white shadow-xl rounded-lg p-3 flex z-50 border border-gray-100 transition-all duration-200 ${
+                      className={`absolute left-0 top-full mt-4 w-[750px] bg-white shadow-xl rounded-lg p-3 flex  border border-gray-100 transition-all duration-200 ${
                         showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
