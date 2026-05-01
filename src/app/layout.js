@@ -90,9 +90,9 @@ export default async function RootLayout({ children }) {
             {/* <Navbar /> */}
             <main>{children}</main>
 
-            <Suspense fallback={null}>
+            {/* <Suspense fallback={null}>
               <SpinWheel />
-            </Suspense>
+            </Suspense> */}
 
             {/* <Footer /> */}
           </NavbarProvider>
