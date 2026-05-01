@@ -3,14 +3,19 @@ import AdmissionForm from "@/components/clientcomponents/forms/Admissionform";
 import BannerVideo from "../../clientcomponents/bannervideo";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
+
 export default function HomepageBanner({ bannerData }) {
   if (!bannerData) return null; // or return a loading state
   return (
     <div className="pb-4 mt-4">
+      
       <div className="container mx-auto bg-[#e1e7ec] rounded-lg overflow-hidden p-4 sm:p-6 md:p-8">
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-center">
+          
           {/* Left Section */}
           <div className="w-full">
+            
             <BannerVideo
               video={bannerData?.video}
               thumbnail={GetData({ url: bannerData?.thumbnail })}

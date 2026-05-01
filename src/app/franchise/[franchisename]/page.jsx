@@ -61,7 +61,7 @@ const Page = async () => {
   return (
     <div className='main_container'>
       <Banner data={data?.banner} />
-      <Certificationcards data={data?.certificationCards} />
+      {/* <Certificationcards data={data?.certificationCards} /> */}
 
       <Nutshell data={data?.careerServices} />
      <Excel data={data?.excelWithTeksversity} />

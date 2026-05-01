@@ -3,8 +3,9 @@ import Image from "next/image";
 
 export default function Topscroll({data}) {
   if (!data) return null;
-  const topscroll = data?.list
  
+  const topscroll = data?.list
+  console.log( data?.list,"topscroll")
   return (
     <div>
       <div className="container-fluid mx-auto lg:mt-0">
@@ -18,13 +19,15 @@ export default function Topscroll({data}) {
                     <div key={`set1-${index}`} className="flex gap-x-5 shrink-0">
                       <Image
                        
-                        src={GetData({ url: item.src })}
+                        src={GetData({ url:item?.src })}
+                        
                         width={200}
                         height={100}
                         alt={item.alt || `Scrolling icon ${index + 1}`}
                         className="object-contain hover:shadow-lg"
                         unoptimized
                       />
+                      
                     </div>
                   ))}
 

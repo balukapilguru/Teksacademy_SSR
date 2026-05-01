@@ -19,9 +19,10 @@ import Excel from "../ui-components/Excel";
 import Nutshell from "../ui-components/NutShell";
 import FinanceApp from "../ui-components/FinanceApp";
 import Hiring from "../ui-components/Hiring";
+import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
 
 export default async function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = "https://0z05cks3-4040.inc1.devtunnels.ms";
   let homeData;
 
   try {
@@ -31,15 +32,27 @@ export default async function Home() {
     const data = await res.json();
     homeData = data?.data;
   } catch (err) {}
-
+  console.log(homeData, "homepagee");
   // #fbf5f6 : pink
   // #fff : white
 
   const sectionsConfig = [
-    { component: <Hiring  /> },
-    
-    { component: <Certificationcards data={homeData?.certificationCards} />, bg: "#fff", border: "#fff" },
-    { component: <Academics data={homeData?.academicsCards} />, bg: "#fbf5f6", border: "#fbf5f6" },
+    {
+      component: (
+        <SuccessStories successStoriesData={homeData?.ourSuccessStories} />
+      ),
+      bg: "#fbf5f6",
+      border: "#fbf5f6",
+    },
+
+    { component: <Hiring hiringData={homeData?.hiringPartners} /> },
+
+    // { component: <Certificationcards data={homeData?.certificationCards} />, bg: "#fff", border: "#fff" },
+    {
+      component: <Academics data={homeData?.academicsCards} />,
+      bg: "#fbf5f6",
+      border: "#fbf5f6",
+    },
     // { component: <SelfLearning data={homeData?.freeCourseCards} />, bg: "#fff", border: "#fff" },
     // { component: <Trusted data={homeData?.trusted} />, bg: "#fbf5f6", border: "#fbf5f6" },
     // { component: <Areaofinterest areaOfInterest={homeData?.areaOfInterest} />, bg: "#fff", border: "#fff" },
@@ -51,39 +64,41 @@ export default async function Home() {
     // { component: <Accordian faq={homeData?.faq} />, bg: "#fff", border: "#fff" }
 
     // ============= new sections harish =============
-{ component: <Areaofinterest areaOfInterest={homeData?.areaOfInterest} />, bg: "#fff", border: "#fff" },
-{
-component: <Excel/>,
-
-      bg: "#fbf5f6",
-      border: "#fbf5f6",
-
-
-},
-{
-component:<Nutshell/>,
+    {
+      component: <Areaofinterest areaOfInterest={homeData?.areaOfInterest} />,
       bg: "#fff",
       border: "#fff",
-},
+    },
     {
-      component: <Whyteksversity whyTeksversity={homeData?.whyTeksversity} />,
+      component: <Excel />,
+
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
     {
-      component: (
-        <Blueribbon blueribbon={homeData?.makingAbroadEducationEasier} />
-      ),
+      component: <Nutshell />,
       bg: "#fff",
       border: "#fff",
     },
+    // {
+    //   component: <Whyteksversity whyTeksversity={homeData?.whyTeksversity} />,
+    //   bg: "#fbf5f6",
+    //   border: "#fbf5f6",
+    // },
+    // {
+    //   component: (
+    //     <Blueribbon blueribbon={homeData?.makingAbroadEducationEasier} />
+    //   ),
+    //   bg: "#fff",
+    //   border: "#fff",
+    // },
     {
       component: <FinanceApp />,
       bg: "#fbf5f6",
       border: "#fbf5f6",
-    } ,
+    },
     {
-component: <Awards />,
+      component: <Awards awardsData={homeData?.awards} />,
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
@@ -105,7 +120,6 @@ component: <Awards />,
         <HomepageBanner bannerData={homeData?.banner} />
         <Topscroll data={homeData?.topScroll} />
 
-
         {sectionsConfig.map((sec, idx) => (
           <section
             key={idx}
@@ -115,8 +129,6 @@ component: <Awards />,
             {sec.component}
           </section>
         ))}
-
-        
       </div>
     </>
   );

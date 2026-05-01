@@ -9,7 +9,6 @@ import PrimaryButton from "@/utility/PrimaryButton";
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-
   // ✅ Sort categories: PG → UG → Others
   const categories = (data?.category || []).sort((a, b) => {
     const order = ["Post Graduation", "Under Graduation"];
@@ -81,6 +80,7 @@ const Page = ({ data }) => {
           { method: "GET", next: { revalidate: 60 } }
         );
         const resData = await response.json();
+        console.log(resData?.data,"coursecardss")
         setFilteredCourses(resData?.data || []);
       } catch (error) {
         console.error("Error fetching filtered data:", error);

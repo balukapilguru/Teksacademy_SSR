@@ -72,7 +72,6 @@ import { FiAward, FiMapPin } from "react-icons/fi";
 import { BsBriefcase, BsJournalText } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 
-// import HomeClientLoader from "./HomeClientLoader";
 import CareerGuidanceForm from "../components/clientcomponents/forms/CareerGuidanceForm";
 
 export default function Navbar() {
@@ -113,7 +112,9 @@ export default function Navbar() {
           next: { revalidate: 60 },
         });
         const data = await response.json();
+        console.log(data,"dattaaa")
         setNavData(data?.data?.navbar || null);
+       
       } catch (err) {
         console.error("Navbar fetch error:", err);
       } finally {
@@ -265,11 +266,9 @@ export default function Navbar() {
 
     if (lowerCategoryValue === "certifications") {
       if (lowerSubName.includes("dual")) return <FaAward className="text-xs" />;
-      if (lowerSubName.includes("post"))
-        return <FaUserGraduate className="text-xs" />;
+      if (lowerSubName.includes("post")) return <FaUserGraduate className="text-xs" />;
       if (lowerSubName.includes("fast")) return <FaBolt className="text-xs" />;
-      if (lowerSubName.includes("certification"))
-        return <AiFillSafetyCertificate className="text-xs" />;
+      if (lowerSubName.includes("teksversity")) return <AiFillSafetyCertificate className="text-xs" />;
       return <FaCertificate className="text-xs" />;
     }
 
@@ -277,18 +276,13 @@ export default function Navbar() {
       if (subValue === "bba") return <FaBriefcase className="text-xs" />;
       if (subValue === "ba") return <FaPenAlt className="text-xs" />;
       if (subValue === "bca") return <FaCode className="text-xs" />;
-      if (subValue.includes("bcom"))
-        return <FaCalculator className="text-xs" />;
+      if (subValue.includes("bcom")) return <FaCalculator className="text-xs" />;
       if (subValue === "mba") return <FaChartLine className="text-xs" />;
       if (subValue === "mca") return <FaDesktop className="text-xs" />;
+      if (subValue === "ma") return <FaBookOpen className="text-xs" />;
+      if (subValue === "mcom") return <FaCalculator className="text-xs" />;
+      if (subValue === "msc") return <FaFlask className="text-xs" />;
       return <FaGraduationCap className="text-xs" />;
-    }
-
-    if (lowerCategoryValue === "selflearning") {
-      if (lowerSubName.includes("self"))
-        return <FaUserClock className="text-xs" />;
-      if (lowerSubName.includes("live")) return <FaVideo className="text-xs" />;
-      return <FaBookReader className="text-xs" />;
     }
 
     return <LuCircleDotDashed className="text-xs" />;
@@ -334,11 +328,30 @@ export default function Navbar() {
       const topbar = navData.topbar || {};
       const mainbar = navData.mainbar || {};
       const elements = mainbar.elements || [];
-      const ivrNumber = mainbar.ivrNumber?.value || mainbar.ivrNumber || "";
-      const topbarItems = topbar.items ? Object.values(topbar.items) : [];
+      
+      // Handle ivrNumber - it could be an object with value property or direct string
+      let ivrNumber = "";
+      if (mainbar.ivrNumber) {
+        ivrNumber = typeof mainbar.ivrNumber === 'object' 
+          ? mainbar.ivrNumber.value 
+          : mainbar.ivrNumber;
+      }
+      
+      // Process topbar items - convert object to array and filter
+      const topbarItemsObj = topbar.items || {};
+      let topbarItemsArray = Object.values(topbarItemsObj);
+      
+      // Extract contact number from topbar if exists
+      if (topbarItemsObj.contact && topbarItemsObj.contact.name && !ivrNumber) {
+        ivrNumber = topbarItemsObj.contact.name;
+      }
+      
+      // Filter out contact from topbar items if it's displayed elsewhere
+      topbarItemsArray = topbarItemsArray.filter(item => item.type !== 'text');
+      
       const coursesMenu = elements.find((el) => el.name === "Courses");
 
-      return { topbar, mainbar, elements, ivrNumber, topbarItems, coursesMenu };
+      return { topbar, mainbar, elements, ivrNumber, topbarItems: topbarItemsArray, coursesMenu };
     }, [navData]);
 
   const socialIcons = useMemo(
@@ -406,7 +419,7 @@ export default function Navbar() {
                 return null;
               })}
             </div>
-            <div className="flex items-center w-full justify-between">
+            <div className="flex items-center w-full justify-end gap-4">
               {topbarItems.map((item, index) => {
                 if (item.type === "button") {
                   if (item.form) {
@@ -614,7 +627,6 @@ export default function Navbar() {
                             const isClickable = [
                               "certifications",
                               "academics",
-                              "selfLearning",
                             ].includes(cat.value);
 
                             return (
@@ -687,10 +699,7 @@ export default function Navbar() {
                                     : item.dropdown[getDisplayCategoryIndex()]
                                           ?.value === "academics"
                                       ? "grid-cols-3"
-                                      : item.dropdown[getDisplayCategoryIndex()]
-                                            ?.value === "selfLearning"
-                                        ? "grid-cols-2"
-                                        : "grid-cols-2"
+                                      : "grid-cols-2"
                                 }`}
                               >
                                 {item.dropdown[
@@ -698,7 +707,7 @@ export default function Navbar() {
                                 ]?.subCategory?.map((sub) => {
                                   const href = hasDirectLink(sub)
                                     ? sub.link
-                                    : "/courses";
+                                    : `/courses?category=${item.dropdown[getDisplayCategoryIndex()].value}&subcategory=${sub.value}`;
                                   const isSelected =
                                     selectedCategory ===
                                       item.dropdown[getDisplayCategoryIndex()]
@@ -765,7 +774,7 @@ export default function Navbar() {
                                       e.preventDefault();
                                       setShowMenu(null);
                                       setHoveredCategoryIndex(null);
-                                      router.push("/courses"); // ✅ FIX
+                                      router.push("/courses");
                                     }}
                                   >
                                     know more{" "}
@@ -879,7 +888,6 @@ export default function Navbar() {
                             const isClickable = [
                               "certifications",
                               "academics",
-                              "selfLearning",
                             ].includes(cat.value);
 
                             return (
@@ -919,15 +927,13 @@ export default function Navbar() {
                                         ? "grid-cols-1"
                                         : cat.value === "academics"
                                           ? "grid-cols-2"
-                                          : cat.value === "selfLearning"
-                                            ? "grid-cols-1"
-                                            : "grid-cols-1"
+                                          : "grid-cols-1"
                                     }`}
                                   >
                                     {cat.subCategory.map((sub, sIndex) => {
                                       const href = hasDirectLink(sub)
                                         ? sub.link
-                                        : "/courses";
+                                        : `/courses?category=${cat.value}&subcategory=${sub.value}`;
                                       const isSelected =
                                         selectedCategory === cat.value &&
                                         selectedSubCategory === sub.value;
@@ -990,7 +996,7 @@ export default function Navbar() {
                                           e.preventDefault();
                                           setMobileMenuOpen(false);
                                           setMobileSubMenu(null);
-                                          router.push("/courses"); // ✅ FIX
+                                          router.push("/courses");
                                         }}
                                       >
                                         know more{" "}
@@ -1099,40 +1105,6 @@ export default function Navbar() {
 
           {/* Social Media Icons in Mobile Menu */}
           <div className="">
-            {/* <div className="flex justify-center mb-3">
-                <div className="flex items-center gap-4">
-                  {topbarItems.map((item, index) => {
-                    if (item.type === "socialMedia" && item.icons) {
-                      return (
-                        <div
-                          key={`mobile-social-${index}`}
-                          className="flex items-center gap-4"
-                        >
-                          {item.icons.map((social, idx) => {
-                            const IconComponent = socialIcons[social.platform];
-                            if (!isValidLink(social.link)) {
-                              return null;
-                            }
-                            return (
-                              <a
-                                key={`mobile-social-icon-${idx}`}
-                                href={social.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-[#c41e3a] transition-colors"
-                              >
-                                <IconComponent className="text-[20px]" />
-                              </a>
-                            );
-                          })}
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-              </div> */}
-
             {/* Call Button in Mobile Menu Footer */}
             <div className="flex justify-center items-center gap-1 bg-[#c41e3a] text-white px-2.5 py-1.5 rounded font-semibold mb-2 text-md">
               <MdCall className="text-[10px]" />
