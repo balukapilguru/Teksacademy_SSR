@@ -8,10 +8,19 @@
     let contactusdata ;
 
     try {
-      const res = await fetch(`${baseUrl}/api/v1/home/contact-us`, { next: { revalidate: 60 } });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const res = await fetch(`${baseUrl}/api/v1/home/contact-us`, { 
+        next: { revalidate: 60 },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
       const data = await res.json();
       contactusdata = data?.data;
     } catch (err) {
+      // Handle error, perhaps log or set default data
+      console.error('Failed to fetch contact data:', err);
     }
   const imageUrl =
       

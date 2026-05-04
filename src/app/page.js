@@ -7,9 +7,15 @@ export async function generateMetadata() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(`${baseUrl}/api/v1/home`, {
       cache: "no-store",
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     if (!res.ok) throw new Error("SEO API failed");
 

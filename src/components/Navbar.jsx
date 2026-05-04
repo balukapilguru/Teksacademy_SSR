@@ -290,7 +290,7 @@ export default function Navbar() {
 
   // Get icon for franchise dropdown items
   const getFranchiseIcon = (itemName) => {
-    const lowerName = itemName.toLowerCase();
+    const lowerName = (itemName || "").toString().toLowerCase();
 
     if (lowerName.includes("franchise") || lowerName.includes("business"))
       return <MdOutlineBusiness className="text-sm" />;
@@ -300,7 +300,7 @@ export default function Navbar() {
 
   // Get icon for discover dropdown items
   const getDiscoverIcon = (itemName) => {
-    const lowerName = itemName.toLowerCase();
+    const lowerName = (itemName || "").toString().toLowerCase();
     if (lowerName.includes("about") || lowerName.includes("about us"))
       return <FiMapPin className="text-sm" />;
 
@@ -628,9 +628,11 @@ export default function Navbar() {
                               "certifications",
                               "academics",
                             ].includes(cat.value);
+                            const categoryKey =
+                              cat.value || cat.category || `category-${catIndex}`;
 
                             return (
-                              <div key={`category-${cat.value}`}>
+                              <div key={`category-${categoryKey}`}> 
                                 {isClickable ? (
                                   <Link
                                     href="/courses"
@@ -704,10 +706,10 @@ export default function Navbar() {
                               >
                                 {item.dropdown[
                                   getDisplayCategoryIndex()
-                                ]?.subCategory?.map((sub) => {
+                                ]?.subCategory?.map((sub, subIndex) => {
                                   const href = hasDirectLink(sub)
                                     ? sub.link
-                                    : `/courses?category=${item.dropdown[getDisplayCategoryIndex()].value}&subcategory=${sub.value}`;
+                                    : `/courses?category=${item.dropdown[getDisplayCategoryIndex()].value}&subcategory=${sub.value || sub.name}`;
                                   const isSelected =
                                     selectedCategory ===
                                       item.dropdown[getDisplayCategoryIndex()]
@@ -722,7 +724,7 @@ export default function Navbar() {
 
                                   return (
                                     <Link
-                                      key={sub.value}
+                                      key={sub.value || sub.name || `sub-${catIndex}-${subIndex}`}
                                       href={href}
                                       onClick={() => {
                                         handleSubCategoryClick(

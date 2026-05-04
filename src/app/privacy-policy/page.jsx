@@ -3,16 +3,27 @@ import React from "react";
 
 async function getPrivacyPolicy() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-  const res = await fetch(`${baseUrl}/api/v1/home/privacy-policy`, {
-    // next: { revalidate: 60 }, // SSR fetch each request
-  });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch Privacy Policy");
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    const res = await fetch(`${baseUrl}/api/v1/home/privacy-policy`, {
+      // next: { revalidate: 60 }, // SSR fetch each request
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    if (!res.ok) {
+      throw new Error("Failed to fetch Privacy Policy");
+    }
+
+    const json = await res.json();
+    return json.data?.privacyPolicy?.sections || [];
+  } catch (error) {
+    console.error('Failed to fetch privacy policy:', error);
+    return []; // Return empty array on error
   }
-
-  const json = await res.json();
-  return json.data?.privacyPolicy?.sections || [];
 }
 
 export default async function PrivacyPolicyPage() {

@@ -1,5 +1,5 @@
 import React from "react";
-import Areaofinterest from "../ui-components/Areaofinterest";
+
 import Topscroll from "../ui-components/Topscroll";
 // import Trusted from '../ui-components/Trusted'
 import Certificationcards from "@/components/allcoursepage/Certificationcards";
@@ -13,26 +13,44 @@ import Accordian from "../../coursePage/Accordian";
 import HiringCompanies from "../../coursePage/HiringCompanies";
 import Workongprofessionals from "../ui-components/Workongprofessionals";
 import Academics from "../../allcoursepage/Academics";
-import SelfLearning from "../../allcoursepage/SelfLearning";
+// import SelfLearning from "../../allcoursepage/SelfLearning";
 import Testimonials from "@/components/coursePage/Testimonials";
 import Excel from "../ui-components/Excel";
 import Nutshell from "../ui-components/NutShell";
 import FinanceApp from "../ui-components/FinanceApp";
 import Hiring from "../ui-components/Hiring";
 import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
+import CertificationCourse from "@/components/allcoursepage/CertificationCourse";
 
 export default async function Home() {
-  const baseUrl = "https://0z05cks3-4040.inc1.devtunnels.ms";
-  let homeData;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  let homeData = null;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+
     const res = await fetch(`${baseUrl}/api/v1/home`, {
       next: { revalidate: 60 },
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      throw new Error(`API error: ${res.status}`);
+    }
+
     const data = await res.json();
     homeData = data?.data;
-  } catch (err) {}
-  console.log(homeData, "homepagee");
+  } catch (err) {
+    console.error("Failed to fetch home page data:", err);
+    homeData = null;
+  }
+
+  if (!homeData) {
+    console.warn("Home data not available, using fallback");
+  }
   // #fbf5f6 : pink
   // #fff : white
 
@@ -49,6 +67,12 @@ export default async function Home() {
 
     // { component: <Certificationcards data={homeData?.certificationCards} />, bg: "#fff", border: "#fff" },
     {
+      component:<CertificationCourse data={homeData?.certificationCards?.[0]} /> ,
+      bg: "#fff",
+      border: "#fff",
+
+    },
+    {
       component: <Academics data={homeData?.academicsCards} />,
       bg: "#fbf5f6",
       border: "#fbf5f6",
@@ -64,11 +88,7 @@ export default async function Home() {
     // { component: <Accordian faq={homeData?.faq} />, bg: "#fff", border: "#fff" }
 
     // ============= new sections harish =============
-    {
-      component: <Areaofinterest areaOfInterest={homeData?.areaOfInterest} />,
-      bg: "#fff",
-      border: "#fff",
-    },
+   
     {
       component: <Excel />,
 

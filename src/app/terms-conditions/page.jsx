@@ -9,15 +9,25 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 // Fetch Terms Data
 // ============================
 async function getTerms() {
-  const res = await fetch(`${baseUrl}/api/v1/home/terms-conditions`, {
-    next: { revalidate: 60 }, // ISR - refresh every 60 seconds
-  });
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch Terms & Conditions");
+    const res = await fetch(`${baseUrl}/api/v1/home/terms-conditions`, {
+      next: { revalidate: 60 }, // ISR - refresh every 60 seconds
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    if (!res.ok) {
+      throw new Error("Failed to fetch Terms & Conditions");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error('Failed to fetch terms:', error);
+    return { data: {} }; // Return empty data on error
   }
-
-  return res.json();
 }
 
 // ============================

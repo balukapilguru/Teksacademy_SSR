@@ -29,10 +29,15 @@ async function getLetstalkAPI() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(`${baseUrl}/api/v1/home/lets-talk`, {
       next: { revalidate: 60 },
+      signal: controller.signal
     });
 
+    clearTimeout(timeoutId);
     const json = await res.json();
     return json?.data || null;
   } catch {
