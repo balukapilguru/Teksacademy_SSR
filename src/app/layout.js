@@ -87,14 +87,14 @@ export default async function RootLayout({ children }) {
           <NavbarProvider>
             <ToastContainer autoClose={1000} />
             <AppLoader />
-            {/* <Navbar /> */}
+            <Navbar />
             <main>{children}</main>
 
             <Suspense fallback={null}>
               <SpinWheel />
             </Suspense>
 
-            {/* <Footer /> */}
+            <Footer />
           </NavbarProvider>
         </SelectedCourseProvider>
       </body>
