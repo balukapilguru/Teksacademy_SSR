@@ -486,7 +486,7 @@ export default function Navbar() {
         </div>
 
         <nav
-          className="max-w-6xl main_container flex items-center justify-between h-12 md:h-18 "
+          className="main_container flex items-center justify-between h-12 md:h-18 "
           ref={menuRef}
         >
           <button
