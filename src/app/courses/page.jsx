@@ -6,10 +6,15 @@ export async function generateMetadata() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(`${baseUrl}/api/v1/courses`, {
       next: { revalidate: 300 }, // cache for 5 minutes
+      signal: controller.signal
     });
 
+    clearTimeout(timeoutId);
     const data = await res.json();
 
     return {

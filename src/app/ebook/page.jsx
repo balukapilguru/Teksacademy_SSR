@@ -11,11 +11,15 @@ export async function generateMetadata() {
   if (!baseurl) return {};
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(
       `${baseurl.replace(/\/$/, "")}/api/v1/home/ebooks`,
-      { next: { revalidate: 60 } }
+      { next: { revalidate: 60 }, signal: controller.signal }
     );
 
+    clearTimeout(timeoutId);
     if (!res.ok) return {};
 
     const json = await res.json();
@@ -53,8 +57,12 @@ export default async function Page() {
   const url = `${baseurl.replace(/\/$/, "")}/api/v1/home/ebooks`;
 
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
+    const res = await fetch(url, { next: { revalidate: 60 }, signal: controller.signal });
+
+    clearTimeout(timeoutId);
     if (!res.ok) {
       const text = await res.text();
       console.error("API ERROR RESPONSE:", text);

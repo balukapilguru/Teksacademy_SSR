@@ -17,11 +17,15 @@ export async function generateMetadata({ params }) {
   const { universityname } = params;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(
       `${baseUrl}/api/v1/university/${universityname}`,
-      { cache: "no-store" }
+      { cache: "no-store", signal: controller.signal }
     );
 
+    clearTimeout(timeoutId);
     const result = await res.json();
     const data = result?.data;
 
@@ -53,13 +57,23 @@ export async function generateMetadata({ params }) {
 export default async function UniversityPage({ params }) {
   const { universityname } = params;
 
-  const res = await fetch(
-    `${baseUrl}/api/v1/university/${universityname}`,
-    { cache: "no-store" }
-  );
+  let data = null;
 
-  const result = await res.json();
-  const data = result?.data;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    const res = await fetch(
+      `${baseUrl}/api/v1/university/${universityname}`,
+      { cache: "no-store", signal: controller.signal }
+    );
+
+    clearTimeout(timeoutId);
+    const result = await res.json();
+    data = result?.data;
+  } catch (error) {
+    console.error('Failed to fetch university data:', error);
+  }
 
   if (!data) {
     return <p className="text-center p-6">University not found</p>;
