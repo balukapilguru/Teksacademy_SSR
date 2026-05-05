@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Heading from "@/utility/Heading";
+import GetData from "@/utility/GetData";
 
 const SuccessStories = ({ successStoriesData }) => {
   const [activeTab, setActiveTab] = useState("placed");
@@ -26,11 +27,7 @@ const SuccessStories = ({ successStoriesData }) => {
   const heading = successStoriesData?.heading || ["Our Success", "Stories"];
   const headingText = Array.isArray(heading) ? heading.join(" ") : heading;
 
-  const getImageUrl = (path) => {
-    if (!path) return "/placeholder-image.webp";
-    if (path.startsWith("http")) return path;
-    return `https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/${path}`;
-  };
+
 
   // Reset indices when tab changes
   useEffect(() => {
@@ -106,7 +103,7 @@ const SuccessStories = ({ successStoriesData }) => {
               >
                 <div className="relative aspect-video">
                   <Image
-                    src={getImageUrl(item.thumbnail?.src)}
+                    src={GetData({url:item.thumbnail?.src})}
                     alt={item.thumbnail?.alt || item.name}
                     fill
                     className="group-hover:scale-105 transition-transform duration-300"
@@ -135,7 +132,7 @@ const SuccessStories = ({ successStoriesData }) => {
               >
                 <div className="relative aspect-video w-full">
                   <Image
-                    src={getImageUrl(videoCards[videoIndex].thumbnail?.src)}
+                    src={GetData({url:videoCards[videoIndex].thumbnail?.src})}
                     alt={videoCards[videoIndex].thumbnail?.alt || videoCards[videoIndex].name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -186,7 +183,7 @@ const SuccessStories = ({ successStoriesData }) => {
               <div key={`placement-${index}`} className="rounded-lg overflow-hidden hover:shadow-lg transition">
                 <div className="relative aspect-video">
                   <Image
-                    src={getImageUrl(item.image?.src)}
+                    src={GetData({url:item.image?.src})}
                     alt={item.image?.alt || item.name}
                     fill
                   />
@@ -206,7 +203,7 @@ const SuccessStories = ({ successStoriesData }) => {
               <div className="w-full rounded-lg overflow-hidden shadow hover:shadow-lg transition">
                 <div className="relative aspect-video w-full">
                   <Image
-                    src={getImageUrl(placementCards[placementIndex].image?.src)}
+                    src={GetData({url:placementCards[placementIndex].image?.src})}
                     alt={placementCards[placementIndex].image?.alt || placementCards[placementIndex].name}
                     fill
                     className="object-cover"
@@ -254,7 +251,7 @@ const SuccessStories = ({ successStoriesData }) => {
               ✖
             </button>
             <video autoPlay loop className="rounded-lg w-full h-full">
-              <source src={getImageUrl(selectedVideo)} type="video/mp4" />
+              <source src={GetData({url:selectedVideo})} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
