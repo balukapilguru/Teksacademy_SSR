@@ -9,16 +9,15 @@ import PrimaryButton from "@/utility/PrimaryButton";
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
+
   // ✅ Sort categories: PG → UG → Others
   const categories = (data?.category || []).sort((a, b) => {
     const order = ["Post Graduation", "Under Graduation"];
     const aIndex = order.indexOf(a.name);
     const bIndex = order.indexOf(b.name);
-
     if (aIndex === -1 && bIndex === -1) return 0;
     if (aIndex === -1) return 1;
     if (bIndex === -1) return -1;
-
     return aIndex - bIndex;
   });
 
@@ -45,28 +44,16 @@ const Page = ({ data }) => {
       {
         name: "Bachelor of Commerce",
         universities: [
-          {
-            ProductId: 31,
-            sourceId: 2,
-            universityname: "Manipal Academy of Higher Education",
-            fee: "2,94,000",
-          },
-          {
-            ProductId: 34,
-            sourceId: 4,
-            universityname: "Sikkim Manipal University",
-            fee: "75,000",
-          },
-          {
-            ProductId: 37,
-            sourceId: 3,
-            universityname: "Manipal University Jaipur",
-            fee: "99,000",
-          },
+          { ProductId: 31, sourceId: 2, universityname: "Manipal Academy of Higher Education", fee: "2,94,000" },
+          { ProductId: 34, sourceId: 4, universityname: "Sikkim Manipal University", fee: "75,000" },
+          { ProductId: 37, sourceId: 3, universityname: "Manipal University Jaipur", fee: "99,000" },
         ],
       },
     ],
   });
+
+  // Mobile carousel index — reset when category changes
+  const [mobileIndex, setMobileIndex] = useState(0);
 
   const scrollRef = useRef(null);
 
@@ -80,8 +67,9 @@ const Page = ({ data }) => {
           { method: "GET", next: { revalidate: 60 } }
         );
         const resData = await response.json();
-        console.log(resData?.data,"coursecardss")
+        console.log(resData?.data, "coursecardss");
         setFilteredCourses(resData?.data || []);
+        setMobileIndex(0); // reset carousel on category change
       } catch (error) {
         console.error("Error fetching filtered data:", error);
       }
@@ -97,6 +85,7 @@ const Page = ({ data }) => {
         (course) => course.subCategory === selectedCategory
       );
       setFilteredCourses(filtered);
+      setMobileIndex(0);
     }
   }, [selectedCategory, allCourses]);
 
@@ -106,6 +95,28 @@ const Page = ({ data }) => {
     setselectedCourseName(course);
   };
 
+  const visibleCourses = filteredCourses.slice(0, 4);
+
+  // Simple minimal chevron arrow (same style as CertificationCourse)
+  const ArrowBtn = ({ direction, onClick, disabled }) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={direction === "prev" ? "Previous" : "Next"}
+      className="p-1 text-[#002b80] disabled:opacity-25 disabled:cursor-not-allowed transition"
+    >
+      {direction === "prev" ? (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+    </button>
+  );
+
   return (
     <section>
       <div className="main_container mx-auto mt-4 pt-5">
@@ -114,36 +125,20 @@ const Page = ({ data }) => {
         {/* Category Tabs */}
         <div className="w-full my-4">
           {/* Mobile Tabs */}
-          <div className="flex items-center justify-center gap-5 md:hidden">
-            <button
-              onClick={() => {
-                const index = categories.findIndex(
-                  (c) => c.value === selectedCategory
-                );
-                if (index > 0)
-                  setSelectedCategory(categories[index - 1].value);
-              }}
-              className="p-2 bg-[#c41e3a] text-white rounded-full"
-            >
-              ◀
-            </button>
-
-            <span className="text-md font-medium border-b-2 border-[#c41e3a] px-3">
-              {categories.find((c) => c.value === selectedCategory)?.name}
-            </span>
-
-            <button
-              onClick={() => {
-                const index = categories.findIndex(
-                  (c) => c.value === selectedCategory
-                );
-                if (index < categories.length - 1)
-                  setSelectedCategory(categories[index + 1].value);
-              }}
-              className="p-2 bg-[#c41e3a] text-white rounded-full"
-            >
-              ▶
-            </button>
+          <div className="flex flex-wrap justify-center gap-3 md:hidden">
+            {categories.map((category) => (
+              <button
+                key={category.value}
+                onClick={() => setSelectedCategory(category.value)}
+                className={`px-5 py-2 rounded-md text-sm font-medium transition ${
+                  selectedCategory === category.value
+                    ? "bg-[#c41e3a] text-white"
+                    : "border border-[#c41e3a] text-[#c41e3a] hover:bg-[#c41e3a] hover:text-white"
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
           </div>
 
           {/* Desktop Tabs */}
@@ -175,16 +170,57 @@ const Page = ({ data }) => {
         />
 
         {/* Course Cards */}
-        {filteredCourses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredCourses.slice(0, 4).map((course, idx) => (
-              <CourseCard
-                key={idx}
-                course={course}
-                onGetDetailsClick={handleOpenModal}
-              />
-            ))}
-          </div>
+        {visibleCourses.length > 0 ? (
+          <>
+            {/* DESKTOP: 4-col grid — untouched */}
+            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {visibleCourses.map((course, idx) => (
+                <CourseCard
+                  key={idx}
+                  course={course}
+                  onGetDetailsClick={handleOpenModal}
+                />
+              ))}
+            </div>
+
+            {/* MOBILE: 1 card at a time, arrows + dots below */}
+            <div className="sm:hidden">
+              <div className="flex flex-col items-center gap-2">
+                {/* Card full width */}
+                <div className="w-full">
+                  <CourseCard
+                    key={mobileIndex}
+                    course={visibleCourses[mobileIndex]}
+                    onGetDetailsClick={handleOpenModal}
+                  />
+                </div>
+                {/* Arrows + Dots row */}
+                <div className="flex items-center justify-center gap-3 mt-1">
+                  <ArrowBtn
+                    direction="prev"
+                    onClick={() => setMobileIndex((i) => Math.max(0, i - 1))}
+                    disabled={mobileIndex === 0}
+                  />
+                  <div className="flex gap-2">
+                    {visibleCourses.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setMobileIndex(i)}
+                        className={`h-2 rounded-full transition-all duration-200 ${
+                          i === mobileIndex ? "bg-[#002b80] w-5" : "bg-gray-300 w-2"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <ArrowBtn
+                    direction="next"
+                    onClick={() => setMobileIndex((i) => Math.min(visibleCourses.length - 1, i + 1))}
+                    disabled={mobileIndex === visibleCourses.length - 1}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
           <p className="flex justify-center h-40">
             No courses found for this category.
