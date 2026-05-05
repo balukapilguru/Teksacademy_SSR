@@ -15,44 +15,46 @@ const CertificationCourse = ({ data }) => {
 
   // ✅ Priority 1: Use data from props (SSR), Priority 2: Fetch from API if not available
   useEffect(() => {
-    if (data?.courses && data.courses.length > 0) {
-      // ✅ Use certification courses from SSR prop
-      console.log("Using courses from prop:", data.courses);
-      setCourses(data.courses);
-    } else {
-      // ✅ Fallback: Fetch certification courses from backend
-      const fetchCourses = async () => {
-        try {
-          setLoading(true);
-          const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-          
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const propCourses =
+      data?.courses || data?.courseList || data?.coursesList || [];
 
-          const res = await fetch(`${baseUrl}/api/v1/courses?subCategory=certification`, {
-            method: "GET",
-            signal: controller.signal,
-          });
-
-          clearTimeout(timeoutId);
-
-          if (!res.ok) throw new Error(`API error: ${res.status}`);
-
-          const result = await res.json();
-          console.log(result?.data, "CertificationCourse API DATA");
-
-          // ✅ Handle different response structures
-          setCourses(result?.data || result?.courses || []);
-        } catch (error) {
-          console.error("Fetch error:", error);
-          setCourses([]);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchCourses();
+    if (propCourses && propCourses.length > 0) {
+      console.log("Using courses from prop:", propCourses);
+      setCourses(propCourses);
+      setLoading(false);
+      return;
     }
+
+    // Fallback: Fetch certification courses from backend only when prop data is unavailable
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        const res = await fetch(`${baseUrl}/api/v1/courses?subCategory=certification`, {
+          method: "GET",
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+        const result = await res.json();
+        console.log(result?.data, "CertificationCourse API DATA");
+
+        setCourses(result?.data || result?.courses || []);
+      } catch (error) {
+        console.error("Fetch error:", error);
+        setCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
   }, [data]);
 
   // ✅ Same modal handler pattern as Page.jsx
