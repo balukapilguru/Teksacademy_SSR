@@ -6,46 +6,14 @@ import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import PrimaryButton from "@/utility/PrimaryButton";
 
 const Page = ({ data }) => {
-  const [courses, setCourses] = useState([]);
+  const courses = data?.courses || [];
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [mobileIndex, setMobileIndex] = useState(0);
-  const firstCategory = data?.subCategory?.[0]?.value || "";
-
-  // ✅ Fetch ALL courses (no category)
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-
-        const response = await fetch(
-          `${baseUrl}/api/v1/courses`,
-          { method: "GET" }
-        );
-
-        const resData = await response.json();
-        setCourses(resData?.data || []);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchCourses();
-  }, []);
 
   const handleOpenModal = (course) => {
     setSelectedCourse(course);
     setShowModal(true);
-  };
-
-  const displayedCourses = filteredCourses.slice(0, 4);
-
-  const handlePrev = () => {
-    setMobileIndex((prev) => (prev > 0 ? prev - 1 : displayedCourses.length - 1));
-  };
-
-  const handleNext = () => {
-    setMobileIndex((prev) => (prev < displayedCourses.length - 1 ? prev + 1 : 0));
   };
 
   return (
@@ -53,7 +21,6 @@ const Page = ({ data }) => {
       <div className="max-w-8xl mx-auto mt-5 px-4 sm:px-6 lg:px-8">
         <Heading data={data?.heading} />
 
-        {/* Modal */}
         <Freecoursesform
           source={28}
           show={showModal}
@@ -61,7 +28,6 @@ const Page = ({ data }) => {
           course={selectedCourse?.universities ? selectedCourse : null}
         />
 
-        {/* Courses Grid */}
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {courses.slice(0, 4).map((course, idx) => (
@@ -78,7 +44,6 @@ const Page = ({ data }) => {
           </p>
         )}
 
-       
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
