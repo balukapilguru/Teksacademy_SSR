@@ -29,7 +29,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
           <Image
             src={GetData({ url: course?.image?.src })}
             alt={course.heading}
-            
+
             height={288}
             width={192}
             className="object-cover transition-all duration-500 
@@ -94,9 +94,8 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
 
           {/* Buttons */}
           <div
-            className={`flex gap-4 mt-4 mb-1 ${
-              isSingle ? "justify-center" : "justify-between"
-            }`}
+            className={`flex gap-4 mt-4 mb-1 ${isSingle ? "justify-center" : "justify-between"
+              }`}
           >
             {buttons.slice().reverse().map((btn, index) => (
               <PrimaryButton

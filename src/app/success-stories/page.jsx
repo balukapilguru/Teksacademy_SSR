@@ -20,6 +20,8 @@ const SuccessStories = () => {
         const res = await fetch(`${baseUrl}/api/v1/home/success-stories`);
         const data = await res.json();
 
+        console.log(res, "sdfkdfhkdffdsf")
+
         setHeading(data?.data?.heading || "Success Stories");
         setStories(data?.data?.cards || []);
       } catch (err) {

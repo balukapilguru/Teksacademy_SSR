@@ -26,10 +26,15 @@ async function getData() {
   const apiUrl = `${baseUrl}/api/v1/home/franchise/kakinada`;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(apiUrl, {
-      next: { revalidate: 60 }
+      next: { revalidate: 60 },
+      signal: controller.signal
     });
 
+    clearTimeout(timeoutId);
     if (!res.ok) {
       console.error("❌ API Failed:", res.status);
       return null;

@@ -7,12 +7,19 @@ export default async function contactus() {
   let supportdata;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const res = await fetch(`${baseUrl}/api/v1/home/support`, {
       next: { revalidate: 60 },
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     const data = await res.json();
     supportdata = data?.data;
-  } catch (err) {}
+  } catch (err) {
+    console.error('Failed to fetch support data:', err);
+  }
   const imageUrl = supportdata?.banner?.image?.src;
 
   return (
