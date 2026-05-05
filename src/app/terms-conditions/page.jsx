@@ -11,22 +11,24 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 async function getTerms() {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const res = await fetch(`${baseUrl}/api/v1/home/terms-conditions`, {
-      next: { revalidate: 60 }, // ISR - refresh every 60 seconds
-      signal: controller.signal
+      next: { revalidate: 60 },
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
+
     if (!res.ok) {
       throw new Error("Failed to fetch Terms & Conditions");
     }
 
-    return res.json();
+    const json = await res.json();
+    return json.data || {};
   } catch (error) {
-    console.error('Failed to fetch terms:', error);
-    return { data: {} }; // Return empty data on error
+    console.error("Failed to fetch terms:", error);
+    return {};
   }
 }
 
@@ -35,26 +37,26 @@ async function getTerms() {
 // ============================
 export async function generateMetadata() {
   try {
-    const response = await getTerms();
-    const meta = response?.data?.meta;
+    const data = await getTerms();
 
     return {
-      title: meta?.title || "Terms & Conditions | Teksversity",
+      title: `${data.heading || "Terms & Conditions"} | Teksversity`,
       description:
-        meta?.description ||
         "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
 
       openGraph: {
-        title: meta?.title,
-        description: meta?.description,
+        title: data.heading,
+        description:
+          "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
         url: `${siteUrl}/terms-conditions`,
         type: "website",
       },
 
       twitter: {
         card: "summary_large_image",
-        title: meta?.title,
-        description: meta?.description,
+        title: data.heading,
+        description:
+          "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
       },
 
       alternates: {
@@ -79,38 +81,58 @@ export async function generateMetadata() {
 // Page Component
 // ============================
 export default async function TermsConditions() {
-  const response = await getTerms();
-  const data = response?.data || {};
+  const data = await getTerms();
 
-  // Remove meta from sections
-  const terms = Object.entries(data)
-    .filter(([key]) => key !== "meta")
-    .map(([key, value]) => ({
-      title: value.heading || key,
-      points: value.points || [],
-    }));
+  const heading = data.heading || "Terms & Conditions";
+  const banner = data.banner || {};
+  const sections = data.sections || [];
 
   return (
-    <div className="main_container">
-      <div className="grid gap-6 mt-6 px-6">
+    <div className="main_container pb-10">
 
-        {terms.map((section, index) => (
-          <div key={index}>
+      {/* Page Heading */}
+      <div className="flex sm:text-2xl bg-[#eee] font-bold justify-center mt-4 mb-6 p-4">
+        {heading}
+      </div>
+
+      {/* Banner */}
+      {/* <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-[#221638]">
+          {banner.title}
+        </h2>
+        <p className="text-gray-600 mt-2">{banner.subtitle}</p>
+      </div> */}
+
+      {/* Sections */}
+      <div className="grid gap-6 px-4">
+
+        {sections.map((section, index) => (
+          <div key={index} className="grid gap-3">
+
+            {/* Section Title */}
             <h2 className="font-bold text-[#221638] text-xl">
               {section.title}
             </h2>
 
-            <ul className="list-disc pl-6 text-lg mt-3 space-y-3 text-[#606060]">
-              {section.points.map((point, i) => (
-                <li key={i}>
-                  {point}
-                </li>
-              ))}
-            </ul>
+            {/* Content (array) */}
+            {Array.isArray(section.content) && (
+              <ul className="list-disc pl-6 text-lg space-y-2 text-[#606060]">
+                {section.content.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
+            )}
+
+            {/* Content (string fallback) */}
+            {typeof section.content === "string" && (
+              <p className="text-[#606060] pl-4 text-lg text-justify">
+                {section.content}
+              </p>
+            )}
+
           </div>
         ))}
 
-        <div className="mb-32" />
       </div>
     </div>
   );
