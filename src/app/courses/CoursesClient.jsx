@@ -530,7 +530,7 @@ const Sidebar = ({
   }
 
   return (
-    <div className="container mx-auto rounded-xl">
+    <div className="main_container mx-auto rounded-xl">
       {/* Modal at the top level */}
       {showModal && selectedCourse && (
         isAcademicCourse ? (

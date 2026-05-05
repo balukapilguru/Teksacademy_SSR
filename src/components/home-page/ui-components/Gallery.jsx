@@ -9,7 +9,7 @@ export  default async function Gallery ({gallery})  {
   return (
     
    <div className="">
-        <div className="max-w-8xl mx-auto px-4 sm:px-2 lg:px-8 pb-4">
+        <div className="main_container mx-auto mt-4 pt-5">
           <div className="text-start mb-6">
             {/* <h2 className="text-2xl xl:text-4xl sm:text-2xl font-medium  text-black"> */}
               <Heading data={gallery?.heading}/>
