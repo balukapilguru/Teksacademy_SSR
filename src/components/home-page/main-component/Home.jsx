@@ -28,6 +28,7 @@ export default async function Home() {
     }
     const data = await res.json();
     homeData = data?.data;
+    console.log(homeData,"homedata")
   } catch (err) {
     console.error("Failed to fetch home page data:", err);
     homeData = null;
@@ -69,7 +70,7 @@ export default async function Home() {
       border: "#fbf5f6",
     },
     {
-      component: <Nutshell />,
+      component: <Nutshell data={homeData?.careerServices}/>,
       bg: "#fff",
       border: "#fff",
     },
