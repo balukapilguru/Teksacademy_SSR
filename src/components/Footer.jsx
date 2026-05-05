@@ -110,7 +110,7 @@ export default function Footer() {
                       <FaLocationDot className="w-5 md:h-5 2xl:mt-4" />
                     </span>
                     <div className="flex flex-col">
-                      <span className="text-[14px] text-[#FE543D] mb-1">Address:</span>
+                      <span className="text-[14px] text-[#FE543D] mb-1 text-start">Address:</span>
                       <Link href={branchMapLink} target="_blank" rel="noopener noreferrer">
                         <span className="font-normal xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem]">
                           {branchAddress}

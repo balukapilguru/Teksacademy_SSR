@@ -1,3 +1,4 @@
+import GetData from "@/utility/GetData";
 import Image from "next/image";
 
 export default function Hiring({ hiringData }) {
@@ -111,7 +112,7 @@ export default function Hiring({ hiringData }) {
                 <Image
                   width={280}
                   height={430}
-                  src={personImage}
+                  src={GetData({url:personImage})}
                   alt={personImageAlt}
                   className="h-[16.25rem] md:h-[16rem] md:w-[11rem] w-[12.5rem] lg:h-[14rem] lg:w-[10.25rem] xl:h-[20.375rem] xl:w-[13.125rem] 3xl:h-[26rem] 3xl:w-[17rem]"
                 />
@@ -128,7 +129,7 @@ export default function Hiring({ hiringData }) {
                         {marquee.images.map((item, idx) => (
                           <span key={`first-${index}-${idx}`}>
                             <Image
-                              src={item.image}
+                              src={GetData({url:item?.image})}
                               alt={item.alt}
                               width={200}
                               height={70}
@@ -139,7 +140,7 @@ export default function Hiring({ hiringData }) {
                         {marquee.images.map((item, idx) => (
                           <span key={`second-${index}-${idx}`}>
                             <Image
-                              src={item.image}
+                              src={GetData({url:item?.image})}
                               alt={item.alt}
                               width={200}
                               height={70}
