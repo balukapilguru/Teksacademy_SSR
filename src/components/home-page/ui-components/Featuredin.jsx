@@ -10,7 +10,7 @@ export default  function Featuredin ({featuredIn})  {
   return (
    
       <div className="">
-       <div className="max-w-8xl mx-auto  sm:px-6 lg:px-8 ">
+       <div className="main_container mx-auto mt-4 pt-5">
          <div className=" text-center">
            <div className=" flex pl-3 md:pl-0 ">
             <Heading data={featuredIn?.heading}/>

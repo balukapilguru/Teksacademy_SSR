@@ -66,7 +66,7 @@ const CertificationCourse = ({ data }) => {
 
   return (
     <section>
-      <div className="max-w-8xl mx-auto mt-4 px-4 sm:px-6 pt-5 md:pt-0 pb-4 md:pb-0 lg:px-8">
+      <div className="main_container mx-auto mt-4 pt-5 ">
 
         {/* Heading from SSR data prop */}
         <Heading data={data?.heading} as="h1" />

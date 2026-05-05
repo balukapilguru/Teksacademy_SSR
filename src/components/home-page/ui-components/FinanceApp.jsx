@@ -9,7 +9,7 @@ import Link from "next/link";
 const FinanceApp = () => {
   return (
     <div className="main_container pt-6 pb-6">
-      <div className="flex flex-col p-6 lg:flex-row gap-y-4 items-center justify-between">
+      <div className="flex flex-col lg:flex-row gap-y-4 items-center justify-between">
         {/* Left Section */}
         <div className="text-center w-full md:text-left xl:w-[60%] space-y-3 xl:space-y-6 2xl:space-y-8">
           {/* <h1 className="text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-[42px] text-start font-bold text-[#2A619D] leading-normal">

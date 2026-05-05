@@ -63,7 +63,7 @@ const SuccessStories = ({ successStoriesData }) => {
         </button>
       </div>
 
-      <div className="px-4 space-y-10">
+      <div className="space-y-10">
         {/* 🔵 TOP ROW - VIDEO CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  xl:grid-cols-4 gap-6">
           {videoCards.length === 0 ? (

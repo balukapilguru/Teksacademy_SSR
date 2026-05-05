@@ -105,7 +105,7 @@ export default async function Home() {
           <section
             key={idx}
             style={{ backgroundColor: sec.bg, borderColor: sec.border }}
-            className="md:py-4 xl:py-6  main_container rounded-lg"
+            className="md:py-4 xl:py-6 rounded-lg"
           >
             {sec.component}
           </section>

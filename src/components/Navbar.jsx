@@ -54,7 +54,7 @@ import {
 } from "react-icons/fa";
 import GetData from "@/utility/GetData";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
-import { FaRegNewspaper } from "react-icons/fa";
+import { FaRegNewspaper, FaSearch } from "react-icons/fa";
 import { FaBuildingColumns, FaMobileScreen } from "react-icons/fa6";
 import { useNavbar } from "@/components/coursePage/NavbarContext";
 import { FaChevronDown } from "react-icons/fa";
@@ -77,24 +77,16 @@ import CareerGuidanceForm from "../components/clientcomponents/forms/CareerGuida
 export default function Navbar() {
   const [navData, setNavData] = useState(null);
   const [showMenu, setShowMenu] = useState(null);
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(null);
+  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubMenu, setMobileSubMenu] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
   const menuRef = useRef(null);
   const headerRef = useRef(null);
   const [backtoTop, setbacktoTop] = useState(false);
   const [showCareer, setshowCareer] = useState(false);
   const router = useRouter();
-
-  const {
-    selectedCategory,
-    setSelectedCategory,
-    selectedSubCategory,
-    setSelectedSubCategory,
-  } = useContext(SelectedCourseContext);
 
   const { mainNavbarVisible } = useNavbar();
 
@@ -112,9 +104,8 @@ export default function Navbar() {
           next: { revalidate: 60 },
         });
         const data = await response.json();
-        console.log(data,"dattaaa")
+        console.log(data, "navbar data");
         setNavData(data?.data?.navbar || null);
-       
       } catch (err) {
         console.error("Navbar fetch error:", err);
       } finally {
@@ -123,26 +114,6 @@ export default function Navbar() {
     };
     fetchNav();
   }, []);
-
-  useEffect(() => {
-    if (!navData) return;
-
-    const mainbar = navData.mainbar || {};
-    const elements = mainbar.elements || [];
-    const coursesMenu = elements.find((el) => el.name === "Courses");
-
-    if (coursesMenu) {
-      const categoryIndex = coursesMenu.dropdown.findIndex(
-        (d) => d.value === selectedCategory,
-      );
-
-      if (categoryIndex >= 0) {
-        setActiveCategoryIndex(categoryIndex);
-      } else if (selectedCategory) {
-        setActiveCategoryIndex(null);
-      }
-    }
-  }, [navData, selectedCategory]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,146 +152,13 @@ export default function Navbar() {
     setMobileSubMenu((prev) => (prev === menuName ? null : menuName));
   }, []);
 
-  const handleSubCategoryClick = useCallback(
-    (catValue, subValue, subLink, catIndex) => {
-      const cleanCatValue = catValue?.trim() || "";
-      const cleanSubValue = subValue?.trim() || "";
-
-      setSelectedCategory(cleanCatValue);
-      setSelectedSubCategory(cleanSubValue);
-      setActiveCategoryIndex(catIndex);
-      setShowMenu(null);
-      setHoveredCategoryIndex(null);
-      setMobileMenuOpen(false);
-
-      localStorage.setItem("selectedCategory", cleanCatValue);
-      localStorage.setItem("selectedSubCategory", cleanSubValue);
-    },
-    [setSelectedCategory, setSelectedSubCategory],
-  );
-
-  const handleCategoryClick = useCallback(
-    (catValue, catIndex) => {
-      setSelectedCategory(catValue);
-      setSelectedSubCategory(null);
-      setActiveCategoryIndex(catIndex);
-      setShowMenu(null);
-      setHoveredCategoryIndex(null);
-      setMobileMenuOpen(false);
-
-      localStorage.setItem("selectedCategory", catValue);
-      localStorage.removeItem("selectedSubCategory");
-    },
-    [setSelectedCategory, setSelectedSubCategory],
-  );
-
-  const handleCategoryHover = useCallback((catIndex) => {
-    setHoveredCategoryIndex(catIndex);
-  }, []);
-
-  const handleCategoryMouseLeave = useCallback(() => {
-    if (!showMenu) {
-      setHoveredCategoryIndex(null);
-    }
-  }, [showMenu]);
-
-  const getDisplayCategoryIndex = useCallback(() => {
-    if (hoveredCategoryIndex !== null) {
-      return hoveredCategoryIndex;
-    }
-    if (activeCategoryIndex !== null) {
-      return activeCategoryIndex;
-    }
-    return 0;
-  }, [hoveredCategoryIndex, activeCategoryIndex]);
-
-  const hasDirectLink = useCallback((subItem) => {
-    return subItem && subItem.link && subItem.link.trim() !== "";
-  }, []);
-
-  // Icon mapping functions
-  const getCategoryIcon = (categoryName) => {
-    switch (categoryName) {
-      case "Certifications":
-        return <TbCertificate className="text-lg" />;
-      case "Academics":
-        return <HiOutlineAcademicCap className="text-lg" />;
-      case "Self Learning":
-        return <IoBookOutline className="text-lg" />;
-      case "Dual Certification":
-        return <GiGraduateCap className="text-lg" />;
-      case "Post Graduation":
-        return <GiGraduateCap className="text-lg" />;
-      case "Fast Track Course":
-        return <BsLightningCharge className="text-lg" />;
-      default:
-        return <LuCircleDotDashed className="text-lg" />;
-    }
-  };
-
-  // Unified icon function for both desktop and mobile
-  const getSubCategoryIcon = (categoryValue, subName) => {
-    const lowerCategoryValue = (categoryValue || "").toLowerCase();
-    const lowerSubName = (subName || "").toLowerCase();
-    const subValue = subName ? subName.replace(/\s+/g, "").toLowerCase() : "";
-
-    if (lowerCategoryValue === "certifications") {
-      if (lowerSubName.includes("dual")) return <FaAward className="text-xs" />;
-      if (lowerSubName.includes("post")) return <FaUserGraduate className="text-xs" />;
-      if (lowerSubName.includes("fast")) return <FaBolt className="text-xs" />;
-      if (lowerSubName.includes("teksversity")) return <AiFillSafetyCertificate className="text-xs" />;
-      return <FaCertificate className="text-xs" />;
-    }
-
-    if (lowerCategoryValue === "academics") {
-      if (subValue === "bba") return <FaBriefcase className="text-xs" />;
-      if (subValue === "ba") return <FaPenAlt className="text-xs" />;
-      if (subValue === "bca") return <FaCode className="text-xs" />;
-      if (subValue.includes("bcom")) return <FaCalculator className="text-xs" />;
-      if (subValue === "mba") return <FaChartLine className="text-xs" />;
-      if (subValue === "mca") return <FaDesktop className="text-xs" />;
-      if (subValue === "ma") return <FaBookOpen className="text-xs" />;
-      if (subValue === "mcom") return <FaCalculator className="text-xs" />;
-      if (subValue === "msc") return <FaFlask className="text-xs" />;
-      return <FaGraduationCap className="text-xs" />;
-    }
-
-    return <LuCircleDotDashed className="text-xs" />;
-  };
-
-  // Get icon for franchise dropdown items
-  const getFranchiseIcon = (itemName) => {
-    const lowerName = (itemName || "").toString().toLowerCase();
-
-    if (lowerName.includes("franchise") || lowerName.includes("business"))
-      return <MdOutlineBusiness className="text-sm" />;
-
-    return <FaBuildingColumns className="text-sm" />;
-  };
-
-  // Get icon for discover dropdown items
-  const getDiscoverIcon = (itemName) => {
-    const lowerName = (itemName || "").toString().toLowerCase();
-    if (lowerName.includes("about") || lowerName.includes("about us"))
-      return <FiMapPin className="text-sm" />;
-
-    if (lowerName.includes("contact") || lowerName.includes("enquiry"))
-      return <MdCall className="text-sm" />;
-
-    if (lowerName.includes("gallery") || lowerName.includes("photo"))
-      return <BsJournalText className="text-sm" />;
-
-    return <FaGlobe className="text-sm" />;
-  };
-
-  const { topbar, mainbar, elements, ivrNumber, topbarItems, coursesMenu } =
+  const { topbar, mainbar, elements, topbarItems, coursesMenu } =
     useMemo(() => {
       if (!navData)
         return {
           topbar: {},
           mainbar: {},
           elements: [],
-          ivrNumber: "",
           topbarItems: [],
           coursesMenu: null,
         };
@@ -328,30 +166,21 @@ export default function Navbar() {
       const topbar = navData.topbar || {};
       const mainbar = navData.mainbar || {};
       const elements = mainbar.elements || [];
-      
-      // Handle ivrNumber - it could be an object with value property or direct string
-      let ivrNumber = "";
-      if (mainbar.ivrNumber) {
-        ivrNumber = typeof mainbar.ivrNumber === 'object' 
-          ? mainbar.ivrNumber.value 
-          : mainbar.ivrNumber;
-      }
-      
-      // Process topbar items - convert object to array and filter
+
+      // Process topbar items - convert object to array AND add missing type
       const topbarItemsObj = topbar.items || {};
-      let topbarItemsArray = Object.values(topbarItemsObj);
-      
-      // Extract contact number from topbar if exists
-      if (topbarItemsObj.contact && topbarItemsObj.contact.name && !ivrNumber) {
-        ivrNumber = topbarItemsObj.contact.name;
-      }
-      
-      // Filter out contact from topbar items if it's displayed elsewhere
-      topbarItemsArray = topbarItemsArray.filter(item => item.type !== 'text');
-      
+      const topbarItemsArray = Object.entries(topbarItemsObj).map(([key, value]) => {
+        // If the item has a link but no type, default to "link"
+        if (!value.type && value.link) {
+          return { ...value, type: "link", key };
+        }
+        // Also add the key for filtering (e.g., "login", "findMyCourse")
+        return { ...value, key };
+      });
+
       const coursesMenu = elements.find((el) => el.name === "Courses");
 
-      return { topbar, mainbar, elements, ivrNumber, topbarItems: topbarItemsArray, coursesMenu };
+      return { topbar, mainbar, elements, topbarItems: topbarItemsArray, coursesMenu };
     }, [navData]);
 
   const socialIcons = useMemo(
@@ -361,7 +190,7 @@ export default function Navbar() {
       youtube: FaYoutube,
       linkedin: FaLinkedinIn,
     }),
-    [],
+    []
   );
 
   const handleFormButtonClick = useCallback(() => {
@@ -390,97 +219,118 @@ export default function Navbar() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${
-          scrolled ? "shadow-md" : "shadow-md"
-        }`}
+        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${scrolled ? "shadow-md" : "shadow-md"
+          }`}
       >
         <div className="hidden md:block bg-[#002b80] text-white text-xs py-2">
-          <div className="max-w-6xl main_container flex items-center justify-between">
-            <div className="flex items-center w-full gap-3">
-              {topbarItems.map((item, index) => {
-                if (item.type === "link") {
-                  if (!isValidLink(item.link)) {
-                    return null;
-                  }
-                  return (
-                    <Link
-                      key={`top-link-${index}`}
-                      href={item.link}
-                      className="hover:text-[#c41e3a] transition-colors text-md flex items-center gap-1"
-                    >
-                      {item.name === "Download Mobile App" && (
-                        <FaMobileScreen size={14} />
-                      )}
-                      {item.name === "Blogs" && <FaRegNewspaper size={14} />}
-                      {item.name}
-                    </Link>
-                  );
-                }
-                return null;
-              })}
-            </div>
-            <div className="flex items-center w-full justify-end gap-4">
-              {topbarItems.map((item, index) => {
-                if (item.type === "button") {
-                  if (item.form) {
+          <div className="main_container flex items-center justify-between">
+            {/* LEFT SIDE - contact, download, blogs, findMyCourse */}
+            <div className="flex items-center w-full gap-6">
+              {topbarItems
+                .filter(item =>
+                  item.type === "text" ||
+                  (item.type === "link" && item.key !== "login" && item.key !== "button")
+                )
+                .map((item, index) => {
+                  if (item.type === "text") {
                     return (
-                      <button
-                        key={`top-button-${index}`}
-                        onClick={handleFormButtonClick}
-                        className="bg-white text-[#002b80] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md cursor-pointer"
-                      >
-                        {item.name}
-                      </button>
+                      <div key={`top-text-${index}`} className="flex items-center gap-2">
+                        <MdCall className="text-sm" />
+                        <span>{item.name}</span>
+                      </div>
                     );
                   }
-                  if (!isValidLink(item.link)) {
-                    return null;
+                  if (item.type === "link") {
+                    if (!isValidLink(item.link)) return null;
+                    return (
+                      <Link
+                        key={`top-link-${index}`}
+                        href={item.link}
+                        className="hover:text-[#c41e3a] transition-colors text-md flex items-center gap-1"
+                      >
+                        {item.name === "Download Mobile App" && <FaMobileScreen size={14} />}
+                        {item.name === "Blogs" && <FaRegNewspaper size={14} />}
+                        {item.name === "Find My Course" && <FaSearch size={14} />}
+                        {item.name}
+                      </Link>
+                    );
                   }
-                  return (
-                    <Link
-                      key={`top-button-${index}`}
-                      href={item.link}
-                      className="bg-white text-[#002b80] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md"
-                    >
-                      {item.name}
-                    </Link>
-                  );
-                }
-                if (item.type === "socialMedia" && item.icons) {
-                  return (
-                    <div
-                      key={`social-${index}`}
-                      className="flex items-center gap-4"
-                    >
-                      {item.icons.map((social, idx) => {
-                        const IconComponent = socialIcons[social.platform];
-                        if (!isValidLink(social.link)) {
-                          return null;
-                        }
-                        return (
-                          <a
-                            key={`social-icon-${idx}`}
-                            href={social.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`Visit our ${social.platform} page`}
-                            className="hover:text-[#c41e3a] transition-colors inline-flex"
-                          >
-                            <IconComponent
-                              className="text-[18px]"
-                              aria-hidden="true"
-                            />
-                            <span className="sr-only">
-                              {`Visit our ${social.platform} page`}
-                            </span>
-                          </a>
-                        );
-                      })}
-                    </div>
-                  );
-                }
-                return null;
-              })}
+                  return null;
+                })}
+            </div>
+
+            {/* RIGHT SIDE - button, login, socialMedia */}
+      
+            <div className="flex items-center w-full justify-end gap-6">
+              {topbarItems
+                .filter(item =>
+                  item.type === "button" ||
+                  item.key === "login" ||
+                  item.type === "socialMedia"
+                )
+                .map((item, index) => {
+                  if (item.type === "button") {
+                    if (item.form) {
+                      return (
+                        <button
+                          key={`top-button-${index}`}
+                          onClick={handleFormButtonClick}
+                          className="bg-white text-[#002b80] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md cursor-pointer"
+                        >
+                          {item.name}
+                        </button>
+                      );
+                    }
+                    if (!isValidLink(item.link)) return null;
+                    return (
+                      <Link
+                        key={`top-button-${index}`}
+                        href={item.link}
+                        className="bg-white text-[#002b80] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md"
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  }
+                  if (item.key === "login") {
+                    if (!isValidLink(item.link)) return null;
+                    return (
+                      <a
+                        key={`top-login-${index}`}
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white hover:text-[#c41e3a] transition-colors text-md"
+                      >
+                        {item.name}
+                      </a>
+                    );
+                  }
+                  if (item.type === "socialMedia" && item.icons) {
+                    return (
+                      <div key={`social-${index}`} className="flex items-center gap-4">
+                        {item.icons.map((social, idx) => {
+                          const IconComponent = socialIcons[social.platform];
+                          if (!IconComponent || !isValidLink(social.link)) return null;
+                          return (
+                            <a
+                              key={`social-icon-${idx}`}
+                              href={social.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`Visit our ${social.platform} page`}
+                              className="hover:text-[#c41e3a] transition-colors inline-flex"
+                            >
+                              <IconComponent className="text-[18px]" aria-hidden="true" />
+                              <span className="sr-only">Visit our {social.platform} page</span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
             </div>
           </div>
         </div>
@@ -489,14 +339,6 @@ export default function Navbar() {
           className="main_container flex items-center justify-between h-12 md:h-18 "
           ref={menuRef}
         >
-          <button
-            className="lg:hidden p-1.5"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <MdClose size={20} /> : <MdMenu size={20} />}
-          </button>
-
           <div className="">
             <Link href="/">
               <Image
@@ -513,45 +355,13 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Social Media Icons in Main Navbar - Mobile Only */}
-          <div className="lg:hidden md:hidden flex items-center gap-3">
-            {topbarItems.map((item, index) => {
-              if (item.type === "socialMedia" && item.icons) {
-                return (
-                  <div
-                    key={`mobile-main-social-${index}`}
-                    className="flex items-center gap-2"
-                  >
-                    {item.icons.map((social, idx) => {
-                      const IconComponent = socialIcons[social.platform];
-                      if (!isValidLink(social.link)) {
-                        return null;
-                      }
-                      return (
-                        <a
-                          key={`mobile-main-social-icon-${idx}`}
-                          href={social.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Visit our ${social.platform} page`}
-                          className="hover:text-[#c41e3a] transition-colors inline-flex"
-                        >
-                          <IconComponent
-                            className="text-[16px]"
-                            aria-hidden="true"
-                          />
-                          <span className="sr-only">
-                            {`Visit our ${social.platform} page`}
-                          </span>
-                        </a>
-                      );
-                    })}
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
+          <button
+            className="lg:hidden p-1.5"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <MdClose size={20} /> : <MdMenu size={20} />}
+          </button>
 
           <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-10">
             {elements.map((item, index) => (
@@ -562,7 +372,7 @@ export default function Navbar() {
                   if (item.dropdown) {
                     setShowMenu(item.name);
                     if (item.name === "Courses") {
-                      setHoveredCategoryIndex(getDisplayCategoryIndex());
+                      setHoveredCategoryIndex(0);
                     }
                   }
                 }}
@@ -587,9 +397,8 @@ export default function Navbar() {
 
                   {item.dropdown && item.dropdown.length > 0 && (
                     <FaChevronDown
-                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${
-                        showMenu === item.name ? "rotate-180" : "rotate-0"
-                      }`}
+                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${showMenu === item.name ? "rotate-180" : "rotate-0"
+                        }`}
                     />
                   )}
                 </div>
@@ -598,19 +407,12 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[750px] bg-white shadow-xl rounded-lg p-3 flex  border border-gray-100 transition-all duration-200 ${
-                        showMenu === item.name
+                      className={`absolute left-0 top-full mt-4 w-[750px] bg-white shadow-xl rounded-lg p-3 flex border border-gray-100 transition-all duration-200 ${showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
-                      }`}
+                        }`}
                       onMouseEnter={() => {
                         setShowMenu(item.name);
-                        if (
-                          hoveredCategoryIndex === null &&
-                          activeCategoryIndex === null
-                        ) {
-                          setHoveredCategoryIndex(0);
-                        }
                       }}
                       onMouseLeave={() => {
                         setShowMenu(null);
@@ -618,175 +420,28 @@ export default function Navbar() {
                       }}
                       style={{ height: "auto", minHeight: "240px" }}
                     >
-                      <div className="w-1/4 pr-2 border-r border-gray-100">
-                        <div className="space-y-3">
-                          {item.dropdown.map((cat, catIndex) => {
-                            const isHovered =
-                              getDisplayCategoryIndex() === catIndex;
-                            const isSelected = activeCategoryIndex === catIndex;
-                            const isClickable = [
-                              "certifications",
-                              "academics",
-                            ].includes(cat.value);
-                            const categoryKey =
-                              cat.value || cat.category || `category-${catIndex}`;
-
-                            return (
-                              <div key={`category-${categoryKey}`}> 
-                                {isClickable ? (
-                                  <Link
-                                    href="/courses"
-                                    onClick={() =>
-                                      handleCategoryClick(cat.value, catIndex)
-                                    }
-                                    className={`block p-4 rounded cursor-pointer transition-all ${
-                                      isHovered
-                                        ? "bg-[#002b80] text-white"
-                                        : isSelected
-                                          ? "bg-blue-50 text-[#002b80] border-l-4 border-[#002b80]"
-                                          : "hover:bg-gray-50"
-                                    }`}
-                                    onMouseEnter={() =>
-                                      handleCategoryHover(catIndex)
-                                    }
-                                  >
-                                    <div className="flex items-center gap-1.5">
-                                      {getCategoryIcon(cat.category)}
-                                      <span className="font-semibold text-sm">
-                                        {cat.category}
-                                      </span>
-                                      <MdArrowForwardIos className="text-[10px] ml-auto" />
-                                    </div>
-                                  </Link>
-                                ) : (
-                                  <div
-                                    className={`p-4 rounded cursor-pointer transition-all ${
-                                      isHovered
-                                        ? "bg-[#002b80] text-white"
-                                        : isSelected
-                                          ? "bg-blue-50 text-[#002b80] border-l-4 border-[#002b80]"
-                                          : "hover:bg-gray-50"
-                                    }`}
-                                    onMouseEnter={() =>
-                                      handleCategoryHover(catIndex)
-                                    }
-                                    onClick={() =>
-                                      handleCategoryClick(cat.value, catIndex)
-                                    }
-                                  >
-                                    <div className="flex items-center gap-1.5">
-                                      {getCategoryIcon(cat.category)}
-                                      <span className="font-semibold text-sm">
-                                        {cat.category}
-                                      </span>
-                                      <MdArrowForwardIos className="text-[10px] ml-auto" />
-                                    </div>
-                                  </div>
-                                )}
+                      <div className="w-full">
+                        <div className="grid grid-cols-2 gap-4">
+                          {item.dropdown.map((course, courseIndex) => (
+                            <Link
+                              key={`course-${courseIndex}`}
+                              href={isValidLink(course.link) ? course.link : "#"}
+                              className="p-4 rounded-lg border border-gray-200 hover:border-[#002b80] hover:shadow-md transition-all group"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="flex-1">
+                                  <h3 className="font-semibold text-[#002b80] group-hover:text-[#c41e3a] transition-colors">
+                                    {course.title}
+                                  </h3>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    {course.description}
+                                  </p>
+                                </div>
+                                <MdArrowForwardIos className="text-[#002b80] group-hover:text-[#c41e3a] transition-colors mt-1" />
                               </div>
-                            );
-                          })}
+                            </Link>
+                          ))}
                         </div>
-                      </div>
-
-                      <div className="w-3/4 pl-3">
-                        {item.dropdown[getDisplayCategoryIndex()] && (
-                          <div className="h-full flex flex-col">
-                            <div className="flex-1">
-                              <div
-                                className={`grid gap-2 ${
-                                  item.dropdown[getDisplayCategoryIndex()]
-                                    ?.value === "certifications"
-                                    ? "grid-cols-2"
-                                    : item.dropdown[getDisplayCategoryIndex()]
-                                          ?.value === "academics"
-                                      ? "grid-cols-3"
-                                      : "grid-cols-2"
-                                }`}
-                              >
-                                {item.dropdown[
-                                  getDisplayCategoryIndex()
-                                ]?.subCategory?.map((sub, subIndex) => {
-                                  const href = hasDirectLink(sub)
-                                    ? sub.link
-                                    : `/courses?category=${item.dropdown[getDisplayCategoryIndex()].value}&subcategory=${sub.value || sub.name}`;
-                                  const isSelected =
-                                    selectedCategory ===
-                                      item.dropdown[getDisplayCategoryIndex()]
-                                        .value &&
-                                    selectedSubCategory === sub.value;
-
-                                  const icon = getSubCategoryIcon(
-                                    item.dropdown[getDisplayCategoryIndex()]
-                                      ?.value,
-                                    sub.name,
-                                  );
-
-                                  return (
-                                    <Link
-                                      key={sub.value || sub.name || `sub-${catIndex}-${subIndex}`}
-                                      href={href}
-                                      onClick={() => {
-                                        handleSubCategoryClick(
-                                          item.dropdown[
-                                            getDisplayCategoryIndex()
-                                          ].value,
-                                          sub.value,
-                                          href,
-                                          getDisplayCategoryIndex(),
-                                        );
-                                      }}
-                                      className={`p-2 rounded border transition-all h-10 flex items-center gap-2 ${
-                                        isSelected
-                                          ? "bg-white text-[#c41e3a] border-[#c41e3a]"
-                                          : "border-gray-200 hover:border-[#002b80] hover:text-[#002b80]"
-                                      }`}
-                                    >
-                                      <div
-                                        className={`p-1.5 rounded ${
-                                          isSelected
-                                            ? "bg-white/20"
-                                            : "bg-blue-50"
-                                        }`}
-                                      >
-                                        {icon}
-                                      </div>
-                                      <div className="flex-1">
-                                        <div className="font-medium text-xs">
-                                          {sub.name}
-                                        </div>
-                                        {sub.description && (
-                                          <div className="text-[10px] text-gray-500 mt-0.5">
-                                            {sub.description}
-                                          </div>
-                                        )}
-                                      </div>
-                                    </Link>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            <div className="mt-3 pt-2 border-t border-gray-100">
-                              <div className="flex items-center justify-start">
-                                <Link href="/courses">
-                                  <button
-                                    className="cursor-pointer text-[#002b80] font-semibold hover:text-[#c41e3a] transition-colors flex items-center gap-1 text-xs"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      setShowMenu(null);
-                                      setHoveredCategoryIndex(null);
-                                      router.push("/courses");
-                                    }}
-                                  >
-                                    know more{" "}
-                                    <MdArrowForwardIos className="text-xs" />
-                                  </button>
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
                   )}
@@ -795,11 +450,10 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[180px] p-2 z-50 border border-gray-100 transition-all duration-200 ${
-                        showMenu === item.name
+                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
-                      }`}
+                        }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
                     >
@@ -809,11 +463,14 @@ export default function Navbar() {
                           href={isValidLink(drop.link) ? drop.link : "#"}
                           className="flex items-center gap-2 p-3 hover:bg-gray-100 rounded whitespace-nowrap font-medium hover:text-[#c41e3a] transition-colors text-sm"
                         >
-                          {item.name === "Franchise" &&
-                            getFranchiseIcon(drop.name)}
-                          {item.name === "Discover" &&
-                            getDiscoverIcon(drop.name)}
-                          <span>{drop.name}</span>
+                          {item.name === "Branches" && <MdOutlineLocationOn className="text-sm" />}
+                          {item.name === "Resources" && <FaBookOpen className="text-sm" />}
+                          {item.name === "Discover" && <FaGlobe className="text-sm" />}
+                          {item.name === "Placements" && <FaBriefcase className="text-sm" />}
+                          <span>{drop.title || drop.name}</span>
+                          {drop.phone && (
+                            <span className="text-xs text-gray-500 ml-auto">{drop.phone}</span>
+                          )}
                         </Link>
                       ))}
                     </div>
@@ -821,10 +478,13 @@ export default function Navbar() {
               </li>
             ))}
 
-            <div className="hidden md:flex items-center gap-1 bg-[#c41e3a] text-white px-2.5 py-1 rounded font-semibold hover:bg-[#a0182e] transition-colors cursor-pointer text-md">
-              <MdCall className="text-[14px]" />
-              <span>{ivrNumber}</span>
-            </div>
+            {mainbar.button && (
+              <div className="hidden md:flex items-center gap-1 bg-[#c41e3a] text-white px-3 py-2 rounded font-semibold hover:bg-[#a0182e] transition-colors cursor-pointer text-sm">
+                <Link href={isValidLink(mainbar.button.link) ? mainbar.button.link : "#"}>
+                  {mainbar.button.title}
+                </Link>
+              </div>
+            )}
           </ul>
         </nav>
       </header>
@@ -837,12 +497,11 @@ export default function Navbar() {
       )}
 
       <div
-        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
-        <div className="flex items-center  justify-between p-2.5 border-b border-gray-100">
-          <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+        <div className="flex items-center  justify-end p-2.5 border-b border-gray-100">
+          {/* <Link href="/" onClick={() => setMobileMenuOpen(false)}>
             <Image
               src={
                 GetData({ url: mainbar.logo?.src }) || "/placeholder-logo.png"
@@ -853,7 +512,7 @@ export default function Navbar() {
               unoptimized
               priority
             />
-          </Link>
+          </Link> */}
           <button onClick={toggleMobileMenu} className="p-1">
             <MdClose size={20} />
           </button>
@@ -886,132 +545,28 @@ export default function Navbar() {
                     {mobileSubMenu === item.name && (
                       <div className="pl-0 pb-1.5">
                         {item.name === "Courses" ? (
-                          item.dropdown.map((cat, catIndex) => {
-                            const isClickable = [
-                              "certifications",
-                              "academics",
-                            ].includes(cat.value);
-
-                            return (
-                              <div
-                                key={`mobile-cat-${catIndex}`}
-                                className="mb-3"
+                          <div className="space-y-2">
+                            {item.dropdown.map((course, courseIndex) => (
+                              <Link
+                                key={`mobile-course-${courseIndex}`}
+                                href={isValidLink(course.link) ? course.link : "#"}
+                                className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded border-l-4 border-transparent hover:border-[#002b80] transition-colors"
+                                onClick={() => setMobileMenuOpen(false)}
                               >
-                                {/* CATEGORY HEADER */}
-                                {isClickable ? (
-                                  <Link
-                                    href="/courses"
-                                    onClick={() => {
-                                      handleCategoryClick(cat.value, catIndex);
-                                      setMobileMenuOpen(false);
-                                    }}
-                                    className="flex items-center gap-1.5 mb-2 p-1.5 hover:bg-gray-50 rounded"
-                                  >
-                                    <h3 className="font-semibold text-sm">
-                                      {cat.category}
-                                    </h3>
-                                    <MdArrowForwardIos className="text-xs ml-auto" />
-                                  </Link>
-                                ) : (
-                                  <div className="flex items-center gap-1.5 mb-2 p-1.5">
-                                    <h3 className="font-semibold text-sm">
-                                      {cat.category}
-                                    </h3>
-                                    <MdArrowForwardIos className="text-xs ml-auto" />
-                                  </div>
-                                )}
-
-                                {/* SUB-CATEGORIES WITH ICONS */}
-                                {cat.subCategory && (
-                                  <div
-                                    className={`grid gap-1.5 ${
-                                      cat.value === "certifications"
-                                        ? "grid-cols-1"
-                                        : cat.value === "academics"
-                                          ? "grid-cols-2"
-                                          : "grid-cols-1"
-                                    }`}
-                                  >
-                                    {cat.subCategory.map((sub, sIndex) => {
-                                      const href = hasDirectLink(sub)
-                                        ? sub.link
-                                        : `/courses?category=${cat.value}&subcategory=${sub.value}`;
-                                      const isSelected =
-                                        selectedCategory === cat.value &&
-                                        selectedSubCategory === sub.value;
-
-                                      const icon = getSubCategoryIcon(
-                                        cat.value,
-                                        sub.name,
-                                      );
-
-                                      return (
-                                        <Link
-                                          key={`mobile-sub-${sIndex}`}
-                                          href={href}
-                                          onClick={() => {
-                                            handleSubCategoryClick(
-                                              cat.value,
-                                              sub.value,
-                                              href,
-                                              catIndex,
-                                            );
-                                            setMobileMenuOpen(false);
-                                          }}
-                                          className={`block p-2 rounded border flex items-center gap-2 text-xs ${
-                                            isSelected
-                                              ? "bg-[#c41e3a] text-white border-[#c41e3a]"
-                                              : "border-gray-200 hover:bg-gray-50"
-                                          }`}
-                                        >
-                                          <div
-                                            className={`p-1.5 rounded ${
-                                              isSelected
-                                                ? "bg-white/20"
-                                                : "bg-blue-50"
-                                            }`}
-                                          >
-                                            {icon}
-                                          </div>
-                                          <div className="flex-1">
-                                            <div className="font-medium">
-                                              {sub.name}
-                                            </div>
-                                            {sub.description && (
-                                              <div className="text-[10px] text-gray-500 mt-0.5">
-                                                {sub.description}
-                                              </div>
-                                            )}
-                                          </div>
-                                        </Link>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-
-                                {!isClickable && (
-                                  <div className="flex justify-start mt-2">
-                                    <Link href="/courses">
-                                      <button
-                                        className="cursor-pointer text-[#002b80] font-semibold hover:text-[#c41e3a] transition-colors flex items-center gap-1 text-xs"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          setMobileMenuOpen(false);
-                                          setMobileSubMenu(null);
-                                          router.push("/courses");
-                                        }}
-                                      >
-                                        know more{" "}
-                                        <MdArrowForwardIos className="text-xs" />
-                                      </button>
-                                    </Link>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })
+                                <div className="flex-1">
+                                  <h3 className="font-semibold text-sm text-[#002b80]">
+                                    {course.title}
+                                  </h3>
+                                  <p className="text-xs text-gray-600 mt-1">
+                                    {course.description}
+                                  </p>
+                                </div>
+                                <MdArrowForwardIos className="text-[#002b80] text-sm mt-1" />
+                              </Link>
+                            ))}
+                          </div>
                         ) : (
-                          // For non-course dropdowns (Franchise, Discover)
+                          // For non-course dropdowns
                           <div className="space-y-1">
                             {item.dropdown.map((drop, dIndex) => (
                               <Link
@@ -1020,11 +575,14 @@ export default function Navbar() {
                                 className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded text-sm"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
-                                {item.name === "Franchise" &&
-                                  getFranchiseIcon(drop.name)}
-                                {item.name === "Discover" &&
-                                  getDiscoverIcon(drop.name)}
-                                <span>{drop.name}</span>
+                                {item.name === "Branches" && <MdOutlineLocationOn className="text-sm" />}
+                                {item.name === "Resources" && <FaBookOpen className="text-sm" />}
+                                {item.name === "Discover" && <FaGlobe className="text-sm" />}
+                                {item.name === "Placements" && <FaBriefcase className="text-sm" />}
+                                <span>{drop.title || drop.name}</span>
+                                {drop.phone && (
+                                  <span className="text-xs text-gray-500 ml-auto">{drop.phone}</span>
+                                )}
                               </Link>
                             ))}
                           </div>
@@ -1046,29 +604,32 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Top Items in Mobile Menu */}
+          {/* Top Items in Mobile Menu - UPDATED to show all topbar items properly */}
           <div className="mb-3 border-b border-gray-100 pb-3">
             <div className="space-y-2">
               {topbarItems.map((item, index) => {
-                if (item.type === "link") {
-                  if (!isValidLink(item.link)) {
-                    return null;
-                  }
+                // Skip social media here (rendered separately)
+                if (item.type === "socialMedia") return null;
+
+                // Link items (including login and findMyCourse now)
+                if (item.type === "link" || (item.link && !item.type)) {
+                  if (!isValidLink(item.link)) return null;
                   return (
                     <Link
                       key={`mobile-top-link-${index}`}
                       href={item.link}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded text-lg text-gray-700"
+                      className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
                     >
-                      {item.name === "Download Mobile App" && (
-                        <FaMobileScreen size={15} />
-                      )}
+                      {item.name === "Download Mobile App" && <FaMobileScreen size={15} />}
                       {item.name === "Blogs" && <FaRegNewspaper size={15} />}
+                      {item.name === "Find My Course" && <FaSearch size={15} />}
                       <span>{item.name}</span>
                     </Link>
                   );
                 }
+
+                // Button items (1:1 Career Guidance)
                 if (item.type === "button") {
                   if (item.form) {
                     return (
@@ -1080,15 +641,11 @@ export default function Navbar() {
                         }}
                         className="w-full flex items-center gap-2 p-2 hover:bg-gray-50 rounded text-sm text-gray-700 text-left bg-blue-50 border border-blue-100"
                       >
-                        <span className="font-semibold text-[#002b80]">
-                          {item.name}
-                        </span>
+                        <span className="font-semibold text-[#002b80]">{item.name}</span>
                       </button>
                     );
                   }
-                  if (!isValidLink(item.link)) {
-                    return null;
-                  }
+                  if (!isValidLink(item.link)) return null;
                   return (
                     <Link
                       key={`mobile-top-button-${index}`}
@@ -1105,13 +662,46 @@ export default function Navbar() {
             </div>
           </div>
 
+          {/* Apply For Job Button in Mobile Menu */}
+          {mainbar.button && (
+            <div className="flex justify-center items-center gap-1 bg-[#c41e3a] text-white px-3 py-2 rounded font-semibold mb-2 text-sm">
+              <Link href={isValidLink(mainbar.button.link) ? mainbar.button.link : "#"}>
+                {mainbar.button.title}
+              </Link>
+            </div>
+          )}
+
           {/* Social Media Icons in Mobile Menu */}
           <div className="">
-            {/* Call Button in Mobile Menu Footer */}
-            <div className="flex justify-center items-center gap-1 bg-[#c41e3a] text-white px-2.5 py-1.5 rounded font-semibold mb-2 text-md">
-              <MdCall className="text-[10px]" />
-              <span>{ivrNumber}</span>
-            </div>
+            {topbarItems.map((item, index) => {
+              if (item.type === "socialMedia" && item.icons) {
+                return (
+                  <div
+                    key={`mobile-social-${index}`}
+                    className="flex items-center justify-center mt-4 gap-4"
+                  >
+                    {item.icons.map((social, idx) => {
+                      const IconComponent = socialIcons[social.platform];
+                      if (!IconComponent || !isValidLink(social.link)) return null;
+                      return (
+                        <a
+                          key={`mobile-social-icon-${idx}`}
+                          href={social.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit our ${social.platform} page`}
+                          className="hover:text-[#c41e3a] transition-colors inline-flex"
+                        >
+                          <IconComponent className="text-[20px]" aria-hidden="true" />
+                          <span className="sr-only">Visit our {social.platform} page</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              return null;
+            })}
           </div>
         </div>
       </div>
