@@ -65,7 +65,7 @@ export default async function Home() {
       border: "#fff",
     },
     {
-      component: <Excel />,
+      component: <Excel data={homeData?.excelWithTeksacademy}/>,
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },

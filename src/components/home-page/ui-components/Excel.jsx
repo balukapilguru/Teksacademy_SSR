@@ -80,7 +80,8 @@ const blueItems = [
     },
 ];
 
-export default function Excel() {
+export default function Excel(data) {
+    console.log(data,"excdlll")
     return (
         <div className="xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel_bg.webp')] bg-cover bg-center">
             <div className="main_container py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10">
