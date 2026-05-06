@@ -333,21 +333,21 @@ export default function Navbar() {
                       </Link>
                     );
                   }
-                if (item.key === "login") {
-  if (!isValidLink(item.link)) return null;
-  return (
-    <a
-      key={`top-login-${index}`}
-      href={item.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-white hover:text-[#fff] transition-colors text-md flex items-center gap-1"
-    >
-      {item.key === "login" && <TbLogin2 size={14} />}
-      {item.name}
-    </a>
-  );
-}
+                  if (item.key === "login") {
+                    if (!isValidLink(item.link)) return null;
+                    return (
+                      <a
+                        key={`top-login-${index}`}
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white hover:text-[#fff] transition-colors text-md flex items-center gap-1"
+                      >
+                        {item.key === "login" && <TbLogin2 size={14} />}
+                        {item.name}
+                      </a>
+                    );
+                  }
                   if (item.type === "socialMedia" && item.icons) {
                     return (
                       <div
@@ -460,8 +460,8 @@ export default function Navbar() {
                   item.dropdown.length > 0 && (
                     <div
                       className={`absolute left-0 top-full mt-4 w-[720px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                          ? "opacity-100 visible translate-y-0"
-                          : "opacity-0 invisible -translate-y-1"
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-1"
                         }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => {
@@ -524,8 +524,8 @@ export default function Navbar() {
                   item.dropdown.length > 0 && (
                     <div
                       className={`absolute left-0 top-full mt-4 w-[780px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                          ? "opacity-100 visible translate-y-0"
-                          : "opacity-0 invisible -translate-y-1"
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-1"
                         }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
@@ -581,8 +581,8 @@ export default function Navbar() {
                   item.dropdown.length > 0 && (
                     <div
                       className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                          ? "opacity-100 visible translate-y-0"
-                          : "opacity-0 invisible -translate-y-1"
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-1"
                         }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
