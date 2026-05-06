@@ -80,7 +80,7 @@ export default async function Home() {
       border: "#fbf5f6",
     },
     {
-      component: <Awards awardsData={homeData?.awards} />,
+      component: <Awards awards={homeData?.awards} />,
       bg: "#fff",
       border: "#fff",
     },
