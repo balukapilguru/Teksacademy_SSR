@@ -187,7 +187,7 @@ export default function Footer() {
                         rel="noopener noreferrer"
                         aria-label={`Visit our ${social.platform} page`}
                       >
-                        <Icon className="w-8 h-8 p-1 text-[#FE543D] bg-slate-600 rounded-full" />
+                        <Icon className="w-8 h-8 p-1.5 text-[#FE543D] bg-slate-600 rounded-full" />
                       </Link>
                     );
                   })}
