@@ -1,5 +1,6 @@
 "use client";
 
+import GetData from "@/utility/GetData";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowDownLong } from "react-icons/fa6";
@@ -8,7 +9,7 @@ export default function Nutshell({ data, courseData }) {
   const { title, services, button, image } = data || {};
 
   const isBFSI = courseData?.coursename === "BFSI-Course";
-
+console.log(data,"nutsheel")
   return (
     <div className="main_container">
       <div className="flex flex-col items-center">
@@ -31,7 +32,7 @@ export default function Nutshell({ data, courseData }) {
         </div>
 
         {/* Layout */}
-        <div className="grid xl:grid-cols-2 gap-6 px-4 w-full">
+        <div className="grid md:grid-cols-2 gap-6 px-4 w-full">
 
           {/* LEFT SIDE */}
           <div className="space-y-6 xl:mt-10">
@@ -43,7 +44,7 @@ export default function Nutshell({ data, courseData }) {
                 <div key={index} className="flex items-center gap-3">
 
                   <Image
-                    src={item.icon.url}
+                    src={GetData({url:item.icon.url})}
                     alt={item.icon.name}
                     width={100}
                     height={100}
@@ -101,7 +102,7 @@ export default function Nutshell({ data, courseData }) {
           {/* RIGHT SIDE IMAGE */}
           <div className="flex justify-center items-center">
             <Image
-              src={image?.mobile}
+              src={GetData({url:image?.mobile})}
               alt={image?.alt}
               width={500}
               height={500}
@@ -109,7 +110,7 @@ export default function Nutshell({ data, courseData }) {
             />
 
             <Image
-              src={isBFSI ? image?.desktop : image?.desktop}
+              src={GetData({url:isBFSI ? image?.desktop : image?.desktop})}
               alt={image?.alt}
               width={700}
               height={700}

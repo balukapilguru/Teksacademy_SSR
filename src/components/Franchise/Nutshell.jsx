@@ -16,18 +16,7 @@ import Heading from "@/utility/Heading";
 export default function Nutshell({ data }) {
   const career = data?.careerServices || data;
 
-  // Map each service by ID to a Lucide icon
-  const serviceIcons = {
-    1: <GraduationCap className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    2: <Cpu className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    3: <BriefcaseBusiness className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    4: <FileBadge className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    5: <Users className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    6: <BookOpenCheck className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    7: <Building2 className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    8: <Handshake className="w-7 h-7 text-red-700 group-hover:text-white" />,
-    9: <BadgeCheck className="w-7 h-7 text-red-700 group-hover:text-white" />,
-  };
+
 
   return (
     <section className="py-7 bg-[#f7f8f9] border border-[#f7f8f9] rounded-lg mt-7">
