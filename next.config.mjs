@@ -16,6 +16,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "s3-eu-west-1.amazonaws.com",
       },
+      // ✅ Add this to fix the error
+      {
+        protocol: "https",
+        hostname: "teksacademy.com",
+      },
+      // Also add localhost for development if needed
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
     ],
   },
 
