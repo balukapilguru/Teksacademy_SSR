@@ -110,7 +110,7 @@ const Excel = ({ data }) => {
 
                   {/* Separator line (for desktop only) */}
                   {((index + 1) % 4 !== 0) && (
-                    <span className="hidden lg:block absolute right-[-20px] top-1/2 -translate-y-1/2 h-32 border-r-2 border-[#c41e3a] border-dotted"></span>
+                    <span className="hidden lg:block absolute right-[-20px] top-1/2 -translate-y-1/2 h-32 border-r-2 border-[#ea6329] border-dotted"></span>
                   )}
                 </div>
               );

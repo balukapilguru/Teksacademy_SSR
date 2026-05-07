@@ -253,7 +253,7 @@ export default function Basicform({ source, image, course, sourcetype }) {
             </div>
           )}
 
-          <h2 className="text-2xl font-semibold mb-2 text-[#c41e3a]">
+          <h2 className="text-2xl font-semibold mb-2 text-[#ea6329]">
             Talk to Our Team
           </h2>
           <p className="text-sm text-gray-600 mb-4">
@@ -313,7 +313,7 @@ export default function Basicform({ source, image, course, sourcetype }) {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-[#c41e3a] text-white font-bold h-10 rounded-lg hover:bg-white hover:text-[#c41e3a] border-2 border-[#c41e3a] transition ${
+              className={`w-full bg-[#ea6329] text-white font-bold h-10 rounded-lg hover:bg-white hover:text-[#ea6329] border-2 border-[#ea6329] transition ${
                 isLoading ? "animate-pulse" : ""
               }`}
             >

@@ -25,7 +25,7 @@ export default function HomepageBanner({ bannerData }) {
             {/* Logos */}
             {/* <div className="mt-5">
               <div
-               className="text-[#c41e3a] text-sm mb-3 font-medium">
+               className="text-[#ea6329] text-sm mb-3 font-medium">
                 {bannerData?.subHeading}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">

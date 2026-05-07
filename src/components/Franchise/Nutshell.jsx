@@ -39,9 +39,9 @@ export default function Nutshell({ data }) {
               className="group bg-white p-3 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-red-200"
             >
               {/* Icon Box */}
-              {/* <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#c41e3a] transition-all duration-300">
+              {/* <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#ea6329] transition-all duration-300">
                 {serviceIcons[feature.id] || (
-                  <span className="w-6 h-6 bg-[#c41e3a] rounded-full block"></span>
+                  <span className="w-6 h-6 bg-[#ea6329] rounded-full block"></span>
                 )}
               </div> */}
 

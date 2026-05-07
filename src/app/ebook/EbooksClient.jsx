@@ -45,7 +45,7 @@ export default function EbookClient({ data, source }) {
           <svg className="absolute top-8 lg:top-10 w-full" viewBox="0 0 110 12">
             <path
               d="M0 10 Q80 -2 190 27"
-              stroke="#c41e3a"
+              stroke="#ea6329"
               strokeWidth="1.3"
               fill="transparent"
             />
@@ -88,7 +88,7 @@ export default function EbookClient({ data, source }) {
                   <p className="text-gray-500 text-xs">{course.description}</p>
                 </div>
 
-                <button className="mt-2 p-1 px-4 w-1/2 border text-sm border-[#c41e3a] cursor-pointer text-[#c41e3a] rounded-lg">
+                <button className="mt-2 p-1 px-4 w-1/2 border text-sm border-[#ea6329] cursor-pointer text-[#ea6329] rounded-lg">
                   {course.button?.text || "Download"}
                 </button>
               </div>

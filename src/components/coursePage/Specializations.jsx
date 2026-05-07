@@ -22,7 +22,7 @@ const Specializations = ({ data }) => {
     }
 
     return (
-      <div className="bg-white rounded-2xl p-2 h-32 xl:h-24 cursor-pointer border border-gray-200 hover:border-[#c41e3a] transition-all duration-300 hover:shadow-md shadow-sm flex flex-col justify-between">
+      <div className="bg-white rounded-2xl p-2 h-32 xl:h-24 cursor-pointer border border-gray-200 hover:border-[#ea6329] transition-all duration-300 hover:shadow-md shadow-sm flex flex-col justify-between">
         <Link href={service?.link}>
           <div className="flex items-center justify-between mt-1">
             <div className="flex flex-col items-start pl-2 mt-0">

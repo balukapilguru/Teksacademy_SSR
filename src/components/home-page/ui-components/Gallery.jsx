@@ -13,7 +13,7 @@ export  default async function Gallery ({gallery})  {
           <div className="text-start mb-6">
             {/* <h2 className="text-2xl xl:text-4xl sm:text-2xl font-medium  text-black"> */}
               <Heading data={gallery?.heading}/>
-              {/* {gallery?.heading}<span className="text-[#c41e3a]"> </span> */}
+              {/* {gallery?.heading}<span className="text-[#ea6329]"> </span> */}
             {/* </h2> */}
           </div>
 

@@ -34,7 +34,7 @@ const Heading = ({ data, as = "div" }) => {
       {validHeadings.length > 1 ? (
         <>
           {validHeadings[0]}{" "}
-          <span className="text-[#c41e3a]">{validHeadings[1]}</span>
+          <span className="text-[#ea6329]">{validHeadings[1]}</span>
         </>
       ) : (
         validHeadings[0]

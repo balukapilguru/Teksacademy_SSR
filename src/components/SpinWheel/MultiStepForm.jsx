@@ -424,7 +424,7 @@ const MultiStepForm = ({ onSuccess, onClose }) => {
       {!showCongrats && currentStep <= 5 && (
         <div className="flex justify-between items-center pt-6 mt-4">
           <p className="text-sm font-medium text-white">
-            Step <strong className="text-[#c41e3a]">{currentStep}</strong> of{" "}
+            Step <strong className="text-[#ea6329]">{currentStep}</strong> of{" "}
             {TOTAL_STEPS}
           </p>
 
@@ -448,7 +448,7 @@ const MultiStepForm = ({ onSuccess, onClose }) => {
     ${
       isButtonDisabled()
         ? "bg-gray-300 text-black cursor-not-allowed"
-        : "bg-[#c41e3a] hover:bg-[#a81a32]"
+        : "bg-[#ea6329] hover:bg-[#a81a32]"
     }
   `}
             >

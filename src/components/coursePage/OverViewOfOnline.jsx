@@ -93,7 +93,7 @@ const OverViewOfOnline = ({
 
               {keyPoints.map((point, index) => (
                 <div key={index} className="flex items-start ">
-                  <span className="flex-shrink-0 w-8 h-8 mr-1 flex items-center justify-center text-[#c41e3a]">
+                  <span className="flex-shrink-0 w-8 h-8 mr-1 flex items-center justify-center text-[#ea6329]">
                     <GiPentarrowsTornado />
                   </span>
                   <p className="flex-1">{point}</p>

@@ -103,7 +103,7 @@ const FeeStructure = () => {
                 <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-md border border-gray-100 p-0 overflow-hidden">
                   <div className="grid md:grid-cols-2 relative">
                     {/* Left Side: View Discounts */}
-                     <div className="bg-gradient-to-tr from-[#002b80] via-[#002b80] to-[#c41e3a] text-white p-8 flex flex-col justify-center relative overflow-hidden">
+                     <div className="bg-gradient-to-tr from-[#002b80] via-[#002b80] to-[#ea6329] text-white p-8 flex flex-col justify-center relative overflow-hidden">
                       <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
                       <div className="text-base opacity-90">Starting at</div>
                       <div className="text-4xl font-bold mt-1">
@@ -138,7 +138,7 @@ const FeeStructure = () => {
                       </div>
                       <button
                         onClick={() => setOpenDiscount(true)}
-                        className="w-full bg-gradient-to-r from-[#c41e3a] to-[#002b80] cursor-pointer text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition shadow"
+                        className="w-full bg-gradient-to-r from-[#ea6329] to-[#002b80] cursor-pointer text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition shadow"
                       >
                         View Discounts
                       </button>
@@ -246,7 +246,7 @@ const FeeStructure = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-[#002b80] to-[#c41e3a] text-white py-3 rounded-xl font-medium hover:opacity-90 hover:scale-[1.02] transition-all shadow-md cursor-pointer"
+                className="w-full bg-gradient-to-r from-[#002b80] to-[#ea6329] text-white py-3 rounded-xl font-medium hover:opacity-90 hover:scale-[1.02] transition-all shadow-md cursor-pointer"
               >
                 {loading ? "Submitting..." : "Submit Application"}
               </button>
@@ -312,7 +312,7 @@ const FeeStructure = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-[#c41e3a] text-white rounded-lg hover:bg-[#a01a30]"
+                  className="w-full py-3 bg-[#ea6329] text-white rounded-lg hover:bg-[#a01a30]"
                 >
                   {loading ? "Submitting..." : "Submit Registration"}
                 </button>
@@ -341,13 +341,13 @@ const FeeStructure = () => {
                 <div className="bg-yellow-50 border border-yellow-300 p-3 rounded-lg">
                   <div className="text-base text-yellow-700 font-medium">
                     Limited-Time Special Discount: <br />
-                    <span className="text-2xl font-bold text-[#c41e3a]">
+                    <span className="text-2xl font-bold text-[#ea6329]">
                       Save up to ₹35,000!
                     </span>
                   </div>
                 </div>
               </div>
-              <button className="mt-6 w-full py-2 cursor-pointer bg-[#c41e3a] text-white rounded-lg font-semibold hover:bg-[#a01a30]">
+              <button className="mt-6 w-full py-2 cursor-pointer bg-[#ea6329] text-white rounded-lg font-semibold hover:bg-[#a01a30]">
                 Take Test & Claim Discount
               </button>
             </div>

@@ -132,8 +132,8 @@ const Page = ({ data }) => {
                 onClick={() => setSelectedCategory(category.value)}
                 className={`px-5 py-2 rounded-md text-sm font-medium transition ${
                   selectedCategory === category.value
-                    ? "bg-[#c41e3a] text-white"
-                    : "border border-[#c41e3a] text-[#c41e3a] hover:bg-[#c41e3a] hover:text-white"
+                    ? "bg-[#ea6329] text-white"
+                    : "border border-[#ea6329] text-[#ea6329] hover:bg-[#ea6329] hover:text-white"
                 }`}
               >
                 {category.name}
@@ -149,7 +149,7 @@ const Page = ({ data }) => {
                 onClick={() => setSelectedCategory(category.value)}
                 className={`text-lg pb-2 border-b-2 ${
                   selectedCategory === category.value
-                    ? "text-[#c41e3a] border-[#c41e3a]"
+                    ? "text-[#ea6329] border-[#ea6329]"
                     : "border-transparent"
                 }`}
               >

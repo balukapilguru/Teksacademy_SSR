@@ -202,7 +202,7 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
             {/* Left Section */}
             <div className="lg:col-span-3 space-y-6">
               {heading?.length > 0 && (
-                <p className="text-[#c41e3a] text-sm font-medium mb-1">
+                <p className="text-[#ea6329] text-sm font-medium mb-1">
                   {heading[0]}
                 </p>
               )}
@@ -237,7 +237,7 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
                     {benefits.map((highlight, index) => (
                       <li key={index} className="flex items-start space-x-3">
                         <PiArrowBendDoubleUpRightLight 
-                          className="text-[#c41e3a] text-xl mt-1"
+                          className="text-[#ea6329] text-xl mt-1"
                         />
                         <span>{highlight}</span>
                       </li>
@@ -357,7 +357,7 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
                     disabled={isLoading}
                     className={`cursor-pointer w-full h-10 px-6 rounded-md font-semibold text-sm flex items-center text-gray-900 placeholder-gray-500 justify-center space-x-2 text-white transition-all duration-200 transform ${isLoading
                         ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-[#c41e3a] hover:bg-[#a31930]"
+                        : "bg-[#ea6329] hover:bg-[#a31930]"
                       }`}
                   >
                     Request Callback
