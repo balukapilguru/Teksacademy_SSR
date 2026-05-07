@@ -21,7 +21,7 @@ const Oppurtunities = ({ data }) => {
       {/* Header */}
        <Heading data={heading}/>
         <div
-         className="text-[#ea6329] text-2xl xl:text-3xl font-semibold mb-8 text-start">
+         className="text-[#2a619d] text-2xl xl:text-3xl font-semibold mb-8 text-start">
             {subHeading}
           </div>
 

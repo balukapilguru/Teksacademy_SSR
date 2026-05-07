@@ -61,7 +61,7 @@ export default function UniversityBranchTabs({ params }) {
             className={`px-4 py-2 text-sm font-semibold rounded-md transition
               ${
                 activeTab === branch
-                  ? "bg-[#ea6329] text-white"
+                  ? "bg-[#2a619d] text-white"
                   : "bg-gray-200 text-gray-700"
               }
             `}

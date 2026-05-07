@@ -166,7 +166,7 @@ export default function Programfee({ data, onSelect, universityLsit }) {
               <Heading data={getDiscount} />
             </div>
             {!selectedUniversity && (
-              <p className="text-sm text-[#ea6329] mt-2">
+              <p className="text-sm text-[#2a619d] mt-2">
                 Select a university to view fee
               </p>
             )}
@@ -185,14 +185,14 @@ export default function Programfee({ data, onSelect, universityLsit }) {
                     uni.bgColor || "bg-white"
                   } flex flex-col p-4 rounded-lg shadow-sm w-full dark:text-black cursor-pointer transition-all border-2 relative ${
                     selectedUniversity?.sourceId === uni.sourceId
-                      ? "border-[#ea6329] ring-1 ring-[#ea6329]/50"
+                      ? "border-[#2a619d] ring-1 ring-[#2a619d]/50"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div
                     className={`absolute top-3 right-3 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                       selectedUniversity?.sourceId === uni.sourceId
-                        ? "border-[#ea6329] bg-[#ea6329]"
+                        ? "border-[#2a619d] bg-[#2a619d]"
                         : "border-gray-300"
                     }`}
                   >
@@ -267,7 +267,7 @@ export default function Programfee({ data, onSelect, universityLsit }) {
                       className={`px-5 h-10 font-semibold rounded-sm cursor-pointer ${
                         !selectedUniversity
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : "bg-[#ea6329] text-white hover:bg-[#ea6329]"
+                          : "bg-[#2a619d] text-white hover:bg-[#2a619d]"
                       }`}
                       disabled={!selectedUniversity}
                     >

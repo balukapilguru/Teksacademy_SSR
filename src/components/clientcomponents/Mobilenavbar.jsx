@@ -24,7 +24,7 @@ export default function MobileMenu({ links }) {
             <li key={index}>
               <Link
                 href={link.href}
-                className="block py-2 font-semibold hover:text-[#ea6329]"
+                className="block py-2 font-semibold hover:text-[#2a619d]"
               >
                 {link.name}
               </Link>

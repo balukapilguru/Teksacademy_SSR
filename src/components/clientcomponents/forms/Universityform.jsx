@@ -383,7 +383,7 @@ export default function UniversityForm({formDetails,
               disabled={isLoading}
               className={`cursor-pointer mt-5 w-full px-2 h-10 rounded-lg font-semibold text-sm flex items-center justify-center space-x-2 text-white transition-all duration-200 transform ${isLoading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#ea6329] hover:bg-white hover:text-[#ea6329] hover:border-2 hover:border-[#ea6329] transition-all shadow-lg"
+                  : "bg-[#2a619d] hover:bg-white hover:text-[#2a619d] hover:border-2 hover:border-[#2a619d] transition-all shadow-lg"
                 }`}
             >
               Submit

@@ -434,7 +434,7 @@ export default function Freecoursesform({
               className={`cursor-pointer mt-5 w-full py-4 px-6 h-9 rounded-lg font-bold text-lg flex items-center justify-center space-x-2 text-white transition-all duration-200 transform ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#ea6329] hover:bg-white hover:text-[#ea6329] hover:border-2 hover:border-[#ea6329] transition-all shadow-lg"
+                  : "bg-[#2a619d] hover:bg-white hover:text-[#2a619d] hover:border-2 hover:border-[#2a619d] transition-all shadow-lg"
               }`}
             >
               <span>

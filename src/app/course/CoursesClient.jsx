@@ -190,7 +190,7 @@ const Breadcrumb = ({
           ) : (
             <button
               onClick={crumb.onClick}
-              className="text-sm font-medium text-[#c41e3a] hover:underline cursor-pointer"
+              className="text-sm font-medium text-[#2a619d] hover:underline cursor-pointer"
             >
               {crumb.label}
             </button>
@@ -243,7 +243,7 @@ const Sidebar = ({
           className={`mt-3 w-full flex items-center justify-between p-3 rounded-lg cursor-pointer transition
             ${
               !selectedCategory
-                ? "border-[#c41e3a] bg-[#faf3f3] text-[#c41e3a]"
+                ? "border-[#2a619d] bg-[#faf3f3] text-[#2a619d]"
                 : "hover:bg-gray-100 text-gray-700"
             }`}
         >
@@ -277,7 +277,7 @@ const Sidebar = ({
                 >
                   <span
                     className={`flex items-center gap-2 ${
-                      isSelected ? "text-[#c41e3a]" : "text-gray-700"
+                      isSelected ? "text-[#2a619d]" : "text-gray-700"
                     }`}
                   >
                     {category === "certifications" && (
@@ -292,7 +292,7 @@ const Sidebar = ({
                     <span
                       className={`px-2 py-1 text-sm rounded-full ${
                         isSelected
-                          ? "bg-[#c41e3a] text-white"
+                          ? "bg-[#2a619d] text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
                     >
@@ -324,7 +324,7 @@ const Sidebar = ({
                               className={`flex justify-between items-center w-full text-sm h-9 rounded-md transition cursor-pointer
                                 ${
                                   isSubSelected
-                                    ? "text-[#c41e3a] bg-[#fff5f7] border border-[#c41e3a]"
+                                    ? "text-[#2a619d] bg-[#fff5f7] border border-[#2a619d]"
                                     : "text-gray-600 hover:bg-gray-200"
                                 }`}
                             >
@@ -332,7 +332,7 @@ const Sidebar = ({
                               <span
                                 className={`px-2 py-1 mr-2 text-sm ${
                                   isSubSelected
-                                    ? "text-[#c41e3a]"
+                                    ? "text-[#2a619d]"
                                     : "text-gray-700"
                                 }`}
                               >
@@ -362,8 +362,8 @@ const Sidebar = ({
                                         className={`cursor-pointer w-full justify-between flex text-[14px] px-2 h-9 rounded-md
                                           ${
                                             selectedProgram === progKey
-                                              ? "text-[#c41e3a] font-semibold"
-                                              : "text-gray-500 hover:bg-gray-50 hover:text-[#c41e3a]"
+                                              ? "text-[#2a619d] font-semibold"
+                                              : "text-gray-500 hover:bg-gray-50 hover:text-[#2a619d]"
                                           }`}
                                       >
                                         <span className="flex flex-row items-center gap-2">
@@ -373,7 +373,7 @@ const Sidebar = ({
                                         <span
                                           className={`flex align-center justify-center rounded-full w-8 h-8 items-center px-2 ${
                                             selectedProgram === progKey
-                                              ? "text-[#c41e3a]"
+                                              ? "text-[#2a619d]"
                                               : "text-gray-700"
                                           }`}
                                         >
@@ -541,7 +541,7 @@ export default function CoursesClient() {
           key={`page-${p}-${index}`}
           onClick={() => setCurrentPage(Number(p))}
           className={`cursor-pointer w-9 h-9 flex items-center justify-center rounded-md border mx-1 text-sm transition
-            ${currentPage === p ? "bg-[#c41e3a] text-white" : "border-gray-300 text-gray-700 hover:bg-gray-200"}`}
+            ${currentPage === p ? "bg-[#2a619d] text-white" : "border-gray-300 text-gray-700 hover:bg-gray-200"}`}
         >
           {p}
         </button>
@@ -690,7 +690,7 @@ export default function CoursesClient() {
                 <Loader />
               </div>
             ) : error ? (
-              <p className="text-red-500 mt-6">{error}</p>
+              <p className="text-[#2a619d] mt-6">{error}</p>
             ) : courses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {courses.map((course, index) => (
