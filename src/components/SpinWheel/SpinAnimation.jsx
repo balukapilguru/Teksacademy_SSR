@@ -115,7 +115,7 @@ const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
           {/* Wheel */}
           <div className="relative w-59 h-59 mx-auto mt-4">
             <div
-              className="absolute w-full h-full rounded-full transition-transform duration-[5000ms] ease-out flex items-center justify-center border-[6px] border-[#c41e3a] shadow-lg"
+              className="absolute w-full h-full rounded-full transition-transform duration-[5000ms] ease-out flex items-center justify-center border-[6px] border-[#ea6329] shadow-lg"
               style={{
                 transform: `rotate(${rotation}deg)`,
                 background: `conic-gradient(
@@ -171,7 +171,7 @@ const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
               className={`absolute inset-0 flex items-center justify-center cursor-pointer`}
             >
               <div
-                className={`cursor-pointer w-20 h-20 bg-[#c41e3a] border-[4px] border-white text-white font-extrabold flex items-center justify-center rounded-full shadow-xl transition-all duration-300 
+                className={`cursor-pointer w-20 h-20 bg-[#ea6329] border-[4px] border-white text-white font-extrabold flex items-center justify-center rounded-full shadow-xl transition-all duration-300 
                       ${
                         spinning || hasSpun
                           ? " cursor-not-allowed scale-90"
@@ -186,7 +186,7 @@ const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
             <div
               className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0 
                       border-l-[15px] border-r-[15px] border-b-[25px] 
-                      border-l-transparent border-r-transparent border-b-[#c41e3a] drop-shadow-lg"
+                      border-l-transparent border-r-transparent border-b-[#ea6329] drop-shadow-lg"
             ></div>
           </div>
           

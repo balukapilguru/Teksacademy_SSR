@@ -407,7 +407,7 @@ export default function GetDetailsModal({
             : "scale-75 opacity-0 translate-y-8"
           } hover:shadow-3xl`}
       >
-        <div className="hidden md:flex w-96 p-4 rounded-l-xl bg-[#c41e3a] flex-col items-center justify-center text-white">
+        <div className="hidden md:flex w-96 p-4 rounded-l-xl bg-[#ea6329] flex-col items-center justify-center text-white">
           <Image
             src="https://teksversity.s3.us-east-1.amazonaws.com/website/assets/home/formimage.webp"
             alt="Join the Family Illustration"
@@ -669,9 +669,9 @@ export default function GetDetailsModal({
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="mt-3 w-auto px-6 bg-[#c41e3a] h-10 cursor-pointer text-white rounded-md font-semibold text-sm 
-               hover:bg-white hover:text-[#c41e3a]
-               hover:border-2 hover:border-[#c41e3a]"
+                className="mt-3 w-auto px-6 bg-[#ea6329] h-10 cursor-pointer text-white rounded-md font-semibold text-sm 
+               hover:bg-white hover:text-[#ea6329]
+               hover:border-2 hover:border-[#ea6329]"
               >
                 Submit
               </button>

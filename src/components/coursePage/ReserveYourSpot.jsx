@@ -179,7 +179,7 @@ const ReserveYourSpot = ({ data, formDetails,course,source }) => {
             {/* Left Section */}
             <div className="lg:col-span-3 space-y-6">
               {heading?.length > 0 && (
-                <div className="text-[#c41e3a] text-sm font-medium mb-1">
+                <div className="text-[#ea6329] text-sm font-medium mb-1">
                   {heading[0]}
                 </div>
               )}
@@ -217,7 +217,7 @@ const ReserveYourSpot = ({ data, formDetails,course,source }) => {
                     {benefits.map((highlight, index) => (
                       <li key={index} className="flex items-start space-x-3">
                         <PiArrowBendDoubleUpRightLight
-                          className="text-[#c41e3a] mt-[2px] flex-shrink-0"
+                          className="text-[#ea6329] mt-[2px] flex-shrink-0"
                           size={22}
                         />
                         <span className="leading-snug">{highlight}</span>
@@ -260,7 +260,7 @@ const ReserveYourSpot = ({ data, formDetails,course,source }) => {
                         
                         className={`${field === "courseName"
                             ? "w-full p-2 border border-gray-300 rounded-lg bg-gray-100"
-                            : "w-full px-3 py-2 border-2 rounded-xl transition-colors text-black duration-200 border-gray-200 focus:border-[#c41e3a] text-black focus:outline-none placeholder-gray-500"
+                            : "w-full px-3 py-2 border-2 rounded-xl transition-colors text-black duration-200 border-gray-200 focus:border-[#ea6329] text-black focus:outline-none placeholder-gray-500"
                             
 
                         }`}

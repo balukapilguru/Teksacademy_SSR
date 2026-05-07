@@ -53,7 +53,7 @@ const SpinWheel = () => {
               <div className="flex justify-center">
                 <button
                   onClick={() => setOpenPopup(true)}
-                  className="cursor-pointer px-6 bg-[#c41e3a] text-white font-semibold py-2 rounded-md text-center"
+                  className="cursor-pointer px-6 bg-[#ea6329] text-white font-semibold py-2 rounded-md text-center"
                 >
                   Spin
                 </button>

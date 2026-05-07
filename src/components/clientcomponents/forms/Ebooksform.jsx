@@ -179,12 +179,12 @@ export default function Ebooksform({
             </h3>
             <p className="text-sm text-gray-600">
               Fill the form to download{" "}
-              <span className="font-medium text-[#c41e3a]">{course}</span>
+              <span className="font-medium text-[#ea6329]">{course}</span>
             </p>
           </div>
 
           <button
-            className="p-2 bg-[#c41e3a] text-white rounded-lg hover:bg-[#a31a2d] transition"
+            className="p-2 bg-[#ea6329] text-white rounded-lg hover:bg-[#a31a2d] transition"
             onClick={closePopup}
             type="button"
             disabled={isSubmitting}
@@ -205,7 +205,7 @@ export default function Ebooksform({
               placeholder="Enter your full name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#c41e3a] focus:border-transparent outline-none"
+              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#ea6329] focus:border-transparent outline-none"
               required
               disabled={isSubmitting}
             />
@@ -222,7 +222,7 @@ export default function Ebooksform({
               placeholder="Enter your email address"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#c41e3a] focus:border-transparent outline-none"
+              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#ea6329] focus:border-transparent outline-none"
               required
               disabled={isSubmitting}
             />
@@ -244,7 +244,7 @@ export default function Ebooksform({
                   handleChange({ target: { name: "mobile", value } });
                 }
               }}
-              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#c41e3a] focus:border-transparent outline-none"
+              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#ea6329] focus:border-transparent outline-none"
               required
               disabled={isSubmitting}
             />
@@ -271,7 +271,7 @@ export default function Ebooksform({
             className={`w-full mt-3 ${
               isSubmitting
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#c41e3a] hover:bg-[#a31a2d]"
+                : "bg-[#ea6329] hover:bg-[#a31a2d]"
             } text-white py-3 rounded-lg font-semibold text-base transition duration-300 flex items-center justify-center`}
           >
             {isSubmitting ? (

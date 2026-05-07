@@ -84,9 +84,9 @@ export default function NotFound4() {
 
       <div className="relative z-10 max-w-5xl w-full">
         <div className="text-center mb-12 mt-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-[#c41e3a] rounded-full mb-4">
-            <FaExclamationCircle className="w-4 h-4 text-[#c41e3a]" />
-            <span className="text-sm text-[#c41e3a] font-medium">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-[#ea6329] rounded-full mb-4">
+            <FaExclamationCircle className="w-4 h-4 text-[#ea6329]" />
+            <span className="text-sm text-[#ea6329] font-medium">
               System Status: Page Not Found
             </span>
           </div>

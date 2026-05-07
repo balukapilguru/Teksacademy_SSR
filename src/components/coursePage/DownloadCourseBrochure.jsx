@@ -81,7 +81,7 @@ const DownloadCourseBrochure = ({
                   key={idx}
                   className="flex items-center text-md md:text-lg gap-3 px-3"
                 >
-                  <RiArrowRightBoxFill className="w-5 h-5 md:w-6 md:h-6 rounded-full text-[#c41e3a] flex-shrink-0" />
+                  <RiArrowRightBoxFill className="w-5 h-5 md:w-6 md:h-6 rounded-full text-[#ea6329] flex-shrink-0" />
                   <span>{point}</span>
                 </li>
               ))}

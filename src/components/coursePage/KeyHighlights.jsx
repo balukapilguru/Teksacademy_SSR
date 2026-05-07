@@ -84,7 +84,7 @@ const Page = ({ data }) => {
                 onClick={() => scrollToSection(s.value)}
                 className={`cursor-pointer block w-full text-left px-4 h-12 rounded-lg mb-2 font-medium transition-all ${
                   active === s.value
-                    ? "bg-[#c41e3a] text-white"
+                    ? "bg-[#ea6329] text-white"
                     : "bg-gray-100 hover:bg-red-100"
                 }`}
               >
@@ -105,7 +105,7 @@ const Page = ({ data }) => {
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {tabsData?.[sec.value]?.keyPoints?.map((point, i) => (
                   <li key={i} className="flex items-start gap-2 text-gray-800">
-                    <HiArrowRightCircle className="text-[#c41e3a] mt-1 w-5 h-5 flex-shrink-0" />
+                    <HiArrowRightCircle className="text-[#ea6329] mt-1 w-5 h-5 flex-shrink-0" />
                     <span>{point}</span>
                   </li>
                 )) || (
@@ -131,7 +131,7 @@ const Page = ({ data }) => {
                 onClick={() => setActive(s.value)}
                 className={`flex-shrink-0 px-4 py-2 rounded-full border font-medium whitespace-nowrap transition-all ${
                   active === s.value
-                    ? "bg-[#c41e3a] text-white border-[#c41e3a]"
+                    ? "bg-[#ea6329] text-white border-[#ea6329]"
                     : "bg-gray-100 text-gray-700 border-gray-300"
                 }`}
               >
@@ -157,7 +157,7 @@ const Page = ({ data }) => {
                   <ul className="space-y-2">
                     {tabsData?.[sec.value]?.keyPoints?.map((point, i) => (
                       <li key={i} className="flex items-start gap-2 text-gray-800">
-                        <HiArrowRightCircle className="text-[#c41e3a] mt-1 w-5 h-5 flex-shrink-0" />
+                        <HiArrowRightCircle className="text-[#ea6329] mt-1 w-5 h-5 flex-shrink-0" />
                         <span>{point}</span>
                       </li>
                     )) || (

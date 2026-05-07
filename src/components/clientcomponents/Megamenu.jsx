@@ -54,7 +54,7 @@ export default function NavbarClient({ data }) {
                         key={catIndex}
                         className={`p-2 rounded mb-2 cursor-pointer font-medium ${
                           activeCategoryIndex === catIndex
-                            ? "bg-[#c41e3a] text-white"
+                            ? "bg-[#ea6329] text-white"
                             : "hover:bg-gray-100"
                         }`}
                         onMouseEnter={() => setActiveCategoryIndex(catIndex)}
@@ -112,7 +112,7 @@ export default function NavbarClient({ data }) {
         </ul>
 
         {/* CALL BUTTON */}
-        <div className="hidden sm:flex items-center gap-2 bg-[#c41e3a] text-white px-4 py-2 rounded font-semibold">
+        <div className="hidden sm:flex items-center gap-2 bg-[#ea6329] text-white px-4 py-2 rounded font-semibold">
           <MdCall />
           {elements.find((x) => x.name === "IVR Number")?.value}
         </div>

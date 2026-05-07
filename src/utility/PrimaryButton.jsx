@@ -15,9 +15,9 @@ export default function PrimaryButton({
   // Normal button variants
   const variants = {
     filled:
-      "cursor-pointer text-sm bg-[#c41e3a] text-white hover:bg-[#a31a32] h-10 px-4 flex items-center justify-center",
+      "cursor-pointer text-sm bg-[#ea6329] text-white hover:bg-[#a31a32] h-10 px-4 flex items-center justify-center",
     outline:
-      "cursor-pointer text-sm border border-[#c41e3a] text-[#c41e3a] hover:bg-[#c41e3a] hover:text-white h-10 px-4 flex items-center justify-center",
+      "cursor-pointer text-sm border border-[#ea6329] text-[#ea6329] hover:bg-[#ea6329] hover:text-white h-10 px-4 flex items-center justify-center",
     light:
       "cursor-pointer text-sm bg-white text-gray-700 hover:bg-gray-100 h-10 px-4 flex items-center justify-center",
   };

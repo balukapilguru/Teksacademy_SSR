@@ -117,8 +117,8 @@ export default function UniversityCards({ params,data }) {
                         <button
                           className={`px-4 py-2 rounded-lg font-semibold text-sm ${
                             btn.link
-                              ? "bg-[#c41e3a] text-white"
-                              : "border border-[#c41e3a] text-[#c41e3a]"
+                              ? "bg-[#ea6329] text-white"
+                              : "border border-[#ea6329] text-[#ea6329]"
                           }`}
                         >
                           {btn.name}

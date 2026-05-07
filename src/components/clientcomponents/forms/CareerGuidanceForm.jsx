@@ -273,7 +273,7 @@ export default function CareerGuidanceForm({ isOpen, onClose }) {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full mt-5 h-10 rounded-md font-bold text-white bg-[#c41e3a] hover:bg-white hover:text-[#c41e3a] hover:border-2 hover:border-[#c41e3a] transition-all ${
+            className={`w-full mt-5 h-10 rounded-md font-bold text-white bg-[#ea6329] hover:bg-white hover:text-[#ea6329] hover:border-2 hover:border-[#ea6329] transition-all ${
               isLoading ? "animate-pulse" : ""
             }`}
           >

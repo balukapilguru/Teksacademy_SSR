@@ -129,7 +129,7 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
               onClick={() => setSelectedBranch(tab.id)}
               className={`px-4 py-2 rounded-full transition ${
                 selectedBranch === tab.id
-                  ? "bg-[#c41e3a] text-white"
+                  ? "bg-[#ea6329] text-white"
                   : "bg-gray-200 text-gray-700"
               }`}
             >
@@ -160,7 +160,7 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
           <button
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
-            className="absolute left-0 top-[40%] bg-[#c41e3a] p-2 rounded-full text-white disabled:opacity-50 z-10"
+            className="absolute left-0 top-[40%] bg-[#ea6329] p-2 rounded-full text-white disabled:opacity-50 z-10"
           >
             <FiChevronLeft size={24} />
           </button>
@@ -180,7 +180,7 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
           <button
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="absolute right-0 top-[40%] bg-[#c41e3a] p-2 rounded-full text-white disabled:opacity-50 z-10"
+            className="absolute right-0 top-[40%] bg-[#ea6329] p-2 rounded-full text-white disabled:opacity-50 z-10"
           >
             <FiChevronRight size={24} />
           </button>

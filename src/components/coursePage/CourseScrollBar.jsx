@@ -96,8 +96,8 @@ const CourseScrollBar = ({ sections }) => {
                 onClick={() => scrollToSection(section.id)}
                 className={`whitespace-nowrap text-sm lg:text-base font-medium border-b-2 transition-all duration-200 flex items-center px-2 py-1 ${
                   activeSection === section.id
-                    ? "text-[#c41e3a] border-[#c41e3a]"
-                    : "text-gray-700 border-transparent hover:text-[#c41e3a] hover:border-[#c41e3a]"
+                    ? "text-[#ea6329] border-[#ea6329]"
+                    : "text-gray-700 border-transparent hover:text-[#ea6329] hover:border-[#ea6329]"
                 }`}
               >
                 {section.name}

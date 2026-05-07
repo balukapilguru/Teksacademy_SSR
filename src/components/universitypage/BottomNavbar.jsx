@@ -118,7 +118,7 @@ const BottomNavbar = ({ data }) => {
                 }}
                 className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm md:text-base font-semibold shadow transition-all ${
                   btn.text === "Enquire Now"
-                    ? "bg-[#c41e3a] text-white hover:bg-white hover:text-[#c41e3a]"
+                    ? "bg-[#ea6329] text-white hover:bg-white hover:text-[#ea6329]"
                     : btn.text === "Video Call"
                     ? "bg-[#012a7f] text-white hover:bg-white hover:text-[#012a7f]"
                     : btn.text === "WhatsApp"

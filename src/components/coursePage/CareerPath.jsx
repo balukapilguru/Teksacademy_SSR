@@ -158,7 +158,7 @@ const CareerPath = ({ data, formDetails  }) => {
 
       <div className="max-w-7xl mx-auto mt-12 text-center">
         <button
-          className="px-8 h-9 cursor-pointer bg-[#c41e3a] text-white font-semibold rounded-lg shadow-md hover:bg-[#a01830] transition duration-300"
+          className="px-8 h-9 cursor-pointer bg-[#ea6329] text-white font-semibold rounded-lg shadow-md hover:bg-[#a01830] transition duration-300"
           onClick={() => handleOpenModal(formDetails)}
         >
           {data?.button?.text || 'Enroll Now'} →

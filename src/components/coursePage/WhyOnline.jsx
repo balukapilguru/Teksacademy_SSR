@@ -86,7 +86,7 @@ const WhyOnline = ({ data }) => {
         <div className="flex justify-center mt-8">
           <motion.button
             onClick={() => setExpanded(!expanded)}
-            className="w-12 h-12 flex items-center justify-center cursor-pointer rounded-full bg-[#c41e3a] text-white shadow-lg hover:bg-[#a31930] transition-colors duration-200"
+            className="w-12 h-12 flex items-center justify-center cursor-pointer rounded-full bg-[#ea6329] text-white shadow-lg hover:bg-[#a31930] transition-colors duration-200"
             whileTap={{ scale: 0.9 }}
             animate={{ y: expanded ? -5 : 5 }}
             transition={{

@@ -346,7 +346,7 @@ export default function Testimonials({ data }) {
                 flex flex-col min-h-[360px] max-h-[360px] 
                 ${
                   i === 1
-                    ? "border-[#c41e3a] scale-105 shadow-xl"
+                    ? "border-[#ea6329] scale-105 shadow-xl"
                     : "opacity-80 scale-95 border-gray-200"
                 }`}
                     >
@@ -411,7 +411,7 @@ export default function Testimonials({ data }) {
                 } ${i + 1}`}
                 aria-current={active === i ? "true" : "false"}
                 className={`w-3 h-3 rounded-full transition 
-    ${active === i ? "bg-[#c41e3a] scale-125" : "bg-gray-400"}
+    ${active === i ? "bg-[#ea6329] scale-125" : "bg-gray-400"}
   `}
               >
                 <span className="sr-only">

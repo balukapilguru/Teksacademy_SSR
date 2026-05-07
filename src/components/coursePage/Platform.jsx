@@ -48,14 +48,14 @@ const Platform = ({ data }) => {
 
   const getIconComponent = (iconName, index) => {
     const iconMap = {
-      FaBriefcase: <FaBriefcase className="w-10 h-10 text-[#c41e3a]" />,
-      FiFileText: <FiFileText className="w-10 h-10 text-[#c41e3a]" />,
-      FaVideo: <FaVideo className="w-10 h-10 text-[#c41e3a]" />,
-      HiOutlineBanknotes: <HiOutlineBanknotes className="w-10 h-10 text-[#c41e3a]" />,
-      FaUsers: <FaUsers className="w-10 h-10 text-[#c41e3a]" />,
-      FiTarget: <FiTarget className="w-10 h-10 text-[#c41e3a]" />,
-      FaBuilding: <FaBuilding className="w-10 h-10 text-[#c41e3a]" />,
-      LuClipboardList: <LuClipboardList className="w-10 h-10 text-[#c41e3a]" />,
+      FaBriefcase: <FaBriefcase className="w-10 h-10 text-[#ea6329]" />,
+      FiFileText: <FiFileText className="w-10 h-10 text-[#ea6329]" />,
+      FaVideo: <FaVideo className="w-10 h-10 text-[#ea6329]" />,
+      HiOutlineBanknotes: <HiOutlineBanknotes className="w-10 h-10 text-[#ea6329]" />,
+      FaUsers: <FaUsers className="w-10 h-10 text-[#ea6329]" />,
+      FiTarget: <FiTarget className="w-10 h-10 text-[#ea6329]" />,
+      FaBuilding: <FaBuilding className="w-10 h-10 text-[#ea6329]" />,
+      LuClipboardList: <LuClipboardList className="w-10 h-10 text-[#ea6329]" />,
     };
 
 
@@ -73,14 +73,14 @@ const Platform = ({ data }) => {
 
 
     const fallbackIcons = [
-      <FaBriefcase className="w-10 h-10 text-[#c41e3a]" />,
-      <FiFileText className="w-10 h-10 text-[#c41e3a]" />,
-      <FaVideo className="w-10 h-10 text-[#c41e3a]" />,
-      <HiOutlineBanknotes className="w-10 h-10 text-[#c41e3a]" />,
-      <FaUsers className="w-10 h-10 text-[#c41e3a]" />,
-      <FiTarget className="w-10 h-10 text-[#c41e3a]" />,
-      <FaBuilding className="w-10 h-10 text-[#c41e3a]" />,
-      <LuClipboardList className="w-10 h-10 text-[#c41e3a]" />,
+      <FaBriefcase className="w-10 h-10 text-[#ea6329]" />,
+      <FiFileText className="w-10 h-10 text-[#ea6329]" />,
+      <FaVideo className="w-10 h-10 text-[#ea6329]" />,
+      <HiOutlineBanknotes className="w-10 h-10 text-[#ea6329]" />,
+      <FaUsers className="w-10 h-10 text-[#ea6329]" />,
+      <FiTarget className="w-10 h-10 text-[#ea6329]" />,
+      <FaBuilding className="w-10 h-10 text-[#ea6329]" />,
+      <LuClipboardList className="w-10 h-10 text-[#ea6329]" />,
     ];
 
     return fallbackIcons[index % fallbackIcons.length];
