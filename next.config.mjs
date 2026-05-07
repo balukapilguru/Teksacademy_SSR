@@ -6,7 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "teksversity.s3.us-east-1.amazonaws.com",
+        hostname: "tekacademy.s3.us-east-1.amazonaws.com",
       },
       {
         protocol: "https",

@@ -17,8 +17,8 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Teksacademy",
-  description: "Teksversity offers AI-powered IT courses and online UG & PG programs with expert mentors, certifications, real-time projects & career support.",
+  title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
+  description: "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
 
   verification: {
     google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
