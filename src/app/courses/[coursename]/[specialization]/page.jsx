@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
 
   try {
     const res = await fetch(
-      `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`,
+      `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
       { next: { revalidate: 60 } }
     );
 
@@ -59,7 +59,7 @@ export default async function Page({ params }) {
 
 try {
   const res = await fetch(
-    `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`,
+    `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
     { next: { revalidate: 60 } }
   );
 

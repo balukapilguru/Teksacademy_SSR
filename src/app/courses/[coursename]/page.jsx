@@ -5,14 +5,14 @@ export async function generateMetadata({ params }) {
     const data = await getCourseData(params.coursename);
 
     return {
-      title: data?.meta?.title || "Teksversity Courses",
+      title: data?.meta?.title || "Tekacademy Courses",
       description:
-        data?.meta?.description || "Explore online courses at Teksversity.",
+        data?.meta?.description || "Explore online courses at Tekacademy.",
     };
   } catch {
     return {
-      title: "Teksversity Courses",
-      description: "Explore online courses at Teksversity.",
+      title: "Tekacademy Courses",
+      description: "Explore online courses at Tekacademy.",
     };
   }
 }

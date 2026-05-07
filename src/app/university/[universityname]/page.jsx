@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
     return {
       title:
         data?.meta?.title ||
-        `${data?.banner?.heading || universityname} | Teksversity`,
+        `${data?.banner?.heading || universityname} | Tekacademy`,
       description:
         data?.meta?.description ||
         data?.aboutSection?.description?.slice(0, 160),
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }) {
     };
   } catch (error) {
     return {
-      title: "University | Teksversity",
+      title: "University | Tekacademy",
       description: "Explore online universities and courses.",
     };
   }

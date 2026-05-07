@@ -71,7 +71,7 @@ const Excel = ({ data }) => {
             src={GetData({url:excelData?.image?.src})}
             width={400}
             height={800}
-            alt={excelData.image?.alt || "Excel With Teksversity"}
+            alt={excelData.image?.alt || "Excel With Tekacademy"}
             unoptimized
             className="object-cover w-full h-full"
           />

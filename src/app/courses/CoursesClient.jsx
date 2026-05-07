@@ -345,7 +345,7 @@ const Sidebar = ({
 
     const fetchCounts = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/v1/courses`, {
+        const res = await fetch(`${baseUrl}/api/v1/course`, {
           cache: "no-store",
         });
         const data = await res.json();
@@ -387,7 +387,7 @@ const Sidebar = ({
       params.append("limit", String(pageSize));
       if (searchTerm.trim()) params.append("search", searchTerm.trim());
 
-      const url = `${baseUrl}/api/v1/courses?${params.toString()}`;
+      const url = `${baseUrl}/api/v1/course?${params.toString()}`;
       const res = await fetch(url, { cache: "no-store" });
       const data = await res.json();
 
@@ -431,7 +431,7 @@ const Sidebar = ({
         params.append("page", String(currentPage));
         params.append("limit", String(pageSize));
 
-        const url = `${baseUrl}/api/v1/courses?${params.toString()}`;
+        const url = `${baseUrl}/api/v1/course?${params.toString()}`;
         const res = await fetch(url, {
           cache: "no-store",
           signal: controller.signal,

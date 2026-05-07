@@ -26,17 +26,17 @@ export async function generateMetadata() {
     
 
     return {
-      title: meta?.title || "Teksversity | Online Courses & Certifications",
+      title: meta?.title || "Best Software Courses Training Institute in Hyderabad | Teks Academy",
       description:
         meta?.description ||
-        "Explore online certifications, academic programs, and self-learning courses at Teksversity.",
+        "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
      
     };
   } catch (error) {
     return {
-      title: "Teksversity | Online Courses & Certifications",
+      title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
       description:
-        "Explore online certifications, academic programs, and self-learning courses at Teksversity.",
+        "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
     };
   }
 }

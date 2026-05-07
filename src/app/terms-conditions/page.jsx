@@ -40,14 +40,14 @@ export async function generateMetadata() {
     const data = await getTerms();
 
     return {
-      title: `${data.heading || "Terms & Conditions"} | Teksversity`,
+      title: `${data.heading || "Terms & Conditions"} | Tekacademy`,
       description:
-        "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
+        "Read Tekacademy Terms & Conditions including policies, fees, certification, and legal guidelines.",
 
       openGraph: {
         title: data.heading,
         description:
-          "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
+          "Read Tekacademy Terms & Conditions including policies, fees, certification, and legal guidelines.",
         url: `${siteUrl}/terms-conditions`,
         type: "website",
       },
@@ -56,7 +56,7 @@ export async function generateMetadata() {
         card: "summary_large_image",
         title: data.heading,
         description:
-          "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
+          "Read Tekacademy Terms & Conditions including policies, fees, certification, and legal guidelines.",
       },
 
       alternates: {
@@ -70,9 +70,9 @@ export async function generateMetadata() {
     };
   } catch (error) {
     return {
-      title: "Terms & Conditions | Teksversity",
+      title: "Terms & Conditions | Tekacademy",
       description:
-        "Read Teksversity Terms & Conditions including policies, fees, certification, and legal guidelines.",
+        "Read Tekacademy Terms & Conditions including policies, fees, certification, and legal guidelines.",
     };
   }
 }
