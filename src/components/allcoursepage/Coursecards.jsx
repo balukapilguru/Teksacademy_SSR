@@ -22,7 +22,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
       <div
         className="group rounded-xl bg-white overflow-hidden 
              shadow-[0_4px_14px_rgba(0,0,0,0.08)] 
-             border border-transparent hover:border-[#ba3148] transition-all duration-300"
+             border border-transparent hover:border-[#2a619d] transition-all duration-300"
       >
         {/* IMAGE WRAPPER */}
         <div className="relative w-full h-48 overflow-hidden">
@@ -54,7 +54,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
           <div className="flex gap-3">
             <div className="flex-1 bg-[#faf2ec] rounded-lg p-2">
               <div className="text-xs text-gray-600">Fee Range</div>
-              <div className="text-[#ba3148] text-sm mt-1 font-semibold">
+              <div className="text-[#2a619d] text-sm mt-1 font-semibold">
                 {course.feeRange}
               </div>
             </div>

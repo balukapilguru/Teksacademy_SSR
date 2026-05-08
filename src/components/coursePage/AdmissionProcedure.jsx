@@ -26,7 +26,7 @@ const Admission = ({ data }) => {
     "bg-[#002b80]",
     "bg-green-800",
     "bg-yellow-800",
-    "bg-[#ea6329]",
+    "bg-[#2a619d]",
     "bg-green-800",
     "bg-[#76777a]",
   ];

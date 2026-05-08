@@ -20,7 +20,7 @@ const RichTextRenderer = ({ content = [] }) => {
             <Link
               key={index}
               href={href}
-              className="text-[#012a7f] font-medium  hover:text-[#ea6329]"
+              className="text-[#012a7f] font-medium  hover:text-[#2a619d]"
             >
               {item.value}
             </Link>
@@ -30,7 +30,7 @@ const RichTextRenderer = ({ content = [] }) => {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#012a7f] font-medium  hover:text-[#ea6329]"
+              className="text-[#012a7f] font-medium  hover:text-[#2a619d]"
             >
               {item.value}
             </a>

@@ -41,7 +41,7 @@ const SuccessStories = ({ successStoriesData }) => {
       onClick={onClick}
       disabled={disabled}
       aria-label={direction === "prev" ? "Previous" : "Next"}
-      className="p-1 text-[#002b80] disabled:opacity-25 disabled:cursor-not-allowed transition"
+      className="p-1 text-[#2a619d] disabled:opacity-25 disabled:cursor-not-allowed transition"
     >
       {direction === "prev" ? (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -68,8 +68,8 @@ const SuccessStories = ({ successStoriesData }) => {
           onClick={() => setActiveTab("placed")}
           className={`px-6 py-2 rounded-md transition ${
             activeTab === "placed"
-              ? "bg-[#002b80] text-white"
-              : "border border-[#002b80] text-[#002b80] hover:bg-[#002b80] hover:text-white"
+              ? "bg-[#2a619d] text-white"
+              : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"
           }`}
         >
           Placed Students
@@ -78,8 +78,8 @@ const SuccessStories = ({ successStoriesData }) => {
           onClick={() => setActiveTab("learning")}
           className={`px-6 py-2 rounded-md transition ${
             activeTab === "learning"
-              ? "bg-[#002b80] text-white"
-              : "border border-[#002b80] text-[#002b80] hover:bg-[#002b80] hover:text-white"
+              ? "bg-[#2a619d] text-white"
+              : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"
           }`}
         >
           Learning Experience
@@ -110,7 +110,7 @@ const SuccessStories = ({ successStoriesData }) => {
                   />
                   {item.videoUrl && (
                     <div className="absolute inset-0 bg-black/40 opacity-0 flex items-center justify-center transition">
-                      <div className="bg-white rounded-full p-3 text-[#002b80] text-xl">▶</div>
+                      <div className="bg-white rounded-full p-3 text-[#2a619d] text-xl">▶</div>
                     </div>
                   )}
                 </div>
@@ -139,7 +139,7 @@ const SuccessStories = ({ successStoriesData }) => {
                   />
                   {videoCards[videoIndex].videoUrl && (
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-                      <div className="bg-white rounded-full p-3 text-[#002b80] text-xl">▶</div>
+                      <div className="bg-white rounded-full p-3 text-[#2a619d] text-xl">▶</div>
                     </div>
                   )}
                 </div>
@@ -157,7 +157,7 @@ const SuccessStories = ({ successStoriesData }) => {
                       key={i}
                       onClick={() => setVideoIndex(i)}
                       className={`h-2 rounded-full transition-all duration-200 ${
-                        i === videoIndex ? "bg-[#002b80] w-5" : "bg-gray-300 w-2"
+                        i === videoIndex ? "bg-[#2a619d] w-5" : "bg-gray-300 w-2"
                       }`}
                     />
                   ))}
@@ -223,7 +223,7 @@ const SuccessStories = ({ successStoriesData }) => {
                       key={i}
                       onClick={() => setPlacementIndex(i)}
                       className={`h-2 rounded-full transition-all duration-200 ${
-                        i === placementIndex ? "bg-[#002b80] w-5" : "bg-gray-300 w-2"
+                        i === placementIndex ? "bg-[#2a619d] w-5" : "bg-gray-300 w-2"
                       }`}
                     />
                   ))}

@@ -86,26 +86,26 @@ import CareerGuidanceForm from "../components/clientcomponents/forms/CareerGuida
 // ─────────────────────────────────────────────
 const DROPDOWN_ICON_MAP = {
   // ── Resources ──
-  "Ebook": <FaBook className="text-sm text-[#002b80]" />,
-  "Video Lectures": <FaVideo className="text-sm text-[#002b80]" />,
-  "Interview Questions": <FaQuestionCircle className="text-sm text-[#002b80]" />,
+  "Ebook": <FaBook className="text-sm text-[#2a619d]" />,
+  "Video Lectures": <FaVideo className="text-sm text-[#2a619d]" />,
+  "Interview Questions": <FaQuestionCircle className="text-sm text-[#2a619d]" />,
 
   // ── Discover ──
-  "About Us": <FaInfoCircle className="text-sm text-[#002b80]" />,
-  "Gallery": <FaImages className="text-sm text-[#002b80]" />,
-  "Media": <MdCampaign className="text-sm text-[#002b80]" />,
-  "Contact Us": <MdContactPhone className="text-sm text-[#002b80]" />,
-  "Support": <MdSupportAgent className="text-sm text-[#002b80]" />,
+  "About Us": <FaInfoCircle className="text-sm text-[#2a619d]" />,
+  "Gallery": <FaImages className="text-sm text-[#2a619d]" />,
+  "Media": <MdCampaign className="text-sm text-[#2a619d]" />,
+  "Contact Us": <MdContactPhone className="text-sm text-[#2a619d]" />,
+  "Support": <MdSupportAgent className="text-sm text-[#2a619d]" />,
 
   // ── Placements ──
-  "Alumni": <FaUserGraduate className="text-sm text-[#002b80]" />,
-  "Recruiters": <FaBuilding className="text-sm text-[#002b80]" />,
+  "Alumni": <FaUserGraduate className="text-sm text-[#2a619d]" />,
+  "Recruiters": <FaBuilding className="text-sm text-[#2a619d]" />,
 };
 
 // Helper: get icon for a dropdown item by its title or name
 function getDropdownIcon(drop) {
   const key = drop.title || drop.name || "";
-  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#002b80]" />;
+  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d]" />;
 }
 
 export default function Navbar() {
@@ -253,7 +253,7 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${scrolled ? "shadow-md" : "shadow-md"
           }`}
       >
-        <div className="hidden md:block bg-[#002b80] text-white text-xs py-2">
+        <div className="hidden md:block bg-[#2a619d] text-white text-xs py-2">
           <div className="main_container flex items-center justify-between">
             {/* LEFT SIDE */}
             <div className="flex items-center w-full gap-6">
@@ -316,7 +316,7 @@ export default function Navbar() {
                         <button
                           key={`top-button-${index}`}
                           onClick={handleFormButtonClick}
-                          className="bg-white text-[#002b80] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md cursor-pointer"
+                          className="bg-white text-[#2a619d] px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colors text-md cursor-pointer"
                         >
                           {item.name}
                         </button>
@@ -365,7 +365,7 @@ export default function Navbar() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label={`Visit our ${social.platform} page`}
-                              className="hover:text-[#002b80] transition-colors inline-flex"
+                              className="hover:text-[#2a619d] transition-colors inline-flex"
                             >
                               <IconComponent
                                 className="text-[18px]"
@@ -434,7 +434,7 @@ export default function Navbar() {
                   }
                 }}
               >
-                <div className="font-semibold flex items-center gap-1 cursor-pointer hover:text-[#002b80] transition-colors">
+                <div className="font-semibold flex items-center gap-1 cursor-pointer hover:text-[#2a619d] transition-colors">
                   {item.link && isValidLink(item.link) ? (
                     <Link
                       href={item.link}
@@ -474,7 +474,7 @@ export default function Navbar() {
                           <Link
                             key={`course-${courseIndex}`}
                             href={isValidLink(course.link) ? course.link : "#"}
-                            className="flex items-center gap-2 p-2 rounded-lg border border-gray-100 hover:border-[#002b80] hover:shadow-md transition-all group"
+                            className="flex items-center gap-2 p-2 rounded-lg border border-gray-100 hover:border-[#2a619d] hover:shadow-md transition-all group"
                             onClick={() => setShowMenu(null)}
                           >
                             {course.image?.url && (
@@ -493,23 +493,23 @@ export default function Navbar() {
                               </div>
                             )}
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-[#002b80] group-hover:text-[#002b80] transition-colors text-xs leading-tight">
+                              <h3 className="font-semibold text-[#2a619d] group-hover:text-[#2a619d] transition-colors text-xs leading-tight">
                                 {course.title}
                               </h3>
                               <p className="text-[10px] text-gray-500 mt-0.5 leading-snug line-clamp-2">
                                 {course.description}
                               </p>
                             </div>
-                            <MdArrowForwardIos className="text-[#002b80] group-hover:text-[#002b80] transition-colors flex-shrink-0 text-xs" />
+                            <MdArrowForwardIos className="text-[#2a619d] group-hover:text-[#2a619d] transition-colors flex-shrink-0 text-xs" />
                           </Link>
                         ))}
                       </div>
 
                       <div className="mt-2 pt-1 flex justify-center">
                         <Link
-                          href="/courses"
+                          href="/course"
                           onClick={() => setShowMenu(null)}
-                          className="flex items-center gap-2 text-[#002b80] hover:text-[#002b80] font-semibold text-sm transition-colors group"
+                          className="flex items-center gap-2 text-[#2a619d] hover:text-[#2a619d] font-semibold text-sm transition-colors group"
                         >
                           <span>Know More</span>
                           <MdArrowForwardIos className="text-xs mt-1" />
@@ -535,7 +535,7 @@ export default function Navbar() {
                           <Link
                             key={`branch-${branchIndex}`}
                             href={isValidLink(branch.link) ? branch.link : "#"}
-                            className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:border-[#002b80] hover:shadow-md transition-all group"
+                            className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:border-[#2a619d] hover:shadow-md transition-all group"
                           >
                             {branch.image?.url && (
                               <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-gray-100">
@@ -553,7 +553,7 @@ export default function Navbar() {
                               </div>
                             )}
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-[#002b80] group-hover:text-[#002b80] transition-colors text-xs leading-tight truncate">
+                              <h3 className="font-semibold text-[#2a619d] group-hover:text-[#2a619d] transition-colors text-xs leading-tight truncate">
                                 {branch.title}
                               </h3>
                               {branch.phone && (
@@ -591,10 +591,10 @@ export default function Navbar() {
                         <Link
                           key={`dropdown-${drop.link}-${dIndex}`}
                           href={isValidLink(drop.link) ? drop.link : "#"}
-                          className="flex items-center gap-2 p-3 hover:bg-gray-100 rounded whitespace-nowrap font-medium hover:text-[#002b80] transition-colors text-sm group"
+                          className="flex items-center gap-2 p-3 hover:bg-gray-100 rounded whitespace-nowrap font-medium hover:text-[#2a619d] transition-colors text-sm group"
                         >
                           {/* ✅ Per-item icon from DROPDOWN_ICON_MAP */}
-                          <span className="group-hover:[&>*]:text-[#002b80] transition-colors">
+                          <span className="group-hover:[&>*]:text-[#2a619d] transition-colors">
                             {getDropdownIcon(drop)}
                           </span>
                           <span>{drop.title || drop.name}</span>
@@ -611,7 +611,7 @@ export default function Navbar() {
             ))}
 
             {mainbar.button && (
-              <div className="hidden md:flex items-center gap-1 bg-[#002b80] text-white px-3 py-2 rounded font-semibold hover:bg-[#a0182e] transition-colors cursor-pointer text-sm">
+              <div className="hidden md:flex items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold hover:bg-[#fe543d] transition-colors cursor-pointer text-sm">
                 <Link
                   href={
                     isValidLink(mainbar.button.link)
@@ -678,7 +678,7 @@ export default function Navbar() {
                                 href={
                                   isValidLink(course.link) ? course.link : "#"
                                 }
-                                className="flex items-center gap-1 p-1 hover:bg-gray-50 rounded border-l-4 border-transparent hover:border-[#002b80] transition-colors"
+                                className="flex items-center gap-1 p-1 hover:bg-gray-50 rounded border-l-4 border-transparent hover:border-[#2a619d] transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 {course.image?.url && (
@@ -697,21 +697,21 @@ export default function Navbar() {
                                   </div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-xs text-[#002b80] leading-tight">
+                                  <h3 className="font-semibold text-xs text-[#2a619d] leading-tight">
                                     {course.title}
                                   </h3>
                                   <p className="text-[10px] text-gray-500 mt-0.5 leading-snug line-clamp-2">
                                     {course.description}
                                   </p>
                                 </div>
-                                <MdArrowForwardIos className="text-[#002b80] text-xs flex-shrink-0" />
+                                <MdArrowForwardIos className="text-[#2a619d] text-xs flex-shrink-0" />
                               </Link>
                             ))}
 
                             <Link
-                              href="/courses"
+                              href="/course"
                               onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center justify-center gap-2 p-3 mt-1 border border-[#002b80] rounded-lg text-[#002b80] hover:bg-[#002b80] hover:text-white transition-colors font-semibold text-sm"
+                              className="flex items-center justify-center gap-2 p-3 mt-1 border border-[#2a619d] rounded-lg text-[#2a619d] hover:bg-[#2a619d] hover:text-white transition-colors font-semibold text-sm"
                             >
                               <span>Know More</span>
                               <MdArrowForwardIos className="text-xs" />
@@ -726,7 +726,7 @@ export default function Navbar() {
                                 href={
                                   isValidLink(branch.link) ? branch.link : "#"
                                 }
-                                className="flex items-center gap-1 p-2 hover:bg-gray-50 rounded border-l-4 border-transparent hover:border-[#002b80] transition-colors"
+                                className="flex items-center gap-1 p-2 hover:bg-gray-50 rounded border-l-4 border-transparent hover:border-[#2a619d] transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 {branch.image?.url && (
@@ -745,7 +745,7 @@ export default function Navbar() {
                                   </div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-xs text-[#002b80] leading-tight">
+                                  <h3 className="font-semibold text-xs text-[#2a619d] leading-tight">
                                     {branch.title}
                                   </h3>
                                   {branch.phone && (
@@ -774,10 +774,10 @@ export default function Navbar() {
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 {/* ✅ Per-item icon from DROPDOWN_ICON_MAP */}
-                                <span className="group-hover:[&>*]:text-[#002b80] transition-colors">
+                                <span className="group-hover:[&>*]:text-[#2a619d] transition-colors">
                                   {getDropdownIcon(drop)}
                                 </span>
-                                <span className="group-hover:text-[#002b80] transition-colors font-medium">
+                                <span className="group-hover:text-[#2a619d] transition-colors font-medium">
                                   {drop.title || drop.name}
                                 </span>
                                 {drop.phone && (
@@ -843,7 +843,7 @@ export default function Navbar() {
                         }}
                         className="w-full flex items-center gap-2 p-2 hover:bg-gray-50 rounded text-sm text-gray-700 text-left bg-blue-50 border border-blue-100"
                       >
-                        <span className="font-semibold text-[#002b80]">
+                        <span className="font-semibold text-[#2a619d]">
                           {item.name}
                         </span>
                       </button>
@@ -868,7 +868,7 @@ export default function Navbar() {
 
           {/* Apply For Job Button in Mobile Menu */}
           {mainbar.button && (
-            <div className="flex justify-center items-center gap-1 bg-[#002b80] text-white px-3 py-2 rounded font-semibold mb-2 text-sm">
+            <div className="flex justify-center items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold mb-2 text-sm">
               <Link
                 href={
                   isValidLink(mainbar.button.link) ? mainbar.button.link : "#"
@@ -899,7 +899,7 @@ export default function Navbar() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Visit our ${social.platform} page`}
-                          className="hover:text-[#002b80] transition-colors inline-flex"
+                          className="hover:text-[#2a619d] transition-colors inline-flex"
                         >
                           <IconComponent
                             className="text-[20px]"
@@ -925,7 +925,7 @@ export default function Navbar() {
       {scrolled && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-4 right-4 cursor-pointer bg-[#002b80] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
+          className="fixed bottom-4 right-4 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
           aria-label="Back to top"
         >
           <AiOutlineArrowUp size={18} />

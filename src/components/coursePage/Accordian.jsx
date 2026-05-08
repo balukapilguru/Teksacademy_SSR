@@ -80,7 +80,7 @@ const FAQ = ({ faq }) => {
               >
                 <div className="flex items-center gap-2 flex-1">
                   {renderIcon(index)}
-                  <span className="hover:text-[#ea6329] font-semibold text-gray-800 text-md lg:text-lg">
+                  <span className="hover:text-[#2a619d] font-semibold text-gray-800 text-md lg:text-lg">
                     {item.question}
                   </span>
                 </div>

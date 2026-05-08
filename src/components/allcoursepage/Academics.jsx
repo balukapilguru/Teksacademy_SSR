@@ -63,7 +63,7 @@ const Page = ({ data }) => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
         const response = await fetch(
-          `${baseUrl}/api/v1/courses?subCategory=${selectedCategory}`,
+          `${baseUrl}/api/v1/course?subCategory=${selectedCategory}`,
           { method: "GET", next: { revalidate: 60 } }
         );
         const resData = await response.json();
@@ -132,8 +132,8 @@ const Page = ({ data }) => {
                 onClick={() => setSelectedCategory(category.value)}
                 className={`px-5 py-2 rounded-md text-sm font-medium transition ${
                   selectedCategory === category.value
-                    ? "bg-[#ea6329] text-white"
-                    : "border border-[#ea6329] text-[#ea6329] hover:bg-[#ea6329] hover:text-white"
+                    ? "bg-[#2a619d] text-white"
+                    : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"
                 }`}
               >
                 {category.name}
@@ -149,7 +149,7 @@ const Page = ({ data }) => {
                 onClick={() => setSelectedCategory(category.value)}
                 className={`text-lg pb-2 border-b-2 ${
                   selectedCategory === category.value
-                    ? "text-[#ea6329] border-[#ea6329]"
+                    ? "text-[#2a619d] border-[#2a619d]"
                     : "border-transparent"
                 }`}
               >

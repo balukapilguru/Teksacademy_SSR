@@ -248,7 +248,7 @@ export default function Form({
             numberOfPieces={500}
           />
           <div className="bg-white rounded-xl shadow-2xl p-8 w-[90%] max-w-md text-center relative animate-fade-in-up">
-            <h2 className="text-3xl font-extrabold text-[#ea6329] mb-4">
+            <h2 className="text-3xl font-extrabold text-[#2a619d] mb-4">
               🥳 Congratulations! 🥳
             </h2>
             <p className="text-gray-700 text-lg mb-6">
@@ -269,7 +269,7 @@ export default function Form({
                 onClose();
                 setShowWheel(false);
               }}
-              className="w-full bg-[#ea6329] text-white h-10 rounded-md font-bold hover:bg-white hover:text-[#ea6329] hover:border-2 hover:border-[#ea6329] transition-all"
+              className="w-full bg-[#2a619d] text-white h-10 rounded-md font-bold hover:bg-white hover:text-[#2a619d] hover:border-2 hover:border-[#2a619d] transition-all"
             >
               Close and Proceed
             </button>
@@ -296,7 +296,7 @@ export default function Form({
               <X size={24} />
             </button>
 
-            <h2 className="text-2xl font-bold mb-4 text-[#ea6329]">
+            <h2 className="text-2xl font-bold mb-4 text-[#2a619d]">
               Spin the Wheel 🎡
             </h2>
             <p className="text-gray-600 mb-4">
@@ -306,7 +306,7 @@ export default function Form({
             {/* Wheel */}
             <div className="relative w-64 h-64 mx-auto">
               <div
-                className="absolute w-full h-full rounded-full transition-transform duration-[5000ms] ease-out flex items-center justify-center border-[6px] border-[#ea6329] shadow-lg"
+                className="absolute w-full h-full rounded-full transition-transform duration-[5000ms] ease-out flex items-center justify-center border-[6px] border-[#2a619d] shadow-lg"
                 style={{
                   transform: `rotate(${rotation}deg)`,
                   background: `conic-gradient(
@@ -347,7 +347,7 @@ export default function Form({
                 className={`absolute inset-0 flex items-center justify-center cursor-pointer`}
               >
                 <div
-                  className={`cursor-pointer w-20 h-20 bg-[#ea6329] border-[4px] border-white text-white font-extrabold flex items-center justify-center rounded-full shadow-xl transition-all duration-300
+                  className={`cursor-pointer w-20 h-20 bg-[#2a619d] border-[4px] border-white text-white font-extrabold flex items-center justify-center rounded-full shadow-xl transition-all duration-300
                   ${
                     spinning || hasSpun
                       ? " cursor-not-allowed scale-90"
@@ -362,7 +362,7 @@ export default function Form({
               <div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0
                   border-l-[15px] border-r-[15px] border-b-[25px]
-                  border-l-transparent border-r-transparent border-b-[#ea6329] drop-shadow-lg"
+                  border-l-transparent border-r-transparent border-b-[#2a619d] drop-shadow-lg"
               ></div>
             </div>
           </div>
@@ -493,7 +493,7 @@ export default function Form({
             {/* Submit */}
             <button
               type="submit"
-              className={`cursor-pointer mt-5 w-full bg-[#ea6329] text-white h-10 rounded-md font-bold hover:bg-white hover:text-[#ea6329] hover:border-2 hover:border-[#ea6329] transition-all ${
+              className={`cursor-pointer mt-5 w-full bg-[#2a619d] text-white h-10 rounded-md font-bold hover:bg-white hover:text-[#2a619d] hover:border-2 hover:border-[#2a619d] transition-all ${
                 isLoading ? "animate-pulse" : ""
               }`}
               disabled={isLoading}

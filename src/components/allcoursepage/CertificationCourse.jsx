@@ -34,7 +34,7 @@ const CertificationCourse = ({ data }) => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        const res = await fetch(`${baseUrl}/api/v1/courses?subCategory=certification`, {
+        const res = await fetch(`${baseUrl}/api/v1/course?subCategory=certification`, {
           method: "GET",
           signal: controller.signal,
         });
