@@ -742,4 +742,6 @@ export default function CoursesClient() {
       </div>
     </div>
   );
+
 }
+
