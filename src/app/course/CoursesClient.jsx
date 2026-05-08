@@ -663,7 +663,7 @@ export default function CoursesClient() {
           />
 
           {/* Big heading */}
-          <div className="text-4xl font-bold text-black mb-2">
+          <div className="text-3xl font-bold text-black mb-2">
             {activeHeading}
           </div>
 
