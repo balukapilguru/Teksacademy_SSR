@@ -283,6 +283,7 @@ export default function Navbar() {
                       <Link
                         key={`top-link-${index}`}
                         href={item.link}
+                        target="_blanket"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                       >
                         {item.name === "Download Mobile App" && (
@@ -365,7 +366,7 @@ export default function Navbar() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label={`Visit our ${social.platform} page`}
-                              className="hover:text-[#2a619d] transition-colors inline-flex"
+                              className="hover:text-[#fff] transition-colors inline-flex"
                             >
                               <IconComponent
                                 className="text-[18px]"
@@ -591,13 +592,25 @@ export default function Navbar() {
                         <Link
                           key={`dropdown-${drop.link}-${dIndex}`}
                           href={isValidLink(drop.link) ? drop.link : "#"}
+                          target={
+                            (drop.title || drop.name) === "Video Lectures"
+                              ? "_blank"
+                              : "_self"
+                          }
+                          rel={
+                            (drop.title || drop.name) === "Video Lectures"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
                           className="flex items-center gap-2 p-3 hover:bg-gray-100 rounded whitespace-nowrap font-medium hover:text-[#2a619d] transition-colors text-sm group"
                         >
                           {/* ✅ Per-item icon from DROPDOWN_ICON_MAP */}
                           <span className="group-hover:[&>*]:text-[#2a619d] transition-colors">
                             {getDropdownIcon(drop)}
                           </span>
+
                           <span>{drop.title || drop.name}</span>
+
                           {drop.phone && (
                             <span className="text-xs text-gray-500 ml-auto">
                               {drop.phone}

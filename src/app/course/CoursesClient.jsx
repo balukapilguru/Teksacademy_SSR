@@ -80,8 +80,8 @@ function buildCounts(apiData) {
         total: Number(ug.total || 0),
         programs: ug.programs
           ? Object.fromEntries(
-              Object.entries(ug.programs).map(([k, v]) => [k, Number(v)])
-            )
+            Object.entries(ug.programs).map(([k, v]) => [k, Number(v)])
+          )
           : undefined,
       };
     }
@@ -92,8 +92,8 @@ function buildCounts(apiData) {
         total: Number(pg.total || 0),
         programs: pg.programs
           ? Object.fromEntries(
-              Object.entries(pg.programs).map(([k, v]) => [k, Number(v)])
-            )
+            Object.entries(pg.programs).map(([k, v]) => [k, Number(v)])
+          )
           : undefined,
       };
     }
@@ -241,10 +241,9 @@ const Sidebar = ({
             if (onCloseMobile) onCloseMobile();
           }}
           className={`mt-3 w-full flex items-center justify-between p-3 rounded-lg cursor-pointer transition
-            ${
-              !selectedCategory
-                ? "border-[#2a619d] bg-[#faf3f3] text-[#2a619d]"
-                : "hover:bg-gray-100 text-gray-700"
+            ${!selectedCategory
+              ? "border-[#2a619d] bg-[#faf3f3] text-[#2a619d]"
+              : "hover:bg-gray-100 text-gray-700"
             }`}
         >
           <span className="flex items-center gap-2">
@@ -276,9 +275,8 @@ const Sidebar = ({
                   className="cursor-pointer flex justify-between w-full p-3 py-2 text-md rounded-sm hover:bg-gray-200 transition"
                 >
                   <span
-                    className={`flex items-center gap-2 ${
-                      isSelected ? "text-[#2a619d]" : "text-gray-700"
-                    }`}
+                    className={`flex items-center gap-2 ${isSelected ? "text-[#2a619d]" : "text-gray-700"
+                      }`}
                   >
                     {category === "certifications" && (
                       <IoRibbonOutline size={18} className="mt-1" />
@@ -290,11 +288,10 @@ const Sidebar = ({
                   </span>
                   <div className="flex items-center gap-1">
                     <span
-                      className={`px-2 py-1 text-sm rounded-full ${
-                        isSelected
+                      className={`px-2 py-1 text-sm rounded-full ${isSelected
                           ? "bg-[#2a619d] text-white"
                           : "bg-gray-200 text-gray-700"
-                      }`}
+                        }`}
                     >
                       {details.total}
                     </span>
@@ -322,19 +319,17 @@ const Sidebar = ({
                                 if (onCloseMobile) onCloseMobile();
                               }}
                               className={`flex justify-between items-center w-full text-sm h-9 rounded-md transition cursor-pointer
-                                ${
-                                  isSubSelected
-                                    ? "text-[#2a619d] bg-[#fff5f7] border border-[#2a619d]"
-                                    : "text-gray-600 hover:bg-gray-200"
+                                ${isSubSelected
+                                  ? "text-[#2a619d] bg-[#fff5f7] border border-[#2a619d]"
+                                  : "text-gray-600 hover:bg-gray-200"
                                 }`}
                             >
                               <span className="pl-2">{subLabel}</span>
                               <span
-                                className={`px-2 py-1 mr-2 text-sm ${
-                                  isSubSelected
+                                className={`px-2 py-1 mr-2 text-sm ${isSubSelected
                                     ? "text-[#2a619d]"
                                     : "text-gray-700"
-                                }`}
+                                  }`}
                               >
                                 {subDetails?.total || 0}
                               </span>
@@ -360,10 +355,9 @@ const Sidebar = ({
                                           if (onCloseMobile) onCloseMobile();
                                         }}
                                         className={`cursor-pointer w-full justify-between flex text-[14px] px-2 h-9 rounded-md
-                                          ${
-                                            selectedProgram === progKey
-                                              ? "text-[#2a619d] font-semibold"
-                                              : "text-gray-500 hover:bg-gray-50 hover:text-[#2a619d]"
+                                          ${selectedProgram === progKey
+                                            ? "text-[#2a619d] font-semibold"
+                                            : "text-gray-500 hover:bg-gray-50 hover:text-[#2a619d]"
                                           }`}
                                       >
                                         <span className="flex flex-row items-center gap-2">
@@ -371,11 +365,10 @@ const Sidebar = ({
                                           {formatLabel(progKey)}
                                         </span>
                                         <span
-                                          className={`flex align-center justify-center rounded-full w-8 h-8 items-center px-2 ${
-                                            selectedProgram === progKey
+                                          className={`flex align-center justify-center rounded-full w-8 h-8 items-center px-2 ${selectedProgram === progKey
                                               ? "text-[#2a619d]"
                                               : "text-gray-700"
-                                          }`}
+                                            }`}
                                         >
                                           {progValue}
                                         </span>
@@ -491,7 +484,7 @@ export default function CoursesClient() {
         const url = `${baseUrl}/api/v1/course?${params.toString()}`;
         const res = await fetch(url, { cache: "no-store", signal: controller.signal });
         const data = await res.json();
-
+        console.log("API Response:", data);
         setCourses(data.data || []);
         if (data.counts) setCounts(buildCounts(data));
 
@@ -553,10 +546,10 @@ export default function CoursesClient() {
   const activeHeading = selectedProgram
     ? formatLabel(selectedProgram)
     : selectedSubCategory
-    ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
-    : selectedCategory
-    ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
-    : "All Courses";
+      ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
+      : selectedCategory
+        ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
+        : "All Courses";
 
   if (pageLoading) {
     return (
@@ -720,9 +713,8 @@ export default function CoursesClient() {
               <button
                 onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${
-                  currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
+                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
               >
                 <IoIosArrowBack />
               </button>
@@ -730,9 +722,8 @@ export default function CoursesClient() {
               <button
                 onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${
-                  currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
+                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
               >
                 <IoIosArrowForward />
               </button>
@@ -744,4 +735,3 @@ export default function CoursesClient() {
   );
 
 }
-
