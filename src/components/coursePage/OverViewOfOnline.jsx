@@ -43,6 +43,7 @@ const OverViewOfOnline = ({
   // const finalImageSrc = GetData({ url: imageSrc });
 
   return (
+    <div className="">
     <section className="py-6 pt-6" id="overViewOfOnline">
       {category || isSelfPaced ? (
         <Freecoursesform
@@ -61,7 +62,7 @@ const OverViewOfOnline = ({
           courseName={selectedCourse}
         />
       )}
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 ">
+      <div className="">
         <Heading data={heading} />
 
         <div className="grid lg:grid-cols-2 gap-12 mt-6">
@@ -121,6 +122,7 @@ const OverViewOfOnline = ({
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

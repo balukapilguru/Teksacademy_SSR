@@ -107,7 +107,7 @@ const LegacyCard = ({ data }) => {
   }) : defaultStats;
   return (
     <div className="bg-white">
-      <div className="max-w-8xl mx-auto">
+      <div className="main_container mx-auto">
         {/* Stats Grid */}
         <div className="grid md:grid-cols-3 gap-5 mb-8 main_container">
           {stats.map((stat, i) => (

@@ -69,7 +69,7 @@ const Page = ({ data }) => {
 
   
   return (
-    <div className="px-3 lg:px-10 lg:py-10" id="keyHighlights">
+    <div className=" mx-auto" id="keyHighlights">
       <h2> <Heading data={heading} /></h2>
      
 

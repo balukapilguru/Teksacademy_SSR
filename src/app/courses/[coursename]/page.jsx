@@ -320,7 +320,7 @@ const schemaData = data?.meta?.schemaCode;
       {sectionsConfig.map(
         (sec, idx) =>
           sec.component && (
-            <div key={idx} className="rounded-lg main_container pt-5">
+            <div key={idx} className="main_container rounded-lg pt-5">
               {sec.component}
             </div>
           )

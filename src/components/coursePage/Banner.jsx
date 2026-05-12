@@ -67,7 +67,7 @@ const Banner = ({
 
       <Particles />
 
-      <div className="relative z-10 max-w-8xl pl-4 pr-2 lg:pl-10 lg:pr-0 lg:pt-0 lg:pb-0 grid grid-cols-1  lg:grid-cols-2 lg:gap-10 items-center">
+      <div className="relative z-10 main_container grid grid-cols-1  lg:grid-cols-2 lg:gap-10 items-center">
         <div>
           <Bannerheading text={data.mainHeading} data={data?.mainHeading} className="mt-5 md:mt-0" />
 

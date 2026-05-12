@@ -13,7 +13,7 @@ const OnlineFacts = ({ data }) => {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <Heading data={heading}/>
 
-        <div className="grid grid-cols-1 gap-6 mb-5 max-w-8xl mx-auto">
+        <div className="grid grid-cols-1 gap-6 mb-5 main_container mx-auto">
           {onlineFactsCards.map((fact, index) => {
             const isEven = index % 2 === 0;
             const isBlue = index % 2 === 0;

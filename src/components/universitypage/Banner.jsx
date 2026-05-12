@@ -80,7 +80,7 @@ const Banner = ({ data, formDetails }) => {
 
       <Particles />
 
-      <div className="relative z-10 max-w-8xl pl-4  lg:pl-6 lg:pr-0 lg:pb-0 lg:pt-0 grid grid-cols-1 lg:grid-cols-2  lg:gap-10 items-center">
+      <div className="relative z-10 main_container pl-4  lg:pl-6 lg:pr-0 lg:pb-0 lg:pt-0 grid grid-cols-1 lg:grid-cols-2  lg:gap-10 items-center">
         <div>
           <Bannerheading data={data?.mainHeading} text={data?.mainHeading} />
           {/* Description FIXED */}

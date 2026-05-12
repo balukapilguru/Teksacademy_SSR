@@ -197,7 +197,7 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
   return (
     <div className="mt-6">
       <section className="relative bg-[#e1e7ec] rounded-lg overflow-hidden main_container">
-        <div className="relative max-w-8xl mx-auto py-6 px-4 sm:px-6 lg:px-10">
+        <div className="relative main_container mx-auto py-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-12">
             {/* Left Section */}
             <div className="lg:col-span-3 space-y-6">

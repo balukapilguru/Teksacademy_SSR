@@ -49,7 +49,7 @@ export default function WorkingProfessionals({ workingProfessionals }) {
 
   return (
     <div className=" w-full">
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-5  rounded-xl">
+      <div className="main_container mx-auto pt-5 rounded-xl">
         {/* Heading */}
         <Heading data={workingProfessionals?.heading} />
 

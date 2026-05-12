@@ -35,7 +35,7 @@ const LogoMarquee = ({ hiringData }) => {
   ];
 
   return (
-    <div className="max-w-8xl px-3 py-4 md:px-8 rounded-xl bg-[#fbf5f6] overflow-hidden">
+    <div className=" px-3 py-4 md:px-8 rounded-xl bg-[#fbf5f6] overflow-hidden">
       <div className="pt-5 md:pt-0">
         <Heading data={heading} />
       </div>

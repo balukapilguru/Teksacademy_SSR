@@ -56,9 +56,9 @@ const DownloadCourseBrochure = ({
         className="rounded-xl bg-[#e5e7eb]"
         id="downloadOurCourseBrochure"
       >
-        <div className="max-w-8xl grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
+        <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
           {/* Left Content + Button */}
-          <div className="p-4 lg:p-6 xl:p-8 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
+          <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
            <h3><Heading data={data?.heading} /></h3>
             
 

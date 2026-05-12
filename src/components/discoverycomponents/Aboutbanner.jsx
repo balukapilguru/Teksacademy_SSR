@@ -35,7 +35,7 @@ const Aboutbanner = (data) => {
 
 
                 {/* Google Map */}
-                <div className="flex justify-center max-w-8xl">
+                <div className="flex justify-center main_container">
                     <iframe
                         title={mapData?.map?.title}
                         src={mapData?.map?.src}

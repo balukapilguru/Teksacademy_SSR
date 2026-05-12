@@ -62,7 +62,7 @@ const Excel = ({ data }) => {
        <section ref={sectionRef} className="py-12  main_container  ">
      <Heading data={excelData.heading} text={excelData.heading}/>
 
-      <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-10 gap-10">
+      <div className="main_container mx-auto grid grid-cols-1 md:grid-cols-10 gap-10">
         
         {/* Image Section */}
         <div className="md:col-span-2 flex justify-center md:justify-start w-full h-full">

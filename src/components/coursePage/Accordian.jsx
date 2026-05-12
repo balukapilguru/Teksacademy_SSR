@@ -35,7 +35,7 @@ const FAQ = ({ faq }) => {
 
   if (error) {
     return (
-      <div className="max-w-8xl mx-auto ">
+      <div className="main_container mx-auto ">
         <div className="pl-3">
           <Heading data={faq?.heading} />
         </div>

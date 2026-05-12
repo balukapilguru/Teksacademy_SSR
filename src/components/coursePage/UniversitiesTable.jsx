@@ -263,9 +263,9 @@ export default function CourseInfoTable({
 
   return (
     <>
-      <section id="offeringUniversity">
+      <section id="offeringUniversity" className=" mx-auto">
         <div className="my-10">
-          <div className="mx-auto px-4 sm:px-6 lg:px-6">
+          <div className="">
             <Heading data={heading} />
 
             <div className="mt-10">

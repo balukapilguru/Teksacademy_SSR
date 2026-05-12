@@ -173,7 +173,7 @@ export default function Testimonials({ data }) {
         </div>
 
         {activeTab === "studentVoices" && (
-          <div className="max-w-8xl mx-auto relative h-[450px] flex items-center justify-center overflow-visible">
+          <div className="main_container mx-auto relative h-[450px] flex items-center justify-center overflow-visible">
             {safeStudentVoices.length > 0 ? (
               <>
                 {safeStudentVoices.map((item, index) => {

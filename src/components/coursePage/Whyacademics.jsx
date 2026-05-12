@@ -12,10 +12,10 @@ const WhyOnline = ({ data }) => {
 
   if (!data) return null;
   return (
-    <section className="py-4 bg-white relative">
-      <div className="max-w-8xl ">
+    <section className=" py-4 bg-white relative">
+      <div className=" ">
         {/* Header Section */}
-        <div className="text-left main_container">
+        <div className="text-left">
           {/* Heading Section */}
           <div className="mb-8">
             <Heading data={data?.heading} />

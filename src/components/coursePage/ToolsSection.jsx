@@ -20,8 +20,8 @@ export default function ToolsAndFeatures({ data }) {
   }
 
   return (
-    <div className="min-h-fit py-10 bg-gray-50">
-      <div className=" max-w-8xl mx-auto px-6">
+    <div className="py-10">
+      <div className="">
         {/* Section Heading */}
         
           <div className="">

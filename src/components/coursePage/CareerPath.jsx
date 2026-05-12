@@ -17,15 +17,15 @@ import {
 import Heading from '@/utility/Heading';
 import Freecoursesform from '../clientcomponents/forms/Freecoursesform';
 
-const CareerPath = ({ data, formDetails  }) => {
+const CareerPath = ({ data, formDetails }) => {
 
-    const {heading}= data || {};
+  const { heading } = data || {};
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
 
-   const [showModal, setShowModal] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState(formDetails);
- 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+
   const toggleFlip = (id) => {
     setFlippedCardId((prev) => (prev === id ? null : id));
   };
@@ -47,7 +47,7 @@ const CareerPath = ({ data, formDetails  }) => {
     return <Icon className="w-7 h-7 text-white" />;
   };
 
-  
+
 
   const getRoleColors = (index) => {
     const colors = [
@@ -67,26 +67,26 @@ const CareerPath = ({ data, formDetails  }) => {
 
   const selectedJob = data?.jobCards?.find((job) => job.role === selectedRole);
 
-   const handleOpenModal = (details) => {
+  const handleOpenModal = (details) => {
     setSelectedCourse(details);
     setShowModal(true);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-       <Freecoursesform
-                    show={showModal}
-                    onClose={() => setShowModal(false)}
-                    course={selectedCourse}
-                    source={28}
-                    
-                  />
-                   <Heading data={heading} />
-                    <div className="text-gray-700 text-lg md:text-xl pb-6">
-          {data?.description || 'Explore roles, opportunities'}
-        </div>
-      
-      <div className="max-w-8xl mx-auto">
+    <div className="mx-auto py-6 p-4 rounded-xl">
+      <Freecoursesform
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        course={selectedCourse}
+        source={28}
+
+      />
+      <Heading data={heading} />
+      <div className="text-gray-700 text-lg md:text-xl pb-6">
+        {data?.description || 'Explore roles, opportunities'}
+      </div>
+
+      <div className="">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {data?.jobCards?.map((job, index) => {
             const isFlipped = flippedCardId === job.role;
@@ -95,9 +95,8 @@ const CareerPath = ({ data, formDetails  }) => {
             return (
               <div key={job.role} className="group perspective cursor-pointer">
                 <div
-                  className={`card-3d relative h-56 w-full group-hover:rotate-y-180 rounded-lg transition-transform duration-700 ${
-                    isFlipped ? 'rotate-y-180' : ''
-                  }`}
+                  className={`card-3d relative h-56 w-full group-hover:rotate-y-180 rounded-lg transition-transform duration-700 ${isFlipped ? 'rotate-y-180' : ''
+                    }`}
                   onClick={() => toggleFlip(job.role)}
                 >
                   <div className="backface-hidden bg-white rounded-lg p-6 border border-gray-200 shadow-sm flex flex-col justify-between">
@@ -221,13 +220,12 @@ const CareerPath = ({ data, formDetails  }) => {
                     >
                       <div className="flex items-center gap-2 flex-1">
                         <div
-                          className={`w-5 h-5 ${
-                            getRoleColors(
-                              data.jobCards.findIndex(
-                                (j) => j.role === selectedRole
-                              )
-                            ).bg
-                          } rounded-md flex items-center justify-center flex-shrink-0`}
+                          className={`w-5 h-5 ${getRoleColors(
+                            data.jobCards.findIndex(
+                              (j) => j.role === selectedRole
+                            )
+                          ).bg
+                            } rounded-md flex items-center justify-center flex-shrink-0`}
                         >
                           <Briefcase className="w-3.5 h-3.5 text-white" />
                         </div>
@@ -236,13 +234,12 @@ const CareerPath = ({ data, formDetails  }) => {
                         </span>
                       </div>
                       <span
-                        className={`text-base font-bold bg-gradient-to-r ${
-                          getRoleColors(
-                            data.jobCards.findIndex(
-                              (j) => j.role === selectedRole
-                            )
-                          ).color
-                        } bg-clip-text text-transparent`}
+                        className={`text-base font-bold bg-gradient-to-r ${getRoleColors(
+                          data.jobCards.findIndex(
+                            (j) => j.role === selectedRole
+                          )
+                        ).color
+                          } bg-clip-text text-transparent`}
                       >
                         {row.value}
                       </span>

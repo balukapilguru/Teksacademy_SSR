@@ -11,19 +11,19 @@ const WhyOnline = ({ data }) => {
 
   if (!data) return null
   return (
-    <section className="py-4 bg-white relative">
-      <div className="max-w-8xl ">
-        
+    <section className=" py-4 bg-white relative">
+      <div className=" ">
+
         {/* Header Section */}
         <div className="text-left px-6">
           {/* Heading Section */}
           <div className="mb-8">
             <h2>
-                          <Heading data={data?.heading} />
+              <Heading data={data?.heading} />
 
             </h2>
-            
-            
+
+
           </div>
 
           {/* Legacy Cards Section */}

@@ -74,7 +74,7 @@ const BottomNavbar = ({ data }) => {
           showBottomNav ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="bg-white max-w-8xl mx-auto flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-3 sm:py-4 shadow-2xl gap-3 sm:gap-4">
+        <div className="bg-white main_container mx-auto flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-3 sm:py-4 shadow-2xl gap-3 sm:gap-4">
           {/* Left */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
             {image?.src && (

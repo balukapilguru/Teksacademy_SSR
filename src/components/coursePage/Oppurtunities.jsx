@@ -17,7 +17,7 @@ const Oppurtunities = ({ data }) => {
   const { heading = [], subHeading = "", sections = [] } = data;
 
   return (
-    <div className="h-full  p-2 lg:p-6 rounded-2xl pt-6 pb-6 ">
+    <div className=" h-full rounded-2xl pt-6 pb-6 ">
       {/* Header */}
        <Heading data={heading}/>
         <div

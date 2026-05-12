@@ -7,7 +7,7 @@ export default function AboutTeks({ data }) {
   
   return (
     <section className=" bg-[#f7f8f9]  pt-5 border rounded-lg border-[#f7f8f9] mt-7">
-      <div className="max-w-8xl mx-auto  px-2 lg:px-6">
+      <div className="main_container mx-auto  px-2 lg:px-6">
         {/* Heading */}
        <Heading data={data.heading} text={data.heading}/> 
 

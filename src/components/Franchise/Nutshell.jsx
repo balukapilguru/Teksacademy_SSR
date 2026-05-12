@@ -20,7 +20,7 @@ export default function Nutshell({ data }) {
 
   return (
     <section className="py-7 bg-[#f7f8f9] border border-[#f7f8f9] rounded-lg mt-7">
-      <div className="max-w-8xl mx-auto lg:px-8">
+      <div className="main_container mx-auto lg:px-8">
 
         {/* Heading */}
         <div className="pl-2 ">

@@ -11,7 +11,7 @@ const trusted = data
   return (
     <div className="">
       <div className="  border-[#faf3f3] rounded-2xl  py-4 md:pt-0">
-        <div className="max-w-8xl mx-auto px-1 sm:px-6 lg:px-8">
+        <div className="main_container mx-auto px-1 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-8 pl-2 xl:pl-0 mt-5">
            <Heading data={data?.heading} />

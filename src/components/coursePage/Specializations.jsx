@@ -55,7 +55,7 @@ const Specializations = ({ data }) => {
   return (
     <section id="specializations">
       <div className="   ">
-        <div className="max-w-8xl p-3 lg:px-6 xl:px-8  mx-auto  ">
+        <div className="main_container p-3 lg:px-6 xl:px-8  mx-auto  ">
           {/* Header */}
           <div className="text-left mb-6">
             <Heading data={data?.heading} />

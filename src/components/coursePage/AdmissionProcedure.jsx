@@ -59,13 +59,13 @@ const Admission = ({ data }) => {
 
   return (
     <section id="OnlineAdmissionProcedure">
-      <div className="min-h-fit bg-gradient-to-br rounded-2xl from-gray-50 to-gray-100 py-1 md:py-8">
-        <div className=" max-w-8xl mx-auto px-4 sm:px-6 lg:px-6 py-3">
+      <div className="">
+        <div className=" mx-auto py-3">
           {/* Header */}
-         <Heading data={data?.heading} />
-<div className="text-md md:text-lg text-gray-600 max-w-8xl mx-auto text-justify pr-1">
-              {description}
-            </div>
+          <Heading data={data?.heading} />
+          <div className="text-md">
+            {description}
+          </div>
           {/* Steps Section */}
           <div className="bg-white rounded-3xl shadow-xl p-4 mb-12 mt-3">
             <div className="relative mb-2">
@@ -85,8 +85,8 @@ const Admission = ({ data }) => {
                       {/* Step Number */}
                       <div
                         className={`px-4 py-1 rounded-full mb-2 shadow-md font-medium text-sm ${index < 5
-                            ? "bg-blue-100 text-gray-800 border-gray-200"
-                            : "bg-gray-700 text-white"
+                          ? "bg-blue-100 text-gray-800 border-gray-200"
+                          : "bg-gray-700 text-white"
                           }`}
                       >
                         {step.number}
@@ -143,8 +143,8 @@ const Admission = ({ data }) => {
                       {/* Step Number */}
                       <div
                         className={`px-4 rounded-full mb-6 flex items-center justify-center shadow-lg font-medium text-sm ${index < 5
-                            ? "bg-blue-100 text-gray-800 border-gray-200"
-                            : "bg-gray-700 text-white"
+                          ? "bg-blue-100 text-gray-800 border-gray-200"
+                          : "bg-gray-700 text-white"
                           }`}
                       >
                         {step.number}

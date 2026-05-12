@@ -103,7 +103,7 @@ const Platform = ({ data }) => {
   }, [open]);
 
   return (
-    <section className="px-5 py-8">
+    <section className=" py-10">
       <div className="text-left">
         <Heading data={heading} />
       </div>

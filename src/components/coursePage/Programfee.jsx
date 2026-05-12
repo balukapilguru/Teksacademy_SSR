@@ -136,13 +136,11 @@ export default function Programfee({ data, onSelect, universityLsit }) {
     <section 
       id="spinAndWin" 
       ref={sectionRef}
-      className="scroll-mt-20" // Add scroll margin for better scrolling
+      className="scroll-mt-20 mx-auto" // Add scroll margin for better scrolling
     >
       <div
         ref={programRef}
-        className="flex items-center justify-center py-6 px-4 main_container bg-white rounded-2xl shadow-lg mx-auto my-8"
-        style={{ maxWidth: "1200px" }} // Add max width for consistency
-      >
+        className="py-10">
         {showModal && (
           <Form
             show={showModal}
@@ -159,7 +157,7 @@ export default function Programfee({ data, onSelect, universityLsit }) {
         )}
 
         {/* === Main Card === */}
-        <div className="w-full p-6 py-6 px-4 space-y-8">
+        <div className="w-full py-6 space-y-8">
           {/* === Fee Progress === */}
           <div className="w-full mb-6">
             <div className="text-left mb-4">
