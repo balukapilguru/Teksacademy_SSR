@@ -80,6 +80,8 @@ import { MdPhotoLibrary, MdContactPhone, MdSupportAgent, MdCampaign } from "reac
 import { useRouter } from "next/navigation";
 
 import CareerGuidanceForm from "../components/clientcomponents/forms/CareerGuidanceForm";
+import Loader from "./Loader";
+
 
 // ─────────────────────────────────────────────
 // Icon map: keyed by dropdown item title/name
@@ -234,10 +236,8 @@ export default function Navbar() {
 
   if (isLoading) {
     return (
-      <div className="h-20 bg-white shadow-md">
-        <div className="max-w-6xl main_container flex items-center justify-between h-16 md:h-20 ">
-          <div className="h-10 w-32 bg-gray-200 rounded animate-pulse"></div>
-        </div>
+      <div>
+       <Loader />
       </div>
     );
   }

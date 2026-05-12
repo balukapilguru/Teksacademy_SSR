@@ -10,7 +10,7 @@ const AdmissionForm = () => {
         <div className="absolute -inset-6 rounded-[2.5rem]" />
         <div className="absolute -inset-1 bg-gradient-to-br from-primary-foreground/30 via-transparent to-secondary/20 rounded-[2rem] blur-xl" />
         <div
-          className="relative glass text-foreground rounded-3xl p-6 lg:p-8 ring-1 bg-white"
+          className="relative glass text-foreground rounded-xl p-6 lg:p-8 ring-1 bg-white"
         >
           <div className="flex items-center gap-2 text-sm font-semibold text-primary mb-1">
             <Sparkles className="w-4 h-4 text-secondary" /> Course Finder
