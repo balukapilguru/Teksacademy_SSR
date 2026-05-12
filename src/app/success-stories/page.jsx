@@ -16,23 +16,23 @@ const SuccessStories = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   // Helper function to extract raw S3 URL from Next.js proxy URLs
-  const getRawImageUrl = (src) => {
-    if (!src) return "";
+  // const getRawImageUrl = (src) => {
+  //   if (!src) return "";
     
-    // Check if it's a teksacademy.com proxy URL
-    if (src.includes("teksacademy.com/_next/image") && src.includes("url=")) {
-      try {
-        const urlParams = new URLSearchParams(src.split("?")[1]);
-        const encodedUrl = urlParams.get("url");
-        if (encodedUrl) {
-          return decodeURIComponent(encodedUrl);
-        }
-      } catch (e) {
-        console.error("Failed to parse image URL", e);
-      }
-    }
-    return src;
-  };
+  //   // Check if it's a teksacademy.com proxy URL
+  //   if (src.includes("teksacademy.com/_next/image") && src.includes("url=")) {
+  //     try {
+  //       const urlParams = new URLSearchParams(src.split("?")[1]);
+  //       const encodedUrl = urlParams.get("url");
+  //       if (encodedUrl) {
+  //         return decodeURIComponent(encodedUrl);
+  //       }
+  //     } catch (e) {
+  //       console.error("Failed to parse image URL", e);
+  //     }
+  //   }
+  //   return src;
+  // };
 
   // Fetch data on client
   useEffect(() => {
@@ -160,7 +160,7 @@ const SuccessStories = () => {
                 {heroSection.galleryImages.slice(0, 6).map((img, idx) => (
                   <div key={idx} className="rounded-lg overflow-hidden bg-white shadow-sm">
                     <Image
-                      src={getRawImageUrl(img.src)}
+                      src={GetData({url:img.src})}
                       alt={img.alt || `Gallery ${idx + 1}`}
                       width={200}
                       height={150}
@@ -213,7 +213,7 @@ const SuccessStories = () => {
           >
             <div className="relative">
               <Image
-                src={getRawImageUrl(item.thumbnail?.src || item.image?.src)}
+                src={GetData({url:item.thumbnail?.src || item.image?.src})}
                 alt={item.thumbnail?.alt || item.name || item.image?.alt || "success story"}
                 width={400}
                 height={300}
