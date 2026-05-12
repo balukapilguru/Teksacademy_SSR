@@ -9,7 +9,7 @@ import PrimaryButton from "@/utility/PrimaryButton";
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-
+console.log(data,"academimcs")
   // ✅ Sort categories: PG → UG → Others
   const categories = (data?.category || []).sort((a, b) => {
     const order = ["Post Graduation", "Under Graduation"];
