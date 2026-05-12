@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
+import Loader from "../Loading";
 
 const SuccessStories = () => {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
@@ -97,11 +98,8 @@ const SuccessStories = () => {
 
   if (loading) {
     return (
-      <div className="main_container">
-        <div className="text-center py-20">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-          <p className="mt-2 text-gray-600">Loading success stories...</p>
-        </div>
+      <div>
+        <Loader />
       </div>
     );
   }

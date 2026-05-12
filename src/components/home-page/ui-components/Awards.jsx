@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
+import Heading from "@/utility/Heading";
 
 const leftleaf =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/left_leaf.webp";
@@ -15,7 +16,9 @@ const Awards = (awards) => {
   const intervalRef = useRef(null);
   const isPausedRef = useRef(false);
 
-  const cards = awards?.awards?.cards || [];
+  const awardsData = awards?.awards || awards?.awardsData || awards?.data;
+  const cards = awardsData?.cards || [];
+  const heading = awardsData?.heading || awardsData?.title;
 
   // 🔥 central control
   const goToIndex = (index) => {
@@ -108,6 +111,11 @@ const Awards = (awards) => {
 
   return (
     <div className="main_container mx-auto py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10 justify-center items-center">
+      {heading && (
+        <div className="text-center px-4 md:px-8 lg:px-0">
+          <Heading data={heading} />
+        </div>
+      )}
 
       {/* 🔴 MOBILE CAROUSEL */}
       <div

@@ -15,20 +15,11 @@ console.log(data,"nutsheel")
       <div className="flex flex-col items-center">
 
         {/* Heading */}
-        <div className="relative my-6 text-center">
+        <div className=" my-6 text-center">
           <h2 className="text-xl md:text-3xl font-semibold">
             {title?.[0]}
             <span className="text-[#2A619D]">{title?.[1]}</span>
           </h2>
-
-          <svg className="absolute left-0 right-0 mx-auto top-8 w-40">
-            <path
-              d="M0 10 Q80 -4 190 27"
-              stroke="orangered"
-              strokeWidth="0.6"
-              fill="transparent"
-            />
-          </svg>
         </div>
 
         {/* Layout */}

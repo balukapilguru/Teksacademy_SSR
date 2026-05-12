@@ -86,19 +86,11 @@ export default function Excel(data) {
         <div className="xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel_bg.webp')] bg-cover bg-center">
             <div className="main_container py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10">
                 <div className="flex flex-col items-center gap-y-2 sm:gap-y-4 lg:gap-y-8 2xl:gap-y-14 3xl:gap-y-20">
-                    <div className="relative flex flex-col items-center">
+                    <div className=" flex flex-col items-center">
                         <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
                             <span className="">Excel with&nbsp;</span><span className="text-[#2A619D]">Teks&nbsp;Academy</span>
                         </div>
-                        <svg className="absolute top-8 w-full h-auto" // Increased width and height
-                            viewBox="0 0 110 12">
-                            <path
-                                d="M0 10 Q80 -4 190 27"
-                                stroke="orangered"
-                                strokeWidth="0.4"
-                                fill="transparent"
-                                strokeLinecap="square" />
-                        </svg>
+                      
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 w-full pb-4">

@@ -12,7 +12,7 @@ export default  function Featuredin ({featuredIn})  {
       <div className="">
        <div className="main_container mx-auto mt-4 pt-5">
          <div className=" text-center">
-           <div className=" flex pl-3 md:pl-0 ">
+           <div className=" pl-3 md:pl-0 text-center">
             <Heading data={featuredIn?.heading}/>
              {/* <h2 className="text-2xl xl:text-4xl pl-4 lg:pl-0 font-medium text-black  whitespace-nowrap sm:text-2">
                {featuredIn?.heading} 

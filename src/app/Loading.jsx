@@ -20,7 +20,7 @@ export default function Loader() {
           src="https://teksversity.s3.us-east-1.amazonaws.com/website/assets/home/loaderteks.gif"
           width={100}
           height={100}
-          alt="srilakshmi loader"
+          alt="loader"
           // priority
           unoptimized
         />

@@ -5,6 +5,7 @@ import CourseCard from "./Coursecards";
 import Link from "next/link";
 import Popupform from "../clientcomponents/forms/Popupform";
 import PrimaryButton from "@/utility/PrimaryButton";
+import Loader from "../Loader";
 
 const CertificationCourse = ({ data }) => {
   const [courses, setCourses] = useState([]);
@@ -106,8 +107,8 @@ const CertificationCourse = ({ data }) => {
 
         {/* Loading State */}
         {loading && (
-          <div className="flex justify-center items-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002b80]"></div>
+          <div>
+            <Loader />
           </div>
         )}
 
