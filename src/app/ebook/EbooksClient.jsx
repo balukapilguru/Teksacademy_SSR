@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import Ebooksform from "@/components/clientcomponents/forms/Ebooksform";
 import GetData from "@/utility/GetData";
+import Loader from "@/components/Loader";
 
 export default function EbookClient({ data, source }) {
   const [selectedCard, setSelectedCard] = useState(null);
