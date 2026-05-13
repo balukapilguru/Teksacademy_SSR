@@ -3230,10 +3230,10 @@ const alumni = () => {
                   </div>
                   <div className="w-2/3 flex flex-col justify-center items-start xl:pl-2">
                     <div className="font-bold text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-xl tracking-normal">
-                      swetha&nbsp;dheeraj
+                      swetha dheeraj
                     </div>
                     <div className="text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-xl">
-                      Software&nbsp;Developer
+                      Software Developer
                     </div>
                   </div>
                 </div>
@@ -3249,10 +3249,10 @@ const alumni = () => {
                   </div>
                   <div className="w-2/3 flex flex-col justify-center items-start xl:pl-2 ">
                     <div className="font-bold text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-xl tracking-normal text-[#FC7C05]">
-                      Successful&nbsp;Verified
+                      Successful Verified
                     </div>
                     <div className="text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-lg">
-                      Your&nbsp;job&nbsp;certification
+                      Your job certification
                     </div>
                   </div>
                 </div>
@@ -3273,10 +3273,10 @@ const alumni = () => {
                   </div>
                   <div className="w-3/4 lg:w-2/3 xl:w-[70%] 3xl:w-[62%] flex flex-col justify-center items-start">
                     <div className="font-bold text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-xl tracking-normal text-[#FC7C05]">
-                      Your&nbsp;job&nbsp;experience
+                      Your job experience
                     </div>
                     <div className="text-[10px] md:text-[10px] lg:text-base xl:text-md 2xl:text-base 3xl:text-lg">
-                      Tell&nbsp;us&nbsp;about&nbsp;your experience
+                      Tell us about your experience
                     </div>
                   </div>
                 </div>
