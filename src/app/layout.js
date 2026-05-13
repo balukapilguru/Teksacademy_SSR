@@ -1,14 +1,17 @@
+// app/layout.jsx
 import { Suspense } from "react";
 import Script from "next/script";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
 import { ToastContainer } from "react-toastify";
 import SpinWheel from "@/components/SpinWheel/SpinWheel";
 import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
+import { MobileBottomNav } from "@/components/home-page/MobileBottomNav";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,7 +22,6 @@ const poppins = Poppins({
 export const metadata = {
   title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
   description: "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
-
   verification: {
     google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
   },
@@ -27,16 +29,13 @@ export const metadata = {
 
 async function getLetstalkAPI() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(`${baseUrl}/api/v1/home/lets-talk`, {
       next: { revalidate: 60 },
       signal: controller.signal
     });
-
     clearTimeout(timeoutId);
     const json = await res.json();
     return json?.data || null;
@@ -54,8 +53,6 @@ export default async function RootLayout({ children }) {
         className={`${poppins.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {/* Scripts should be placed here, NOT inside <head> */}
-
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -94,14 +91,15 @@ export default async function RootLayout({ children }) {
             <AppLoader />
             <Navbar />
             <main>{children}</main>
-
             {/* <Suspense fallback={null}>
               <SpinWheel />
             </Suspense> */}
-
             <Footer />
           </NavbarProvider>
         </SelectedCourseProvider>
+        
+        {/* Mobile Bottom Navigation - Only visible on mobile devices */}
+        <MobileBottomNav />
       </body>
     </html>
   );

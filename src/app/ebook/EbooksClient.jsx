@@ -57,14 +57,15 @@ export default function EbookClient({ data, source }) {
         {(isLoading ? Array(8).fill(0) : courses)?.map((course, index) =>
           isLoading ? (
             // Skeleton
-            <div
-              key={index}
-              className="animate-pulse bg-gray-200 h-56 rounded-lg"
-            ></div>
+            // <div
+            //   key={index}
+            //   className="animate-pulse bg-gray-200 h-56 rounded-lg"
+            // ></div>
+            <Loader key={index} />
           ) : (
             <div
               key={course.productId}
-              className="bg-[#DFF6F4] h-56 rounded-lg shadow-lg p-2  hover:scale-105 transition flex flex-col"
+              className="bg-[#DFF6F4] h-56 rounded-lg shadow-lg p-2 hover:scale-105 transition flex flex-col"
               onClick={() => setSelectedCard(course)}
             >
               <div className="h-2/5 flex items-center justify-center">

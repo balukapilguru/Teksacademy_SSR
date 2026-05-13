@@ -11,7 +11,7 @@ export default function HomepageBanner({ bannerData }) {
       
       <div className="main_container mx-auto bg-[#e1e7ec] rounded-lg overflow-hidden p-4 sm:p-6 md:p-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-start">
           
           {/* Left Section */}
           <div className="w-full">

@@ -110,7 +110,7 @@ function HeroSection({ data }) {
       className="bg-cover bg-center bg-[#04264d]"
       style={{ backgroundImage: `url("${backgroundImage}")` }}
     >
-      <div className="main_container mx-auto flex px-6 xl:px-0 3xl:py-14 2xl:py-12 xl:py-8 lg:py-6 py-4">
+      <div className="main_container mx-auto flex sm:px-6 xl:px-0 3xl:py-14 2xl:py-12 xl:py-8 lg:py-6 py-4">
         <div className="flex flex-col xl:flex-row w-full gap-2 lg:gap-4 xl:gap-8">
           {/* Text Section - 60% */}
           <div className="flex-[60%] 2xl:flex-[70%] text-[#f5f6f7] pb-5">
