@@ -63,7 +63,7 @@ console.log(data,"academimcs")
       try {
         const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
         const response = await fetch(
-          `${baseUrl}/api/v1/course?subCategory=${selectedCategory}`,
+          `${baseUrl}/api/v1/course?category=academics&subCategory=${selectedCategory}`,
           { method: "GET", next: { revalidate: 60 } }
         );
         const resData = await response.json();

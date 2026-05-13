@@ -83,7 +83,7 @@ export default function CourseInfoTable({
       const button = row.button.find(
         (btn) =>
           btn.name?.toLowerCase().includes("enroll") ||
-          btn.text?.toLowerCase().includes("enroll")
+          btn.text?.toLowerCase().includes("enroll"),
       );
       return (
         button?.name ||
@@ -174,7 +174,7 @@ export default function CourseInfoTable({
   // NEW: Function to get universities for a specialization (filtered if needed)
   const getUniversitiesForSpecialization = (
     specialization,
-    selectedUni = null
+    selectedUni = null,
   ) => {
     if (!specialization?.universities) return [];
 
@@ -198,7 +198,6 @@ export default function CourseInfoTable({
 
   // Handle button click for all course types
   const handleUniversityClick = (university) => {
-   
     setSelectedUniversity(university);
 
     // Get filtered specializations for this university
@@ -218,8 +217,6 @@ export default function CourseInfoTable({
       // setShowGetDetailsModal(true);
     }
   };
-
- 
 
   // Updated prepareCourseData to include filtered specializations
   const prepareCourseData = (university, filteredSpecializations = null) => {
@@ -259,8 +256,6 @@ export default function CourseInfoTable({
     };
   };
 
- 
-
   return (
     <>
       <section id="offeringUniversity" className=" mx-auto">
@@ -269,9 +264,10 @@ export default function CourseInfoTable({
             <Heading data={heading} />
 
             <div className="mt-10">
-              <div className="overflow-x-auto bg-white rounded-2xl shadow-xl">
+              <div className="w-full overflow-x-auto overflow-y-hidden rounded-2xl shadow-xl border border-gray-200 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
                 {/* Table header */}
-                <div className="min-w-[800px] grid grid-cols-6 text-white font-semibold text-sm uppercase tracking-wide border-b border-gray-300 px-8 py-4 bg-[#47557c]">
+                <div className="min-w-[900px] grid grid-cols-[240px_220px_120px_140px_180px_180px] text-white font-semibold text-sm uppercase tracking-wide border-b border-gray-300 px-6 py-4 bg-[#47557c]">
+                  {" "}
                   {columns.map((col, idx) => (
                     <div key={idx} className={idx === 5 ? "text-center" : ""}>
                       {col}
@@ -292,10 +288,10 @@ export default function CourseInfoTable({
                   return (
                     <div
                       key={index}
-                      className="min-w-[800px] grid grid-cols-6 items-center text-black px-8 py-6 border-b border-gray-200 hover:bg-gray-100 transition-all duration-200"
+                      className="min-w-[900px] grid grid-cols-[240px_220px_120px_140px_180px_180px] items-center text-black px-6 py-5 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
                     >
                       {/* University column */}
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
                         {(() => {
                           const universityLink = getUniversityLink(row);
 
@@ -348,7 +344,7 @@ export default function CourseInfoTable({
                       </div>
 
                       {/* Accreditations column */}
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-2 min-w-[180px]">
                         {row.accreditations?.map((acc, i) => (
                           <span
                             key={i}
@@ -385,7 +381,7 @@ export default function CourseInfoTable({
                       </div>
 
                       {/* Action column */}
-                      <div className="flex justify-center">
+                      <div className="flex justify-center min-w-[160px]">
                         <PrimaryButton
                           onClick={() => handleUniversityClick(row)}
                           variant="filled"
