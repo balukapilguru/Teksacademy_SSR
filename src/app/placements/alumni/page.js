@@ -14,7 +14,7 @@ const metadata = {
   description:
     "Discover where Teks Academy alumni successful training in the best software courses.",
 };
-const alumni = () => {
+const Alumni = () => {
   const alumniImgaes = [
      {
       id: 255,
@@ -3345,7 +3345,7 @@ const alumni = () => {
           </div>
           <div className="flex justify-center items-center  text-xl font-normal">
             <button className="bg-[#FE543D] text-white text-md flex justify-center items-center w-fit h-10 p-6 rounded-lg cursor-default ">
-              we have created 48K+ Trained student's...
+              we have created 48K+ Trained students...
             </button>
           </div>
         </div>
@@ -3353,4 +3353,4 @@ const alumni = () => {
     </>
   );
 };
-export default alumni;
+export default Alumni;
