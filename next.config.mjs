@@ -26,6 +26,11 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "teksacademynewwebsite.s3.ap-south-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
   },
 
