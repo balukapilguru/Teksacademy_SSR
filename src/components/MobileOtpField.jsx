@@ -176,7 +176,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
         {!isVerified && (
           <button type="button" onClick={handleSendOtp} disabled={!canSendOtp || isLoading}
-            className={`px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap
+            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all whitespace-nowrap
               ${!canSendOtp || isLoading ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-[#2a619d] text-white hover:bg-[#214d7d] active:scale-95 shadow-sm"}`}>
             {isLoading && !showOtp
               ? <span className="flex items-center gap-1.5">

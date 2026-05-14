@@ -5,8 +5,8 @@ import { MobileOtpField } from "./MobileOtpField";
 
 // Complete field configuration
 const ALL_FIELDS = {
-  name: { id: "name", label: "Full Name", type: "text", required: true, placeholder: "Enter your full name" },
-  email: { id: "email", label: "Email Address", type: "email", required: true, placeholder: "you@example.com" },
+  name: { id: "name", label: "Name", type: "text", required: true, placeholder: "Enter your name" },
+  email: { id: "email", label: "Email", type: "email", required: true, placeholder: "Enter your email" },
   phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
   course: { id: "course", label: "Course", type: "course", required: true },
   branch: { id: "branch", label: "Branch", type: "select", required: true, options: ["ameerpet", "kukatpally", "mehdipatnam", "hiteccity", "secunderabad", "dilsukhnagar", "bangalore", "visakhapatnam"] },
