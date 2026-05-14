@@ -163,7 +163,7 @@ const Media = () => {
         </div>
       </div>
 
-      <div className="flex justify-center w-11/12 xl:w-full mx-auto gap-4 lg:gap-16 3xl:gap-x-24 border-b-2">
+      <div className="flex justify-center sm:w-11/12   xl:w-full mx-auto gap-4 md:gap-x-12 lg:gap-16 3xl:gap-x-24 border-b-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
