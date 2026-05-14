@@ -79,7 +79,7 @@ import { BsBriefcase, BsJournalText } from "react-icons/bs";
 import { MdPhotoLibrary, MdContactPhone, MdSupportAgent, MdCampaign } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
-import CareerGuidanceForm from "../components/clientcomponents/forms/CareerGuidanceForm";
+import CareerGuidanceForm from "./clientcomponents/forms/CareerGuidanceForm";
 import Loader from "./Loader";
 
 

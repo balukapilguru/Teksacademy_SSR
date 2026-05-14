@@ -25,7 +25,7 @@ const COURSE_OPTIONS = [
 ];
 
 export default function ReusableForm({
-  formType = "default", // contact, support, recruiter, ebook, enquiry, excel, syllabus, banner
+  formType = "default",
   onSubmit,
   initialValues = {},
   buttonText = "Submit",
@@ -43,7 +43,8 @@ export default function ReusableForm({
       enquiry: ["name", "email", "phone", "course", "branch"],
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
-      banner: ["name", "email", "phone", "course", "branch", "city"]
+      banner: ["name", "email", "phone", "course", "branch", "city"],
+      Career: ["name", "email", "phone", "course", "branch"]
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
@@ -63,8 +64,7 @@ export default function ReusableForm({
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close dropdown on outside click
-  const API_URL = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const API_URL = "https://apierp.infozit.com";
   
   useEffect(() => {
     const handler = (e) => {
@@ -76,19 +76,18 @@ export default function ReusableForm({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Helper function to map form values to API payload
   const mapToApiPayload = (values) => {
-    // Map formType to source based on your table
     const sourceMap = {
-      contact: "Contact Us - Website",      // From your table: contact-us page
-      support: "enquiryform",               // From your table: support form
-      recruiter: "formdata",                // From your table: recruiters
-      ebook: "Ebook—Website",               // From your table: Ebook
-      enquiry: "Website",                   // From your table: enquiry
-      excel: "Request Callback—Website",    // From your table: Excel with
-      syllabus: "Download Syllabus—Website", // From your table: Download syllabus
-      banner: "Enrollnow",                  // From your table: Enroll now banner
-      default: "Website"                    // Default fallback
+      contact: "Contact Us - Website",
+      support: "enquiryform",
+      recruiter: "formdata",
+      ebook: "Ebook—Website",
+      enquiry: "Website",
+      excel: "Request Callback—Website",
+      syllabus: "Download Syllabus—Website",
+      banner: "Enrollnow",
+      default: "Website",
+      Career: "Request Callback—Website"
     };
     
     return {
@@ -103,14 +102,13 @@ export default function ReusableForm({
       designation: values.designation || "",
       message: values.message || "",
       issue: values.issue || "",
-      source: sourceMap[formType] || "Website",  // source name from your table
-      crm_source: sourceMap[formType] || "Website", // CRM source (same as source in your table)
+      source: sourceMap[formType] || "Website",
+      crm_source: sourceMap[formType] || "Website",
       form_type: formType,
       timestamp: new Date().toISOString()
     };
   };
 
-  // Validation
   const validateField = (fieldId, value) => {
     const field = ALL_FIELDS[fieldId];
     if (!field) return "";
@@ -164,15 +162,12 @@ export default function ReusableForm({
 
     setIsSubmitting(true);
     try {
-      // Map form values to API payload
       const payload = mapToApiPayload(formValues);
       console.log("Submitting payload:", payload);
       
       if (onSubmit) {
-        // Pass both original values and mapped payload
         await onSubmit(formValues, payload);
       } else {
-        // Default submission with mapped payload
         const response = await fetch(`${API_URL}/lead/create`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -185,7 +180,6 @@ export default function ReusableForm({
         }
         
         alert(successMessage);
-        // Reset form
         const fields = getFieldsForType();
         const resetValues = {};
         fields.forEach(fieldId => { resetValues[fieldId] = ""; });
@@ -200,7 +194,6 @@ export default function ReusableForm({
     }
   };
 
-  // Render individual field
   const renderField = (fieldId) => {
     const field = ALL_FIELDS[fieldId];
     if (!field) return null;
@@ -208,7 +201,6 @@ export default function ReusableForm({
     const value = formValues[fieldId];
     const error = errors[fieldId];
 
-    // Phone field with OTP
     if (fieldId === "phone") {
       return (
         <div key={fieldId} className="mb-4">
@@ -222,7 +214,6 @@ export default function ReusableForm({
       );
     }
 
-    // Course field with search dropdown
     if (fieldId === "course") {
       const filteredCourses = COURSE_OPTIONS.filter(c =>
         c.toLowerCase().includes(courseSearchTerm.toLowerCase())
@@ -230,12 +221,12 @@ export default function ReusableForm({
 
       return (
         <div key={fieldId} className="mb-4 relative" ref={dropdownRef}>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs font-medium text-gray-700 mb-1">
             {field.label} <span className="text-red-500">*</span>
           </label>
           <div
             onClick={() => setShowCourseDropdown(!showCourseDropdown)}
-            className={`w-full px-4 py-3 border rounded-xl flex items-center justify-between text-sm cursor-pointer
+            className={`w-full px-4 py-2 border rounded-md flex items-center justify-between text-sm cursor-pointer
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
             <span className={value ? "text-gray-900" : "text-gray-400"}>
@@ -249,13 +240,13 @@ export default function ReusableForm({
 
           {showCourseDropdown && (
             <div className="absolute z-50 left-0 right-0 mt-1 bg-white border rounded-xl shadow-lg max-h-60 overflow-auto">
-              <div className="p-2 border-b">
+              <div className="p-1 border-b">
                 <input
                   type="text"
                   value={courseSearchTerm}
                   onChange={(e) => setCourseSearchTerm(e.target.value)}
                   placeholder="Search courses..."
-                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
@@ -267,7 +258,7 @@ export default function ReusableForm({
                     setCourseSearchTerm(course);
                     setShowCourseDropdown(false);
                   }}
-                  className={`px-4 py-3 text-sm cursor-pointer hover:bg-blue-50
+                  className={`px-4 py-1 text-sm cursor-pointer hover:bg-blue-50
                     ${value === course ? "bg-blue-50 text-blue-600 font-semibold" : "text-gray-700"}`}
                 >
                   {course}
@@ -280,17 +271,16 @@ export default function ReusableForm({
       );
     }
 
-    // Branch select field
     if (fieldId === "branch") {
       return (
         <div key={fieldId} className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs font-medium text-gray-700 mb-1">
             {field.label} <span className="text-red-500">*</span>
           </label>
           <select
             value={value}
             onChange={(e) => handleChange(fieldId, e.target.value)}
-            className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+            className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
             <option value="">Select Branch</option>
@@ -305,11 +295,10 @@ export default function ReusableForm({
       );
     }
 
-    // Textarea field
     if (field.type === "textarea") {
       return (
         <div key={fieldId} className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-xs font-medium text-gray-700 mb-1">
             {field.label} {field.required && <span className="text-red-500">*</span>}
           </label>
           <textarea
@@ -317,7 +306,7 @@ export default function ReusableForm({
             value={value}
             onChange={(e) => handleChange(fieldId, e.target.value)}
             placeholder={field.placeholder}
-            className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+            className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -325,10 +314,9 @@ export default function ReusableForm({
       );
     }
 
-    // Default input field
     return (
       <div key={fieldId} className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xs font-medium text-gray-700 mb-1">
           {field.label} {field.required && <span className="text-red-500">*</span>}
         </label>
         <input
@@ -336,7 +324,7 @@ export default function ReusableForm({
           value={value}
           onChange={(e) => handleChange(fieldId, e.target.value)}
           placeholder={field.placeholder}
-          className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+          className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
             ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -352,10 +340,10 @@ export default function ReusableForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full py-3.5 px-4 rounded-xl font-semibold text-white transition-all shadow-md
+        className={`w-full py-2 px-4 rounded-md font-semibold text-white transition-all shadow-md
           ${isSubmitting
             ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98]"}`}
+            : "bg-[#2a619d] hover:bg-[#214d7d] active:scale-[0.98]"}`}
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
