@@ -39,7 +39,7 @@ export default function ContactUsPage() {
       <ReusableForm 
         formType="contact" 
         onSubmit={handleSubmit}
-        buttonText="Send Message"
+        buttonText="Submit"
         successMessage="Thank you! We'll contact you soon."
       />
     </div>

@@ -18,7 +18,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   // Get API URL from environment variable
-  const API_URL = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const API_URL = "https://apierp.infozit.com";
 
   useEffect(() => { onVerifiedRef.current = onVerified; }, [onVerified]);
 
@@ -153,7 +153,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
   return (
     <div className="w-full">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-xs font-medium text-gray-700 mb-1">
         Mobile Number <span className="text-red-500">*</span>
       </label>
 
@@ -168,7 +168,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
             maxLength={10}
             inputMode="numeric"
             placeholder="Enter 10-digit mobile number"
-            className={`w-full pl-12 pr-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2a619d] focus:border-transparent transition
+            className={`w-full pl-12 pr-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#2a619d] focus:border-transparent transition
               ${error ? "border-red-500 bg-red-50" : "border-gray-300"}
               ${isVerified ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "bg-white"}`}
           />
@@ -176,7 +176,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
         {!isVerified && (
           <button type="button" onClick={handleSendOtp} disabled={!canSendOtp || isLoading}
-            className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap
+            className={`px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap
               ${!canSendOtp || isLoading ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-[#2a619d] text-white hover:bg-[#214d7d] active:scale-95 shadow-sm"}`}>
             {isLoading && !showOtp
               ? <span className="flex items-center gap-1.5">
@@ -220,7 +220,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
                 onKeyDown={(e) => handleKeyDown(e, i)}
                 onPaste={(e) => handlePaste(e, i)}
                 maxLength={1} inputMode="numeric"
-                className={`w-11 h-12 text-center border-2 rounded-lg text-lg font-bold focus:outline-none transition-all
+                className={`w-11 h-10 text-center border-2 rounded-lg text-lg font-normal focus:outline-none transition-all
                   ${val ? "border-[#2a619d] bg-white text-[#2a619d]" : "border-gray-300 bg-white"}
                   focus:border-[#2a619d] focus:ring-2 focus:ring-[#2a619d]/20`}
               />
@@ -229,13 +229,13 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
           <div className="flex gap-2">
             <button type="button" onClick={handleSendOtp} disabled={isResendDisabled || isLoading}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all
+              className={`flex-1 py-2 rounded-md text-xs font-medium transition-all
                 ${isResendDisabled || isLoading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border border-[#2a619d] text-[#2a619d] hover:bg-blue-50 active:scale-95"}`}>
               {isResendDisabled && timer > 0 ? `Resend in ${formatTimer(timer)}` : isLoading ? "Sending..." : "Resend OTP"}
             </button>
 
             <button type="button" onClick={handleVerifyOtp} disabled={!isOtpComplete || isLoading}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all
+              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all
                 ${isOtpComplete && !isLoading ? "bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-sm" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}>
               {isLoading && showOtp
                 ? <span className="flex items-center justify-center gap-1.5">

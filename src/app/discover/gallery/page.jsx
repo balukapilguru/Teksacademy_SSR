@@ -6,13 +6,14 @@ import GetData from "@/utility/GetData";
 
 export default function GalleryPage() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+
   const [galleryData, setGalleryData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/v1/home/gallery`, { next: { revalidate: 60 } });
+        const res = await fetch(`${baseUrl}/api/v1/discover/gallery`, { next: { revalidate: 60 } });
         const data = await res.json();
         setGalleryData(data?.data?.gallery?.images || []);
       } catch (error) {
