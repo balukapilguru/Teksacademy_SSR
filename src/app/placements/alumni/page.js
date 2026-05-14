@@ -3218,7 +3218,7 @@ const Alumni = () => {
                   src={man_using_tech}
                   alt="image"
                 />
-                <div className="bg-white border border-black h-12 w-32 md:w-36 lg:h-20 lg:w-56 xl:w-64 xl:h-20 2xl:h-[70px] 2xl:w-64 3xl:h-[74px] 3xl:w-72 rounded-t-lg rounded-r-lg absolute top-[15%] left-[70%] lg:left-[70%] xl:left-[70%] 2xl:left-[70%] flex">
+                <div className="bg-white border border-black h-12 w-32 md:w-36 lg:h-20 lg:w-56 xl:w-64 xl:h-20 2xl:h-[70px] 2xl:w-64 3xl:h-[74px] 3xl:w-72 rounded-t-lg rounded-r-lg absolute top-[15%] left-[70%]  md:left-[80%] lg:left-[80%] xl:left-[80%] 2xl:left-[70%] flex">
                   <div className="w-1/3 h-full flex justify-center items-center">
                     <Image
                       width={400}
@@ -3237,7 +3237,7 @@ const Alumni = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-white border border-black flex h-12 w-32 md:w-40 lg:h-20 lg:w-60 xl:w-64 xl:h-20 2xl:h-[70px] 2xl:w-64 3xl:h-24 3xl:w-72 rounded-t-lg rounded-l-lg absolute  top-[36%] 2xl:top-[40%] -left-4">
+                <div className="bg-white border border-black flex h-12 w-36 md:w-40 lg:h-20 lg:w-60 xl:w-64 xl:h-20 2xl:h-[70px] 2xl:w-64 3xl:h-24 3xl:w-72 rounded-t-lg rounded-l-lg absolute  top-[36%] 2xl:top-[40%] -left-4">
                   <div className="w-1/4 h-full flex justify-center items-center">
                     <Image
                       width={400}

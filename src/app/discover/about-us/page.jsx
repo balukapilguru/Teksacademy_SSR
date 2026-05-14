@@ -18,10 +18,11 @@ const Home = async () => {
 
     const result = await res.json();
     aboutusdata = result?.data;
+    console.log(aboutusdata,"aboutuss")
+
   } catch (err) {
     console.error("API Error:", err);
   }
-
   return (
     <div className="main_container">
       <div className="justify-items-center">
