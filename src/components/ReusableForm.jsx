@@ -1,249 +1,156 @@
-// ReusableForm.jsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { MobileOtpField } from "./MobileOtpField";
 
-// Configuration for form fields
-const formConfig = {
-  fields: [
-    {
-      id: "career",
-      label: "Career",
-      type: "select",
-      required: true,
-      options: [
-        { value: "web development", label: "Web Development" },
-        { value: "datascience", label: "Data Science" },
-        { value: "cloud / devops", label: "Cloud / DevOps" },
-        { value: "cyber security", label: "Cyber Security" }
-      ]
-    },
-    {
-      id: "background",
-      label: "Background",
-      type: "select",
-      required: true,
-      options: [
-        { value: "fresher/student", label: "Fresher/Student" },
-        { value: "working it professional", label: "Working IT Professional" },
-        { value: "career switcher", label: "Career Switcher" }
-      ]
-    },
-    {
-      id: "preferredMode",
-      label: "Preferred Mode",
-      type: "select",
-      required: true,
-      options: [
-        { value: "online (live)", label: "Online (Live)" },
-        { value: "offline (classroom)", label: "Offline (Classroom)" },
-        { value: "hybrid", label: "Hybrid" }
-      ]
-    },
-    {
-      id: "name",
-      label: "Name",
-      type: "text",
-      required: true,
-      placeholder: "Enter your full name"
-    },
-    {
-      id: "email",
-      label: "Email",
-      type: "email",
-      required: true,
-      placeholder: "you@example.com"
-    },
-    {
-      id: "phone",
-      label: "Phone Number",
-      type: "phone",
-      required: true,
-      placeholder: "10-digit mobile number"
-    },
-    {
-      id: "city",
-      label: "City",
-      type: "text",
-      required: true,
-      placeholder: "Enter your city"
-    },
-    {
-      id: "branch",
-      label: "Branch",
-      type: "branch",
-      required: true,
-      options: [
-        "ameerpet", "hiteccity", "secunderabad", "dilsukhnagar",
-        "mehdipatnam", "kukatpally", "bangalore", "visakhapatnam", "salem"
-      ]
-    },
-    {
-      id: "course",
-      label: "Course",
-      type: "course",
-      required: true,
-      options: [
-        "financial services and insurance", "excel", "autocad", "aws and devops",
-        "bim", "business analytics", "cyber security", "data analytics",
-        "data science", "digitial marketing", "full stack java", "full stack python",
-        "generative ai", "medical coding", "multimedia", "revit",
-        "salesforce", "sap fico", "sapmm", "testing tools", "vlsi"
-      ]
-    },
-    {
-      id: "message",
-      label: "Your Message",
-      type: "textarea",
-      required: true,
-      placeholder: "Write your message or questions here...",
-      rows: 4
-    }
-  ],
-  enableDownloadBrochure: true
+// Complete field configuration
+const ALL_FIELDS = {
+  name: { id: "name", label: "Full Name", type: "text", required: true, placeholder: "Enter your full name" },
+  email: { id: "email", label: "Email Address", type: "email", required: true, placeholder: "you@example.com" },
+  phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
+  course: { id: "course", label: "Course", type: "course", required: true },
+  branch: { id: "branch", label: "Branch", type: "select", required: true, options: ["ameerpet", "kukatpally", "mehdipatnam", "hiteccity", "secunderabad", "dilsukhnagar", "bangalore", "visakhapatnam"] },
+  city: { id: "city", label: "City", type: "text", required: true, placeholder: "Enter your city" },
+  message: { id: "message", label: "Message", type: "textarea", required: false, placeholder: "Your message here...", rows: 4 },
+  companyName: { id: "companyName", label: "Company Name", type: "text", required: true, placeholder: "Enter company name" },
+  designation: { id: "designation", label: "Designation", type: "text", required: true, placeholder: "Your designation" },
+  issue: { id: "issue", label: "Issue / Query", type: "textarea", required: true, placeholder: "Describe your issue...", rows: 3 }
 };
 
-// Helper functions - CORRECTED
-function getBranchFromPathname(pathname) {
-  const branchMap = {
-    "best-software-training-institute-ameerpet": "ameerpet",
-    "best-software-training-institute-hiteccity": "hiteccity",
-    "best-software-training-institute-secunderabad": "secunderabad",
-    "best-software-training-institute-dilsukhnagar": "dilsukhnagar",
-    "best-software-training-institute-mehdipatnam": "mehdipatnam",
-    "best-software-training-institute-kukatpally": "kukatpally",
-    "best-software-training-institute-bangalore": "bangalore",
-    "best-software-training-institute-visakhapatnam": "visakhapatnam",
-    "best-software-training-institute-salem": "salem",
-  };
-  
-  // CORRECTED: Use Object.entries() instead of .entries()
-  for (const [key, value] of Object.entries(branchMap)) {
-    if (pathname.includes(key)) return value;
-  }
-  return null;
-}
+// Course options
+const COURSE_OPTIONS = [
+  "Full Stack Python", "Full Stack Java", "Data Science", "AWS & DevOps",
+  "Digital Marketing", "Cyber Security", "Data Analytics", "Business Analytics",
+  "Generative AI", "Medical Coding", "SAP FICO", "Testing Tools", "Excel", "AutoCAD", "BIM", "Revit"
+];
 
-function getCourseFromPathname(pathname) {
-  const courseMap = {
-    "banking-financial-services-and-insurance-course": "financial services and insurance",
-    "best-advance-excel-course-training-institute": "excel",
-    "best-autocad-course-training-institute": "autocad",
-    "best-awsplusdevops-course-training-institute": "aws and devops",
-    "best-bim-building-information-modeling-course-training-institute": "bim",
-    "best-business-analytics-course-training-institute": "business analytics",
-    "best-cyber-security-course-training-institute": "cyber security",
-    "best-data-analytics-course-training-institute": "data analytics",
-    "best-data-science-course-training-institute": "data science",
-    "best-digital-marketing-course-training-institute": "digitial marketing",
-    "best-full-stack-java-development-course-training-institute": "full stack java",
-    "best-full-stack-python-development-course-training-institute": "full stack python",
-    "best-generative-ai-course-training-institute": "generative ai",
-    "best-medical-coding-course-training-institute": "medical coding",
-    "best-multimedia-course-training-institute": "multimedia",
-    "best-revit-mep-course-training-institute": "revit",
-    "best-salesforce-admin-development-course-training-institute": "salesforce",
-    "best-sap-fico-finance-and-controlling-course-training-institute": "sap fico",
-    "best-sapmm-course-training-institute": "sapmm",
-    "best-testingtools-course-training-institute": "testing tools",
-    "best-vlsi-course-training-institute-hyderabad": "vlsi",
-  };
-  
-  // CORRECTED: Use Object.entries() instead of .entries()
-  for (const [key, value] of Object.entries(courseMap)) {
-    if (pathname.includes(key)) return value;
-  }
-  return null;
-}
-
-// Main Reusable Component
-export default function ReusableForm({ 
-  onSubmit, 
-  initialValues = {}, 
-  hiddenFields = [], 
-  readOnlyFields = [],
-  customValidations = {},
-  showBrochure = true,
-  buttonText = "Submit Enquiry"
+export default function ReusableForm({
+  formType = "default", // contact, support, recruiter, ebook, enquiry, excel, syllabus, banner
+  onSubmit,
+  initialValues = {},
+  buttonText = "Submit",
+  successMessage = "Form submitted successfully!",
+  className = ""
 }) {
-  const pathname = usePathname();
-  
-  // Initialize form values
+  // Define which fields to show for each form type
+  const getFieldsForType = useCallback(() => {
+    const formFields = {
+      default: ["name", "email", "phone", "course", "branch", "city", "message"],
+      contact: ["name", "email", "phone", "course", "branch", "city"],
+      support: ["name", "email", "phone", "course", "branch", "issue"],
+      recruiter: ["name", "email", "phone", "companyName", "designation", "branch"],
+      ebook: ["name", "email", "phone", "course", "branch"],
+      enquiry: ["name", "email", "phone", "course", "branch"],
+      excel: ["name", "email", "phone", "message", "branch"],
+      syllabus: ["name", "email", "phone", "branch", "city", "course"],
+      banner: ["name", "email", "phone", "course", "branch", "city"]
+    };
+    return formFields[formType] || formFields.default;
+  }, [formType]);
+
   const [formValues, setFormValues] = useState(() => {
     const initial = {};
-    formConfig.fields.forEach(field => {
-      initial[field.id] = initialValues[field.id] || "";
+    getFieldsForType().forEach(fieldId => {
+      initial[fieldId] = initialValues[fieldId] || "";
     });
     return initial;
   });
-  
+
   const [errors, setErrors] = useState({});
-  const [otpSent, setOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [courseSearchTerm, setCourseSearchTerm] = useState("");
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // URL binding for branch and course
-  const branchFromUrl = getBranchFromPathname(pathname);
-  const courseFromUrl = getCourseFromPathname(pathname);
-  const isBranchPage = branchFromUrl !== null;
-  const isCoursePage = courseFromUrl !== null;
-
+  // Close dropdown on outside click
+  const API_URL = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  
   useEffect(() => {
-    if (isBranchPage) {
-      setFormValues(prev => ({ ...prev, branch: branchFromUrl }));
-    }
-  }, [branchFromUrl, isBranchPage]);
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowCourseDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-  useEffect(() => {
-    if (isCoursePage) {
-      setFormValues(prev => ({ ...prev, course: courseFromUrl }));
-      setCourseSearchTerm(courseFromUrl);
-    }
-  }, [courseFromUrl, isCoursePage]);
+  // Helper function to map form values to API payload
+  const mapToApiPayload = (values) => {
+    // Map formType to source based on your table
+    const sourceMap = {
+      contact: "Contact Us - Website",      // From your table: contact-us page
+      support: "enquiryform",               // From your table: support form
+      recruiter: "formdata",                // From your table: recruiters
+      ebook: "Ebook—Website",               // From your table: Ebook
+      enquiry: "Website",                   // From your table: enquiry
+      excel: "Request Callback—Website",    // From your table: Excel with
+      syllabus: "Download Syllabus—Website", // From your table: Download syllabus
+      banner: "Enrollnow",                  // From your table: Enroll now banner
+      default: "Website"                    // Default fallback
+    };
+    
+    return {
+      name: values.name || "",
+      email: values.email || "",
+      number: values.phone || "",
+      course: values.course || "",
+      city: values.city || "",
+      branch: values.branch || "",
+      course_branch: values.branch || "",
+      company: values.companyName || "",
+      designation: values.designation || "",
+      message: values.message || "",
+      issue: values.issue || "",
+      source: sourceMap[formType] || "Website",  // source name from your table
+      crm_source: sourceMap[formType] || "Website", // CRM source (same as source in your table)
+      form_type: formType,
+      timestamp: new Date().toISOString()
+    };
+  };
 
   // Validation
-  const validateField = (fieldId, value, allValues = formValues) => {
-    const field = formConfig.fields.find(f => f.id === fieldId);
+  const validateField = (fieldId, value) => {
+    const field = ALL_FIELDS[fieldId];
     if (!field) return "";
-    
+
     if (field.required && !value?.toString().trim()) {
       return `${field.label} is required`;
     }
-    
-    if (fieldId === "email" && value && !/\S+@\S+\.\S+/.test(value)) {
-      return "Email is invalid";
+
+    if (fieldId === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return "Please enter a valid email address";
     }
-    
+
     if (fieldId === "phone" && value && !/^\d{10}$/.test(value)) {
-      return "Phone number must be 10 digits";
+      return "Mobile number must be exactly 10 digits";
     }
-    
-    if (customValidations[fieldId]) {
-      return customValidations[fieldId](value, allValues);
+
+    if (fieldId === "name" && value && value.trim().length < 2) {
+      return "Name must be at least 2 characters";
     }
-    
+
     return "";
   };
 
   const validateForm = () => {
     const newErrors = {};
-    formConfig.fields.forEach(field => {
-      if (hiddenFields.includes(field.id)) return;
-      const error = validateField(field.id, formValues[field.id], formValues);
-      if (error) newErrors[field.id] = error;
+    const fields = getFieldsForType();
+
+    fields.forEach(fieldId => {
+      const error = validateField(fieldId, formValues[fieldId]);
+      if (error) newErrors[fieldId] = error;
     });
-    
-    if (!isOtpVerified && !hiddenFields.includes("phone")) {
-      newErrors.otp = "Please verify OTP";
+
+    if (fields.includes("phone") && !isOtpVerified) {
+      newErrors.phone = "Please verify your mobile number with OTP";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handlers
   const handleChange = (fieldId, value) => {
     setFormValues(prev => ({ ...prev, [fieldId]: value }));
     if (errors[fieldId]) {
@@ -251,322 +158,215 @@ export default function ReusableForm({
     }
   };
 
-  const handleSendOtp = () => {
-    const phoneError = validateField("phone", formValues.phone);
-    if (phoneError) {
-      setErrors(prev => ({ ...prev, phone: phoneError }));
-      return;
-    }
-    alert(`OTP sent to ${formValues.phone}: 123456 (demo)`);
-    setOtpSent(true);
-  };
-
-  const handleVerifyOtp = () => {
-    if (formValues.otp === "123456") {
-      setIsOtpVerified(true);
-      alert("OTP verified successfully!");
-      setErrors(prev => ({ ...prev, otp: "" }));
-    } else {
-      setErrors(prev => ({ ...prev, otp: "Invalid OTP. Use 123456 for demo." }));
-    }
-  };
-
-  const handleDownloadBrochure = () => {
-    if (!formValues.course) {
-      alert("Please select a course first to download the syllabus.");
-      return;
-    }
-    const syllabusUrls = {
-      "financial services and insurance": "/syllabus/financial_services_insurance.pdf",
-      "excel": "/syllabus/excel.pdf",
-      "autocad": "/syllabus/autocad.pdf",
-      "aws and devops": "/syllabus/aws_devops.pdf",
-      "bim": "/syllabus/bim.pdf",
-      "business analytics": "/syllabus/business_analytics.pdf",
-      "cyber security": "/syllabus/cyber_security.pdf",
-      "data analytics": "/syllabus/data_analytics.pdf",
-      "data science": "/syllabus/data_science.pdf",
-      "digitial marketing": "/syllabus/digital_marketing.pdf",
-      "full stack java": "/syllabus/full_stack_java.pdf",
-      "full stack python": "/syllabus/full_stack_python.pdf",
-      "generative ai": "/syllabus/generative_ai.pdf",
-      "medical coding": "/syllabus/medical_coding.pdf",
-      "multimedia": "/syllabus/multimedia.pdf",
-      "revit": "/syllabus/revit.pdf",
-      "salesforce": "/syllabus/salesforce.pdf",
-      "sap fico": "/syllabus/sap_fico.pdf",
-      "sapmm": "/syllabus/sapmm.pdf",
-      "testing tools": "/syllabus/testing_tools.pdf",
-      "vlsi": "/syllabus/vlsi.pdf",
-    };
-    const url = syllabusUrls[formValues.course.toLowerCase()] || "/syllabus/default.pdf";
-    alert(`Downloading syllabus for ${formValues.course}: ${url}`);
-    window.open(url, "_blank");
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      const submitData = { ...formValues };
-      delete submitData.otp;
-      onSubmit ? onSubmit(submitData) : console.log("Form submitted:", submitData);
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
+      // Map form values to API payload
+      const payload = mapToApiPayload(formValues);
+      console.log("Submitting payload:", payload);
+      
+      if (onSubmit) {
+        // Pass both original values and mapped payload
+        await onSubmit(formValues, payload);
+      } else {
+        // Default submission with mapped payload
+        const response = await fetch(`${API_URL}/lead/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || "Submission failed");
+        }
+        
+        alert(successMessage);
+        // Reset form
+        const fields = getFieldsForType();
+        const resetValues = {};
+        fields.forEach(fieldId => { resetValues[fieldId] = ""; });
+        setFormValues(resetValues);
+        setIsOtpVerified(false);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert(error.message || "Submission failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Render field based on type
-  const renderField = (field) => {
-    if (hiddenFields.includes(field.id)) return null;
-    
-    const value = formValues[field.id];
-    const error = errors[field.id];
-    const isReadOnly = readOnlyFields.includes(field.id);
-    
-    // Branch field with URL binding
-    if (field.id === "branch") {
-      if (isBranchPage || isReadOnly) {
-        return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="text"
-              value={value}
-              readOnly
-              className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
-            />
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-          </div>
-        );
-      }
+  // Render individual field
+  const renderField = (fieldId) => {
+    const field = ALL_FIELDS[fieldId];
+    if (!field) return null;
+
+    const value = formValues[fieldId];
+    const error = errors[fieldId];
+
+    // Phone field with OTP
+    if (fieldId === "phone") {
       return (
-        <div key={field.id}>
+        <div key={fieldId} className="mb-4">
+          <MobileOtpField
+            value={value}
+            onChange={(e) => handleChange(fieldId, e.target.value)}
+            onVerified={setIsOtpVerified}
+            error={error}
+          />
+        </div>
+      );
+    }
+
+    // Course field with search dropdown
+    if (fieldId === "course") {
+      const filteredCourses = COURSE_OPTIONS.filter(c =>
+        c.toLowerCase().includes(courseSearchTerm.toLowerCase())
+      );
+
+      return (
+        <div key={fieldId} className="mb-4 relative" ref={dropdownRef}>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
+            {field.label} <span className="text-red-500">*</span>
+          </label>
+          <div
+            onClick={() => setShowCourseDropdown(!showCourseDropdown)}
+            className={`w-full px-4 py-3 border rounded-xl flex items-center justify-between text-sm cursor-pointer
+              ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
+          >
+            <span className={value ? "text-gray-900" : "text-gray-400"}>
+              {value || "Search or select a course"}
+            </span>
+            <svg className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+          {showCourseDropdown && (
+            <div className="absolute z-50 left-0 right-0 mt-1 bg-white border rounded-xl shadow-lg max-h-60 overflow-auto">
+              <div className="p-2 border-b">
+                <input
+                  type="text"
+                  value={courseSearchTerm}
+                  onChange={(e) => setCourseSearchTerm(e.target.value)}
+                  placeholder="Search courses..."
+                  className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+              {filteredCourses.map(course => (
+                <div
+                  key={course}
+                  onClick={() => {
+                    handleChange(fieldId, course);
+                    setCourseSearchTerm(course);
+                    setShowCourseDropdown(false);
+                  }}
+                  className={`px-4 py-3 text-sm cursor-pointer hover:bg-blue-50
+                    ${value === course ? "bg-blue-50 text-blue-600 font-semibold" : "text-gray-700"}`}
+                >
+                  {course}
+                </div>
+              ))}
+            </div>
+          )}
+          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+        </div>
+      );
+    }
+
+    // Branch select field
+    if (fieldId === "branch") {
+      return (
+        <div key={fieldId} className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {field.label} <span className="text-red-500">*</span>
           </label>
           <select
             value={value}
-            onChange={(e) => handleChange(field.id, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => handleChange(fieldId, e.target.value)}
+            className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
-            <option value="">Select {field.label}</option>
+            <option value="">Select Branch</option>
             {field.options.map(opt => (
-              <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
+              <option key={opt} value={opt}>
+                {opt.charAt(0).toUpperCase() + opt.slice(1)}
+              </option>
             ))}
           </select>
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
       );
     }
-    
-    // Course field with search dropdown
-    if (field.id === "course") {
-      const filteredCourses = field.options.filter(c =>
-        c.toLowerCase().includes(courseSearchTerm.toLowerCase())
-      );
-      
-      if (isCoursePage || isReadOnly) {
-        return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="text"
-              value={value}
-              readOnly
-              className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
-            />
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-          </div>
-        );
-      }
-      return (
-        <div key={field.id} className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
-          </label>
-          <input
-            type="text"
-            value={courseSearchTerm}
-            onChange={(e) => {
-              setCourseSearchTerm(e.target.value);
-              setShowCourseDropdown(true);
-              handleChange(field.id, "");
-            }}
-            onFocus={() => setShowCourseDropdown(true)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search or select course"
-          />
-          {showCourseDropdown && courseSearchTerm && (
-            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-              {filteredCourses.length > 0 ? (
-                filteredCourses.map(c => (
-                  <div
-                    key={c}
-                    className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
-                    onClick={() => {
-                      handleChange(field.id, c);
-                      setCourseSearchTerm(c);
-                      setShowCourseDropdown(false);
-                    }}
-                  >
-                    {c}
-                  </div>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-gray-500">No courses found</div>
-              )}
-            </div>
-          )}
-          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-        </div>
-      );
-    }
-    
-    // Phone field with OTP
-    if (field.id === "phone") {
-      return (
-        <div key={field.id}>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="tel"
-              value={value}
-              onChange={(e) => handleChange(field.id, e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder={field.placeholder}
-              disabled={isOtpVerified || isReadOnly}
-            />
-            <button
-              type="button"
-              onClick={handleSendOtp}
-              disabled={isOtpVerified || isReadOnly}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
-            >
-              Send OTP
-            </button>
-          </div>
-          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-          {otpSent && !isOtpVerified && (
-            <div className="flex gap-2 mt-2">
-              <input
-                type="text"
-                value={formValues.otp || ""}
-                onChange={(e) => handleChange("otp", e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter 6-digit OTP"
-              />
-              <button
-                type="button"
-                onClick={handleVerifyOtp}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-              >
-                Verify OTP
-              </button>
-            </div>
-          )}
-          {isOtpVerified && <p className="text-green-600 text-xs mt-1">✓ Phone verified</p>}
-          {errors.otp && <p className="text-red-500 text-xs mt-1">{errors.otp}</p>}
-        </div>
-      );
-    }
-    
+
     // Textarea field
     if (field.type === "textarea") {
       return (
-        <div key={field.id}>
+        <div key={fieldId} className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             {field.label} {field.required && <span className="text-red-500">*</span>}
           </label>
           <textarea
             rows={field.rows}
             value={value}
-            onChange={(e) => handleChange(field.id, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => handleChange(fieldId, e.target.value)}
             placeholder={field.placeholder}
-            readOnly={isReadOnly}
+            className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
       );
     }
-    
-    // Select field
-    if (field.type === "select") {
-      return (
-        <div key={field.id}>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
-          </label>
-          <select
-            value={value}
-            onChange={(e) => handleChange(field.id, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={isReadOnly}
-          >
-            <option value="">Select {field.label}</option>
-            {field.options.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-        </div>
-      );
-    }
-    
+
     // Default input field
     return (
-      <div key={field.id}>
+      <div key={fieldId} className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {field.label} {field.required && <span className="text-red-500">*</span>}
         </label>
         <input
           type={field.type}
           value={value}
-          onChange={(e) => handleChange(field.id, e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => handleChange(fieldId, e.target.value)}
           placeholder={field.placeholder}
-          readOnly={isReadOnly}
+          className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+            ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
     );
   };
-  
-  // Filter visible fields
-  const visibleFields = formConfig.fields.filter(f => !hiddenFields.includes(f.id));
-  
+
+  const fields = getFieldsForType();
+
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="p-4">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {visibleFields.map(renderField)}
-          
-          {showBrochure && (
-            <div>
-              <button
-                type="button"
-                onClick={handleDownloadBrochure}
-                className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
-              >
-                📥 Download Brochure / Syllabus
-              </button>
-            </div>
-          )}
-          
-          <div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold"
-            >
-              {buttonText}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className={`space-y-2 ${className}`}>
+      {fields.map(renderField)}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={`w-full py-3.5 px-4 rounded-xl font-semibold text-white transition-all shadow-md
+          ${isSubmitting
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700 active:scale-[0.98]"}`}
+      >
+        {isSubmitting ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            </svg>
+            Submitting...
+          </span>
+        ) : buttonText}
+      </button>
+    </form>
   );
 }

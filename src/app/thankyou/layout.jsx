@@ -5,7 +5,7 @@ export default function ThankYouLayout({ children }) {
     <>
       <head>
         <Script
-          id="thank-you-conversion"
+          id="thankyou-conversion"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
