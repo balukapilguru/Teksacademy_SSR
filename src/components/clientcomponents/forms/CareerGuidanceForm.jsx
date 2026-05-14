@@ -68,12 +68,12 @@ export default function CareerGuidanceForm({ isOpen, onClose }) {
             </button>
 
             {/* Header */}
-            <div className="text-center pt-4 pb-4 px-6 border-b border-gray-100">
+            <div className="text-center pt-4 pb-2 px-6">
               {/* <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-3">
                 <FaGraduationCap className="text-3xl text-[#2a619d]" />
               </div> */}
               <h2 className="text-lg font-bold text-gray-800">
-                Career Guidance
+               1:1 Career Guidance
               </h2>
               <p className="text-gray-500 text-sm mt-1">
                 Get expert advice for your career journey
@@ -89,20 +89,6 @@ export default function CareerGuidanceForm({ isOpen, onClose }) {
                 successMessage="Thank you! We'll contact you soon."
                 className="space-y-4"
               />
-            </div>
-
-            {/* Footer Note */}
-            <div className="px-6 pb-6">
-              <p className="text-xs text-gray-400 text-center">
-                By submitting, you agree to our{" "}
-                <a href="/terms" className="text-[#2a619d] hover:underline">
-                  Terms
-                </a>{" "}
-                and{" "}
-                <a href="/privacy" className="text-[#2a619d] hover:underline">
-                  Privacy Policy
-                </a>
-              </p>
             </div>
           </div>
         </div>
