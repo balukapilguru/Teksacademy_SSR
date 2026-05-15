@@ -160,7 +160,8 @@ const SuccessStories = () => {
                 {heroSection.galleryImages.slice(0, 6).map((img, idx) => (
                   <div key={idx} className="rounded-lg overflow-hidden bg-white shadow-sm">
                     <Image
-                      src={GetData({url:img.src})}
+                    src={img.src}
+                      // src={GetData({url:img.src})}
                       alt={img.alt || `Gallery ${idx + 1}`}
                       width={200}
                       height={150}
@@ -213,7 +214,8 @@ const SuccessStories = () => {
           >
             <div className="relative">
               <Image
-                src={GetData({url:item.thumbnail?.src || item.image?.src})}
+              src={item.thumbnail?.src || item.image?.src}
+                // src={GetData({url:item.thumbnail?.src || item.image?.src})}
                 alt={item.thumbnail?.alt || item.name || item.image?.alt || "success story"}
                 width={400}
                 height={300}
