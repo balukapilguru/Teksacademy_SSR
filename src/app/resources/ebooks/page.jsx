@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 const ebookbanner =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/ebookbanner.webp";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 const Ebook = () => {
   const [ebookData, setEbookData] = useState(null);
@@ -240,13 +241,8 @@ const Ebook = () => {
 
   if (loading) {
     return (
-      <div className="main_container">
-        <div className="min-h-[400px] flex justify-center items-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2A619D] mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading E-Books...</p>
-          </div>
-        </div>
+      <div>
+        <Loader />
       </div>
     );
   }

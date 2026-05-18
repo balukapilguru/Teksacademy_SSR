@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 // import Recruitersform from "@/app/forms/Recruitersform";
 
 const Recruiters = () => {
@@ -55,8 +56,8 @@ const Recruiters = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">Loading...</div>
+      <div>
+        <Loader />
       </div>
     );
   }

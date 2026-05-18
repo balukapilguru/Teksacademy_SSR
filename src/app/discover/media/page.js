@@ -4,6 +4,7 @@ import { LuNewspaper } from "react-icons/lu";
 import { IoMicOutline } from "react-icons/io5";
 import { MdOndemandVideo } from "react-icons/md";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 const Media = () => {
   const [activeTab, setActiveTab] = useState("news-papers");
@@ -123,10 +124,8 @@ const Media = () => {
 
   if (loading) {
     return (
-      <div className="main_container">
-        <div className="flex justify-center items-center h-64">
-          <div className="text-center">Loading media content...</div>
-        </div>
+      <div>
+        <Loader />
       </div>
     );
   }

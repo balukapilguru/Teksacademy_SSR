@@ -6,6 +6,7 @@ import TabsCards from "./TabsCards";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import Heading from "@/utility/Heading";
+import Loader from "../Loader";
 
 export default function CourseCategories({ data, universityName,formDetails  }) {
   const [selectedBranch, setSelectedBranch] = useState(
@@ -141,9 +142,9 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
 
       {/* ---------- Loading ---------- */}
       {loading && (
-        <p className="text-center text-gray-500 py-10">
-          Loading courses...
-        </p>
+       <div>
+        <Loader />
+        </div>
       )}
 
       {/* ---------- No Courses Found ---------- */}
