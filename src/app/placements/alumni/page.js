@@ -23,10 +23,25 @@ const Alumni = () => {
       try {
         const response = await fetch(`${baseUrl}/api/v1/placements/alumni`);
         const result = await response.json();
-        console.log(result,"alumni")
+        console.log(result, "alumni");
+        
         if (result.success && result.data?.alumniSection) {
           setAlumniData(result.data.alumniSection);
-          setAlumniImages(result.data.alumniSection.networkSection.alumniCards || []);
+          
+          // ✅ FIX: alumniCards is an array of arrays, flatten it
+          const cards = result.data.alumniSection.networkSection.alumniCards || [];
+          const flattenedCards = cards.flat(); // Flatten nested arrays
+          
+          // ✅ Transform to match expected format with imgUrl
+          const transformedCards = flattenedCards.map(card => ({
+            id: card.id,
+            name: card.name,
+            course: card.course,
+            imgUrl: card.image?.src || "", // Use image.src from API
+            alt: card.image?.alt || card.name
+          }));
+          
+          setAlumniImages(transformedCards);
         }
       } catch (error) {
         console.error("Error fetching alumni data:", error);
@@ -177,7 +192,7 @@ const Alumni = () => {
                   className="w-full h-full"
                   width={400}
                   height={100}
-                  src={GetData({url:alumniData?.heroSection?.image?.src || man_using_tech})}
+                  src={GetData({url: alumniData?.heroSection?.image?.src || man_using_tech})}
                   alt={alumniData?.heroSection?.image?.alt || "Teks Academy Alumni"}
                 />
                 {floatingCards.map((card) => (
@@ -220,7 +235,7 @@ const Alumni = () => {
                 <div className="w-full flex justify-center items-center">
                   <Image
                     src={ele.imgUrl}
-                    className="h-36 sm:h-32 lg:h-36 2xl:h-40 3xl:h-48 w-full rounded-xl"
+                    className="h-36 sm:h-32 lg:h-36 2xl:h-40 3xl:h-48 w-full rounded-xl object-cover"
                     alt={ele.alt}
                     width={300}
                     height={200}

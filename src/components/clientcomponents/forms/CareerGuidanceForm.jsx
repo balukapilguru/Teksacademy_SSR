@@ -55,7 +55,7 @@ export default function CareerGuidanceForm({ isOpen, onClose }) {
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4">
           <div
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto transform transition-all duration-300"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-4 transform transition-all duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
