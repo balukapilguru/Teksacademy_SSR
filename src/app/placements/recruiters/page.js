@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
+import ReusableForm from "@/components/ReusableForm";
 // import Recruitersform from "@/app/forms/Recruitersform";
 
 const Recruiters = () => {
@@ -10,6 +11,31 @@ const Recruiters = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
   // Fetch API
   useEffect(() => {
     const fetchData = async () => {
@@ -41,9 +67,9 @@ const Recruiters = () => {
   const talentPool = hero?.talentPool || "Access to Job-Ready Talent Pool";
   const hiringModes = hero?.hiringModes || "Flexible Hiring Modes";
   const placementSupport = hero?.placementSupport || "Full Placement Support";
-  
+
   const recruiterCards = data?.recruitersCardsSection?.cards || [];
-  
+
   // Form fields data
   const formFields = data?.formFields || {
     firstName: { label: "First Name", placeholder: "Enter your full name", required: true },
@@ -86,13 +112,13 @@ const Recruiters = () => {
         </div>
 
         {/* Hero Section */}
-        <div className="bg-[#2A619D] mt-4">
-          <div className="main_container">
+        <div className="bg-[#2A619D]">
+          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:gap-x-20 xl:py-6 lg:py-4">
-             
+
               {/* LEFT */}
               <div className="flex pt-9 flex-col 2xl:w-4/5 text-white">
-               
+
                 {/* Headings */}
                 <div>
                   <div className="font-semibold xl:text-[2rem] lg:text-[1.5rem] md:text-[1.2rem] xs:text-[1rem] xs:pl-4 md:pl-5 lg:pl-0">
@@ -113,11 +139,11 @@ const Recruiters = () => {
                 <div className="grid grid-cols-2 bg-[#2C5581]  gap-4 mt-6 ">
                   <div className=" p-3 rounded-lg">
                     <div className="font-bold text-white text-lg pl-7">Hiring Fee for Recruiters – {hiringFee}</div>
-                                       <div className="font-bold text-white mt-8 text-lg pl-7">{placementSupport}</div>
+                    <div className="font-bold text-white mt-8 text-lg pl-7">{placementSupport}</div>
 
                   </div>
                   <div className="bg-[#2C5581] p-4 rounded-lg">
-                                         <div className="font-bold text-white  text-lg ">{talentPool}</div>
+                    <div className="font-bold text-white  text-lg ">{talentPool}</div>
 
                     <div className="font-bold text-white text-lg mt-8">{hiringModes}</div>
                   </div>
@@ -141,7 +167,16 @@ const Recruiters = () => {
               </div>
 
               {/* RIGHT FORM */}
-            
+              <div className="flex justify-center items-center bg-white rounded-lg shadow-lg p-6">
+              <ReusableForm
+                formType="recruiter"
+                onSubmit={handleSubmit}
+                buttonText="Submit"
+                className="w-full"
+                successMessage="Thank you! We'll contact you soon."
+              />
+              </div>
+
             </div>
           </div>
         </div>
@@ -155,8 +190,8 @@ const Recruiters = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-white lg:gap-6 2xl:gap-4 gap-y-0 3xl:gap-x-4 w-full mt-6 lg:mt-8 2xl:mt-12 3xl:mt-14">
                 {recruiterCards.map((ele, idx) => (
                   ele?.thumbnail?.src && (
-                    <div 
-                      key={ele.id || idx} 
+                    <div
+                      key={ele.id || idx}
                       onClick={() => ele?.videoUrl && setSelectedVideo(ele.videoUrl)}
                       className="cursor-pointer hover:opacity-80 transition-opacity"
                     >
@@ -181,14 +216,14 @@ const Recruiters = () => {
 
       {/* Video Modal */}
       {selectedVideo && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
           onClick={() => setSelectedVideo(null)}
         >
           <div className="relative w-full max-w-4xl mx-4">
-            <video 
-              controls 
-              autoPlay 
+            <video
+              controls
+              autoPlay
               className="w-full rounded-lg"
               onClick={(e) => e.stopPropagation()}
             >

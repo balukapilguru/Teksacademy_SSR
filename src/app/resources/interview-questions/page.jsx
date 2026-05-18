@@ -123,7 +123,7 @@ const InterviewQuestionsPage = () => {
                 <div className="h-32 flex items-center justify-center">
                   <div className="p-3 md:p-4 h-20 w-20 md:h-[72px] md:w-[72px] lg:h-20 lg:w-20 mx-auto flex items-center justify-center bg-white rounded-full shadow-md">
                     <Image
-                      src={`https://teksacademy.com${card.image?.src}`}
+                      src={`https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com${card.image?.src}`}
                       alt={card.image?.alt || card.title}
                       width={60}
                       height={60}

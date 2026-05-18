@@ -16,22 +16,18 @@ const nextConfig = {
         protocol: "https",
         hostname: "s3-eu-west-1.amazonaws.com",
       },
-      // ✅ Add this to fix the error
       {
         protocol: "https",
         hostname: "teksacademy.com",
       },
-      // Also add localhost for development if needed
       {
         protocol: "http",
         hostname: "localhost",
       },
-      {
-        protocol: "https",
-        hostname: "teksacademynewwebsite.s3.ap-south-1.amazonaws.com",
-        pathname: "/**",
-      },
     ],
+    // Add deviceSizes for better responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   async headers() {
