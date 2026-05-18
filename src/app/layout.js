@@ -12,6 +12,7 @@ import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
 import { MobileBottomNav } from "@/components/home-page/MobileBottomNav";
+import LayoutWrapper from "@/components/clientcomponents/LayoutWrapper";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -89,12 +90,11 @@ export default async function RootLayout({ children }) {
           <NavbarProvider>
             <ToastContainer autoClose={1000} />
             <AppLoader />
-            <Navbar />
-            <main>{children}</main>
+           <LayoutWrapper>{children}</LayoutWrapper>
             {/* <Suspense fallback={null}>
               <SpinWheel />
             </Suspense> */}
-            <Footer />
+          
           </NavbarProvider>
         </SelectedCourseProvider>
         
