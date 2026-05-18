@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import GetData from "@/utility/GetData";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -55,12 +56,8 @@ const Alumni = () => {
 
   if (loading) {
     return (
-      <div className="main_container flex flex-col mb-8">
-        <div className="text-center flex flex-col items-center gap-y-6 lg:gap-y-10">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg">Loading...</div>
-          </div>
-        </div>
+      <div>
+        <Loader />
       </div>
     );
   }

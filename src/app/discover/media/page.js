@@ -4,6 +4,7 @@ import { LuNewspaper } from "react-icons/lu";
 import { IoMicOutline } from "react-icons/io5";
 import { MdOndemandVideo } from "react-icons/md";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 const Media = () => {
   const [activeTab, setActiveTab] = useState("news-papers");
@@ -112,8 +113,23 @@ const Media = () => {
     return currentTab.mediaCards || [];
   };
 
-  if (loading) return <div className="text-center py-20">Loading...</div>;
-  if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
+  if (loading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="main_container">
+        <div className="flex justify-center items-center h-64">
+          <div className="text-center text-red-500">{error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main_container">

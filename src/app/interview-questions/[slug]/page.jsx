@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import Loader from "@/components/Loader";
 
 const InterviewQuestionDetailPage = () => {
   const params = useParams();
@@ -82,11 +83,8 @@ const InterviewQuestionDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex justify-center items-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2A619D] mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading interview questions...</p>
-        </div>
+      <div>
+        <Loader />
       </div>
     );
   }

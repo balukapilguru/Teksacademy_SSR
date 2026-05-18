@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import Loader from "../Loader";
 
 export default function UniversityBranchTabs({ params }) {
   const { universityname } = params;
@@ -74,7 +75,9 @@ export default function UniversityBranchTabs({ params }) {
       <div className="text-xl font-bold mb-4">{activeTab} Specializations</div>
 
       {/* Loading */}
-      {loading && <p className="py-10 text-center">Loading...</p>}
+      {loading && <div>
+        <Loader />
+        </div>}
 
       {/* Cards */}
       {!loading && (
