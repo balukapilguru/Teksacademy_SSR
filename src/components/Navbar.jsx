@@ -82,6 +82,9 @@ import { useRouter } from "next/navigation";
 import CareerGuidanceForm from "./clientcomponents/forms/CareerGuidanceForm";
 import Loader from "./Loader";
 
+const APPLY_FOR_JOBS_LINK = "/apply-for-jobs";
+const APPLY_FOR_JOBS_LABEL = "Apply for Jobs";
+
 
 // ─────────────────────────────────────────────
 // Icon map: keyed by dropdown item title/name
@@ -627,19 +630,12 @@ export default function Navbar() {
               </li>
             ))}
 
-            {mainbar.button && (
-              <div className="hidden md:flex items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold hover:bg-[#fe543d] transition-colors cursor-pointer text-sm">
-                <Link
-                  href={
-                    isValidLink(mainbar.button.link)
-                      ? mainbar.button.link
-                      : "#"
-                  }
-                >
-                  {mainbar.button.title}
-                </Link>
-              </div>
-            )}
+            <Link
+              className="hidden md:flex items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold hover:bg-[#e94932] transition-colors cursor-pointer text-sm"
+              href={APPLY_FOR_JOBS_LINK}
+            >
+              {mainbar.button?.title || APPLY_FOR_JOBS_LABEL}
+            </Link>
           </ul>
         </nav>
       </header>
@@ -888,17 +884,13 @@ export default function Navbar() {
           </div>
 
           {/* Apply For Job Button in Mobile Menu */}
-          {mainbar.button && (
-            <div className="flex justify-center items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold mb-2 text-sm">
-              <Link
-                href={
-                  isValidLink(mainbar.button.link) ? mainbar.button.link : "#"
-                }
-              >
-                {mainbar.button.title}
-              </Link>
-            </div>
-          )}
+          <Link
+            href={APPLY_FOR_JOBS_LINK}
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex justify-center items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold mb-2 text-sm"
+          >
+            {mainbar.button?.title || APPLY_FOR_JOBS_LABEL}
+          </Link>
 
           {/* Social Media Icons in Mobile Menu */}
           <div className="">
