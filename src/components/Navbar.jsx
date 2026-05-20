@@ -279,11 +279,15 @@ export default function Navbar() {
                   }
                   if (item.type === "link") {
                     if (!isValidLink(item.link)) return null;
+                    
+                    // Check if it's the Find My Course link
+                    const isFindMyCourse = item.name === "Find My Course";
+                    
                     return (
                       <Link
                         key={`top-link-${index}`}
-                        href={item.link}
-                        target="_blanket"
+                        href={isFindMyCourse ? "/find-my-course" : item.link}
+                        target="_self"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                       >
                         {item.name === "Download Mobile App" && (
@@ -479,7 +483,7 @@ export default function Navbar() {
                             onClick={() => setShowMenu(null)}
                           >
                             {course.image?.url && (
-                              <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-gray-100">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-white">
                                 <Image
                                   src={
                                     GetData({ url: course.image.url }) ||
@@ -539,7 +543,7 @@ export default function Navbar() {
                             className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:border-[#2a619d] hover:shadow-md transition-all group"
                           >
                             {branch.image?.url && (
-                              <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-gray-100">
+                              <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-white">
                                 <Image
                                   src={
                                     GetData({ url: branch.image.url }) ||
@@ -695,7 +699,7 @@ export default function Navbar() {
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 {course.image?.url && (
-                                  <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-gray-100">
+                                  <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden bg-white">
                                     <Image
                                       src={
                                         GetData({ url: course.image.url }) ||
@@ -828,10 +832,14 @@ export default function Navbar() {
 
                 if (item.type === "link" || (item.link && !item.type)) {
                   if (!isValidLink(item.link)) return null;
+                  
+                  // Check if it's the Find My Course link
+                  const isFindMyCourse = item.name === "Find My Course";
+                  
                   return (
                     <Link
                       key={`mobile-top-link-${index}`}
-                      href={item.link}
+                      href={isFindMyCourse ? "/find-my-course" : item.link}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
                     >

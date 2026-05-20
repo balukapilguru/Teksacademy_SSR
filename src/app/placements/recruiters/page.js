@@ -113,7 +113,7 @@ const Recruiters = () => {
 
         {/* Hero Section */}
         <div className="bg-[#2A619D]">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:gap-x-20 xl:py-6 lg:py-4">
 
               {/* LEFT */}
@@ -167,7 +167,7 @@ const Recruiters = () => {
               </div>
 
               {/* RIGHT FORM */}
-              <div className="flex justify-center items-center bg-white rounded-lg shadow-lg p-6">
+              <div className="w-96 flex justify-center items-center bg-white rounded-lg shadow-lg p-6">
               <ReusableForm
                 formType="recruiter"
                 onSubmit={handleSubmit}
