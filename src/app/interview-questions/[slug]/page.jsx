@@ -16,7 +16,7 @@ const InterviewQuestionDetailPage = () => {
   const [copiedId, setCopiedId] = useState(null);
   const [openQuestions, setOpenQuestions] = useState({});
   
-  const API_BASE_URL = "https://0z05cks3-4040.inc1.devtunnels.ms/api/v1";
+  const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   useEffect(() => {
     const fetchQuestionDetail = async () => {
@@ -24,7 +24,7 @@ const InterviewQuestionDetailPage = () => {
       
       try {
         setLoading(true);
-        const apiUrl = `${API_BASE_URL}/interview-questions/${slug}`;
+        const apiUrl = `${api}/api/v1/interview-questions/${slug}`;
         console.log("Fetching from:", apiUrl);
         
         const response = await fetch(apiUrl);

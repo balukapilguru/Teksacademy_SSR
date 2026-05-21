@@ -1,5 +1,8 @@
 "use client";
 
+// ============================================
+// IMPORTS SECTION
+// ============================================
 import {
   useEffect,
   useState,
@@ -10,6 +13,7 @@ import {
 } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { TbLogin2 } from "react-icons/tb";
 import {
   MdCall,
@@ -20,6 +24,10 @@ import {
   MdOutlineStore,
   MdArrowForwardIos,
   MdPhone,
+  MdPhotoLibrary,
+  MdContactPhone,
+  MdSupportAgent,
+  MdCampaign,
 } from "react-icons/md";
 import {
   FaAngleUp,
@@ -59,11 +67,8 @@ import {
   FaUserFriends,
   FaBuilding,
 } from "react-icons/fa";
-import GetData from "@/utility/GetData";
-import { SelectedCourseContext } from "@/context/SelectedCourseContext";
 import { FaRegNewspaper, FaSearch } from "react-icons/fa";
 import { FaBuildingColumns, FaMobileScreen } from "react-icons/fa6";
-import { useNavbar } from "@/components/coursePage/NavbarContext";
 import { FaChevronDown } from "react-icons/fa";
 import { TbCertificate } from "react-icons/tb";
 import { LuCircleDotDashed } from "react-icons/lu";
@@ -76,44 +81,52 @@ import { RiUserStarLine } from "react-icons/ri";
 import { TbBrandNextjs } from "react-icons/tb";
 import { FiAward, FiMapPin } from "react-icons/fi";
 import { BsBriefcase, BsJournalText } from "react-icons/bs";
-import { MdPhotoLibrary, MdContactPhone, MdSupportAgent, MdCampaign } from "react-icons/md";
-import { useRouter } from "next/navigation";
-
+import GetData from "@/utility/GetData";
+import { SelectedCourseContext } from "@/context/SelectedCourseContext";
+import { useNavbar } from "@/components/coursePage/NavbarContext";
 import CareerGuidanceForm from "./clientcomponents/forms/CareerGuidanceForm";
 import Loader from "./Loader";
 
+// ============================================
+// CONSTANTS SECTION
+// ============================================
 const APPLY_FOR_JOBS_LINK = "/apply-for-jobs";
 const APPLY_FOR_JOBS_LABEL = "Apply for Jobs";
 
-
-// ─────────────────────────────────────────────
-// Icon map: keyed by dropdown item title/name
-// ─────────────────────────────────────────────
+// Icon map for dropdown items
 const DROPDOWN_ICON_MAP = {
-  // ── Resources ──
+  // Resources
   "Ebook": <FaBook className="text-sm text-[#2a619d]" />,
   "Video Lectures": <FaVideo className="text-sm text-[#2a619d]" />,
   "Interview Questions": <FaQuestionCircle className="text-sm text-[#2a619d]" />,
-
-  // ── Discover ──
+  
+  // Discover
   "About Us": <FaInfoCircle className="text-sm text-[#2a619d]" />,
   "Gallery": <FaImages className="text-sm text-[#2a619d]" />,
   "Media": <MdCampaign className="text-sm text-[#2a619d]" />,
   "Contact Us": <MdContactPhone className="text-sm text-[#2a619d]" />,
   "Support": <MdSupportAgent className="text-sm text-[#2a619d]" />,
-
-  // ── Placements ──
+  
+  // Placements
   "Alumni": <FaUserGraduate className="text-sm text-[#2a619d]" />,
   "Recruiters": <FaBuilding className="text-sm text-[#2a619d]" />,
 };
 
-// Helper: get icon for a dropdown item by its title or name
+// ============================================
+// HELPER FUNCTIONS SECTION
+// ============================================
 function getDropdownIcon(drop) {
   const key = drop.title || drop.name || "";
-  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d]" />;
+  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d}" />;
 }
 
+// ============================================
+// MAIN NAVBAR COMPONENT
+// ============================================
 export default function Navbar() {
+  // ============================================
+  // STATE DECLARATIONS
+  // ============================================
   const [navData, setNavData] = useState(null);
   const [showMenu, setShowMenu] = useState(null);
   const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
@@ -121,23 +134,41 @@ export default function Navbar() {
   const [mobileSubMenu, setMobileSubMenu] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const menuRef = useRef(null);
-  const headerRef = useRef(null);
   const [backtoTop, setbacktoTop] = useState(false);
   const [showCareer, setshowCareer] = useState(false);
+  
+  // ============================================
+  // REFS SECTION
+  // ============================================
+  const menuRef = useRef(null);
+  const headerRef = useRef(null);
+  
+  // ============================================
+  // HOOKS SECTION
+  // ============================================
   const router = useRouter();
-
+  const pathname = usePathname(); // Fixed: moved this before usage
   const { mainNavbarVisible } = useNavbar();
+  
+  // Define route-based conditions after pathname is declared
+  const isFindMyCourse = pathname === "/find-my-course";
+  const isBlogs = pathname === "/blogs";
 
+  // ============================================
+  // HELPER FUNCTIONS
+  // ============================================
   const isValidLink = useCallback((link) => {
     return link && typeof link === "string" && link.trim() !== "";
   }, []);
 
+  // ============================================
+  // DATA FETCHING
+  // ============================================
   useEffect(() => {
     const fetchNav = async () => {
       try {
         setIsLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
         const response = await fetch(`${baseUrl}/api/v1/home/navbar`, {
           method: "GET",
           next: { revalidate: 60 },
@@ -154,6 +185,9 @@ export default function Navbar() {
     fetchNav();
   }, []);
 
+  // ============================================
+  // SCROLL HANDLERS
+  // ============================================
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 0);
@@ -171,6 +205,9 @@ export default function Navbar() {
     });
   };
 
+  // ============================================
+  // CLICK OUTSIDE HANDLER
+  // ============================================
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -182,6 +219,9 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ============================================
+  // MOBILE MENU HANDLERS
+  // ============================================
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
     setMobileSubMenu(null);
@@ -191,33 +231,46 @@ export default function Navbar() {
     setMobileSubMenu((prev) => (prev === menuName ? null : menuName));
   }, []);
 
-  const { topbar, mainbar, elements, topbarItems, coursesMenu } =
-    useMemo(() => {
-      if (!navData)
-        return {
-          topbar: {},
-          mainbar: {},
-          elements: [],
-          topbarItems: [],
-          coursesMenu: null,
-        };
+  // ============================================
+  // FORM HANDLERS
+  // ============================================
+  const handleFormButtonClick = useCallback(() => {
+    setshowCareer(true);
+  }, []);
 
-      const topbar = navData.topbar || {};
-      const mainbar = navData.mainbar || {};
-      const elements = mainbar.elements || [];
+  const handleCloseCareerForm = useCallback(() => {
+    setshowCareer(false);
+  }, []);
 
-      const topbarItemsObj = topbar.items || {};
-      const topbarItemsArray = Object.entries(topbarItemsObj).map(([key, value]) => {
-        if (!value.type && value.link) {
-          return { ...value, type: "link", key };
-        }
-        return { ...value, key };
-      });
+  // ============================================
+  // MEMOIZED DATA PROCESSING
+  // ============================================
+  const { topbar, mainbar, elements, topbarItems, coursesMenu } = useMemo(() => {
+    if (!navData)
+      return {
+        topbar: {},
+        mainbar: {},
+        elements: [],
+        topbarItems: [],
+        coursesMenu: null,
+      };
 
-      const coursesMenu = elements.find((el) => el.name === "Courses");
+    const topbar = navData.topbar || {};
+    const mainbar = navData.mainbar || {};
+    const elements = mainbar.elements || [];
 
-      return { topbar, mainbar, elements, topbarItems: topbarItemsArray, coursesMenu };
-    }, [navData]);
+    const topbarItemsObj = topbar.items || {};
+    const topbarItemsArray = Object.entries(topbarItemsObj).map(([key, value]) => {
+      if (!value.type && value.link) {
+        return { ...value, type: "link", key };
+      }
+      return { ...value, key };
+    });
+
+    const coursesMenu = elements.find((el) => el.name === "Courses");
+
+    return { topbar, mainbar, elements, topbarItems: topbarItemsArray, coursesMenu };
+  }, [navData]);
 
   const socialIcons = useMemo(
     () => ({
@@ -229,18 +282,13 @@ export default function Navbar() {
     []
   );
 
-  const handleFormButtonClick = useCallback(() => {
-    setshowCareer(true);
-  }, []);
-
-  const handleCloseCareerForm = useCallback(() => {
-    setshowCareer(false);
-  }, []);
-
+  // ============================================
+  // LOADING STATE
+  // ============================================
   if (isLoading) {
     return (
       <div>
-       <Loader />
+        <Loader />
       </div>
     );
   }
@@ -249,16 +297,26 @@ export default function Navbar() {
     return <div className="pt-20 xl:pt-30"></div>;
   }
 
+  // ============================================
+  // COMPONENT RENDER
+  // ============================================
   return (
     <>
+      {/* ============================================ */}
+      {/* HEADER SECTION */}
+      {/* ============================================ */}
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${scrolled ? "shadow-md" : "shadow-md"
-          }`}
+        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${
+          scrolled ? "shadow-md" : "shadow-md"
+        }`}
       >
+        {/* ============================================ */}
+        {/* TOPBAR SECTION - Desktop Only */}
+        {/* ============================================ */}
         <div className="hidden md:block bg-[#2a619d] text-white text-xs py-2">
           <div className="main_container flex items-center justify-between">
-            {/* LEFT SIDE */}
+            {/* LEFT SIDE - Topbar Items */}
             <div className="flex items-center w-full gap-6">
               {topbarItems
                 .filter(
@@ -282,21 +340,26 @@ export default function Navbar() {
                   }
                   if (item.type === "link") {
                     if (!isValidLink(item.link)) return null;
-                    
-                    // Check if it's the Find My Course link
-                    const isFindMyCourse = item.name === "Find My Course";
-                    
+
                     return (
                       <Link
                         key={`top-link-${index}`}
-                        href={isFindMyCourse ? "/find-my-course" : item.link}
+                        href={
+                          isFindMyCourse
+                            ? "/find-my-course"
+                            : isBlogs
+                            ? "/blogs"
+                            : item.link || "#"
+                        }
                         target="_self"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                       >
                         {item.name === "Download Mobile App" && (
                           <FaMobileScreen size={14} />
                         )}
-                        {item.name === "Blogs" && <FaRegNewspaper size={14} />}
+                        {item.name === "Blogs" && (
+                          <FaRegNewspaper size={14} />
+                        )}
                         {item.name === "Find My Course" && (
                           <FaSearch size={14} />
                         )}
@@ -308,7 +371,7 @@ export default function Navbar() {
                 })}
             </div>
 
-            {/* RIGHT SIDE */}
+            {/* RIGHT SIDE - Topbar Items */}
             <div className="flex items-center w-full justify-end gap-6">
               {topbarItems
                 .filter(
@@ -394,10 +457,14 @@ export default function Navbar() {
           </div>
         </div>
 
+        {/* ============================================ */}
+        {/* MAIN NAVBAR SECTION */}
+        {/* ============================================ */}
         <nav
           className="main_container flex items-center justify-between h-12 md:h-18"
           ref={menuRef}
         >
+          {/* LOGO SECTION */}
           <div className="">
             <Link href="/">
               <Image
@@ -414,6 +481,7 @@ export default function Navbar() {
             </Link>
           </div>
 
+          {/* MOBILE MENU BUTTON */}
           <button
             className="lg:hidden p-1.5"
             onClick={toggleMobileMenu}
@@ -422,6 +490,7 @@ export default function Navbar() {
             {mobileMenuOpen ? <MdClose size={20} /> : <MdMenu size={20} />}
           </button>
 
+          {/* DESKTOP NAVIGATION MENU */}
           <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-10">
             {elements.map((item, index) => (
               <li
@@ -456,21 +525,23 @@ export default function Navbar() {
 
                   {item.dropdown && item.dropdown.length > 0 && (
                     <FaChevronDown
-                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${showMenu === item.name ? "rotate-180" : "rotate-0"
-                        }`}
+                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${
+                        showMenu === item.name ? "rotate-180" : "rotate-0"
+                      }`}
                     />
                   )}
                 </div>
 
-                {/* ========== COURSES DROPDOWN ========== */}
+                {/* COURSES DROPDOWN */}
                 {item.name === "Courses" &&
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[720px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-1"
-                        }`}
+                      className={`absolute left-0 top-full mt-4 w-[720px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${
+                        showMenu === item.name
+                          ? "opacity-100 visible translate-y-0"
+                          : "opacity-0 invisible -translate-y-1"
+                      }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => {
                         setShowMenu(null);
@@ -526,15 +597,16 @@ export default function Navbar() {
                     </div>
                   )}
 
-                {/* ========== BRANCHES DROPDOWN ========== */}
+                {/* BRANCHES DROPDOWN */}
                 {item.name === "Branches" &&
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[780px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-1"
-                        }`}
+                      className={`absolute left-0 top-full mt-4 w-[780px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${
+                        showMenu === item.name
+                          ? "opacity-100 visible translate-y-0"
+                          : "opacity-0 invisible -translate-y-1"
+                      }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
                     >
@@ -582,16 +654,17 @@ export default function Navbar() {
                     </div>
                   )}
 
-                {/* ========== OTHER DROPDOWNS (Resources, Discover, Placements) ========== */}
+                {/* OTHER DROPDOWNS (Resources, Discover, Placements) */}
                 {item.name !== "Courses" &&
                   item.name !== "Branches" &&
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${showMenu === item.name
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-1"
-                        }`}
+                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${
+                        showMenu === item.name
+                          ? "opacity-100 visible translate-y-0"
+                          : "opacity-0 invisible -translate-y-1"
+                      }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
                     >
@@ -611,13 +684,10 @@ export default function Navbar() {
                           }
                           className="flex items-center gap-2 p-3 hover:bg-gray-100 rounded whitespace-nowrap font-medium hover:text-[#2a619d] transition-colors text-sm group"
                         >
-                          {/* ✅ Per-item icon from DROPDOWN_ICON_MAP */}
                           <span className="group-hover:[&>*]:text-[#2a619d] transition-colors">
                             {getDropdownIcon(drop)}
                           </span>
-
                           <span>{drop.title || drop.name}</span>
-
                           {drop.phone && (
                             <span className="text-xs text-gray-500 ml-auto">
                               {drop.phone}
@@ -630,6 +700,7 @@ export default function Navbar() {
               </li>
             ))}
 
+            {/* APPLY FOR JOBS BUTTON */}
             <Link
               className="hidden md:flex items-center gap-1 bg-[#fe543d] text-white px-3 py-2 rounded font-semibold hover:bg-[#e94932] transition-colors cursor-pointer text-sm"
               href={APPLY_FOR_JOBS_LINK}
@@ -640,6 +711,9 @@ export default function Navbar() {
         </nav>
       </header>
 
+      {/* ============================================ */}
+      {/* MOBILE MENU OVERLAY */}
+      {/* ============================================ */}
       {mobileMenuOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black/60 bg-opacity-50 z-40"
@@ -647,9 +721,13 @@ export default function Navbar() {
         />
       )}
 
+      {/* ============================================ */}
+      {/* MOBILE MENU SIDEBAR */}
+      {/* ============================================ */}
       <div
-        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex items-center justify-end p-2.5 border-b border-gray-100">
           <button onClick={toggleMobileMenu} className="p-1">
@@ -682,7 +760,7 @@ export default function Navbar() {
 
                     {mobileSubMenu === item.name && (
                       <div className="pl-0 pb-1.5">
-                        {/* ========== MOBILE COURSES ========== */}
+                        {/* MOBILE COURSES DROPDOWN */}
                         {item.name === "Courses" ? (
                           <div className="space-y-2">
                             {item.dropdown.map((course, courseIndex) => (
@@ -731,7 +809,7 @@ export default function Navbar() {
                             </Link>
                           </div>
                         ) : item.name === "Branches" ? (
-                          /* ========== MOBILE BRANCHES ========== */
+                          /* MOBILE BRANCHES DROPDOWN */
                           <div className="space-y-1">
                             {item.dropdown.map((branch, branchIndex) => (
                               <Link
@@ -777,7 +855,7 @@ export default function Navbar() {
                             ))}
                           </div>
                         ) : (
-                          /* ========== MOBILE Resources / Discover / Placements ========== */
+                          /* MOBILE OTHER DROPDOWNS */
                           <div className="space-y-1">
                             {item.dropdown.map((drop, dIndex) => (
                               <Link
@@ -786,7 +864,6 @@ export default function Navbar() {
                                 className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded text-sm group"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
-                                {/* ✅ Per-item icon from DROPDOWN_ICON_MAP */}
                                 <span className="group-hover:[&>*]:text-[#2a619d] transition-colors">
                                   {getDropdownIcon(drop)}
                                 </span>
@@ -820,7 +897,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Top Items in Mobile Menu */}
+          {/* MOBILE TOPBAR ITEMS */}
           <div className="mb-3 border-b border-gray-100 pb-3">
             <div className="space-y-2">
               {topbarItems.map((item, index) => {
@@ -828,10 +905,7 @@ export default function Navbar() {
 
                 if (item.type === "link" || (item.link && !item.type)) {
                   if (!isValidLink(item.link)) return null;
-                  
-                  // Check if it's the Find My Course link
-                  const isFindMyCourse = item.name === "Find My Course";
-                  
+
                   return (
                     <Link
                       key={`mobile-top-link-${index}`}
@@ -883,7 +957,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Apply For Job Button in Mobile Menu */}
+          {/* MOBILE APPLY FOR JOBS BUTTON */}
           <Link
             href={APPLY_FOR_JOBS_LINK}
             onClick={() => setMobileMenuOpen(false)}
@@ -892,7 +966,7 @@ export default function Navbar() {
             {mainbar.button?.title || APPLY_FOR_JOBS_LABEL}
           </Link>
 
-          {/* Social Media Icons in Mobile Menu */}
+          {/* MOBILE SOCIAL MEDIA ICONS */}
           <div className="">
             {topbarItems.map((item, index) => {
               if (item.type === "socialMedia" && item.icons) {
@@ -933,11 +1007,16 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* ============================================ */}
+      {/* SPACER FOR FIXED HEADER */}
+      {/* ============================================ */}
       <div className="pt-14 md:pt-28"></div>
 
+      {/* ============================================ */}
+      {/* BACK TO TOP BUTTON */}
+      {/* ============================================ */}
       {scrolled && (
-        <button
-          onClick={scrollToTop}
+        <button          onClick={scrollToTop}
           className="fixed bottom-4 right-4 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
           aria-label="Back to top"
         >
@@ -945,6 +1024,9 @@ export default function Navbar() {
         </button>
       )}
 
+      {/* ============================================ */}
+      {/* CAREER GUIDANCE FORM MODAL */}
+      {/* ============================================ */}
       <CareerGuidanceForm isOpen={showCareer} onClose={handleCloseCareerForm} />
     </>
   );

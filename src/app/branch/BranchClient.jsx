@@ -393,7 +393,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
   const [pageLoading, setPageLoading] = useState(!initialData);
   const [error, setError] = useState(null);
 
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
   const branchApiPath = branchName
     ? `/api/v1/branch/${encodeURIComponent(branchName)}`
     : "/api/v1/branch";

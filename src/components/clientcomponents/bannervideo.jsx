@@ -16,7 +16,7 @@ const BannerVideo = () => {
     const fetchBannerData = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
         const response = await fetch(`${baseUrl}/api/v1/home`, {
           method: "GET",
           next: { revalidate: 60 },

@@ -13,7 +13,7 @@ import SuccessStories from "@/components/home-page/ui-components/SuccessStories"
 import CertificationCourse from "@/components/allcoursepage/CertificationCourse";
 
 export default async function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
   let homeData = null;
   try {
     const controller = new AbortController();

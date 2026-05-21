@@ -4,7 +4,7 @@ import CoursesClient from "./CoursesClient";
 
 export async function generateMetadata() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout

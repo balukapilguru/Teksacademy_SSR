@@ -5,7 +5,7 @@ const ebookbanner =
 import Image from "next/image";
 import Loader from "@/components/Loader";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 const S3_BASE_URL = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com";
 
@@ -17,7 +17,7 @@ const Ebook = () => {
   useEffect(() => {
     const fetchEbooks = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/resources/ebooks`);
+        const response = await fetch(`${baseUrl}/api/v1/resources/ebooks`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch ebooks: ${response.status}`);
@@ -54,7 +54,7 @@ const Ebook = () => {
 
   const handleDownload = (ebookurl) => {
     if (ebookurl) {
-      window.open(`${API_BASE_URL}${ebookurl}`, "_blank");
+      window.open(`${baseUrl}${ebookurl}`, "_blank");
     }
   };
 

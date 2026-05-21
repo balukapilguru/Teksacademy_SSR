@@ -11,13 +11,14 @@ export default function EbookClient({ source }) {
   const [data, setData] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
   const modalRef = useRef(null);
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   // Fetch API Data
   useEffect(() => {
     const fetchEbooks = async () => {
       try {
         const response = await fetch(
-          "https://0z05cks3-4040.inc1.devtunnels.ms/api/v1/resources/ebooks"
+          `${baseUrl}/api/v1/resources/ebooks`
         );
 
         if (!response.ok) {

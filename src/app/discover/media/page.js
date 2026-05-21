@@ -35,7 +35,7 @@ const Media = () => {
   // Fetch API
   useEffect(() => {
     const fetchMediaData = async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+      const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
       try {
         const res = await fetch(`${baseUrl}/api/v1/discover/media`);

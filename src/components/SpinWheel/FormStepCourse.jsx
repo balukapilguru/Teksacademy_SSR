@@ -12,7 +12,7 @@ const FormStepCourse = ({ formData = {}, onChange, forceValidation = false, erro
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const searchInputRef = useRef(null);
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL; // Ensure this is set in your environment variables
   /* ---------------- FETCH TOP 5 COURSES ---------------- */
   const fetchTopCourses = async () => {
     try {
