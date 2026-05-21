@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
-import Loader from "../Loading";
+import Loader from "@/components/Loader";
+
 
 const SuccessStories = () => {
   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;

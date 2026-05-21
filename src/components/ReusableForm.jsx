@@ -38,7 +38,7 @@ export default function ReusableForm({
       default: ["name", "email", "phone", "course", "branch", "city", "message"],
       contact: ["name", "email", "phone", "course", "branch", "city"],
       support: ["name", "email", "phone", "course", "branch", "issue"],
-      recruiter: ["name", "email", "phone", "companyName", "designation", "branch"],
+      recruiter: ["name", "email", "phone", "companyName", "designation"],
       ebook: ["name", "email", "phone", "course", "branch"],
       enquiry: ["name", "email", "phone", "course", "branch"],
       excel: ["name", "email", "phone", "message", "branch"],

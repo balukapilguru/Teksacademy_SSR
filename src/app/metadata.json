@@ -1,0 +1,26 @@
+ {
+    "course":{
+        "dynamicTitle":"Top Software Training Courses in Hyderabad-Teks Academy",
+       "description":"Browse industry-relevant software training courses at Teks Academy. Certified trainers & placement support."
+    },
+    "apply-for-jobs":{"dynamicTitle": "Apply for IT Jobs - Teks Academy Placement Cell",
+       "description":"Apply for software jobs with Teks Academy placement support. Boost your career today!"},
+    
+     "aboutus ":{
+    "dynamicTitle":"About Teks Academy - Software Training Experts",
+      "description":"Discover Teks Academy’s mission, expert trainers & commitment to student success in Hyderabad."
+      },
+    "media": {
+       "dynamicTitle":"Teks Academy Media Coverage & Highlights",
+       "description":"See Teks Academy featured in media, awards, recognitions & success stories."
+     },
+      "recruiters" : {
+      "dynamicTitle":"Our Recruiters - Teks Academy Placements",
+      "description":"Meet top companies hiring Teks Academy graduates. Launch your career with us!"
+     },
+     "blogs" : {
+      "dynamicTitle":"Explore Latest Tech Trends & Updates on TEKS Academy Blogs",
+      "description":"Stay updated with expert blogs on Full Stack Python & Java, Data Science, Digital Marketing & 30+ top IT & non-IT courses to boost your learning experience."
+     }
+    
+    }
