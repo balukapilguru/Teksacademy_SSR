@@ -5,7 +5,7 @@ import Image from "next/image";
 import GetData from "@/utility/GetData";
 
 export default function GalleryPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   const [galleryData, setGalleryData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);

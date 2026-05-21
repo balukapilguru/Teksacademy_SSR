@@ -28,7 +28,7 @@ import metadata from "../../app/metadata.json";
 import Loader from "@/components/Loader";
 
 
-const apiUrl = "https://apierp.infozit.com";
+const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
 
 
 const PUBLIC_API_KEY =

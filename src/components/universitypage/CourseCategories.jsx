@@ -23,7 +23,7 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
   const [selectedCourseName, setSelectedCourseName] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
 
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL; // Ensure this is set in your environment variables
 
   /* ---------- Responsive Cards ---------- */
   useEffect(() => {

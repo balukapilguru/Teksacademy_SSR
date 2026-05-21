@@ -2,7 +2,7 @@
 
 import EbookClient from "@/app/ebook/EbooksClient";
 
-const baseurl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 /* ===========================
    ✅ METADATA (HEAD SECTION)
@@ -15,7 +15,7 @@ export async function generateMetadata() {
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
     const res = await fetch(
-      `${baseurl.replace(/\/$/, "")}/api/v1/home/ebooks`,
+      `${baseUrl.replace(/\/$/, "")}/api/v1/home/ebooks`,
       { next: { revalidate: 60 }, signal: controller.signal }
     );
 

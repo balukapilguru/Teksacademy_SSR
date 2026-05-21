@@ -90,7 +90,7 @@ export default function FindMyCourse() {
             
             {/* Main Title */}
             <div className="text-[37px] font-bold leading-tight tracking-tight">
-              Choose the right course in 60 seconds - zero guesswork, maximum clarity.
+              Choose the right course in 60 seconds zero guesswork, maximum clarity.
             </div>
             
             {/* Description */}

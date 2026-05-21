@@ -1,7 +1,7 @@
 import BranchClient from "../BranchClient";
 import { notFound } from "next/navigation";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 async function getBranchData(branchname) {
   if (!baseUrl || !branchname) return null;

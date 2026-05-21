@@ -2,7 +2,7 @@ import React from "react";
 
 // Fetch API
 async function getPrivacyPolicy() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   try {
     const controller = new AbortController();

@@ -74,7 +74,7 @@ export default function Footer() {
   useEffect(() => {
     async function fetchFooterData() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
         const res = await fetch(`${baseUrl}/api/v1/home/footer`, {
           next: { revalidate: 60 }, // optional, works on server but fine here
         });

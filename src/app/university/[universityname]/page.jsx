@@ -10,7 +10,7 @@ import UniversityCards from "@/components/universitypage/UniversityCards";
 import CourseCategories from "@/components/universitypage/CourseCategories";
 import Examinationpattern from "@/components/universitypage/Examinationpattern";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 // ✅ Dynamic Metadata
 export async function generateMetadata({ params }) {

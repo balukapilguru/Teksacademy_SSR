@@ -258,7 +258,7 @@ const Sidebar = ({
   const [pageLoading, setPageLoading] = useState(true);
 
   const pageSize = 9;
-  const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   // ================================
   // RESTORE FILTERS FROM LOCALSTORAGE (FIXED: now also restores program)

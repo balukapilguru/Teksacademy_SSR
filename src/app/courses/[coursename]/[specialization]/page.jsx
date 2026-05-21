@@ -18,7 +18,7 @@ import CourseScrollBar from "@/components/coursePage/CourseScrollBar";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 export async function generateMetadata({ params }) {
   const { coursename, specialization } = params;

@@ -14,7 +14,7 @@ import { PiBuildingsFill } from "react-icons/pi";
 import Swal from "sweetalert2";
 import { useParams, useRouter } from "next/navigation";
 
-const apiUrl = "https://apierp.infozit.com";
+const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
 
 const JobDetail = () => {
   const [open, setOpen] = useState(false);

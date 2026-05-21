@@ -21,7 +21,8 @@ const CoursesOffered = ({ branchData }) => {
       try {
         setLoading(true);
         // Use the correct API endpoint with your tunnel URL
-        const response = await fetch(`https://0z05cks3-4040.inc1.devtunnels.ms/api/v1/course?branches=${branchName}`);
+        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+        const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchName}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
