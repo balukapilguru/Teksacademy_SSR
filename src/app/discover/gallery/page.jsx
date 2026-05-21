@@ -50,7 +50,7 @@ export default function GalleryPage() {
         {galleryData.map((images, index) => (
           <div key={images.id} className="cursor-pointer" onClick={() => openModal(index)}>
             <Image
-              src={GetData({url:images.src})}
+              src={GetData({url:images.imgsrc})}
               alt={images.alt}
               width={400}
               height={300}
@@ -84,7 +84,7 @@ export default function GalleryPage() {
     {/* IMAGE FULL HEIGHT */}
     <div className="max-h-screen flex items-center">
       <Image
-        src={GetData({ url: galleryData[activeIndex]?.src })}
+        src={GetData({ url: galleryData[activeIndex]?.imgsrc })}
         alt={galleryData[activeIndex]?.alt}
         width={1200}
         height={1200}
