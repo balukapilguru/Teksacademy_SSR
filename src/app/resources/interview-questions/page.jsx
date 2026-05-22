@@ -13,7 +13,7 @@ const InterviewQuestionsPage = () => {
  
   // IMPORTANT: Use the correct API URL with /api/v1
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
- 
+
   useEffect(() => {
     const fetchInterviewQuestions = async () => {
       try {

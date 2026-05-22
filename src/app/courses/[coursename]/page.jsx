@@ -166,12 +166,12 @@ export default async function Page({ params }) {
         <Testimonials data={data.testimonials} />
       )}
 
-      {!isSelfPaced && !isAcademic && (
+      {/* {!isSelfPaced && !isAcademic && (
         <Programfee
           data={data?.offeringUniversity}
           universityLsit={data?.formDetails}
         />
-      )}
+      )} */}
     </CourseFlowProvider>
   );
 
