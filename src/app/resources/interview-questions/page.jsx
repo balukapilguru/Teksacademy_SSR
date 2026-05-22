@@ -4,13 +4,13 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/Loading";
-
+ 
 const InterviewQuestionsPage = () => {
   const router = useRouter();
   const [interviewData, setInterviewData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+ 
   // IMPORTANT: Use the correct API URL with /api/v1
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
@@ -19,15 +19,15 @@ const InterviewQuestionsPage = () => {
       try {
         setLoading(true);
         const response = await fetch(`${baseUrl}/api/v1/resources/interview-questions`);
-        
+       
         console.log("Fetching URL:", `${baseUrl}/api/v1/resources/interview-questions`);
-
+ 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+ 
         const result = await response.json();
-
+ 
         if (result.success && result.data) {
           setInterviewData(result.data);
         } else {
@@ -40,20 +40,20 @@ const InterviewQuestionsPage = () => {
         setLoading(false);
       }
     };
-
+ 
     fetchInterviewQuestions();
   }, []);
-
+ 
   const heroSection = interviewData?.heroSection;
   const interviewCards = interviewData?.interviewQuestions?.cards || [];
-
+ 
   const handleCardClick = (card) => {
     const link = card.button?.link;
     if (link) {
       router.push(link);
     }
   };
-
+ 
   if (loading) {
     return (
       <div >
@@ -61,7 +61,7 @@ const InterviewQuestionsPage = () => {
       </div>
     );
   }
-
+ 
   if (error) {
     return (
       <div className="min-h-[400px] flex justify-center items-center">
@@ -82,7 +82,7 @@ const InterviewQuestionsPage = () => {
       </div>
     );
   }
-
+ 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header Section */}
@@ -98,14 +98,14 @@ const InterviewQuestionsPage = () => {
           </div>
         </div>
       </div>
-
+ 
       {/* Hero Subheading */}
       <div className="text-center px-4 mt-6 mb-10">
         <p className="text-gray-600 text-sm sm:text-base max-w-3xl mx-auto">
           {heroSection?.subHeading || "Prepare for your dream job with the most asked interview questions across trending technologies and domains."}
         </p>
       </div>
-
+ 
       {/* Cards Grid Section */}
       <div className="w-full pb-12">
         {interviewCards.length === 0 ? (
@@ -158,5 +158,5 @@ const InterviewQuestionsPage = () => {
     </div>
   );
 };
-
+ 
 export default InterviewQuestionsPage;

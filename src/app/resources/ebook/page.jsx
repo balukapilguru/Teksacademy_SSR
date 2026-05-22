@@ -17,7 +17,7 @@ const Ebook = () => {
   useEffect(() => {
     const fetchEbooks = async () => {
       try {
-        const response = await fetch(`${baseUrl}/api/v1/resources/ebooks`);
+        const response = await fetch(`${baseUrl}/api/v1/resources/ebook`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch ebooks: ${response.status}`);
