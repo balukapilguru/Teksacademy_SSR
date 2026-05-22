@@ -8,8 +8,6 @@ import { FaChevronDown } from "react-icons/fa";
 import { SlCalender } from "react-icons/sl";
 import metadata from "../../app/metadata.json";
 
-
-
 import Link from "next/link";
 
 const courseList = [
@@ -36,7 +34,9 @@ const courseList = [
 ];
 
 const BlogPaginationPage = () => {
-  const api = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
+  const api =
+    process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||
+    process.env.NEXT_BLOGS_APPLY_API_URL;
 
   const [bannerData, setBannerData] = useState({});
   const [getBlog, setGetBlog] = useState([]);
@@ -57,6 +57,7 @@ const BlogPaginationPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [thMaxBlogs, setThMaxBlogs] = useState(0);
   const blogsPerPage = 6;
+
   useEffect(() => {
     document.title = metadata.blogs?.dynamicTitle;
 
@@ -103,34 +104,22 @@ const BlogPaginationPage = () => {
       try {
         const response = await fetch(apiUrl, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(
-            `HTTP error! Status: ${response.status} - ${errorText}`
-          );
+          throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
         }
         const data = await response.json();
         return data;
       } catch (error) {
         console.error("Error fetching banner data:", error);
-
         throw error;
       }
     };
     getBannerData()
-      .then((data) => {
-        if (data) {
-          // console.log("Processing banner data:", data);
-          setBannerData(data);
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to get banner data after trying:", error);
-      });
+      .then((data) => { if (data) setBannerData(data); })
+      .catch((error) => console.error("Failed to get banner data:", error));
   }, []);
 
   useEffect(() => {
@@ -139,60 +128,43 @@ const BlogPaginationPage = () => {
       try {
         const response = await fetch(apiUrl, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
-
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(
-            `HTTP error! Status: ${response.status} - ${errorText}`
-          );
+          throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
         }
-
         const data = await response.json();
-        // console.log("Blog data fetched successfully:", data);
-
         if (data?.totalBlogs) {
-          setThMaxBlogs(data.totalPages); // You already receive only 4 blogs from backend
+          setThMaxBlogs(data.totalPages);
           setGetBlog(data);
         }
       } catch (error) {
         console.error("Error fetching blog data:", error);
       }
     };
-
     getBlog();
   }, [currentPage]);
 
   useEffect(() => {
-    const updatedNoBlogs = 6; // Reset when activeCourse changes
-    setNoBlogs(updatedNoBlogs); // Optional: keep state in sync
+    const updatedNoBlogs = 6;
+    setNoBlogs(updatedNoBlogs);
 
     const getBlog = async () => {
       const apiUrl =
         activeCourse === "All"
           ? `${api}/blogs/getAll?search=${searchPass}&pageSize=${updatedNoBlogs}`
           : `${api}/blogs/blogcategory?category=${activeCourse}&search=${searchPass}&pageSize=${updatedNoBlogs}`;
-
       try {
         const response = await fetch(apiUrl, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
-
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(
-            `HTTP error! Status: ${response.status} - ${errorText}`
-          );
+          throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
         }
-
-        const data = await response.json();
-        return data;
+        return await response.json();
       } catch (error) {
         console.error("Error fetching blog data:", error);
         throw error;
@@ -202,46 +174,29 @@ const BlogPaginationPage = () => {
     getBlog()
       .then((data) => {
         if (data) {
-          // console.log("Processing blog data:", data);
           setMaxBlogs(data);
-          setCurrentBlog(
-            activeCourse === "All" ? data.blogPosts : data.categoryBlogs
-          );
+          setCurrentBlog(activeCourse === "All" ? data.blogPosts : data.categoryBlogs);
         }
       })
-      .catch((error) => {
-        console.error("Failed to get blog data:", error);
-      });
+      .catch((error) => console.error("Failed to get blog data:", error));
   }, [activeCourse, searchPass]);
 
   useEffect(() => {
     const getBlog = async () => {
       const apiUrl =
         activeCourse === "All"
-          ? `${api}/blogs/getAll?search=${searchPass}&pageSize=${
-              noBlogs < 6 ? 6 : noBlogs
-            }`
-          : `${api}/blogs/blogcategory?category=${activeCourse}&search=${searchPass}&pageSize=${
-              noBlogs < 6 ? 6 : noBlogs
-            }`;
-
+          ? `${api}/blogs/getAll?search=${searchPass}&pageSize=${noBlogs < 6 ? 6 : noBlogs}`
+          : `${api}/blogs/blogcategory?category=${activeCourse}&search=${searchPass}&pageSize=${noBlogs < 6 ? 6 : noBlogs}`;
       try {
         const response = await fetch(apiUrl, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
-
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(
-            `HTTP error! Status: ${response.status} - ${errorText}`
-          );
+          throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
         }
-
-        const data = await response.json();
-        return data;
+        return await response.json();
       } catch (error) {
         console.error("Error fetching blog data:", error);
         throw error;
@@ -252,16 +207,11 @@ const BlogPaginationPage = () => {
       getBlog()
         .then((data) => {
           if (data) {
-            // console.log("Processing blog data:", data);
             setMaxBlogs(data);
-            setCurrentBlog(
-              activeCourse === "All" ? data.blogPosts : data.categoryBlogs
-            );
+            setCurrentBlog(activeCourse === "All" ? data.blogPosts : data.categoryBlogs);
           }
         })
-        .catch((error) => {
-          console.error("Failed to get blog data:", error);
-        });
+        .catch((error) => console.error("Failed to get blog data:", error));
     }
   }, [noBlogs, searchPass]);
 
@@ -271,8 +221,6 @@ const BlogPaginationPage = () => {
 
   return (
     <div className="main_container">
-      {/* {console.log('current',currentPage,'max num',thMaxBlogs, "currentPagecurrentPage")} */}
-
       <div className="lg:flex">
         <div className="py-8 w-full 2xl:w-11/12 mx-auto px-4 lg:w-[75%]">
           <h1
@@ -281,103 +229,180 @@ const BlogPaginationPage = () => {
           >
             Category
           </h1>
-          <div className="flex justify-between gap-3 flex-col 2xl:flex-row mb-6 items-center lg:items-start">
-            <div className="flex lg:space-x-10 flex-col lg:flex-row items-center lg:justify-start gap-2">
-              <div className="space-x-7 flex overflow-x-auto">
+
+          {/* ── Filter bar ── */}
+          <div className="mb-6">
+
+            {/* Row 1 (mobile): scrollable pill strip — full-bleed so it reaches screen edges */}
+            <div className="lg:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide">
+              <div className="flex items-center gap-5 w-max pr-4">
+                {/* All */}
                 <button
                   onClick={() => handleCourseClick("All")}
-                  className={`relative text-xs  pb-2 font-bold ${
+                  className={`text-xs font-bold whitespace-nowrap pb-1 shrink-0 ${
                     activeCourse === "All" ? "text-[#2a619d]" : "text-gray-600"
                   }`}
                   style={{ fontFamily: "Roboto, sans-serif" }}
                 >
                   All
-                  {/* {activeCourse === "All" && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] w-full bg-[#2a619d] rounded-full"></span>
-                  )} */}
                 </button>
 
-                <div className="flex space-x-7 items-center">
-                  {firstFiveCourses.map((course, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleCourseClick(course)}
-                      className={`relative text-xs font-bold pb-2 whitespace-nowrap ${
-                        activeCourse === course
-                          ? "text-[#2a619d]"
-                          : "text-gray-600"
-                      }`}
-                      style={{ fontFamily: "Roboto, sans-serif" }}
-                    >
-                      {course}
-                      {/* {activeCourse === course && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] w-full bg-[#2a619d] rounded-full"></span>
-                      )} */}
-                    </button>
-                  ))}
+                {/* First 5 courses */}
+                {firstFiveCourses.map((course, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleCourseClick(course)}
+                    className={`text-xs font-bold whitespace-nowrap pb-1 shrink-0 ${
+                      activeCourse === course ? "text-[#2a619d]" : "text-gray-600"
+                    }`}
+                    style={{ fontFamily: "Roboto, sans-serif" }}
+                  >
+                    {course}
+                  </button>
+                ))}
+
+                {/* More dropdown (mobile) */}
+                <div className="relative shrink-0" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={`text-xs font-medium border flex items-center gap-1 p-1 px-2 rounded ${
+                      remainingCourses.includes(activeCourse)
+                        ? "text-[#2a619d] border-b-2 border-b-[#2a619d]"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {remainingCourses.includes(activeCourse) ? activeCourse : "More"}
+                    {isDropdownOpen ? (
+                      <FaChevronUp className="text-xs" />
+                    ) : (
+                      <FaChevronDown className="text-xs" />
+                    )}
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute top-full mt-2 w-40 bg-white border-t border-gray-200 rounded shadow-md z-10">
+                      <div className="h-72 overflow-y-auto [scrollbar-width:thin]">
+                        {remainingCourses.map((course, index) => (
+                          <button
+                            key={index}
+                            className={`block w-full text-left px-4 py-2 text-sm ${
+                              course === activeCourse
+                                ? "text-[#2a619d] font-semibold"
+                                : "text-gray-600"
+                            } hover:bg-gray-100 hover:text-[#2a619d]`}
+                            onClick={() => handleDropdownClick(course)}
+                            style={{ fontFamily: "Roboto, sans-serif" }}
+                          >
+                            {course}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-center lg:justify-end gap-2">
-              <div className="relative " ref={dropdownRef}>
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={`text-sm sm:text-xs font-medium  border flex justify-between p-1 px-2 rounded lg:h-[33px] sm:mt-1 lg:mt-0 ${
-                    remainingCourses.includes(activeCourse)
-                      ? "text-[#2a619d] border-b-2 border-b-[#2a619d]"
-                      : "text-gray-600"
-                  } hover:text-[#2a619d] flex items-center`}
-                >
-                  {remainingCourses.includes(activeCourse)
-                    ? activeCourse
-                    : "More"}
-                  {isDropdownOpen ? (
-                    <FaChevronUp className="ml-2 text-xs" />
-                  ) : (
-                    <FaChevronDown className="ml-2 text-xs" />
-                  )}
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute top-full mt-2 w-40 bg-white border-t border-gray-200 rounded shadow-md z-10">
-                    <div className="h-72 overflow-y-auto [scrollbar-width:thin]">
-                      {remainingCourses.map((course, index) => (
-                        <button
-                          key={index}
-                          className={`block w-full text-left px-4 py-2 text-sm ${
-                            course === activeCourse
-                              ? "text-[#2a619d] font-semibold"
-                              : "text-gray-600"
-                          } hover:bg-gray-100 hover:text-[#2a619d]`}
-                          onClick={() => handleDropdownClick(course)}
-                          style={{ fontFamily: "Roboto, sans-serif" }}
-                        >
-                          {course}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className=" relative">
+
+            {/* Row 2 (mobile): search — always full width below the scroll strip */}
+            <div className="lg:hidden mt-3">
+              <div className="relative">
                 <input
                   type="text"
                   placeholder="Search..."
                   value={searchTerm}
-                  // onChange={(e) => setSearchTerm(e.target.value)}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="w-full px-4 pr-10 text-sm sm:text-xs py-1 border border-gray-300 rounded shadow-sm text-gray-700 placeholder-gray-400 lg:h-[33px]"
+                  className="w-full px-4 pr-10 text-sm py-1.5 border border-gray-300 rounded shadow-sm text-gray-700 placeholder-gray-400"
                 />
-                <button
-                  // onClick={handleSearch}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 "
-                >
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
                   <IoIosSearch className="text-xl" />
                 </button>
               </div>
             </div>
-          </div>
 
-          <div className="w-full  flex flex-col items-center">
+            {/* Desktop layout: single row, existing behaviour unchanged */}
+            <div className="hidden lg:flex justify-between gap-3 items-center">
+              <div className="flex space-x-7 items-center overflow-x-auto">
+                <button
+                  onClick={() => handleCourseClick("All")}
+                  className={`relative text-xs pb-2 font-bold whitespace-nowrap ${
+                    activeCourse === "All" ? "text-[#2a619d]" : "text-gray-600"
+                  }`}
+                  style={{ fontFamily: "Roboto, sans-serif" }}
+                >
+                  All
+                </button>
+                {firstFiveCourses.map((course, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleCourseClick(course)}
+                    className={`relative text-xs font-bold pb-2 whitespace-nowrap ${
+                      activeCourse === course ? "text-[#2a619d]" : "text-gray-600"
+                    }`}
+                    style={{ fontFamily: "Roboto, sans-serif" }}
+                  >
+                    {course}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                {/* More dropdown (desktop) */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={`text-sm sm:text-xs font-medium border flex justify-between p-1 px-2 rounded h-[33px] ${
+                      remainingCourses.includes(activeCourse)
+                        ? "text-[#2a619d] border-b-2 border-b-[#2a619d]"
+                        : "text-gray-600"
+                    } hover:text-[#2a619d] flex items-center`}
+                  >
+                    {remainingCourses.includes(activeCourse) ? activeCourse : "More"}
+                    {isDropdownOpen ? (
+                      <FaChevronUp className="ml-2 text-xs" />
+                    ) : (
+                      <FaChevronDown className="ml-2 text-xs" />
+                    )}
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute top-full mt-2 w-40 bg-white border-t border-gray-200 rounded shadow-md z-10">
+                      <div className="h-72 overflow-y-auto [scrollbar-width:thin]">
+                        {remainingCourses.map((course, index) => (
+                          <button
+                            key={index}
+                            className={`block w-full text-left px-4 py-2 text-sm ${
+                              course === activeCourse
+                                ? "text-[#2a619d] font-semibold"
+                                : "text-gray-600"
+                            } hover:bg-gray-100 hover:text-[#2a619d]`}
+                            onClick={() => handleDropdownClick(course)}
+                            style={{ fontFamily: "Roboto, sans-serif" }}
+                          >
+                            {course}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Search (desktop) */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className="w-full px-4 pr-10 text-xs py-1 border border-gray-300 rounded shadow-sm text-gray-700 placeholder-gray-400 h-[33px]"
+                  />
+                  <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                    <IoIosSearch className="text-xl" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* ── End Filter bar ── */}
+
+          <div className="w-full flex flex-col items-center">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 2xl:gap-10">
               {currentBlog.length === 0 ? (
                 <div className="col-span-full flex flex-col items-center justify-center min-h-80">
@@ -409,7 +434,7 @@ const BlogPaginationPage = () => {
                     <img
                       src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                       alt={article?.title}
-                      className="w-full h-48  rounded-md"
+                      className="w-full h-48 rounded-md"
                     />
                     <div className="px-1 flex flex-col gap-3 mt-2">
                       <Link
@@ -420,7 +445,6 @@ const BlogPaginationPage = () => {
                       >
                         {article?.title}
                       </Link>
-
                       <div
                         style={{ fontFamily: "Roboto, sans-serif" }}
                         className="prose max-w-none text-[15px] min-h-16 text-[#252525] font-light line-clamp-3 leading-[1.5]"
@@ -428,7 +452,6 @@ const BlogPaginationPage = () => {
                           __html: article?.blogsimages[0]?.data,
                         }}
                       />
-
                       <p
                         className="text-xs text-[#252525] font-normal flex items-center gap-x-2 mt-auto"
                         style={{ fontFamily: "Roboto, sans-serif" }}
@@ -460,8 +483,10 @@ const BlogPaginationPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Latest sidebar */}
         <div className="w-full xl:w-[40%] flex justify-center py-8">
-          <div className="xl:w-[80%] w-full flex flex-col  gap-y-0 bg-gray-50/20 px-4">
+          <div className="xl:w-[80%] w-full flex flex-col gap-y-0 bg-gray-50/20 px-4">
             <div className="space-y-3">
               <div>
                 <h1
@@ -481,9 +506,8 @@ const BlogPaginationPage = () => {
                       <img
                         src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                         alt={article?.title}
-                        className="w-22 h-20 rounded-md "
+                        className="w-full h-20 rounded-md"
                       />
-
                       <div>
                         <p
                           className="text-[#2a619d] text-xs font-semibold"
@@ -543,27 +567,22 @@ const BlogPaginationPage = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
                 disabled={currentPage === 1}
-                className={`flex items-center justify-center w-8 h-8 rounded-md transition
-                  ${
-                    currentPage === 1
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-200 hover:bg-gray-300 text-gray-700"
-                  }
-                `}
+                className={`flex items-center justify-center w-8 h-8 rounded-md transition ${
+                  currentPage === 1
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                }`}
               >
                 <MdKeyboardDoubleArrowLeft className="text-2xl" />
               </button>
-
               <button
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={currentPage >= thMaxBlogs}
-                className={`flex items-center justify-center w-8 h-8 rounded-md transition
-                  ${
-                    currentPage >= thMaxBlogs
-                      ? "bg-[#fe543d]/50 text-white cursor-not-allowed"
-                      : "bg-[#fe543d]/90 hover:bg-[#fe543d] text-white"
-                  }
-                `}
+                className={`flex items-center justify-center w-8 h-8 rounded-md transition ${
+                  currentPage >= thMaxBlogs
+                    ? "bg-[#fe543d]/50 text-white cursor-not-allowed"
+                    : "bg-[#fe543d]/90 hover:bg-[#fe543d] text-white"
+                }`}
               >
                 <MdKeyboardDoubleArrowRight className="text-2xl" />
               </button>
@@ -572,23 +591,9 @@ const BlogPaginationPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full xl:flex-row justify-center lg:px-10 p-5">
-        {/* <div className="w-full xl:w-[60%] px-6 pt-6 pb-3 xl:pb-1 xl:px-14 flex flex-col gap-4 xl:border shadow-md">
-          <div className="flex justify-center ">
-            <img
-              src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${bannerData?.blogBanner?.brandimage}`}
-              alt="Google Building"
-              className="w-full h-44 lg:h-[370px] object-cover p-3"
-            />
-          </div>
-          <div className="px-4">
-            <h1 className="font-bold w-full 2xl:w-10/12 mx-auto mb-2 break-words text-center text-2xl lg:text-4xl line-clamp-3 hover:underline">
-              {bannerData?.blogBanner?.brandHeading}
-            </h1>
-          </div>
-        </div> */}
-      </div>
+      <div className="flex flex-col w-full xl:flex-row justify-center lg:px-10 p-5"></div>
     </div>
   );
 };
+
 export default BlogPaginationPage;

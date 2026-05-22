@@ -9,7 +9,7 @@ import Loader from "@/components/Loader";
 
 
 const SuccessStories = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -272,10 +272,10 @@ const SuccessStories = () => {
               playsInline
             />
             
-            <div className="p-4 bg-gray-900">
+            {/* <div className="p-4 bg-gray-900">
               <h3 className="text-white font-semibold text-lg">{selectedVideo.name}</h3>
               <p className="text-gray-400 text-sm mt-1">Student Success Story</p>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
