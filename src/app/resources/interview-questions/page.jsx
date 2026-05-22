@@ -12,15 +12,15 @@ const InterviewQuestionsPage = () => {
   const [error, setError] = useState(null);
   
   // IMPORTANT: Use the correct API URL with /api/v1
-  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
   useEffect(() => {
     const fetchInterviewQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${baseUrl}api/v1/resources/interview-questions`);
+        const response = await fetch(`${baseUrl}/api/v1/resources/interview-questions`);
         
-        console.log("Fetching URL:", `${baseUrl}api/v1/resources/interview-questions`);
+        console.log("Fetching URL:", `${baseUrl}/api/v1/resources/interview-questions`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
