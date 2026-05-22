@@ -283,7 +283,7 @@ const BlogPaginationPage = () => {
           </h1>
           <div className="flex justify-between gap-3 flex-col 2xl:flex-row mb-6 items-center lg:items-start">
             <div className="flex lg:space-x-10 flex-col lg:flex-row items-center lg:justify-start gap-2">
-              <div className="space-x-7 flex w-80 lg:w-full overflow-x-auto">
+              <div className="space-x-7 flex overflow-x-auto">
                 <button
                   onClick={() => handleCourseClick("All")}
                   className={`relative text-xs  pb-2 font-bold ${

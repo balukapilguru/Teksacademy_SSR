@@ -399,9 +399,9 @@ export default function BranchClient({ data: initialData = null, branchName = ""
     : "/api/v1/branch";
 
   useEffect(() => {
-    if (initialData || !baseUrl) {
+    if (initialData || !api) {
       setPageLoading(false);
-      if (!baseUrl) setError("Branch API URL is not configured.");
+      if (!api) setError("Branch API URL is not configured.");
       return;
     }
 
@@ -412,7 +412,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
       setError(null);
 
       try {
-        const res = await fetch(`${baseUrl}${branchApiPath}`, {
+        const res = await fetch(`${api}${branchApiPath}`, {
           cache: "no-store",
           signal: controller.signal,
         });
@@ -436,7 +436,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
     fetchBranchData();
 
     return () => controller.abort();
-  }, [baseUrl, branchApiPath, initialData]);
+  }, [api, branchApiPath, initialData]);
 
   if (pageLoading) {
     return (

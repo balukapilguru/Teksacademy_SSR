@@ -2,13 +2,13 @@
 
 import EbookClient from "@/app/ebook/EbooksClient";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
 /* ===========================
    ✅ METADATA (HEAD SECTION)
 =========================== */
 export async function generateMetadata() {
-  if (!baseurl) return {};
+  if (!baseUrl) return {};
 
   try {
     const controller = new AbortController();
@@ -49,12 +49,12 @@ export async function generateMetadata() {
    ✅ PAGE COMPONENT
 =========================== */
 export default async function Page() {
-  if (!baseurl) {
-    console.error("NEXT_PUBLIC_TEKSSKILL_API_URL is not defined");
+  if (!baseUrl) {
+    console.error("NEXT_PUBLIC_TEKS_SSR_API_URL is not defined");
     return <div>API base URL not defined</div>;
   }
 
-  const url = `${baseurl.replace(/\/$/, "")}/api/v1/home/ebooks`;
+  const url = `${baseUrl.replace(/\/$/, "")}/api/v1/home/ebooks`;
 
   try {
     const controller = new AbortController();
