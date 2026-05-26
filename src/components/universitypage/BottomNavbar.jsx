@@ -1,7 +1,7 @@
 "use client";
 import GetData from "@/utility/GetData";
 import React, { useEffect, useState } from "react";
-import UniversityForm from "../clientcomponents/forms/Universityform";
+
 import Image from "next/image";
 
 const BottomNavbar = ({ data }) => {
@@ -132,20 +132,7 @@ const BottomNavbar = ({ data }) => {
           </div>
         </div>
       </div>
-     
-      {showForm && (
-        <UniversityForm
-          show={showForm}
-          onClose={() => setShowForm(false)}
-           universityData={{
-            instituteName: universityName, 
-          }}
-          course={{
-           
-            specializations: data?.formDetails?.specializations || [],
-          }}
-        />
-      )}
+ 
     </>
   );
 };

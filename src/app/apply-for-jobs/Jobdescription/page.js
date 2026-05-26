@@ -8,7 +8,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { BsWhatsapp } from "react-icons/bs";
 import { RiFacebookBoxFill } from "react-icons/ri";
 import { SiInstagram } from "react-icons/si";
-import Apply from "@/app/forms/Apply/page";
+
 
 const Jobdescription = () => {
   const demo = {
@@ -133,7 +133,7 @@ const Jobdescription = () => {
       </div>
       {showPopup && (
         <div className="bg-white flex z-20 fixed left-1/2 -translate-x-1/2 top-48 p-6 rounded-md">
-          <Apply />
+          {/* <Apply /> */}
           <button className="flex " onClick={closePopup}>
             <IoCloseOutline className="text-3xl" />
           </button>

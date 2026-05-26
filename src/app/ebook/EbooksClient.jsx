@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import Ebooksform from "@/components/clientcomponents/forms/Ebooksform";
+
 import Loader from "@/components/Loader";
 
 export default function EbookClient({ source }) {
@@ -226,14 +226,14 @@ export default function EbookClient({ source }) {
             ref={modalRef}
             className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4"
           >
-            <Ebooksform
+            {/* <Ebooksform
               course={selectedCard.title}
               downloadLink={`https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com${selectedCard.ebookurl}`}
               productId={selectedCard.productId}
               sourceId={selectedCard.sourceId}
               source={source}
               closePopup={() => setSelectedCard(null)}
-            />
+            /> */}
           </div>
         </div>
       )}
