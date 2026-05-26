@@ -60,7 +60,7 @@ const Awards = (awards) => {
   const renderCard = (item, index) => (
     <div
       key={index}
-      className="w-full flex flex-col md:flex-row gap-x-1 md:gap-x-2 xl:gap-x-1 2xl:gap-x-4 justify-center items-center"
+      className="w-full flex flex-col md:flex-row gap-x-1  md:gap-x-20 lg:gap-x-4 2xl:gap-x-4 justify-center items-center"
     >
       {/* LEFT IMAGE */}
       <div className="w-1/2 flex flex-col justify-center rounded-md bg-[#EFF6F3] hidden md:block">
@@ -74,16 +74,16 @@ const Awards = (awards) => {
       </div>
 
       {/* RIGHT LEAF + TEXT */}
-      <div className="flex items-center justify-between w-1/2 relative mt-5 md:mt-0">
+      <div className="flex items-center justify-between   w-1/2 relative mt-5 md:mt-0">
         <Image
           width={300}
           height={300}
           src={leftleaf}
           alt="Left Leaf"
-          className="w-16 xl:w-12 xl:h-28 2xl:w-16 h-28 sm:h-32 md:h-32 lg:h-32 2xl:h-32 3xl:w-20 3xl:h-36"
+          className="w-14 xl:w-12 xl:h-28 2xl:w-16 h-28 sm:h-32 md:h-32 lg:h-32 2xl:h-32 3xl:w-20 3xl:h-36"
         />
 
-        <div className="text-[0.62rem] sm:text-[0.68rem] md:text-[0.76rem] lg:text-[0.7rem] xl:text-[0.64rem] 2xl:text-[0.78rem] 3xl:text-[0.9rem] text-center font-medium w-28 sm:w-36 lg:w-32 px-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="text-[0.62rem] sm:text-[0.68rem] md:text-[0.76rem]  lg:text-[0.7rem] xl:text-[0.64rem] 2xl:text-[0.78rem] 3xl:text-[0.9rem] text-center font-medium w-28 sm:w-36 lg:w-32  lg:px-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           {item.description}
         </div>
 
@@ -92,12 +92,12 @@ const Awards = (awards) => {
           height={300}
           src={rightleaf}
           alt="Right Leaf"
-          className="w-16 xl:w-12 xl:h-28 2xl:w-16 h-28 sm:h-32 md:h-32 lg:h-32 2xl:h-32 3xl:w-20 3xl:h-36"
+          className="w-14 xl:w-12 xl:h-28 2xl:w-16 h-28 sm:h-32 md:h-32 lg:h-32 2xl:h-32 3xl:w-20 3xl:h-36"
         />
       </div>
 
       {/* MOBILE IMAGE */}
-      <div className="w-1/2 flex flex-col justify-center rounded-md bg-[#EFF6F3] mt-5 md:hidden">
+      <div className="w-1/2 flex flex-col justify-center rounded-md bg-[#EFF6F3] mt-5 sm:hidden">
         <Image
           width={300}
           height={400}
