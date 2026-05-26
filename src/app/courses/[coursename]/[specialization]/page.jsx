@@ -18,69 +18,65 @@ import CourseScrollBar from "@/components/coursePage/CourseScrollBar";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
-export async function generateMetadata({ params }) {
-  const { coursename, specialization } = params;
+// export async function generateMetadata({ params }) {
+//   const { coursename, specialization } = await params;
+
+//   try {
+//     const res = await fetch(
+//       `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
+//       { next: { revalidate: 60 } }
+//     );
+
+//     if (!res.ok) return {};
+
+//     const json = await res.json();
+//     const meta = json?.data?.meta;
+
+//     if (!meta) return {};
+
+//     return {
+//       title: meta.title || "Course",
+//       description: meta.description || "",
+//       openGraph: {
+//         title: meta.title,
+//         description: meta.description,
+//       },
+//       twitter: {
+//         title: meta.title,
+//         description: meta.description,
+//       },
+//     };
+//   } catch {
+//     return {};
+//   }
+// }
+export default async function Page({ params }) {
+ const { coursename, specialization } = await params;
+
+  let courseData;
 
   try {
     const res = await fetch(
-      `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
+      `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`,
       { next: { revalidate: 60 } }
     );
 
-    if (!res.ok) return {};
+    if (res.status === 404) notFound();
+
+    if (!res.ok) {
+      throw new Error(`API error: ${res.status}`);
+    }
 
     const json = await res.json();
-    const meta = json?.data?.meta;
+    courseData = json?.data;
 
-    if (!meta) return {};
-
-    return {
-      title: meta.title || "Course",
-      description: meta.description || "",
-      openGraph: {
-        title: meta.title,
-        description: meta.description,
-      },
-      twitter: {
-        title: meta.title,
-        description: meta.description,
-      },
-    };
-  } catch {
-    return {};
+    if (!courseData) notFound();
+  } catch (error) {
+    console.error("Course fetch failed:", error);
+    throw error;
   }
-}
-export default async function Page({ params }) {
-  const { coursename, specialization } = params;
-
- let courseData;
-
-try {
-  const res = await fetch(
-    `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
-    { next: { revalidate: 60 } }
-  );
-
-  if (res.status === 404) {
-    notFound();
-  }
-
-  if (!res.ok) {
-    throw new Error(`API error: ${res.status}`);
-  }
-
-  const json = await res.json();
-  courseData = json?.data;
-
-  if (!courseData) {
-    notFound();
-  }
-} catch (error) {
-  console.error("Course fetch failed:", error);
-  throw error; // let Next handle real errors
-}
 
   const {
     banner,
@@ -101,7 +97,7 @@ try {
     formDetails,
     meta,
   } = courseData || {};
-
+console.log()
   // Create a component that wraps all CourseFlow-dependent components
   const CourseFlowSection = () => (
     <>

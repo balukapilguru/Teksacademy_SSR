@@ -99,14 +99,14 @@ const DownloadCourseBrochure = ({
           </div>
 
           {/* Right Image */}
-          <div className="flex justify-center p-2">
+          <div className="flex justify-center p-4 ">
             {data?.image?.src && data.image.src !== "null" ? (
               <Image
                 src={GetData({ url: data?.image.src })}
                 alt={data.image.alt || "Course Brochure"}
                 width={600}
                 height={400}
-                className="rounded-2xl transition-transform duration-500 bg-white/60 hover:scale-105 object-cover"
+                className="rounded-2xl transition-transform duration-500 bg-white/60  object-cover"
               />
             ) : (
               <div className="w-full h-64 bg-white/60 rounded-2xl flex items-center justify-center">

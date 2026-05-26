@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 import { FaBriefcase } from "react-icons/fa";
 import { FiFileText } from "react-icons/fi";
@@ -9,13 +10,13 @@ import { FaUsers } from "react-icons/fa";
 import { FiTarget } from "react-icons/fi";
 import { FaBuilding } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu";
+
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 
 const Platform = ({ data }) => {
   const [open, setOpen] = useState(false);
   const modalRef = useRef(null);
-
 
   const defaultData = {
     heading: ["Platform That Supports You", "End-to-End"],
@@ -33,45 +34,37 @@ const Platform = ({ data }) => {
       button: {
         text: "View all →",
         icon: { src: "", alt: "" },
-        link: null
-      }
-    }
+        link: null,
+      },
+    },
   };
-
 
   const componentData = data || defaultData;
 
   const heading = componentData.heading || defaultData.heading;
-  const services = componentData.services?.items || defaultData.services.items;
-  const buttonText = componentData.services?.button?.text || defaultData.services.button.text;
-
+  const services =
+    componentData.services?.items || defaultData.services.items;
+  const buttonText =
+    componentData.services?.button?.text ||
+    defaultData.services.button.text;
 
   const getIconComponent = (iconName, index) => {
-    const iconMap = {
-      FaBriefcase: <FaBriefcase className="w-10 h-10 text-[#2a619d]" />,
-      FiFileText: <FiFileText className="w-10 h-10 text-[#2a619d]" />,
-      FaVideo: <FaVideo className="w-10 h-10 text-[#2a619d]" />,
-      HiOutlineBanknotes: <HiOutlineBanknotes className="w-10 h-10 text-[#2a619d]" />,
-      FaUsers: <FaUsers className="w-10 h-10 text-[#2a619d]" />,
-      FiTarget: <FiTarget className="w-10 h-10 text-[#2a619d]" />,
-      FaBuilding: <FaBuilding className="w-10 h-10 text-[#2a619d]" />,
-      LuClipboardList: <LuClipboardList className="w-10 h-10 text-[#2a619d]" />,
-    };
+    // 🔥 CLEAN THE BROKEN URL
+    const cleanSrc = iconName?.src?.replace(/%22/g, "").trim();
 
-
-    if (iconName?.src && !iconName.src.includes("apple.webp")) {
+    if (cleanSrc) {
       return (
         <Image
-          src={iconName.src}
-          alt={iconName.alt || "service icon"}
+          src={cleanSrc}
+          alt={iconName?.alt || "service icon"}
           className="w-10 h-10 object-contain"
-          width="100"
-          height="100"
+          width={100}
+          height={100}
         />
       );
     }
 
-
+    // fallback icons (only if backend fails)
     const fallbackIcons = [
       <FaBriefcase className="w-10 h-10 text-[#2a619d]" />,
       <FiFileText className="w-10 h-10 text-[#2a619d]" />,
@@ -86,7 +79,6 @@ const Platform = ({ data }) => {
     return fallbackIcons[index % fallbackIcons.length];
   };
 
-
   const allServices = services;
 
   useEffect(() => {
@@ -99,11 +91,12 @@ const Platform = ({ data }) => {
     if (open) document.addEventListener("mousedown", handleClickOutside);
     else document.removeEventListener("mousedown", handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
   return (
-    <section className=" py-10">
+    <section className="py-10">
       <div className="text-left">
         <Heading data={heading} />
       </div>
@@ -112,22 +105,22 @@ const Platform = ({ data }) => {
       <div className="mt-6 bg-white border-2 border-gray-100 shadow-md rounded-2xl p-6">
         <div className="grid grid-cols-2 md:grid-cols-8 gap-6 text-center">
           {services.slice(0, 8).map((service, i) => (
-            <div key={service.id || i} className="flex flex-col items-center">
+            <div
+              key={service.id || i}
+              className="flex flex-col items-center"
+            >
               {getIconComponent(service.icon, i)}
-              <div
-                className="mt-4 text-md">{service.heading?.[0] || service.title}</div>
+              <div className="mt-4 text-md">
+                {service.heading?.[0] || service.title}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-
       {services.length > 8 && (
         <div className="flex justify-center mt-6">
-          <PrimaryButton
-            onClick={() => setOpen(true)}
-            variant="outline"
-          >
+          <PrimaryButton onClick={() => setOpen(true)} variant="outline">
             {buttonText}
           </PrimaryButton>
         </div>
@@ -136,19 +129,29 @@ const Platform = ({ data }) => {
       {/* Popup Modal */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div ref={modalRef} className="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-2xl flex flex-col p-10 justify-between shadow-lg relative max-h-[80vh] overflow-y-auto">
+          <div
+            ref={modalRef}
+            className="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-2xl flex flex-col p-10 justify-between shadow-lg relative max-h-[80vh] overflow-y-auto"
+          >
             <button
               onClick={() => setOpen(false)}
               className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
             >
               ✖
             </button>
-            <div className="text-xl font-semibold mb-4">More Services</div>
+            <div className="text-xl font-semibold mb-4">
+              More Services
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {allServices.map((service, i) => (
-                <div key={service.id || i} className="flex flex-col items-center">
+                <div
+                  key={service.id || i}
+                  className="flex flex-col items-center"
+                >
                   {getIconComponent(service.icon, i)}
-                  <p className="mt-2 text-sm">{service.heading?.[0] || service.title}</p>
+                  <p className="mt-2 text-sm">
+                    {service.heading?.[0] || service.title}
+                  </p>
                 </div>
               ))}
             </div>
@@ -156,7 +159,7 @@ const Platform = ({ data }) => {
         </div>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default Platform
+export default Platform;

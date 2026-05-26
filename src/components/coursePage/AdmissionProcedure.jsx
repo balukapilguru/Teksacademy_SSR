@@ -10,6 +10,8 @@ import { VscGitStashApply } from "react-icons/vsc";
 import { BiSolidRightArrow, BiSolidDownArrow } from "react-icons/bi";
 import { MdOutlineDomainVerification } from "react-icons/md";
 import Heading from "@/utility/Heading";
+import Image from "next/image";
+import GetData from "@/utility/GetData";
 
 const Admission = ({ data }) => {
 
@@ -21,7 +23,7 @@ const Admission = ({ data }) => {
   const stepsHeading = admissionSteps.heading?.[0] || "Guide to Online Admission Process";
 
   const stepsData = admissionSteps.steps || [];
-
+console.log(admissionSteps,"stepsData")
   const stepColors = [
     "bg-[#002b80]",
     "bg-green-800",
@@ -31,24 +33,24 @@ const Admission = ({ data }) => {
     "bg-[#76777a]",
   ];
 
-  const getIconComponent = (index) => {
-    const icons = [
-      <AiOutlineGlobal size={28} key="signup" />,
-      <VscGitStashApply size={28} key="application" />,
-      <AiOutlineForm size={28} key="upload" />,
-      <AiOutlineCloudUpload size={28} key="fees" />,
-      <MdOutlineDomainVerification size={28} key="verification" />,
-      <AiOutlineCheckCircle size={28} key="confirmation" />,
-    ];
-    return icons[index] || <AiOutlineGlobal size={28} />;
-  };
+  // const getIconComponent = (index) => {
+  //   const icons = [
+  //     <AiOutlineGlobal size={28} key="signup" />,
+  //     <VscGitStashApply size={28} key="application" />,
+  //     <AiOutlineForm size={28} key="upload" />,
+  //     <AiOutlineCloudUpload size={28} key="fees" />,
+  //     <MdOutlineDomainVerification size={28} key="verification" />,
+  //     <AiOutlineCheckCircle size={28} key="confirmation" />,
+  //   ];
+  //   return icons[index] || <AiOutlineGlobal size={28} />;
+  // };
 
   // Process steps from API data
   const steps = stepsData.map((step, index) => ({
     number: step.stepNumber,
     title: step.heading[0],
     description: step.details,
-    icon: getIconComponent(index),
+    icon: step.image.src,
     color: stepColors[index] || "bg-gray-600",
   }));
 
@@ -96,7 +98,12 @@ const Admission = ({ data }) => {
                       <div
                         className={`w-14 h-14 flex items-center justify-center rounded-full ${step.color} text-white shadow-lg mb-3`}
                       >
-                        {step.icon}
+                        {/* {step.icon} */}
+                        <Image 
+                        width={70}
+                        height={30}
+                        alt="icons"
+                        src={GetData({url:step.icon})}/>
                       </div>
 
                       {/* Title + Description */}
@@ -127,7 +134,11 @@ const Admission = ({ data }) => {
                       <div
                         className={`w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-4 ${step.color} shadow-lg text-white z-10`}
                       >
-                        {step.icon}
+                        <Image 
+                        width={40}
+                        height={30}
+                        alt="icons"
+                        src={GetData({url:step.icon})}/>
                       </div>
 
                       {/* Dashed line + arrow (desktop only) */}
@@ -152,10 +163,10 @@ const Admission = ({ data }) => {
 
                       {/* Title + Description */}
                       <div className="text-center max-w-[250px]">
-                        <h3 className="font-bold text-gray-800 text-lg mb-1">
+                        <h3 className="font-bold text-gray-800 mr-2 text-lg mb-1">
                           {step.title}
                         </h3>
-                        <div className="text-gray-600 text-sm leading-relaxed">
+                        <div className="text-gray-600 text-sm ml-2 leading-relaxed">
                           {step.description}
                         </div>
                       </div>
