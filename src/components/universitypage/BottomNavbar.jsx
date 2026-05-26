@@ -1,7 +1,6 @@
 "use client";
 import GetData from "@/utility/GetData";
 import React, { useEffect, useState } from "react";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import UniversityForm from "../clientcomponents/forms/Universityform";
 import Image from "next/image";
 

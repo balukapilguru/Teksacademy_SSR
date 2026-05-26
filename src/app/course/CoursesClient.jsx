@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
@@ -14,15 +15,15 @@ import {
 } from "react-icons/io5";
 import { MdChevronRight } from "react-icons/md";
 import CourseCard from "@/components/allcoursepage/Coursecards";
-import Freecoursesform from "@/components/clientcomponents/forms/Freecoursesform";
+
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { IoIosSearch } from "react-icons/io";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
+import ReusableForm from "@/components/ReusableForm";
 
 // ================================
 // HELPERS
 // ================================
-
 const formatLabel = (str = "") => {
   if (!str) return "";
   return str
@@ -418,11 +419,37 @@ export default function CoursesClient() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isAcademicCourse, setIsAcademicCourse] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
   const pageSize = 9;
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const router = useRouter();
+
+  const handleSubmit = useCallback(async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  }, [router]);
 
   useEffect(() => {
     const savedCategory = localStorage.getItem("selectedCategory");
@@ -507,8 +534,6 @@ export default function CoursesClient() {
   }, []);
 
   const handleOpenModal = (course) => {
-    const isAcademic = course?.category === "academics";
-    setIsAcademicCourse(isAcademic);
     setSelectedCourse(course);
     setShowModal(true);
   };
@@ -561,25 +586,16 @@ export default function CoursesClient() {
 
   return (
     <div className="main_container mx-auto rounded-xl">
-      {showModal && selectedCourse &&
-        (isAcademicCourse ? (
-          <Popupform
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            course={selectedCourse?.heading}
-            courseName={selectedCourse}
-            source={28}
-          />
-        ) : (
-          <Freecoursesform
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            course={selectedCourse?.universities ? selectedCourse : null}
-            courseName={selectedCourse.programName}
-            university={selectedCourse.universities?.[0]?.name || "Teksversity"}
-            source={28}
-          />
-        ))}
+      {showModal && selectedCourse && (
+        <Popupform
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          course={selectedCourse?.heading}
+          courseName={selectedCourse}
+          source={28}
+          onSubmit={handleSubmit}
+        />
+      )}
 
       <div className="flex flex-col md:flex-row">
         {/* Mobile top bar */}

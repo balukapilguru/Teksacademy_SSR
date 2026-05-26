@@ -2,9 +2,33 @@
 import React, { useEffect, useState, useRef } from "react";
 import Heading from "@/utility/Heading";
 import CourseCard from "./Coursecards";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import PrimaryButton from "@/utility/PrimaryButton";
+import ReusableForm from "../ReusableForm";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 const Page = ({ data }) => {
   const courses = data?.courses || [];
 
@@ -21,12 +45,11 @@ const Page = ({ data }) => {
       <div className="main_container mx-auto mt-5 px-4 sm:px-6 lg:px-8">
         <Heading data={data?.heading} />
 
-        <Freecoursesform
-          source={28}
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          course={selectedCourse?.universities ? selectedCourse : null}
-        />
+        <ReusableForm formType="enquiry"
+          onSubmit={handleSubmit}
+          buttonText="Submit"
+          className="w-full"
+          successMessage="Thank you! We'll contact you soon." />
 
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

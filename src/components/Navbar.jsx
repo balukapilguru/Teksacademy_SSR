@@ -84,7 +84,6 @@ import { BsBriefcase, BsJournalText } from "react-icons/bs";
 import GetData from "@/utility/GetData";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
 import { useNavbar } from "@/components/coursePage/NavbarContext";
-import CareerGuidanceForm from "./clientcomponents/forms/CareerGuidanceForm";
 import Loader from "./Loader";
 
 // ============================================
@@ -1027,7 +1026,7 @@ export default function Navbar() {
       {/* ============================================ */}
       {/* CAREER GUIDANCE FORM MODAL */}
       {/* ============================================ */}
-      <CareerGuidanceForm isOpen={showCareer} onClose={handleCloseCareerForm} />
+    
     </>
   );
 }

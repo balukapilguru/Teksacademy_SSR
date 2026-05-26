@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import confetti from "canvas-confetti";
-import Form from "../clientcomponents/forms/Form";
 import Heading from "../../utility/Heading";
 import { useCourseFlow } from "./CourseFlowProvider";
 import Image from "next/image";

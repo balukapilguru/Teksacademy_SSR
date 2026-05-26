@@ -4,12 +4,36 @@ import { FiDownload } from "react-icons/fi";
 import { FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
 import Heading from "../../utility/Heading";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
-import Popupforms from "../clientcomponents/forms/Popupforms";
 import GetData from "@/utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { RiArrowRightBoxFill } from "react-icons/ri";
+import ReusableForm from "../ReusableForm";
+import Popupform from "../clientcomponents/forms/Popupform";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 const DownloadCourseBrochure = ({
   data,
   formDetails,
@@ -31,24 +55,19 @@ const DownloadCourseBrochure = ({
 
   return (
     <div className="mb-6">
-      {category || isSelfPaced? (
-        <Freecoursesform
-        source={41}
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          course={selectedCourse}
-          enableBrochureDownload={true}
-          formType={category ? "certification" : "selfPaced"}
-        />
+      {category || isSelfPaced ? (
+        <ReusableForm formType="enquiry"
+          onSubmit={handleSubmit}
+          buttonText="Submit"
+          className="w-full"
+          successMessage="Thank you! We'll contact you soon." />
       ) : (
-        <Popupforms
-         source={41}
+        <Popupform
+          source={41}
           show={showModal}
           onClose={() => setShowModal(false)}
           course={branch}
           courseName={selectedCourse}
-          enableBrochureDownload={true}
-          formType={category ? "certification" : "selfPaced"}
         />
       )}
 
@@ -59,8 +78,8 @@ const DownloadCourseBrochure = ({
         <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
           {/* Left Content + Button */}
           <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
-           <h3><Heading data={data?.heading} /></h3>
-            
+            <h3><Heading data={data?.heading} /></h3>
+
 
             {/* Description */}
             <div className="text-md md:text-lg text-gray-600 text-justify leading-relaxed mb-4">

@@ -45,6 +45,9 @@ import Specializations from "@/components/coursePage/Specializations";
 import Whyacademics from "@/components/coursePage/Whyacademics";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
+import Excel from "@/components/home-page/ui-components/Excel";
+import Nutshell from "@/components/home-page/ui-components/NutShell";
+
 
 /* =====================================================
    PAGE
@@ -73,7 +76,7 @@ export default async function Page({ params }) {
 
 
 
-    // const schemaData = data?.meta?.schemaCode;
+  // const schemaData = data?.meta?.schemaCode;
 
   const isSelfPaced =
     data?.category === "selfPacedLearning" ||
@@ -117,6 +120,39 @@ export default async function Page({ params }) {
     courses: data.mostSearchedTerms.courses,
   };
 
+  const excelSectionData =
+    data?.excel || data?.Excel;
+  const careerServicesData =
+    data?.careerServices ||
+    data?.careerService ||
+    {
+      title: ["Career Services in a", "Nutshell"],
+      services: [
+        {
+          title: "Technical Seminars",
+          icon: { url: "assets/img/excel/orange-1.webp", name: "Technical Seminars" },
+        },
+        {
+          title: "Mock Interviews CRT & Job Ready Skills",
+          icon: { url: "assets/img/excel/orange-2.webp", name: "Mock Interviews" },
+        },
+        {
+          title: "Dedicated Job Portal",
+          icon: { url: "assets/img/excel/orange-3.webp", name: "Dedicated Job Portal" },
+        },
+        {
+          title: "Internship opportunity in a IT Company",
+          icon: { url: "assets/img/excel/orange-4.webp", name: "Internship Opportunity" },
+        },
+      ],
+      button: { text: "Request Call Back", link: "/forms/request-call-back" },
+      image: {
+        desktop: "assets/img/excel/blue-1.webp",
+        mobile: "assets/img/excel/blue-1.webp",
+        alt: "Career Services",
+      },
+    };
+
   /* =====================================================
      COURSE FLOW (UNCHANGED)
   ===================================================== */
@@ -136,6 +172,9 @@ export default async function Page({ params }) {
           formDetails={formDetails}
           branch={data?.branch}
         />
+      )}
+      {data?.excel && (
+        <Excel data={data.excel} />
       )}
 
       {data?.embraceTheEndlessOpportunities && (
@@ -187,72 +226,75 @@ export default async function Page({ params }) {
 
     ...(isCertification
       ? [
-          {
-            component: data?.overViewOfOnline && (
-              <OverViewOfOnline
-                data={data.overViewOfOnline}
-                formDetails={formDetails}
-                category={true}
-              />
-            ),
-          },
-          { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
-          {
-            component: data?.keyHighlights && (
-              <KeyHighLights data={data.keyHighlights} />
-            ),
-          },
-          {
-            component: data?.downloadOurCourseBrochure && (
-              <DownloadCourseBrochure
-                data={data.downloadOurCourseBrochure}
-                formDetails={formDetails}
-                category={true}
-              />
-            ),
-          },
-          { component: <CourseFlowWrapper /> },
-        ]
+        {
+          component: data?.overViewOfOnline && (
+            <OverViewOfOnline
+              data={data.overViewOfOnline}
+              formDetails={formDetails}
+              category={true}
+            />
+          ),
+        },
+        {
+          component: data?.Excel && <Excel data={data.Excel} />,
+        },
+        { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
+        {
+          component: data?.keyHighlights && (
+            <KeyHighLights data={data.keyHighlights} />
+          ),
+        },
+        {
+          component: data?.downloadOurCourseBrochure && (
+            <DownloadCourseBrochure
+              data={data.downloadOurCourseBrochure}
+              formDetails={formDetails}
+              category={true}
+            />
+          ),
+        },
+        { component: <CourseFlowWrapper /> },
+      ]
       : [
-          {
-            component: data?.overViewOfOnline && (
-              <OverViewOfOnline
-                data={data.overViewOfOnline}
-                formDetails={formDetails}
-                category={isCertification}
-                branch={data?.branch}
-                isSelfPaced={isSelfPaced}
-              />
-            ),
-          },
-          {
-            component: data?.whyOnline && (
-              <Whyacademics data={data.whyOnline} />
-            ),
-          },
-          {
-            component: data?.keyHighlights && (
-              <KeyHighLights data={data.keyHighlights} />
-            ),
-          },
-          {
-            component: data?.downloadOurCourseBrochure && (
-              <DownloadCourseBrochure
-                data={data.downloadOurCourseBrochure}
-                formDetails={formDetails}
-                category={isCertification}
-                branch={data?.branch}
-                isSelfPaced={isSelfPaced}
-              />
-            ),
-          },
-          {
-            component: data?.specializations && (
-              <Specializations data={data?.specializations} />
-            ),
-          },
-          { component: <CourseFlowWrapper /> },
-        ]),
+        {
+          component: data?.overViewOfOnline && (
+            <OverViewOfOnline
+              data={data.overViewOfOnline}
+              formDetails={formDetails}
+              category={isCertification}
+              branch={data?.branch}
+              isSelfPaced={isSelfPaced}
+            />
+          ),
+        },
+        {
+          component: data?.whyOnline && (
+            <Whyacademics data={data.whyOnline} />
+          ),
+        },
+        {
+          component: data?.keyHighlights && (
+            <KeyHighLights data={data.keyHighlights} />
+          ),
+        },
+        {
+          component: data?.downloadOurCourseBrochure && (
+            <DownloadCourseBrochure
+              data={data.downloadOurCourseBrochure}
+              formDetails={formDetails}
+              category={isCertification}
+              branch={data?.branch}
+              isSelfPaced={isSelfPaced}
+            />
+          ),
+        },
+        {
+          component: data?.specializations && (
+            <Specializations data={data?.specializations} />
+          ),
+        },
+        { component: <CourseFlowWrapper /> },
+      ]),
     {
       component: data?.hiringPartners && (
         <HiringCompanies hiringData={data.hiringPartners} />
@@ -267,68 +309,78 @@ export default async function Page({ params }) {
       component: data?.letsTalk && <Talktoour data={data.letsTalk} />,
     },
   ];
-const schemaData = data?.meta?.schemaCode;
+  const schemaData = data?.meta?.schemaCode;
   /* =====================================================
      RENDER
   ===================================================== */
   return (
 
-<>
-     {schemaData && (
-      <script
-        id="course-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html:
-            typeof schemaData === "string"
-              ? schemaData
-              : JSON.stringify(schemaData),
-        }}
-      />
-    )}
-
-    <div className="mt-5">
-      {bannerData && (
-        <Banner
-          data={bannerData}
-          formDetails={formDetails}
-          category={isCertification}
-          branch={data?.branch}
-          isSelfPaced={isSelfPaced}
+    <>
+      {schemaData && (
+        <script
+          id="course-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof schemaData === "string"
+                ? schemaData
+                : JSON.stringify(schemaData),
+          }}
         />
       )}
 
-      {reserveSpotData &&
-
-        (isCertification || isSelfPaced ? (
-          <ReserveYourSpot
-            source={31}
-            data={reserveSpotData}
-            formDetails={formDetails}                    
+      <div className="mt-5">
+        {bannerData && (
+          <Banner
+            data={bannerData}
+            formDetails={formDetails}
+            category={isCertification}
+            branch={data?.branch}
             isSelfPaced={isSelfPaced}
           />
-        ) : (
-          <ReserveYourSpots
-            source={31}            
-            data={reserveSpotData}
-            formDetails={formDetails}
-            branch={data?.branch}
-          />
-          
-        ))}
+        )}
 
-      {sectionsConfig.map(
-        (sec, idx) =>
-          sec.component && (
-            <div key={idx} className="main_container rounded-lg pt-5">
-              {sec.component}
-            </div>
-          )
-      )}
+        <div className="main_container rounded-lg pt-5">
+          <Excel data={excelSectionData} />
+        </div>
 
-      {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
-    </div>
-</>
+     
+          <div className="main_container rounded-lg pt-5">
+            <Nutshell data={careerServicesData} />
+          </div>
+       
+
+        {reserveSpotData &&
+
+          (isCertification || isSelfPaced ? (
+            <ReserveYourSpot
+              source={31}
+              data={reserveSpotData}
+              formDetails={formDetails}
+              isSelfPaced={isSelfPaced}
+            />
+          ) : (
+            <ReserveYourSpots
+              source={31}
+              data={reserveSpotData}
+              formDetails={formDetails}
+              branch={data?.branch}
+            />
+
+          ))}
+
+        {sectionsConfig.map(
+          (sec, idx) =>
+            sec.component && (
+              <div key={idx} className="main_container rounded-lg pt-5">
+                {sec.component}
+              </div>
+            )
+        )}
+
+        {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
+      </div>
+    </>
 
   );
 }
