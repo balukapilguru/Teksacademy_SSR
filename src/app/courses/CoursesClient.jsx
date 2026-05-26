@@ -16,11 +16,35 @@ import {
   IoBookOutline,
 } from "react-icons/io5";
 import CourseCard from "@/components/allcoursepage/Coursecards";
-import Freecoursesform from "@/components/clientcomponents/forms/Freecoursesform";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { IoIosSearch } from "react-icons/io";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
+import ReusableForm from "@/components/ReusableForm";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 const formatLabel = (str = "") => {
   if (!str) return "";
   return str
@@ -107,8 +131,8 @@ const Sidebar = ({
               >
                 <span
                   className={`flex items-center gap-2 ${selectedCategory === category
-                      ? "text-[#c41e3a]"
-                      : "text-gray-700"
+                    ? "text-[#c41e3a]"
+                    : "text-gray-700"
                     }`}
                 >
                   {category.toLowerCase().includes("cert") && (
@@ -126,8 +150,8 @@ const Sidebar = ({
                 <div className="flex items-center gap-1">
                   <span
                     className={`px-2 py-1 text-sm rounded-full ${selectedCategory === category
-                        ? "bg-[#c41e3a] text-white"
-                        : "bg-gray-200 text-gray-700"
+                      ? "bg-[#c41e3a] text-white"
+                      : "bg-gray-200 text-gray-700"
                       }`}
                   >
                     {details.total}
@@ -225,7 +249,7 @@ const Sidebar = ({
 };
 
 // const Page = () => {
-    export default function CoursesClient() {
+export default function CoursesClient() {
   // ================================
   // STATE
   // ================================
@@ -505,10 +529,9 @@ const Sidebar = ({
           key={`page-${p}-${index}`}
           onClick={() => setCurrentPage(Number(p))}
           className={`cursor-pointer w-9 h-9 flex items-center justify-center rounded-md border mx-1 text-sm transition
-            ${
-              currentPage === p
-                ? "bg-[#c41e3a] text-white"
-                : "border-gray-300 text-gray-700 hover:bg-gray-200"
+            ${currentPage === p
+              ? "bg-[#c41e3a] text-white"
+              : "border-gray-300 text-gray-700 hover:bg-gray-200"
             }`}
         >
           {p}
@@ -542,14 +565,11 @@ const Sidebar = ({
             source={28}
           />
         ) : (
-          <Freecoursesform
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            course={selectedCourse?.universities ? selectedCourse : null}
-            courseName={selectedCourse.programName}
-            university={selectedCourse.universities?.[0]?.name || "Teksversity"}
-            source={28}
-          />
+          <ReusableForm formType="enquiry"
+            onSubmit={handleSubmit}
+            buttonText="Submit"
+            className="w-full"
+            successMessage="Thank you! We'll contact you soon." />
         )
       )}
 

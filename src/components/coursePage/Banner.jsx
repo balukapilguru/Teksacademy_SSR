@@ -4,15 +4,39 @@ import Image from "next/image";
 import bgImage from "@/app/assets/course-banner/bgt3.png";
 import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
-import Popupforms from "../clientcomponents/forms/Popupforms";
 import Bannerheading from '@/utility/Bannerheading'
 import PrimaryButton from "@/utility/PrimaryButton";
+import ReusableForm from "../ReusableForm";
+import Popupform from "../clientcomponents/forms/Popupform";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
-const Banner = ({ 
-  data, 
-  formDetails, 
-  category = false, 
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
+const Banner = ({
+  data,
+  formDetails,
+  category = false,
   branch = "course",
   isSelfPaced = false // Add this new prop
 }) => {
@@ -22,7 +46,7 @@ const Banner = ({
   if (!data) return null;
 
   const handleOpenModal = (details) => {
-    
+
     setSelectedCourse(details);
     setShowModal(true);
   };
@@ -33,20 +57,18 @@ const Banner = ({
     <div className="relative main_container rounded-2xl text-white overflow-hidden">
       {/* Show Freecoursesform for certifications OR self-paced learning */}
       {category || isSelfPaced ? (
-        <Freecoursesform
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          course={selectedCourse}
-         formType={category ? "certification" : "selfPaced"}
-          source={30}
-        />
+        <ReusableForm formType="enquiry"
+          onSubmit={handleSubmit}
+          buttonText="Submit"
+          className="w-full"
+          successMessage="Thank you! We'll contact you soon." />
       ) : (
-        <Popupforms
+        <Popupform
           show={showModal}
           onClose={() => setShowModal(false)}
           course={branch}
           courseName={selectedCourse}
-           source={30}
+          source={30}
         />
       )}
 

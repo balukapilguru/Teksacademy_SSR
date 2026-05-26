@@ -3,8 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import Heading from "@/utility/Heading";
 import CourseCard from "./Coursecards";
 import Link from "next/link";
-import Popupform from "../clientcomponents/forms/Popupform";
 import PrimaryButton from "@/utility/PrimaryButton";
+import Popupform from "../clientcomponents/forms/Popupform";
 
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);

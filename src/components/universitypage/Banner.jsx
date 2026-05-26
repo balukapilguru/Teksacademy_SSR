@@ -4,7 +4,6 @@ import Image from "next/image";
 import bgImage from "@/app/assets/course-banner/bgt3.png";
 import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import Heading from "@/utility/Heading";
 import Bannerheading from "@/utility/Bannerheading";
 import UniversityForm from "../clientcomponents/forms/Universityform";

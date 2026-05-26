@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import Heading from "@/utility/Heading";
 import CourseCard from "./Coursecards";
 import Link from "next/link";
-import Popupform from "../clientcomponents/forms/Popupform";
 import PrimaryButton from "@/utility/PrimaryButton";
 import Loader from "../Loader";
+import Popupform from "../clientcomponents/forms/Popupform";
 
 const CertificationCourse = ({ data }) => {
   const [courses, setCourses] = useState([]);

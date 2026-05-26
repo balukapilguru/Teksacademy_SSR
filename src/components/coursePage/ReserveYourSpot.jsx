@@ -11,6 +11,7 @@ import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
 
+
 const ReserveYourSpot = ({ data, formDetails,course,source }) => {
   // const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
   const baseUrl = "https://apierp.teksversity.com";
@@ -242,79 +243,14 @@ console.log(data,"reserve")
                   )}
                 </div>
 
-                {/* ✅ Same form structure as first code */}
-                <form onSubmit={formSubmit} className="space-y-4">
-                  {["name", "mail", "mobile", "courseName"].map((field) => (
-                    <div key={field}>
-                      <input
-                        type={field === "mail" ? "email" : "text"}
-                        disabled={field === "courseName"}
-                        name={field}
-                        value={formData[field]}
-                        onChange={handleChange}
-                        placeholder={`Enter your ${
-                          field === "mobile"
-                            ? "Mobile Number"
-                            : field.charAt(0).toUpperCase() + field.slice(1)
-                        }`}
-                        
-                        className={`${field === "courseName"
-                            ? "w-full p-2 border border-gray-300 rounded-lg bg-gray-100"
-                            : "w-full px-3 py-2 border-2 rounded-xl transition-colors text-black duration-200 border-gray-200 focus:border-[#2a619d] text-black focus:outline-none placeholder-gray-500"
-                            
-
-                        }`}
-                      />
-                      {error[field] && (
-                        <p className="text-red-500 text-xs mt-1">
-                          {error[field]}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* University Select - Same as first code */}
-                  <div> 
-                    <select
-                      name="universityName"
-                      value={formData.universityName}
-                      onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#981b1b]"
-                    >
-                      <option value="">Select a university</option>
-                      {universitiesList.map((u, index) => (
-                        <option
-                          key={index}
-                          value={u.universityName || ""}
-                          data-productid={u.ProductId}
-                          data-sourceid={u.sourceId}
-                        >
-                          {u.universityName}
-                        </option>
-                      ))}
-                    </select>
-                    {error.universityName && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {error.universityName}
-                      </p>
-                    )}
-                  </div>
-
-                  <PrimaryButton
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full flex items-center justify-center gap-2"
-                    variant="filled"
-                    label="Request Callback"
-                  >
-                  </PrimaryButton>
-
-                  {formDescription && (
-                    <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-                      {formDescription}
-                    </p>
-                  )}
-                </form>
+              {/* <ReusableForm
+                  formType="contact"
+                  onSubmit={formSubmit}
+                  buttonText={isLoading ? "Submitting..." : "Submit"} 
+                  className="w-full"
+                  successMessage="Thank you! We'll contact you soon."
+                /> */}
+            
               </div>
             </div>
           </div>

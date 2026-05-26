@@ -63,9 +63,10 @@ export default function ReusableForm({
   const [courseSearchTerm, setCourseSearchTerm] = useState("");
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const prevInitialValuesRef = useRef(null);
 
   const API_URL = "https://apierp.infozit.com";
-  
+
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -75,6 +76,32 @@ export default function ReusableForm({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  const areInitialValuesEqual = (prev, next) => {
+    if (!prev || !next) return false;
+    const prevKeys = Object.keys(prev);
+    const nextKeys = Object.keys(next);
+    if (prevKeys.length !== nextKeys.length) return false;
+    return prevKeys.every(key => prev[key] === next[key]);
+  };
+
+  useEffect(() => {
+    const initial = {};
+    getFieldsForType().forEach(fieldId => {
+      initial[fieldId] = initialValues[fieldId] || "";
+    });
+
+    if (areInitialValuesEqual(prevInitialValuesRef.current, initial)) {
+      return;
+    }
+
+    prevInitialValuesRef.current = initial;
+    setFormValues(initial);
+    setErrors({});
+    setIsOtpVerified(false);
+    setCourseSearchTerm(initial.course || "");
+    setShowCourseDropdown(false);
+  }, [formType, initialValues, getFieldsForType]);
 
   const mapToApiPayload = (values) => {
     const sourceMap = {

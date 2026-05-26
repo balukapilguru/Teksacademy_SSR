@@ -1,8 +1,8 @@
-// app/components/HomepageBanner.tsx (Server Component)
-import AdmissionForm from "@/components/clientcomponents/forms/Admissionform";
+
 import BannerVideo from "../../clientcomponents/bannervideo";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
+import ReusableForm from "@/components/ReusableForm";
 
 export default function HomepageBanner({ bannerData }) {
   if (!bannerData) return null; // or return a loading state
@@ -49,7 +49,12 @@ export default function HomepageBanner({ bannerData }) {
           {/* Right Section: Form */}
           <div className="w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-md sm:max-w-lg">
-              <AdmissionForm />
+              <ReusableForm
+                formType="enquiry"
+                buttonText="Submit"
+                successMessage="Thank you! We'll contact you soon."
+                className="w-full"
+              />
             </div>
           </div>
         </div>

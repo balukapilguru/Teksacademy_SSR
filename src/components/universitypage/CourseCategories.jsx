@@ -4,11 +4,35 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TabsCards from "./TabsCards";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
 import Heading from "@/utility/Heading";
 import Loader from "../Loader";
+import ReusableForm from "../ReusableForm";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
-export default function CourseCategories({ data, universityName,formDetails  }) {
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
+export default function CourseCategories({ data, universityName, formDetails }) {
   const [selectedBranch, setSelectedBranch] = useState(
     data?.courseCategories?.[0]?.id || ""
   );
@@ -53,25 +77,25 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
         const res = await axios.get(url);
         const apiData = res?.data?.data || [];
 
-       const flattened = apiData.flatMap((course) =>
-  (course.universities || []).map((uni) => ({
-    heading: course.heading || "No heading",
-    programName: course.programName || "N/A",
-    feeRange: uni.fee || course.feeRange || "N/A",
-    duration: uni.duration || course.duration || "N/A",
+        const flattened = apiData.flatMap((course) =>
+          (course.universities || []).map((uni) => ({
+            heading: course.heading || "No heading",
+            programName: course.programName || "N/A",
+            feeRange: uni.fee || course.feeRange || "N/A",
+            duration: uni.duration || course.duration || "N/A",
 
-    universityName: uni.universityName || "Unknown",
-    universityImage: uni.image?.src || "/placeholder-university.png",
-    courseImage: course.image?.src || "/placeholder-course.png",
+            universityName: uni.universityName || "Unknown",
+            universityImage: uni.image?.src || "/placeholder-university.png",
+            courseImage: course.image?.src || "/placeholder-course.png",
 
-   ProductId: uni.ProductId,
-    sourceId: uni.sourceId,
+            ProductId: uni.ProductId,
+            sourceId: uni.sourceId,
 
-    universities: course.universities || [],
-    tags: course.tags || [],
-    button: course.button || [],
-  }))
-);
+            universities: course.universities || [],
+            tags: course.tags || [],
+            button: course.button || [],
+          }))
+        );
 
 
         setCourses(flattened);
@@ -93,30 +117,24 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
     currentPage * itemsPerPage
   );
 
- const handleGetDetailsClick = (heading, course) => {
-  setSelectedCourse({
-    heading,
-    universities: course.universities, // ✅ FULL DATA
-  });
+  const handleGetDetailsClick = (heading, course) => {
+    setSelectedCourse({
+      heading,
+      universities: course.universities, // ✅ FULL DATA
+    });
 
-  setShowModal(true);
-};
+    setShowModal(true);
+  };
 
 
   return (
     <div>
       {/* ---------- Popup ---------- */}
-      <Freecoursesform
-      
-      formDetails={data?.formDetails}
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        course={selectedCourse}
-        courseName={selectedCourseName}
-        university={selectedUniversity}
-        
-        source={40}
-      />
+      <ReusableForm formType="enquiry"
+        onSubmit={handleSubmit}
+        buttonText="Submit"
+        className="w-full"
+        successMessage="Thank you! We'll contact you soon." />
 
       {/* ---------- Heading ---------- */}
       <Heading data={data?.heading} />
@@ -128,11 +146,10 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
             <button
               key={tab.id}
               onClick={() => setSelectedBranch(tab.id)}
-              className={`px-4 py-2 rounded-full transition ${
-                selectedBranch === tab.id
+              className={`px-4 py-2 rounded-full transition ${selectedBranch === tab.id
                   ? "bg-[#2a619d] text-white"
                   : "bg-gray-200 text-gray-700"
-              }`}
+                }`}
             >
               {tab.value.toUpperCase()}
             </button>
@@ -142,8 +159,8 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
 
       {/* ---------- Loading ---------- */}
       {loading && (
-       <div>
-        <Loader />
+        <div>
+          <Loader />
         </div>
       )}
 
@@ -197,9 +214,8 @@ export default function CourseCategories({ data, universityName,formDetails  }) 
               <button
                 key={index}
                 onClick={() => setCurrentPage(page)}
-                className={`w-3 h-3 rounded-full ${
-                  currentPage === page ? "bg-[#ba3148]" : "bg-gray-300"
-                }`}
+                className={`w-3 h-3 rounded-full ${currentPage === page ? "bg-[#ba3148]" : "bg-gray-300"
+                  }`}
               />
             );
           })}

@@ -8,10 +8,32 @@ import { ExternalLink, Star } from "lucide-react";
 import GetData from "../../utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { useCourseFlow } from "./CourseFlowProvider";
-import Freecoursesform from "../clientcomponents/forms/Freecoursesform";
-import AcademicsForm from "../clientcomponents/forms/Popupforms";
-import GetDetailsModal from "../clientcomponents/forms/GetDetailsModal";
+import ReusableForm from "../ReusableForm";
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
 
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 export default function CourseInfoTable({
   data,
   isSelfPaced = false,
@@ -353,8 +375,8 @@ export default function CourseInfoTable({
                             {acc}
                           </span>
                         )) || (
-                          <span className="text-gray-400 text-xs">N/A</span>
-                        )}
+                            <span className="text-gray-400 text-xs">N/A</span>
+                          )}
                       </div>
 
                       {/* Rating column */}
@@ -403,20 +425,14 @@ export default function CourseInfoTable({
 
       {/* Self-paced courses modal */}
       {isSelfPaced && selectedUniversity && (
-        <Freecoursesform
-          show={showFreeCourseModal}
-          onClose={() => {
-            setShowFreeCourseModal(false);
-            setSelectedUniversity(null);
-          }}
-          course={prepareCourseData(selectedUniversity)}
-          selectedUniversity={selectedUniversity} // Pass selected university
-          enableBrochureDownload={false}
-          source={34}
-        />
+        <ReusableForm formType="enquiry"
+          onSubmit={handleSubmit}
+          buttonText="Submit"
+          className="w-full"
+          successMessage="Thank you! We'll contact you soon." />
       )}
 
-      {/* Academic courses modal */}
+      {/* {/* Academic courses modal */ }
       {isAcademic && selectedUniversity && (
         <AcademicsForm
           show={showAcademicModal}
