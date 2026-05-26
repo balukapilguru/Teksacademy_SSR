@@ -6,7 +6,7 @@ import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
 import Bannerheading from "@/utility/Bannerheading";
-import UniversityForm from "../clientcomponents/forms/Universityform";
+
 
 const Banner = ({ data, formDetails }) => {
   const [showForm, setShowForm] = useState(false);
@@ -41,26 +41,7 @@ const Banner = ({ data, formDetails }) => {
   return (
     <div className="relative rounded-2xl text-white overflow-hidden mt-5">
       {/* University Form Modal */}
-      {showForm && (
-        <UniversityForm
-        source={40}
-          show={showForm}
-          onClose={() => {
-            setShowForm(false);
-          }}
-          formDetails={formDetails}
-          universityData={{
-            instituteName: universityName, 
-            image: data?.bannerImage, 
-            rating: data?.rating 
-          }}
-          course={{
-            heading: universityName + " Courses",
-            specializations: formDetails?.specializations || data?.formDetails?.specializations || [],
-             
-          }}
-        />
-      )}
+
 
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] z-0" />

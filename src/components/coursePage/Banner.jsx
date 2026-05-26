@@ -4,41 +4,43 @@ import Image from "next/image";
 import bgImage from "@/app/assets/course-banner/bgt3.png";
 import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
-import Bannerheading from '@/utility/Bannerheading'
+import Bannerheading from "@/utility/Bannerheading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import Popupform from "../clientcomponents/forms/Popupform";
-  const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
 
-    try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
+const handleSubmit = async (formValues, mappedPayload) => {
+  console.log("Mapped payload being sent:", mappedPayload);
 
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
+  try {
+    const response = await fetch("https://apierp.infozit.com/lead/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mappedPayload),
+    });
 
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
+    const responseData = await response.json();
+    console.log("API Response:", responseData);
 
-      router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(responseData.message || "Submission failed");
     }
-  };
+
+    router.push("/thankyou");
+  } catch (error) {
+    console.error("Submission error:", error);
+    throw error;
+  }
+};
+
 const Banner = ({
   data,
   formDetails,
   category = false,
   branch = "course",
-  isSelfPaced = false // Add this new prop
+  isSelfPaced = false,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(formDetails);
@@ -46,23 +48,14 @@ const Banner = ({
   if (!data) return null;
 
   const handleOpenModal = (details) => {
-
     setSelectedCourse(details);
     setShowModal(true);
   };
 
-  // Use Freecoursesform for BOTH certifications AND self-paced learning
-  // Use Popupforms for regular courses
   return (
     <div className="relative main_container rounded-2xl text-white overflow-hidden">
-      {/* Show Freecoursesform for certifications OR self-paced learning */}
-      {category || isSelfPaced ? (
-        <ReusableForm formType="enquiry"
-          onSubmit={handleSubmit}
-          buttonText="Submit"
-          className="w-full"
-          successMessage="Thank you! We'll contact you soon." />
-      ) : (
+      {/* Popupform for regular courses — rendered outside layout (modal) */}
+      {!category && !isSelfPaced && (
         <Popupform
           show={showModal}
           onClose={() => setShowModal(false)}
@@ -89,30 +82,34 @@ const Banner = ({
 
       <Particles />
 
-      <div className="relative z-10 main_container grid grid-cols-1  lg:grid-cols-2 lg:gap-10 items-center">
-        <div>
-          <Bannerheading text={data.mainHeading} data={data?.mainHeading} className="mt-5 md:mt-0" />
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-start">
+        {/* LEFT COLUMN — heading, description, button */}
+        <div className="p-4">
+          <Bannerheading
+            text={data.mainHeading}
+            data={data?.mainHeading}
+            className="mt-4"
+          />
 
-          {/* Description */}
           {data.description && (
-            <div className="mt-4 text-gray-300 text-base text-justify sm:text-lg leading-relaxed">
+            <div className="mt-2 text-gray-300 text-base text-justify sm:text-lg leading-relaxed">
               {data.description}
             </div>
           )}
 
           {data.desc && !data.description && (
-            <div className="mt-4 text-gray-300 text-base sm:text-lg leading-relaxed">
+            <div className="mt-2 text-gray-300 text-base sm:text-lg leading-relaxed">
               {data.desc}
             </div>
           )}
 
           {!data.description && !data.desc && (
-            <div className="mt-4 text-gray-300 text-base sm:text-lg leading-relaxed">
+            <div className="mt-2 text-gray-300 text-base sm:text-lg leading-relaxed">
               Step into the tech world with industry-ready Full Stack expertise.
             </div>
           )}
 
-          {data.button && (
+          {data.button && !category && !isSelfPaced && (
             <div className="mt-4 lg:mb-4 flex flex-wrap gap-4">
               <PrimaryButton
                 variant="light"
@@ -125,17 +122,19 @@ const Banner = ({
           )}
         </div>
 
+        {/* RIGHT COLUMN — form (category/selfPaced) OR banner image (regular course) */}
         <div className="flex justify-center md:justify-end relative lg:mt-0">
-          <div className="w-full max-w-lg md:max-w-lg">
-            <Image
-              src={GetData({ url: data?.bannerImage?.src })}
-              alt={data.imageAlt || "Course Banner"}
-              width={800}
-              height={600}
-              className="w-full h-auto object-contain rounded-md z-10"
-              priority
-            />
-          </div>
+            <div className="w-full max-w-lg md:max-w-lg">
+              <Image
+                src={GetData({ url: data?.bannerImage?.src })}
+                alt={data.imageAlt || "Course Banner"}
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain rounded-md z-10"
+                priority
+              />
+            </div>
+        
         </div>
       </div>
     </div>
