@@ -86,7 +86,7 @@ const Banner = ({
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] z-0" />
 
       {/* Background Image */}
-      <div className="absolute inset-0 z-0 hidden md:block">
+      <div className="absolute w-full inset-0 z-0 hidden md:block ">
         <Image
           src={bgImage}
           alt="Background Pattern"
@@ -99,9 +99,9 @@ const Banner = ({
 
       <Particles />
 
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-start">
+      <div className="relative z-10 max-w-8xl pl-4 pr-2  lg:pr-0 lg:pt-0 lg:pb-0 grid grid-cols-1  lg:grid-cols-2 lg:gap-10 items-center">
         {/* LEFT COLUMN */}
-        <div className="pl-8 mt-2">
+        <div className="pl-8 mt-2 lg:pt-0">
           <Bannerheading
             text={data.mainHeading}
             data={data?.mainHeading}

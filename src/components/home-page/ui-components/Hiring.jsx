@@ -72,7 +72,7 @@ export default function Hiring({ hiringData }) {
 
   return (
     <div className="main_container">
-      <div className="flex xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/hiring_companies/hiring_bg.webp')] bg-cover bg-center">
+      <div className="flex bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/hiring_companies/hiring_bg.webp')] bg-cover bg-center">
         <div className="flex flex-col lg:flex-row lg:gap-x-10">
           <div className="w-full lg:w-[33%] 2xl:w-[26%] flex justify-center 2xl:justify-start">
             <div className="flex flex-col justify-between h-full px-2 lg:px-0 pt-2 lg:pt-3 xl:pt-4 2xl:pt-6 3xl:pt-8">
@@ -119,13 +119,13 @@ export default function Hiring({ hiringData }) {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[70%] lg:px-5 flex items-center">
+          <div className="w-full lg:w-[70%]  flex items-center">
             <div className="flex">
               <div className="marquee-container flex flex-col justify-center 2xl:gap-y-6">
                 {marqueeData.length > 0 ? (
                   marqueeData.map((marquee, index) => (
-                    <div key={index} className="marquee lg:h-20 3xl:h-24">
-                      <div className="marquee-content flex justify-center items-center">
+                    <div key={index} className="marquee lg:h-24 3xl:h-24">
+                      <div className="animate-scroll-left flex justify-center items-center">
                         {marquee.images.map((item, idx) => (
                           <span key={`first-${index}-${idx}`}>
                             <Image
@@ -133,7 +133,7 @@ export default function Hiring({ hiringData }) {
                               alt={item.alt}
                               width={200}
                               height={70}
-                              className="object-contain w-full h-auto"
+                              className="object-contain w-full h-32"
                             />
                           </span>
                         ))}
@@ -144,10 +144,11 @@ export default function Hiring({ hiringData }) {
                               alt={item.alt}
                               width={200}
                               height={70}
-                              className="object-contain w-full h-auto"
+                              className="object-contain w-full h-32"
                             />
                           </span>
                         ))}
+                        
                       </div>
                     </div>
                   ))

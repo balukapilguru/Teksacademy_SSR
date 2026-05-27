@@ -95,7 +95,7 @@ export default async function Home() {
       border: "#fff",
     },
   ];
-
+console.log(homeData?.careerServices,"homeData?.careerServices")
   return (
     <>
       <div>

@@ -49,7 +49,7 @@ console.log(data,"nutsheel")
                       const highlight =
                         word.toLowerCase().includes("technical") ||
                         word.toLowerCase().includes("interviews") ||
-                        word.toLowerCase().includes("job") ||
+                        word.toLowerCase().includes("Ready") ||
                         word.toLowerCase().includes("portal") ||
                         word.toLowerCase().includes("it");
 

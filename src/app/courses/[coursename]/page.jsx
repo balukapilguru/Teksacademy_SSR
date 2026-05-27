@@ -47,6 +47,7 @@ import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
 import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
+import Hiring from "@/components/home-page/ui-components/Hiring";
 
 
 /* =====================================================
@@ -153,6 +154,7 @@ export default async function Page({ params }) {
       },
     };
 
+    console.log(data?.careerService,"data?.careerServices")
   /* =====================================================
      COURSE FLOW (UNCHANGED)
   ===================================================== */
@@ -297,7 +299,7 @@ export default async function Page({ params }) {
       ]),
     {
       component: data?.hiringPartners && (
-        <HiringCompanies hiringData={data.hiringPartners} />
+        <Hiring hiringData={data.hiringPartners} />
       ),
     },
     {
@@ -348,7 +350,7 @@ export default async function Page({ params }) {
           <div className="main_container rounded-lg pt-5">
             <Nutshell data={careerServicesData} />
           </div>
-       
+       {console.log(careerServicesData,"careerServicesData")}
 
         {reserveSpotData &&
 
