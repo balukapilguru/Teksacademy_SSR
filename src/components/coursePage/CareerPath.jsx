@@ -15,32 +15,8 @@ import {
   Cloud,
 } from 'lucide-react';
 import Heading from '@/utility/Heading';
-import ReusableForm from '../ReusableForm';
-  const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
 
-    try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
-
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
-
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
-
-      router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
-    }
-  };
+ 
 const CareerPath = ({ data, formDetails }) => {
 
   const { heading } = data || {};
@@ -98,11 +74,7 @@ const CareerPath = ({ data, formDetails }) => {
 
   return (
     <div className="mx-auto py-6 p-4 rounded-xl">
-      <ReusableForm formType="enquiry"
-        onSubmit={handleSubmit}
-        buttonText="Submit"
-        className="w-full"
-        successMessage="Thank you! We'll contact you soon." />
+
 
       <Heading data={heading} />
       <div className="text-gray-700 text-lg md:text-xl pb-6">

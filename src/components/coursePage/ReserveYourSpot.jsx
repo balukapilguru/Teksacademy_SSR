@@ -5,17 +5,19 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { versityApi } from "../../serviceLayer/interseptor";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
+import Popupform from "../clientcomponents/forms/Popupform";
 
+const ReserveYourSpot = ({ data, formDetails, course, source }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(
+    formDetails?.courseName || formDetails?.course || ""
+  );
+  const router = useRouter();
 
-const ReserveYourSpot = ({ data, formDetails,course,source }) => {
-  // const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-  const baseUrl = "https://apierp.teksversity.com";
-console.log(data,"reserve")
   if (!data) return null;
 
   const {
@@ -25,152 +27,35 @@ console.log(data,"reserve")
     reserveYourSpotForm = {},
   } = data;
 
-  const universitiesList = formDetails?.universities || [];
-  const router = useRouter();
+  const { formTitle, formSubtitle, formDescription } = reserveYourSpotForm;
 
-  // ✅ Form Data State - Same structure as first code
-  const [formData, setFormData] = useState({
-    name: "",
-    mail: "",
-    mobile: "",
-    // source: "freeCareer",
-    courseName: formDetails?.courseName || "",
-    universityName: "",
-    sourceId: "",
-    ProductId: "",
-     sourceType: source,
-  });
-
-  const [error, setError] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  // ✅ Handle Input Changes - Same validation as first code
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Validation - Same as first code
-    if (name === "mobile" && !/^\d*$/.test(value)) {
-      setError((prev) => ({ ...prev, mobile: "Only numbers are allowed" }));
-      return;
-    }
-    if (name === "mobile" && value.length > 10) return;
-
-    if (name === "name" && /\d/.test(value)) {
-      setError((prev) => ({
-        ...prev,
-        name: "Name should not contain numbers",
-      }));
-      return;
-    }
-
-    // ✅ Handle university selection - Same as first code
-    if (name === "universityName") {
-      const selectedUniversity = universitiesList.find(
-        (u) => u?.universityName?.trim() === value?.trim()
-      );
-
-      if (selectedUniversity) {
-        setFormData((prev) => ({
-          ...prev,
-          universityName: selectedUniversity.universityName || "",
-          sourceId: selectedUniversity.sourceId || "",
-          ProductId: selectedUniversity.productId || "",
-        }));
-        setError((prev) => ({ ...prev, universityName: "" }));
-        return;
-      }
-    }
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setError((prev) => ({ ...prev, [name]: "" }));
+  const handleOpenModal = () => {
+    setSelectedCourse(formDetails?.courseName || formDetails?.course || "");
+    setShowModal(true);
   };
 
-  // ✅ Submit Form - Same logic as first code
-  const formSubmit = async (e) => {
-    e.preventDefault();
-
-    const { name, mail, mobile, universityName ,sourceType} = formData;
-
-    // Validation rules - Same as first code
-    const errorMessages = {
-      name: !name.trim()
-        ? "Please enter your name"
-        : name.trim().length < 3
-        ? "Name must be at least 3 characters"
-        : "",
-      mail: !mail.trim()
-        ? "Enter your mail"
-        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)
-        ? "Enter a valid mail"
-        : "",
-      mobile: !/^[6-9]\d{9}$/.test(mobile)
-        ? "Enter a valid 10-digit mobile number (starting with 6-9)"
-        : "",
-      universityName: !universityName.trim() ? "Please Select University" : "",
-    };
-
-    const hasError = Object.entries(errorMessages).find(
-      ([_, msg]) => msg !== ""
-    );
-    if (hasError) {
-      const [field, message] = hasError;
-      setError((prev) => ({ ...prev, [field]: message }));
-      return;
-    }
-
-    setIsLoading(true);
-
-    const newData = {
-      course: formData?.ProductId,
-      email: formData?.mail,
-      mobile: formData?.mobile,
-      name: formData?.name,
-      university: formData?.sourceId,
-      sourceType:source
-      
-    };
-
+  const handleSubmit = async (formValues, mappedPayload) => {
     try {
-      const response = await fetch(`${baseUrl}/lead/create`, {
+      const response = await fetch("https://apierp.teksversity.com/lead/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(mappedPayload),
       });
 
-      if (response.ok) {
-        toast.success("Form submitted successfully!" || response?.statusText);
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData?.message || "Failed to submit form.");
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
       }
+
+      toast.success("Form submitted successfully!");
+      router.push("/thankyou");
     } catch (error) {
-      if (error?.response) {
-        toast.error(error.response.data?.message || "Server error occurred");
-      } else if (error?.request) {
-        toast.error("No response from server. Check your network.");
-      } else {
-        toast.error("Something went wrong.");
-      }
-    } finally {
-      setIsLoading(false);
-      setFormData({
-        name: "",
-        mail: "",
-        mobile: "",
-        courseName: formDetails?.courseName || "",
-        universityName: "",
-        sourceId: "",
-        ProductId: "",
-        source: "freeCareer",
-        sourceType:source
-      });
+      toast.error(error.message || "Submission failed. Please try again.");
+      throw error;
     }
   };
 
   const { benefits = [], heading: benefitsHeading } = whyJoinThisCourse;
-  const { formTitle, formSubtitle, formDescription } = reserveYourSpotForm;
 
   return (
     <div className="mt-6">
@@ -229,7 +114,7 @@ console.log(data,"reserve")
               )}
             </div>
 
-            {/* Form Section - Same form structure as first code */}
+            {/* Form Section - Unified popup enquiry form */}
             <div className="lg:col-span-2 w-full md:w-[60%] lg:w-[60%] xl:w-[100%] mt-8 lg:mt-0">
               <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-gray-100">
                 <div className="text-left mb-4">
@@ -242,17 +127,26 @@ console.log(data,"reserve")
                     <p className="text-gray-700">{formSubtitle}</p>
                   )}
                 </div>
-
-              {/* <ReusableForm
-                  formType="contact"
-                  onSubmit={formSubmit}
-                  buttonText={isLoading ? "Submitting..." : "Submit"} 
-                  className="w-full"
-                  successMessage="Thank you! We'll contact you soon."
-                /> */}
-            
+                <div className="mt-6">
+                  <PrimaryButton variant="filled" onClick={handleOpenModal}>
+                    {formTitle || "Request Callback"}
+                  </PrimaryButton>
+                </div>
               </div>
             </div>
+            <Popupform
+              show={showModal}
+              onClose={() => setShowModal(false)}
+              course={course || formDetails?.courseName || ""}
+              courseName={selectedCourse}
+              source={source}
+              title={formTitle || "Reserve Your Spot"}
+              subtitle={formSubtitle || "Complete the form to reserve your seat and get a callback."}
+              onSubmit={handleSubmit}
+              formType="enquiry"
+              buttonText={formTitle || "Reserve Your Spot"}
+              successMessage="Thank you! We'll contact you soon."
+            />
           </div>
         </div>
 

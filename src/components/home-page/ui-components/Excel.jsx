@@ -1,4 +1,11 @@
 
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import PrimaryButton from "@/utility/PrimaryButton";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
+
 const vector = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/vector.webp";
 const tekslogo = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/teks_logo.webp";
 const orange1 = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/orange-1.webp";
@@ -11,9 +18,6 @@ const blue2 = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/
 const blue3 = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/blue-3.webp";
 const blue4 = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/blue-4.webp";
 const blue5 = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/blue-5.webp";
-import Image from "next/image";
-import ExcelForm from "./ExcelForm";
-// import Excelform from "../forms/Excelform"
 
 const orangeItems = [
     {
@@ -81,7 +85,46 @@ const blueItems = [
 ];
 
 export default function Excel(data) {
-    console.log(data,"excdlll")
+    const router = useRouter();
+    const [showModal, setShowModal] = useState(false);
+
+    const buttonText = data?.button?.text || "Request Call Back";
+    const formTitle = buttonText;
+    const courseName = data?.heading || "Course Enquiry";
+
+    const handleSubmit = async (formValues, mappedPayload) => {
+        try {
+            const response = await fetch("https://apierp.infozit.com/lead/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(mappedPayload),
+            });
+
+            const responseData = await response.json();
+            if (!response.ok) {
+                throw new Error(responseData.message || "Submission failed");
+            }
+
+            const brochureUrl =
+                data?.button?.link ||
+                data?.downloadLink ||
+                data?.brochureUrl ||
+                data?.brochure?.url ||
+                "";
+
+            if (brochureUrl) {
+                window.open(brochureUrl, "_blank");
+            }
+
+            router.push("/thankyou");
+        } catch (error) {
+            console.error("Form submission failed:", error);
+            throw error;
+        }
+    };
+
     return (
         <div className="xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel_bg.webp')] bg-cover bg-center">
             <div className="main_container py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10">
@@ -167,14 +210,25 @@ export default function Excel(data) {
                         {/* Form Section */}
                         <div className="lg:col-span-4 w-full">
                             <div className="flex relative items-center h-full w-full justify-center xl:justify-end">
-                                {/* Form */}
                                 <div className="absolute hidden xl:block top-1/2 -translate-y-1/2 left-3 lg:left-32 xl:left-2 2xl:left-6 h-[320px] 2xl:h-[380px] 3xl:h-[420px] border-r-[3px] border-[#FE543D]
                                         before:content-[''] before:absolute before:left-[-7px] before:top-[-8px] before:w-4 before:h-4 before:bg-[#FE543D] before:rounded-full
                                         after:content-[''] after:absolute after:left-[-7px] after:bottom-[-6px] after:w-4  after:h-4 after:bg-[#FE543D] after:rounded-full">
                                 </div>
                                 <div className="w-full">
                                     <div className="bg-[#2A619D] p-5 px-6  2xl:p-10 mx-7 sm:mx-14  lg:mx-2 xl:ml-10 2xl:ml-24 3xl:ml-28 xl:mr-0  rounded-lg">
-                                        <ExcelForm/>
+                                        <div className="text-white mb-5">
+                                            <h3 className="text-2xl font-semibold mb-3">{buttonText}</h3>
+                                            <p className="text-sm sm:text-base text-white/80">
+                                                Submit your details and our team will call you back with personalized guidance.
+                                            </p>
+                                        </div>
+                                        <PrimaryButton
+                                            variant="filled"
+                                            className="w-full py-3"
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            {buttonText}
+                                        </PrimaryButton>
                                     </div>
                                 </div>
                             </div>
@@ -183,6 +237,17 @@ export default function Excel(data) {
 
                 </div>
             </div>
+            <Popupform
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                courseName={courseName}
+                onSubmit={handleSubmit}
+                title={formTitle}
+                subtitle="Complete the form below and verify OTP to receive a callback."
+                formType="enquiry"
+                buttonText={buttonText}
+                successMessage="Thank you! We'll contact you soon."
+            />
         </div>
 
     );

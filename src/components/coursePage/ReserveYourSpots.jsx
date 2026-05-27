@@ -1,16 +1,18 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { FaArrowCircleRight } from "react-icons/fa";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import GetData from "@/utility/GetData";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
+import Popupform from "../clientcomponents/forms/Popupform";
+import Heading from "@/utility/Heading";
+import PrimaryButton from "@/utility/PrimaryButton";
 
-
-const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
-  // const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-  const baseUrl = "https://apierp.teksversity.com";
+const ReserveYourSpots = ({ data, formDetails, branch = "Course", source }) => {
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const selectedCourse = formDetails?.courseName || branch || "";
 
   if (!data || !formDetails) return null;
 
@@ -21,178 +23,33 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
     reserveYourSpotForm = {},
   } = data;
 
-  const specializationList = formDetails?.specializations || [];
+  const { formTitle, formSubtitle } = reserveYourSpotForm;
+  const { benefits = [], heading: benefitsHeading } = whyJoinThisCourse;
 
-
-  const [universityOptions, setUniversityOptions] = useState([]);
-
-  // ✨ Full form data
-  const [formData, setFormData] = useState({
-    name: "",
-    mail: "",
-    mobile: "",
-    source: "freeCareer",
-    sourceType:source,
-    
-
-    // Added correct course name
-    courseName: formDetails?.courseName || "",
-
-    specialization: "",
-    universityName: "",
-    sourceId: "",
-    ProductId: "",
-  });
-
-  const [error, setError] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  // 🔥 Auto-update universities based on specialization
-  useEffect(() => {
-    if (!formData.specialization) {
-      setUniversityOptions([]);
-      setFormData((prev) => ({ ...prev, universityName: "" }));
-      return;
-    }
-
-    const selectedSpec = specializationList.find(
-      (spec) => spec.heading.trim() === formData.specialization.trim()
-    );
-
-    if (selectedSpec) {
-      setUniversityOptions(selectedSpec.universities || []);
-      setFormData((prev) => ({ ...prev, universityName: "" }));
-    }
-  }, [formData.specialization]);
-
-  // 🔥 Handle form changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Name validation
-    if (name === "name") {
-      const onlyLetters = value.replace(/[^a-zA-Z\s]/g, "");
-      setFormData((prev) => ({ ...prev, name: onlyLetters }));
-      setError((prev) => ({ ...prev, name: "" }));
-      return;
-    }
-
-    // Mobile validation
-    if (name === "mobile") {
-      const num = value.replace(/\D/g, "").slice(0, 10);
-      setFormData((prev) => ({ ...prev, mobile: num }));
-      setError((prev) => ({ ...prev, mobile: "" }));
-      return;
-    }
-
-    // University selection
-    if (name === "universityName") {
-      const selectedUni = universityOptions.find(
-        (u) => u.universityName?.trim() === value.trim()
-      );
-
-      if (selectedUni) {
-        setFormData((prev) => ({
-          ...prev,
-          universityName: selectedUni.universityName,
-          sourceId: selectedUni.sourceId,
-          ProductId: selectedUni.ProductId,
-        }));
-      }
-
-      setError((prev) => ({ ...prev, universityName: "" }));
-      return;
-    }
-
-    // Default update
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setError((prev) => ({ ...prev, [name]: "" }));
+  const handleOpenModal = () => {
+    setShowModal(true);
   };
 
-  // 🔥 Submit
-  const formSubmit = async (e) => {
-    e.preventDefault();
-
-    const { name, mail, mobile, specialization, universityName,sourceType } = formData;
-
-    const errorMessages = {
-      name: !name.trim()
-        ? "Please enter your name"
-        : name.trim().length < 3
-          ? "Name must be at least 3 characters"
-          : "",
-      mail: !mail.trim()
-        ? "Enter your mail"
-        : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)
-          ? "Enter a valid mail"
-          : "",
-      mobile: !/^[6-9]\d{9}$/.test(mobile)
-        ? "Enter a valid 10-digit mobile number"
-        : "",
-      specialization: !specialization ? "Please select specialization" : "",
-      universityName: !universityName ? "Please select a university" : "",
-    };
-
-    const hasError = Object.entries(errorMessages).find(
-      ([_, msg]) => msg !== ""
-    );
-
-    if (hasError) {
-      const [field, message] = hasError;
-      setError((prev) => ({ ...prev, [field]: message }));
-      return;
-    }
-
-    setIsLoading(true);
-
-    const newData = {
-      course: formData?.ProductId,
-      email: formData?.mail,
-      mobile: formData?.mobile,
-      name: formData?.name,
-      university: formData?.sourceId,
-      source: "freeCareer",
-      sourceType 
-    };
-
+  const handleSubmit = async (formValues, mappedPayload) => {
     try {
-      const response = await fetch(`${baseUrl}/lead/create`, {
+      const response = await fetch("https://apierp.teksversity.com/lead/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newData),
+        body: JSON.stringify(mappedPayload),
       });
 
-      if (response.ok) {
-        toast.success("Form submitted successfully!");
-      } else {
-        const err = await response.json();
-        toast.error(err?.message || "Failed to submit form.");
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
       }
-    } catch {
-      toast.error("Something went wrong.");
+
+      toast.success("Form submitted successfully!");
+      router.push("/thankyou");
+    } catch (error) {
+      toast.error(error.message || "Submission failed. Please try again.");
+      throw error;
     }
-
-    setIsLoading(false);
-
-    // Reset form
-    setFormData({
-      name: "",
-      mail: "",
-      mobile: "",
-      courseName: formDetails?.courseName || "",
-      specialization: "",
-      universityName: "",
-      sourceId: "",
-      ProductId: "",
-      source: "freeCareer",
-      sourceType:''
-    });
-
-    setUniversityOptions([]);
   };
-
-  const { benefits = [], heading: benefitsHeading } = whyJoinThisCourse;
-  const { formTitle, formSubtitle, formDescription } = reserveYourSpotForm;
 
   return (
     <div className="mt-6">
@@ -260,119 +117,27 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course",source }) => {
                   <p className="text-gray-700 mb-4">{formSubtitle}</p>
                 )}
 
-                <form onSubmit={formSubmit} className="space-y-3">
-                  {/* Name */}
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-2 h-10 dark:text-black border text-black placeholder-gray-500 border-gray-300 rounded-md focus:border-1 focus:border-[#981b1b] focus:ring-0 outline-none"
-                  />
-                  {error.name && (
-                    <p className="text-red-600 text-xs">{error.name}</p>
-                  )}
-
-                  {/* Email */}
-                  <input
-                    type="text"
-                    name="mail"
-                    placeholder="Enter Email"
-                    value={formData.mail}
-                    onChange={handleChange}
-                    className="w-full px-2 h-10 dark:text-black border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:border-1 focus:border-[#981b1b] focus:ring-0 outline-none"
-                  />
-                  {error.mail && (
-                    <p className="text-red-500 text-xs">{error.mail}</p>
-                  )}
-
-                  {/* Mobile */}
-                  <input
-                    type="text"
-                    name="mobile"
-                    placeholder="Enter Mobile Number"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                     className="w-full px-2 h-10 dark:text-black border border-gray-300 rounded-md focus:border-1 text-gray-900 placeholder-gray-500 focus:border-[#981b1b] focus:ring-0 outline-none"
-                  />
-                  {error.mobile && (
-                    <p className="text-red-500 text-xs">{error.mobile}</p>
-                  )}
-
-                  {/* Course */}
-                  <input
-                    type="text"
-                    name="courseName"
-                    value={branch}
-                    disabled
-                    className="cursor-not-allowed w-full px-2 h-10 border rounded-md bg-gray-200 text-gray-600 border-gray-300 text-gray-900 placeholder-gray-500"
-                  />
-
-                  {/* Specialization */}
-                  <select
-                    name="specialization"
-                    value={formData.specialization}
-                    onChange={handleChange}
-                     className="w-full px-2 h-10 dark:text-black border border-gray-300 rounded-md focus:border-1 text-gray-900 placeholder-gray-500 focus:border-[#981b1b] focus:ring-0 outline-none"
-                  >
-                    <option value="">Select Specialization</option>
-
-                    {specializationList.map((spec, index) => (
-                      <option key={index} value={spec.heading.trim()}>
-                        {spec.heading.trim()}
-                      </option>
-                    ))}
-                  </select>
-                  {error.specialization && (
-                    <p className="text-red-500 text-xs">
-                      {error.specialization}
-                    </p>
-                  )}
-
-                  {/* University */}
-                  <select
-                    name="universityName"
-                    value={formData.universityName}
-                    onChange={handleChange}
-                    className="w-full px-2 h-10 dark:text-black border border-gray-300 rounded-md focus:border-1 text-gray-900 placeholder-gray-500 focus:border-[#981b1b] focus:ring-0 outline-none"
-                  >
-                    <option value="">Select University</option>
-
-                    {universityOptions.map((uni, index) => (
-                      <option key={index} value={uni.universityName}>
-                        {uni.universityName}
-                      </option>
-                    ))}
-                  </select>
-                  {error.universityName && (
-                    <p className="text-red-500 text-xs">
-                      {error.universityName}
-                    </p>
-                  )}
-
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`cursor-pointer w-full h-10 px-6 rounded-md font-semibold text-sm flex items-center text-gray-900 placeholder-gray-500 justify-center space-x-2 text-white transition-all duration-200 transform ${isLoading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-[#2a619d] hover:bg-[#a31930]"
-                      }`}
-                  >
-                    Request Callback
-                  </button>
-
-                  {/* {formDescription && (
-                    <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-                      {formDescription}
-                    </p>
-                  )} */}
-                </form>
+                <div className="mt-6">
+                  <PrimaryButton variant="filled" onClick={handleOpenModal}>
+                    {formTitle || "Request Callback"}
+                  </PrimaryButton>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <Popupform
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          courseName={selectedCourse}
+          course={branch}
+          source={source}
+          onSubmit={handleSubmit}
+          formType="enquiry"
+          buttonText="Submit"
+          successMessage="Thank you! We'll contact you soon."
+        />
 
         <style jsx>{`
           @keyframes scroll {
