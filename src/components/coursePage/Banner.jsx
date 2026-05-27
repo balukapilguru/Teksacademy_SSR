@@ -1,39 +1,14 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import bgImage from "@/app/assets/course-banner/bgt3.png";
 import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
 import Bannerheading from "@/utility/Bannerheading";
 import PrimaryButton from "@/utility/PrimaryButton";
-import ReusableForm from "../ReusableForm";
-import Popupform from "../clientcomponents/forms/Popupform";
+import Popupform from "../Popupform";
 
-const handleSubmit = async (formValues, mappedPayload) => {
-  console.log("Mapped payload being sent:", mappedPayload);
-
-  try {
-    const response = await fetch("https://apierp.infozit.com/lead/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mappedPayload),
-    });
-
-    const responseData = await response.json();
-    console.log("API Response:", responseData);
-
-    if (!response.ok) {
-      throw new Error(responseData.message || "Submission failed");
-    }
-
-    router.push("/thankyou");
-  } catch (error) {
-    console.error("Submission error:", error);
-    throw error;
-  }
-};
 
 const Banner = ({
   data,
@@ -44,24 +19,66 @@ const Banner = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   if (!data) return null;
 
   const handleOpenModal = (details) => {
+    console.log("Opening modal with course:", details); // Debug log
     setSelectedCourse(details);
     setShowModal(true);
   };
 
+  const handleFormSubmit = async (formValues, mappedPayload) => {
+    setIsSubmitting(true);
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      setShowModal(false);
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="relative main_container rounded-2xl text-white overflow-hidden">
-      {/* Popupform for regular courses — rendered outside layout (modal) */}
+      {/* Debug log to check if Popupform renders */}
+      {console.log("Modal state:", showModal)}
+      
+      {/* Popupform for regular courses */}
       {!category && !isSelfPaced && (
         <Popupform
           show={showModal}
-          onClose={() => setShowModal(false)}
+          onClose={() => !isSubmitting && setShowModal(false)}
           course={branch}
           courseName={selectedCourse}
           source={30}
+          title={data?.button?.name || "Enroll Now"}
+          subtitle="Fill in your details to get course guidance and a callback from our team."
+          onSubmit={handleFormSubmit}
+          formType="banner"
+          buttonText={data?.button?.name || "Enroll Now"}
+          successMessage="Thank you! We'll contact you soon."
         />
       )}
 
@@ -83,8 +100,8 @@ const Banner = ({
       <Particles />
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-start">
-        {/* LEFT COLUMN — heading, description, button */}
-        <div className="p-4">
+        {/* LEFT COLUMN */}
+        <div className="pl-8 mt-2">
           <Bannerheading
             text={data.mainHeading}
             data={data?.mainHeading}
@@ -120,21 +137,27 @@ const Banner = ({
               </PrimaryButton>
             </div>
           )}
+          
+          <button 
+            className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
+            onClick={() => handleOpenModal(formDetails)}
+          >
+            Enroll Now
+          </button>
         </div>
 
-        {/* RIGHT COLUMN — form (category/selfPaced) OR banner image (regular course) */}
+        {/* RIGHT COLUMN */}
         <div className="flex justify-center md:justify-end relative lg:mt-0">
-            <div className="w-full max-w-lg md:max-w-lg">
-              <Image
-                src={GetData({ url: data?.bannerImage?.src })}
-                alt={data.imageAlt || "Course Banner"}
-                width={800}
-                height={600}
-                className="w-full h-auto object-contain rounded-md z-10"
-                priority
-              />
-            </div>
-        
+          <div className="w-full max-w-lg md:max-w-lg">
+            <Image
+              src={GetData({ url: data?.bannerImage?.src })}
+              alt={data.imageAlt || "Course Banner"}
+              width={800}
+              height={600}
+              className="w-full h-auto object-contain rounded-md z-10"
+              priority
+            />
+          </div>
         </div>
       </div>
     </div>

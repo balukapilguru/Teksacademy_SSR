@@ -45,7 +45,7 @@ export default function Loading({ message = "Loading..." }) {
           {/* Logo */}
           <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center ">
             <Image
-              src="https://teksversity.s3.us-east-1.amazonaws.com/website/assets/home/loaderteks.gif"
+              src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/loader.gif"
               alt="Institute of Advanced Learning"
               className="animate-bounce-gentle"
               height={120} // increased

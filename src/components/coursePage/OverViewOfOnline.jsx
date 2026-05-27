@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import mba from "@/app/assets/onilnemba.png";
 import Heading from "@/utility/Heading";
@@ -8,8 +9,37 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import { LiaArrowsAltSolid } from "react-icons/lia";
 import { GiPentarrowsTornado } from "react-icons/gi";
 import RichTextRenderer from "../coursePage/RichTextRenderer";
-import ReusableForm from "../ReusableForm";
-import Popupform from "../clientcomponents/forms/Popupform";
+const OverViewOfOnline = ({
+  data,
+  formDetails,
+  category = false,
+  branch = "course",
+  isSelfPaced = false,
+}) => {
+  const router = useRouter();
+
+  if (!data) return null;
+
+  const {
+    heading = "",
+    subHeading = "",
+    description = "",
+    keyPoints = [],
+    button,
+    overViewImage = {},
+  } = data;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+
+  const imageSrc =
+    overViewImage?.src && overViewImage.src !== "" ? overViewImage.src : mba;
+  const imageAlt = overViewImage?.alt || subHeading || "Overview image";
+
+  const handleOpenModal = (details) => {
+    setSelectedCourse(details);
+    setShowModal(true);
+  };
+
   const handleSubmit = async (formValues, mappedPayload) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
@@ -35,55 +65,13 @@ import Popupform from "../clientcomponents/forms/Popupform";
       throw error;
     }
   };
-const OverViewOfOnline = ({
-  data,
-  formDetails,
-  category = false,
-  branch = "course",
-  isSelfPaced = false,
-}) => {
-  if (!data) return null;
-
-  const {
-    heading = "",
-    subHeading = "",
-    description = "",
-    keyPoints = [],
-    button,
-    overViewImage = {},
-  } = data;
-  const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
-
-  const imageSrc =
-    overViewImage?.src && overViewImage.src !== "" ? overViewImage.src : mba;
-  const imageAlt = overViewImage?.alt || subHeading || "Overview image";
-
-  const handleOpenModal = (details) => {
-    setSelectedCourse(details);
-    setShowModal(true);
-  };
 
   // const finalImageSrc = GetData({ url: imageSrc });
 
   return (
     <div className="">
-      <section className="py-6 pt-6" id="overViewOfOnline">
-        {category || isSelfPaced ? (
-          <ReusableForm formType="enquiry"
-            onSubmit={handleSubmit}
-            buttonText="Submit"
-            className="w-full"
-            successMessage="Thank you! We'll contact you soon." />
-        ) : (
-          <Popupform
-            source={32}
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            course={branch}
-            courseName={selectedCourse}
-          />
-        )}
+      <section className="py-6 pt-6">
+     
         <div className="">
           <Heading data={heading} />
 
@@ -128,13 +116,7 @@ const OverViewOfOnline = ({
                 <div className="mt-auto pt-6">
                   <PrimaryButton
                     variant="filled"
-                    onClick={() => {
-                      if (button.popup) {
-                        handleOpenModal(formDetails);
-                      } else if (button.link) {
-                        window.location.href = button.link;
-                      }
-                    }}
+                    onClick={() => handleOpenModal(formDetails)}
                   >
                     {button.name}
                   </PrimaryButton>

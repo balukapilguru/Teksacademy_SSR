@@ -1,17 +1,31 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiDownload } from "react-icons/fi";
-import { FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
 import Heading from "../../utility/Heading";
 import GetData from "@/utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { RiArrowRightBoxFill } from "react-icons/ri";
-import ReusableForm from "../ReusableForm";
-import Popupform from "../clientcomponents/forms/Popupform";
-  const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+const DownloadCourseBrochure = ({
+  data,
+  formDetails,
+  category = false,
+  branch = "course",
+  isSelfPaced = false,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const router = useRouter();
 
+  if (!data) return null;
+
+  const handleOpenModal = (details) => {
+    setSelectedCourse(details);
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (formValues, mappedPayload) => {
     try {
       const response = await fetch("https://apierp.infozit.com/lead/create", {
         method: "POST",
@@ -22,10 +36,19 @@ import Popupform from "../clientcomponents/forms/Popupform";
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
-
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
+      }
+
+      const brochureUrl =
+        data?.button?.link ||
+        data?.downloadLink ||
+        data?.brochureUrl ||
+        data?.brochure?.url ||
+        "";
+
+      if (brochureUrl) {
+        window.open(brochureUrl, "_blank");
       }
 
       router.push("/thankyou");
@@ -34,43 +57,10 @@ import Popupform from "../clientcomponents/forms/Popupform";
       throw error;
     }
   };
-const DownloadCourseBrochure = ({
-  data,
-  formDetails,
-  category = false,
-  branch = "course",
-  isSelfPaced = false,
-}) => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
-
-
-  if (!data) return null;
-
-  const handleOpenModal = (details) => {
-    setSelectedCourse(details);
-    setShowModal(true);
-  };
 
 
   return (
-    <div className="mb-6">
-      {category || isSelfPaced ? (
-        <ReusableForm formType="enquiry"
-          onSubmit={handleSubmit}
-          buttonText="Submit"
-          className="w-full"
-          successMessage="Thank you! We'll contact you soon." />
-      ) : (
-        <Popupform
-          source={41}
-          show={showModal}
-          onClose={() => setShowModal(false)}
-          course={branch}
-          courseName={selectedCourse}
-        />
-      )}
-
+   
       <section
         className="rounded-xl bg-[#e5e7eb]"
         id="downloadOurCourseBrochure"
@@ -135,7 +125,7 @@ const DownloadCourseBrochure = ({
           </div>
         </div>
       </section>
-    </div>
+  
   );
 };
 

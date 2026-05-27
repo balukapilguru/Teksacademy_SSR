@@ -2,46 +2,30 @@
 import Heading from "@/utility/Heading";
 import React, { useState } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
-import { TbLetterXSmall } from "react-icons/tb";
+import { X } from "lucide-react";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
 
 const FeeStructure = () => {
-      const [openForm, setOpenForm] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const [openDiscount, setOpenDiscount] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    course: "",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const handleSubmit = async (formValues, mappedPayload) => {
     try {
-      const res = await fetch("/api/apply", {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(mappedPayload),
       });
 
-      if (res.ok) {
-        setFormData({ name: "", email: "", phone: "", course: "" });
-        setOpenForm(false);
-      } else {
-        alert("Something went wrong. Please try again.");
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
       }
+
+      window.location.href = "/thankyou";
     } catch (error) {
-      console.error(error);
-      alert("Error submitting form!");
-    } finally {
-      setLoading(false);
+      console.error("Submission error:", error);
+      throw error;
     }
   };
 
@@ -184,75 +168,15 @@ const FeeStructure = () => {
 
       {/* Apply Now Popup */}
       {openForm && (
-        <div
-          onClick={() => setOpenForm(false)}
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white/95 backdrop-blur-xl rounded-2xl p-10 shadow-2xl w-full max-w-md relative animate-fadeIn"
-          >
-            <button
-              onClick={() => setOpenForm(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
-            >
-              <TbLetterXSmall size={26} />
-            </button>
-
-            <div className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-              Apply Now
-            </div>
-
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                required
-                className="w-full px-4 py-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address"
-                required
-                className="w-full px-4 py-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-              />
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Mobile Number"
-                required
-                className="w-full px-4 py-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-              />
-              <select
-                name="course"
-                value={formData.course}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-              >
-                <option value="">Select Course</option>
-                <option value="mba">MBA</option>
-                <option value="bba">BBA</option>
-                <option value="pgdm">PGDM</option>
-              </select>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-[#002b80] to-[#2a619d] text-white py-3 rounded-xl font-medium hover:opacity-90 hover:scale-[1.02] transition-all shadow-md cursor-pointer"
-              >
-                {loading ? "Submitting..." : "Submit Application"}
-              </button>
-            </form>
-          </div>
-        </div>
+        <Popupform
+          show={openForm}
+          onClose={() => setOpenForm(false)}
+          courseName="Program Fee"
+          onSubmit={handleSubmit}
+          formType="enquiry"
+          buttonText="Submit"
+          successMessage="Thank you! We'll contact you soon."
+        />
       )}
 
       {/* Fees & Discount Popup */}

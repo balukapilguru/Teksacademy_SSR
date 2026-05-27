@@ -6,9 +6,9 @@ export default function Loader() {
     
       <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
         <Image
-          src="https://teksversity.s3.us-east-1.amazonaws.com/website/assets/home/loaderteks.gif"
-          width={150}
-          height={150}
+          src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/loader.gif"
+          width={80}
+          height={80}
           alt="Loading"
           unoptimized
         />

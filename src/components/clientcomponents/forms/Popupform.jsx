@@ -21,6 +21,11 @@ export default function Popupform({
   university,
   source,
   onSubmit,
+  title = "Enquiry Form",
+  subtitle = "Please fill in the details below and our team will contact you shortly.",
+  formType = "enquiry",
+  buttonText = "Submit",
+  successMessage = "Thank you! We'll contact you soon.",
 }) {
   if (!show) return null;
 
@@ -42,16 +47,14 @@ export default function Popupform({
           Close
         </button>
         <div className="p-6 md:p-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Enquiry Form</h2>
-          <p className="text-sm text-gray-600 mb-6">
-            Please fill in the details below and our team will contact you shortly.
-          </p>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h2>
+          <p className="text-sm text-gray-600 mb-6">{subtitle}</p>
           <ReusableForm
-            formType="enquiry"
+            formType={formType}
             initialValues={initialValues}
             onSubmit={onSubmit}
-            buttonText="Submit"
-            successMessage="Thank you! We'll contact you soon."
+            buttonText={buttonText}
+            successMessage={successMessage}
           />
         </div>
       </div>
