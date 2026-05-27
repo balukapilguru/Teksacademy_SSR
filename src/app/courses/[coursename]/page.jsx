@@ -49,6 +49,54 @@ import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
 import Hiring from "@/components/home-page/ui-components/Hiring";
 
+const isGenericCourseLabel = (value) => {
+  const label = typeof value === "string" ? value.trim().toLowerCase() : "";
+  return !label || label === "course" || label === "course enquiry" || label === "course details";
+};
+
+const getCourseLabelValue = (value) => {
+  if (!value) return "";
+  if (typeof value === "string") {
+    return isGenericCourseLabel(value) ? "" : value.trim();
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const label = getCourseLabelValue(item);
+      if (label) return label;
+    }
+    return "";
+  }
+  if (typeof value === "object") {
+    const directValue =
+      value.mainHeading ||
+      value.heading ||
+      value.programName ||
+      value.courseName ||
+      value.course ||
+      value.title ||
+      value.name ||
+      value.text;
+
+    const directLabel = getCourseLabelValue(directValue);
+    if (directLabel) return directLabel;
+
+    for (const item of Object.values(value)) {
+      const label = getCourseLabelValue(item);
+      if (label) return label;
+    }
+  }
+  return "";
+};
+
+const getCourseLabelFromSlug = (slug = "") => {
+  return slug
+    .replace(/^best-/, "")
+    .replace(/-course-training-institute$/, "")
+    .replace(/-training-institute$/, "")
+    .replace(/-certification-program$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
 
 /* =====================================================
    PAGE
@@ -123,6 +171,13 @@ export default async function Page({ params }) {
 
   const excelSectionData =
     data?.excel || data?.Excel;
+
+  const courseLabel =
+    getCourseLabelValue(data?.banner?.mainHeading) ||
+    getCourseLabelValue(data?.mainHeading) ||
+    getCourseLabelValue(data?.name) ||
+    getCourseLabelValue(data?.banner?.name) ||
+    getCourseLabelFromSlug(coursename);
   const careerServicesData =
     data?.careerServices ||
     data?.careerService ||
@@ -169,22 +224,15 @@ export default async function Page({ params }) {
           isSelfPaced={isSelfPaced}
           isAcademic={isAcademic}
           isCertification={isCertification}
-          courseName={coursename}
+          courseName={courseLabel}
           bannerData={data.banner}
           formDetails={formDetails}
           branch={data?.branch}
         />
       )}
+
       {data?.excel && (
-        <Excel data={data.excel} />
-      )}
-
-      {data?.embraceTheEndlessOpportunities && (
-        <Oppurtunities data={data.embraceTheEndlessOpportunities} />
-      )}
-
-      {data?.advancedTools && (
-        <ToolsAndFeatures data={data.advancedTools} />
+        <Excel data={data.excel} courseName={courseLabel} />
       )}
 
       {data?.industryProjects && (
@@ -192,7 +240,11 @@ export default async function Page({ params }) {
       )}
 
       {data?.careerPath && (
-        <CareerPath data={data.careerPath} formDetails={formDetails} />
+        <CareerPath
+          data={data.careerPath}
+          formDetails={formDetails}
+          courseName={courseLabel}
+        />
       )}
 
       {data?.OnlineAdmissionProcedure && (
@@ -221,6 +273,7 @@ export default async function Page({ params }) {
   ===================================================== */
   const sectionsConfig = [
     {
+      key: "course-scrollbar",
       component: data?.sections && (
         <CourseScrollBar sections={data?.sections} />
       ),
@@ -229,40 +282,49 @@ export default async function Page({ params }) {
     ...(isCertification
       ? [
         {
+          key: "course-overview",
           component: data?.overViewOfOnline && (
             <OverViewOfOnline
               data={data.overViewOfOnline}
               formDetails={formDetails}
+              courseName={courseLabel}
               category={true}
             />
           ),
         },
         {
-          component: data?.Excel && <Excel data={data.Excel} />,
+          key: "certification-excel",
+          component: data?.Excel && <Excel data={data.Excel} courseName={courseLabel} />,
         },
         { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
         {
+          key: "course-key-highlights",
           component: data?.keyHighlights && (
             <KeyHighLights data={data.keyHighlights} />
           ),
         },
         {
+          key: "course-download-brochure",
           component: data?.downloadOurCourseBrochure && (
             <DownloadCourseBrochure
               data={data.downloadOurCourseBrochure}
               formDetails={formDetails}
+              courseName={courseLabel}
+              courseSlug={coursename}
               category={true}
             />
           ),
         },
-        { component: <CourseFlowWrapper /> },
+        { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
       ]
       : [
         {
+          key: "course-overview",
           component: data?.overViewOfOnline && (
             <OverViewOfOnline
               data={data.overViewOfOnline}
               formDetails={formDetails}
+              courseName={courseLabel}
               category={isCertification}
               branch={data?.branch}
               isSelfPaced={isSelfPaced}
@@ -270,20 +332,25 @@ export default async function Page({ params }) {
           ),
         },
         {
+          key: "course-why-online",
           component: data?.whyOnline && (
             <Whyacademics data={data.whyOnline} />
           ),
         },
         {
+          key: "course-key-highlights",
           component: data?.keyHighlights && (
             <KeyHighLights data={data.keyHighlights} />
           ),
         },
         {
+          key: "course-download-brochure",
           component: data?.downloadOurCourseBrochure && (
             <DownloadCourseBrochure
               data={data.downloadOurCourseBrochure}
               formDetails={formDetails}
+              courseName={courseLabel}
+              courseSlug={coursename}
               category={isCertification}
               branch={data?.branch}
               isSelfPaced={isSelfPaced}
@@ -291,23 +358,27 @@ export default async function Page({ params }) {
           ),
         },
         {
+          key: "course-specializations",
           component: data?.specializations && (
             <Specializations data={data?.specializations} />
           ),
         },
-        { component: <CourseFlowWrapper /> },
+        { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
       ]),
     {
+      key: "course-hiring-partners",
       component: data?.hiringPartners && (
         <Hiring hiringData={data.hiringPartners} />
       ),
     },
     {
+      key: "course-questions",
       component: data?.questionSection && (
         <Accordian faq={data.questionSection} />
       ),
     },
     {
+      key: "course-lets-talk",
       component: data?.letsTalk && <Talktoour data={data.letsTalk} />,
     },
   ];
@@ -339,16 +410,17 @@ export default async function Page({ params }) {
             category={isCertification}
             branch={data?.branch}
             isSelfPaced={isSelfPaced}
+            courseLabel={courseLabel}
           />
         )}
 
-        <div className="main_container rounded-lg pt-5">
-          <Excel data={excelSectionData} />
+        <div className=" rounded-lg pt-5">
+          <Excel data={excelSectionData} courseName={courseLabel} />
         </div>
 
      
           <div className="main_container rounded-lg pt-5">
-            <Nutshell data={careerServicesData} />
+            <Nutshell data={careerServicesData} courseName={courseLabel} />
           </div>
        {console.log(careerServicesData,"careerServicesData")}
 
@@ -359,6 +431,7 @@ export default async function Page({ params }) {
               source={31}
               data={reserveSpotData}
               formDetails={formDetails}
+              courseName={courseLabel}
               isSelfPaced={isSelfPaced}
             />
           ) : (
@@ -366,6 +439,7 @@ export default async function Page({ params }) {
               source={31}
               data={reserveSpotData}
               formDetails={formDetails}
+              courseName={courseLabel}
               branch={data?.branch}
             />
 
@@ -374,7 +448,7 @@ export default async function Page({ params }) {
         {sectionsConfig.map(
           (sec, idx) =>
             sec.component && (
-              <div key={idx} className="main_container rounded-lg pt-5">
+              <div key={sec.key || idx} className="main_container rounded-lg pt-5">
                 {sec.component}
               </div>
             )

@@ -2,16 +2,68 @@
 
 import GetData from "@/utility/GetData";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
 
-export default function Nutshell({ data, courseData }) {
+export default function Nutshell({ data, courseData, courseName = "" }) {
   const { title, services, button, image } = data || {};
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
 
   const isBFSI = courseData?.coursename === "BFSI-Course";
-console.log(data,"nutsheel")
+  const selectedCourse =
+    courseName ||
+    courseData?.coursename ||
+    courseData?.courseName ||
+    courseData?.name ||
+    "";
+
+  const handleSubmit = async (_formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      setShowModal(false);
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
+
   return (
     <div className="main_container">
+      {showModal && (
+        <Popupform
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          course={selectedCourse}
+          courseName={selectedCourse}
+          title="Request Callback"
+          subtitle="Fill in your details and our team will call you back shortly."
+          onSubmit={handleSubmit}
+          formType="requestCallback"
+          buttonText="Request Callback"
+          successMessage="Thank you! We'll contact you soon."
+        />
+      )}
+
       <div className="flex flex-col items-center">
 
         {/* Heading */}
@@ -75,19 +127,13 @@ console.log(data,"nutsheel")
             })}
 
             {/* Button */}
-            <Link
-              href={
-                courseData?.coursename
-                  ? `/forms/request-call-back?course=${encodeURIComponent(
-                      courseData.coursename
-                    )}`
-                  : button?.link
-              }
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="mt-6 px-6 py-2 border border-[#2a619d] text-[#2a619d] rounded-lg hover:bg-[#2a619d] hover:text-white transition"
             >
-              <button className="mt-6 px-6 py-2 border border-[#2a619d] text-[#2a619d] rounded-lg hover:bg-[#2a619d] hover:text-white transition">
-                {button?.text}
-              </button>
-            </Link>
+              {button?.text || "Request Callback"}
+            </button>
           </div>
 
           {/* RIGHT SIDE IMAGE */}

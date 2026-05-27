@@ -7,9 +7,71 @@ import Heading from "../../utility/Heading";
 import GetData from "@/utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { RiArrowRightBoxFill } from "react-icons/ri";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
+import { coursesList } from "@/data/courses";
+
+const normalizeCourseText = (value) => {
+  if (!value) return "";
+  if (Array.isArray(value)) {
+    return normalizeCourseText(value.find(Boolean));
+  }
+  if (typeof value === "object") {
+    return normalizeCourseText(
+      value.slug ||
+      value.courseName ||
+      value.programName ||
+      value.title ||
+      value.name ||
+      value.heading ||
+      value.course
+    );
+  }
+  return value
+    .toString()
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/\+/g, "plus")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+};
+
+const findCourseBrochureLink = ({ courseSlug, courseName, formDetails }) => {
+  const candidates = [
+    normalizeCourseText(courseSlug),
+    normalizeCourseText(courseName),
+    normalizeCourseText(formDetails),
+  ].filter(Boolean);
+
+  const matchedCourse = coursesList.find((course) => {
+    const searchableValues = [
+      course.slug,
+      course.shortTitle,
+      course.title,
+      course.category,
+    ]
+      .map(normalizeCourseText)
+      .filter(Boolean);
+
+    return candidates.some((candidate) =>
+      searchableValues.some(
+        (value) => value === candidate || value.includes(candidate) || candidate.includes(value)
+      )
+    );
+  });
+
+  return matchedCourse?.brochureLink || "";
+};
+
+const getPdfLink = (value) => {
+  if (!value || value === "#") return "";
+  return value.toLowerCase().includes(".pdf") ? value : "";
+};
+
 const DownloadCourseBrochure = ({
   data,
   formDetails,
+  courseName = "",
+  courseSlug = "",
   category = false,
   branch = "course",
   isSelfPaced = false,
@@ -20,12 +82,30 @@ const DownloadCourseBrochure = ({
 
   if (!data) return null;
 
+  const courseDisplayName = courseName || selectedCourse || formDetails || "";
+
+  const getBrochureUrl = () => {
+    const brochureUrl =
+      data?.brochure?.url ||
+      data?.brochureUrl ||
+      data?.downloadLink ||
+      findCourseBrochureLink({ courseSlug, courseName: courseDisplayName, formDetails }) ||
+      getPdfLink(data?.button?.link) ||
+      "";
+
+    if (!brochureUrl || brochureUrl === "#") return "";
+
+    return brochureUrl && !brochureUrl.startsWith("http")
+      ? GetData({ url: brochureUrl })
+      : brochureUrl;
+  };
+
   const handleOpenModal = (details) => {
     setSelectedCourse(details);
     setShowModal(true);
   };
 
-  const handleSubmit = async (formValues, mappedPayload) => {
+  const handleSubmit = async (_formValues, mappedPayload) => {
     try {
       const response = await fetch("https://apierp.infozit.com/lead/create", {
         method: "POST",
@@ -40,15 +120,19 @@ const DownloadCourseBrochure = ({
         throw new Error(responseData.message || "Submission failed");
       }
 
-      const brochureUrl =
-        data?.button?.link ||
-        data?.downloadLink ||
-        data?.brochureUrl ||
-        data?.brochure?.url ||
-        "";
+      const brochureUrl = getBrochureUrl();
 
       if (brochureUrl) {
-        window.open(brochureUrl, "_blank");
+        const link = document.createElement("a");
+        link.href = brochureUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.download = "";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } else {
+        alert("Brochure PDF is not available for this course right now.");
       }
 
       router.push("/thankyou");
@@ -65,6 +149,21 @@ const DownloadCourseBrochure = ({
         className="rounded-xl bg-[#e5e7eb]"
         id="downloadOurCourseBrochure"
       >
+        {showModal && (
+          <Popupform
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            course={courseDisplayName}
+            courseName={courseDisplayName}
+            title="Download Brochure"
+            subtitle="Fill in your details to download the course brochure."
+            onSubmit={handleSubmit}
+            formType="syllabus"
+            buttonText={data?.button?.name || "Download Brochure"}
+            successMessage="Thank you! Your brochure download will start shortly."
+          />
+        )}
+
         <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
           {/* Left Content + Button */}
           <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">

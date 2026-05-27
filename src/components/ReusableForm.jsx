@@ -24,6 +24,33 @@ const COURSE_OPTIONS = [
   "Generative AI", "Medical Coding", "SAP FICO", "Testing Tools", "Excel", "AutoCAD", "BIM", "Revit"
 ];
 
+const isFixedCourseValue = (course) => {
+  if (!course || !course.toString().trim()) return false;
+
+  const normalizedCourse = course.toString().trim().toLowerCase();
+  return (
+    normalizedCourse !== "course" &&
+    normalizedCourse !== "course enquiry" &&
+    normalizedCourse !== "course details"
+  );
+};
+
+const normalizeInitialValue = (fieldId, value) => {
+  if (fieldId === "course" && !isFixedCourseValue(value)) {
+    return "";
+  }
+
+  return value || "";
+};
+
+const formatFixedLabel = (value) => {
+  return value
+    .toString()
+    .trim()
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
+
 export default function ReusableForm({
   formType = "default",
   onSubmit,
@@ -44,7 +71,10 @@ export default function ReusableForm({
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
       banner: ["name", "email", "phone", "course", "branch", "city"],
-      Career: ["name", "email", "phone", "course", "branch"]
+      Career: ["name", "email", "phone", "course", "branch"],
+      EnrollNow: ["name", "email", "phone", "course", "branch", "city"],
+      requestCallback: ["name", "email", "phone", "course", "branch", "city"],
+      reserveSpot: ["name", "email", "phone", "course", "branch", "city"],
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
@@ -52,7 +82,7 @@ export default function ReusableForm({
   const [formValues, setFormValues] = useState(() => {
     const initial = {};
     getFieldsForType().forEach(fieldId => {
-      initial[fieldId] = initialValues[fieldId] || "";
+      initial[fieldId] = normalizeInitialValue(fieldId, initialValues[fieldId]);
     });
     return initial;
   });
@@ -88,7 +118,7 @@ export default function ReusableForm({
   useEffect(() => {
     const initial = {};
     getFieldsForType().forEach(fieldId => {
-      initial[fieldId] = initialValues[fieldId] || "";
+      initial[fieldId] = normalizeInitialValue(fieldId, initialValues[fieldId]);
     });
 
     if (areInitialValuesEqual(prevInitialValuesRef.current, initial)) {
@@ -113,6 +143,9 @@ export default function ReusableForm({
       excel: "Request Callback—Website",
       syllabus: "Download Syllabus—Website",
       banner: "Enrollnow",
+      EnrollNow: "Enrollnow",
+      requestCallback: "Request Callback—Website",
+      reserveSpot: "Reserve Spot—Website",
       default: "Website",
       Career: "Request Callback—Website"
     };
@@ -233,7 +266,10 @@ export default function ReusableForm({
         <div key={fieldId} className="mb-4">
           <MobileOtpField
             value={value}
-            onChange={(e) => handleChange(fieldId, e.target.value)}
+            onChange={(e) => {
+              const v = typeof e === "string" ? e : e && e.target ? e.target.value : "";
+              handleChange(fieldId, v);
+            }}
             onVerified={setIsOtpVerified}
             error={error}
           />
@@ -245,6 +281,26 @@ export default function ReusableForm({
       const filteredCourses = COURSE_OPTIONS.filter(c =>
         c.toLowerCase().includes(courseSearchTerm.toLowerCase())
       );
+
+      const isCourseFixed = initialValues && isFixedCourseValue(initialValues.course);
+
+      if (isCourseFixed) {
+        return (
+          <div key={fieldId} className="mb-4">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              {field.label} <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formValues[fieldId] || initialValues.course}
+              disabled
+              className={`w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed`
+              }
+            />
+            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+          </div>
+        );
+      }
 
       return (
         <div key={fieldId} className="mb-4 relative" ref={dropdownRef}>
@@ -299,6 +355,25 @@ export default function ReusableForm({
     }
 
     if (fieldId === "branch") {
+      const isBranchFixed = initialValues && initialValues.branch && initialValues.branch.toString().trim() !== "";
+
+      if (isBranchFixed) {
+        return (
+          <div key={fieldId} className="mb-4">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              {field.label} <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formatFixedLabel(value || initialValues.branch)}
+              disabled
+              className="w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
+            />
+            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+          </div>
+        );
+      }
+
       return (
         <div key={fieldId} className="mb-4">
           <label className="block text-xs font-medium text-gray-700 mb-1">

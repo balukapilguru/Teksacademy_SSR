@@ -5,13 +5,13 @@ import Image from "next/image";
 import mba from "@/app/assets/onilnemba.png";
 import Heading from "@/utility/Heading";
 import GetData from "@/utility/GetData";
-import PrimaryButton from "@/utility/PrimaryButton";
-import { LiaArrowsAltSolid } from "react-icons/lia";
+import Popupform from "../clientcomponents/forms/Popupform";
 import { GiPentarrowsTornado } from "react-icons/gi";
 import RichTextRenderer from "../coursePage/RichTextRenderer";
 const OverViewOfOnline = ({
   data,
   formDetails,
+  courseName = "",
   category = false,
   branch = "course",
   isSelfPaced = false,
@@ -28,15 +28,16 @@ const OverViewOfOnline = ({
     button,
     overViewImage = {},
   } = data;
+  const courseDisplayName = courseName || formDetails?.courseName || formDetails?.course || formDetails || "";
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
 
   const imageSrc =
     overViewImage?.src && overViewImage.src !== "" ? overViewImage.src : mba;
   const imageAlt = overViewImage?.alt || subHeading || "Overview image";
 
   const handleOpenModal = (details) => {
-    setSelectedCourse(details);
+    setSelectedCourse(courseDisplayName || details);
     setShowModal(true);
   };
 
@@ -114,17 +115,32 @@ const OverViewOfOnline = ({
 
               {button?.name && (
                 <div className="mt-auto pt-6">
-                  <PrimaryButton
-                    variant="filled"
+                  <button
+                    className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent font-semibold border border-[#2a619d] text-[#2a619d] px-6 py-2 rounded-md hover:bg-white hover:text-[#2a619d] transition-colors duration-300"
                     onClick={() => handleOpenModal(formDetails)}
                   >
-                    {button.name}
-                  </PrimaryButton>
+                    Enroll Now
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
+        {showModal && (
+          <Popupform
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            course={selectedCourse}
+            courseName={selectedCourse}
+            source={30}
+            title="Enroll Now"
+            subtitle="Fill in your details to get course guidance and a callback from our team."
+            onSubmit={handleSubmit}
+            formType="EnrollNow"
+            buttonText="Enroll Now"
+            successMessage="Thank you! We'll contact you soon."
+          />
+        )}
       </section>
     </div>
   );

@@ -9,10 +9,10 @@ import Popupform from "../clientcomponents/forms/Popupform";
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 
-const ReserveYourSpots = ({ data, formDetails, branch = "Course", source }) => {
+const ReserveYourSpots = ({ data, formDetails, courseName = "", branch = "Course", source }) => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const selectedCourse = formDetails?.courseName || branch || "";
+  const selectedCourse = courseName || formDetails?.courseName || formDetails?.course || branch || "";
 
   if (!data || !formDetails) return null;
 
@@ -131,7 +131,7 @@ const ReserveYourSpots = ({ data, formDetails, branch = "Course", source }) => {
           show={showModal}
           onClose={() => setShowModal(false)}
           courseName={selectedCourse}
-          course={branch}
+          course={selectedCourse}
           source={source}
           onSubmit={handleSubmit}
           formType="enquiry"

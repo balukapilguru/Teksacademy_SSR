@@ -17,8 +17,72 @@ import AboutTeks from "@/components/coursePage/AboutTeks";
 import ExploreBranch from "@/components/coursePage/ExploreBranch";
 import Faq from "@/components/coursePage/Faq";
 import CoursesOffered from "@/components/coursePage/CoursesOffered";
+import ReusableForm from "@/components/ReusableForm";
 
+const BRANCH_LABELS = {
+  ameerpet: "Ameerpet",
+  kukatpally: "Kukatpally",
+  mehdipatnam: "Mehdipatnam",
+  hiteccity: "Hitec City",
+  secunderabad: "Secunderabad",
+  dilsukhnagar: "Dilsukhnagar",
+  bangalore: "Bangalore",
+  visakhapatnam: "Visakhapatnam",
+};
+
+const getBranchNameFromSlug = (value = "") => {
+  const slug = value
+    .replace(/^best-software-training-institute-/, "")
+    .replace(/^software-training-institute-/, "")
+    .replace(/-branch$/, "")
+    .trim();
+
+  return BRANCH_LABELS[slug] || slug.replace(/-/g, " ");
+};
+
+const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
+  const fromSlug = getBranchNameFromSlug(branchName);
+  if (fromSlug) return fromSlug;
+
+  const fromLocation =
+    branchLocation?.address?.split(",")?.[0] ||
+    branchLocation?.title ||
+    branchLocation?.name ||
+    "";
+
+  const fromHeroTitle = heroData?.title || heroData?.heading || heroData?.mainHeading || "";
+  const branchFromHero = fromHeroTitle.match(/in\s+([A-Za-z\s-]+)$/i)?.[1] || "";
+
+  return branchFromHero || fromLocation;
+};
+
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      const response = await fetch("https://apierp.infozit.com/lead/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      window.location.href = "/thankyou";
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 const FeaturedIn = Featuredin;
+
 
 const aboutFallbackImage =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/About_teks/teks_about_banner2.webp";
@@ -78,8 +142,9 @@ function SectionHeading({ parts = [], className = "" }) {
 }
 
 // ─── 1. HERO SECTION ──────────────────────────────────────────────────────
-function HeroSection({ data }) {
+function HeroSection({ data, branchName = "", branchLocation }) {
   if (!data) return null;
+  const branchLabel = getBranchLabel({ branchName, branchLocation, heroData: data });
 
   const branchData = {
     Rating: data.Rating || data.rating || data.ratingText,
@@ -158,17 +223,15 @@ function HeroSection({ data }) {
           </div>
 
           {/* Form Section - 40% */}
-          <div className="flex-[40%] 2xl:flex-[25%] 3xl:mx-14 2xl:p-4 3xl:p-6 lg:p-4 mx-6 lg:mx-40 p-3 xl:mx-0">
-            {branchData.heroImage && (
-              <div className="relative min-h-64 xl:min-h-80">
-                <Img
-                  src={branchData.heroImage}
-                  alt={data.image?.alt || data.bannerImage?.alt || branchData.title || "Branch"}
-                  fill
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-            )}
+          <div className="flex-[40%] bg-white rounded-xl 2xl:flex-[25%] 3xl:mx-14 2xl:p-4 3xl:p-6 lg:p-4 mx-6 lg:mx-40 p-3 xl:mx-0">
+           <ReusableForm
+          formType="enquiry"
+          onSubmit={handleSubmit}
+          initialValues={branchLabel ? { branch: branchLabel } : {}}
+          buttonText="Submit"
+          className="w-full"
+          successMessage="Thank you! We'll contact you soon."
+        />
           </div>
         </div>
       </div>
@@ -456,7 +519,11 @@ export default function BranchClient({ data: initialData = null, branchName = ""
 
   return (
     <main className="min-h-screen font-sans bg-white text-gray-800">
-      <HeroSection data={data.heroSection} />
+      <HeroSection
+        data={data.heroSection}
+        branchName={branchName}
+        branchLocation={data.branchLocation}
+      />
       <Topscroll data={data.topScroll} />
       <CoursesOffered data={data.CoursesOffered} />
       <section className="md:py-4 xl:py-6 bg-white">

@@ -428,6 +428,7 @@ export default function CourseInfoTable({
         <ReusableForm formType="enquiry"
           onSubmit={handleSubmit}
           buttonText="Submit"
+          initialValues={{ course: courseName || bannerData?.name || branch || "" }}
           className="w-full"
           successMessage="Thank you! We'll contact you soon." />
       )}
