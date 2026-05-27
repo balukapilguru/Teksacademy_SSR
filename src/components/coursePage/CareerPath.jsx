@@ -14,17 +14,22 @@ import {
   Layers,
   Cloud,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Heading from '@/utility/Heading';
+import Popupform from '../clientcomponents/forms/Popupform';
 
  
-const CareerPath = ({ data, formDetails }) => {
+const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
   const { heading } = data || {};
+  const router = useRouter();
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const courseDisplayName = courseName || formDetails?.courseName || formDetails?.course || formDetails || '';
+  const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toggleFlip = (id) => {
     setFlippedCardId((prev) => (prev === id ? null : id));
@@ -68,12 +73,57 @@ const CareerPath = ({ data, formDetails }) => {
   const selectedJob = data?.jobCards?.find((job) => job.role === selectedRole);
 
   const handleOpenModal = (details) => {
-    setSelectedCourse(details);
+    setSelectedCourse(courseDisplayName || details);
     setShowModal(true);
+  };
+
+  const handleFormSubmit = async (_formValues, mappedPayload) => {
+    setIsSubmitting(true);
+    console.log('Mapped payload being sent:', mappedPayload);
+
+    try {
+      const response = await fetch('https://apierp.infozit.com/lead/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log('API Response:', responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Submission failed');
+      }
+
+      setShowModal(false);
+      router.push('/thankyou');
+    } catch (error) {
+      console.error('Submission error:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="mx-auto py-6 p-4 rounded-xl">
+      {showModal && (
+        <Popupform
+          show={showModal}
+          onClose={() => !isSubmitting && setShowModal(false)}
+          course={selectedCourse}
+          courseName={selectedCourse}
+          source={30}
+          title="Enroll Now"
+          subtitle="Fill in your details to get course guidance and a callback from our team."
+          onSubmit={handleFormSubmit}
+          formType="EnrollNow"
+          buttonText="Enroll Now"
+          successMessage="Thank you! We'll contact you soon."
+        />
+      )}
 
 
       <Heading data={heading} />

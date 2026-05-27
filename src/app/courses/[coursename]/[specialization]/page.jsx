@@ -20,6 +20,55 @@ import Programfee from "@/components/coursePage/Programfee";
 
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
+const isGenericCourseLabel = (value) => {
+  const label = typeof value === "string" ? value.trim().toLowerCase() : "";
+  return !label || label === "course" || label === "course enquiry" || label === "course details";
+};
+
+const getCourseLabelValue = (value) => {
+  if (!value) return "";
+  if (typeof value === "string") {
+    return isGenericCourseLabel(value) ? "" : value.trim();
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const label = getCourseLabelValue(item);
+      if (label) return label;
+    }
+    return "";
+  }
+  if (typeof value === "object") {
+    const directValue =
+      value.mainHeading ||
+      value.heading ||
+      value.programName ||
+      value.courseName ||
+      value.course ||
+      value.title ||
+      value.name ||
+      value.text;
+
+    const directLabel = getCourseLabelValue(directValue);
+    if (directLabel) return directLabel;
+
+    for (const item of Object.values(value)) {
+      const label = getCourseLabelValue(item);
+      if (label) return label;
+    }
+  }
+  return "";
+};
+
+const getCourseLabelFromSlug = (slug = "") => {
+  return slug
+    .replace(/^best-/, "")
+    .replace(/-course-training-institute$/, "")
+    .replace(/-training-institute$/, "")
+    .replace(/-certification-program$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
+
 // export async function generateMetadata({ params }) {
 //   const { coursename, specialization } = await params;
 
@@ -97,7 +146,15 @@ export default async function Page({ params }) {
     formDetails,
     meta,
   } = courseData || {};
-console.log()
+
+  const courseLabel =
+    getCourseLabelValue(banner?.mainHeading) ||
+    getCourseLabelValue(courseData?.mainHeading) ||
+    getCourseLabelValue(courseData?.name) ||
+    getCourseLabelValue(banner?.name) ||
+    getCourseLabelFromSlug(specialization) ||
+    getCourseLabelFromSlug(coursename);
+
   // Create a component that wraps all CourseFlow-dependent components
   const CourseFlowSection = () => (
     <>
@@ -185,6 +242,7 @@ console.log()
           <Banner
             data={banner}
             formDetails={formDetails}
+            courseLabel={courseLabel}
             category={true}
             source={29}
           />
@@ -194,6 +252,7 @@ console.log()
             data={offeredBy}
             source={31}
             formDetails={formDetails}
+            courseName={courseLabel}
             category={true}
           />
         )}
@@ -215,6 +274,7 @@ console.log()
             <OverViewOfOnline
               data={overViewOfOnline}
               formDetails={formDetails}
+              courseName={courseLabel}
               category={true}
             />
           </div>
@@ -246,6 +306,8 @@ console.log()
             <DownloadCourseBrochure
               data={downloadOurCourseBrochure}
               formDetails={formDetails}
+              courseName={courseLabel}
+              courseSlug={coursename}
               category={true}
             />
           </div>

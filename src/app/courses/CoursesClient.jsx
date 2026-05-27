@@ -565,11 +565,25 @@ export default function CoursesClient() {
             source={28}
           />
         ) : (
-          <ReusableForm formType="enquiry"
+          <ReusableForm
+            formType="enquiry"
             onSubmit={handleSubmit}
+            initialValues={
+              React.useMemo(
+                () => ({
+                  course:
+                    selectedCourse?.programName ||
+                    selectedCourse?.courseName ||
+                    selectedCourse?.heading ||
+                    selectedCourse?.name || "",
+                }),
+                [selectedCourse]
+              )
+            }
             buttonText="Submit"
             className="w-full"
-            successMessage="Thank you! We'll contact you soon." />
+            successMessage="Thank you! We'll contact you soon."
+          />
         )
       )}
 

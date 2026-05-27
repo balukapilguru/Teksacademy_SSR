@@ -1,16 +1,44 @@
 "use client";
 
+import React, { useMemo } from "react";
 import ReusableForm from "@/components/ReusableForm";
 
 const getCourseLabel = (value) => {
   if (!value) return "";
   if (typeof value === "string") return value;
+  if (Array.isArray(value)) {
+    const firstValue = value.find((item) => item !== undefined && item !== null);
+    return getCourseLabel(firstValue);
+  }
   if (typeof value === "object") {
     return (
-      value.heading || value.programName || value.courseName || value.course || value.title || value.name || ""
+      value.programName ||
+      value.heading ||
+      value.courseName ||
+      value.course ||
+      value.title ||
+      value.name ||
+      ""
     );
   }
   return "";
+};
+
+const isMeaningfulCourseLabel = (label) => {
+  if (typeof label !== "string") return Boolean(label);
+
+  const normalizedLabel = label.trim().toLowerCase();
+  return (
+    normalizedLabel !== "" &&
+    normalizedLabel !== "course" &&
+    normalizedLabel !== "course enquiry" &&
+    normalizedLabel !== "course details"
+  );
+};
+
+const normalizeCourseInput = (value) => {
+  const label = getCourseLabel(value);
+  return isMeaningfulCourseLabel(label) ? label : "";
 };
 
 export default function Popupform({
@@ -29,19 +57,19 @@ export default function Popupform({
 }) {
   if (!show) return null;
 
-  const initialCourse = getCourseLabel(courseName) || getCourseLabel(course);
-  const initialValues = {
-    course: initialCourse,
-    branch: university || "",
-  };
+  const initialCourse = normalizeCourseInput(courseName) || normalizeCourseInput(course);
+  const initialValues = useMemo(
+    () => ({ course: initialCourse, branch: university || "" }),
+    [initialCourse, university]
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="relative w-full max-w-2xl rounded-3xl bg-white shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden">
         <button
           type="button"
           onClick={onClose}
-          className="absolute  cursor-pointer right-4 top-4 rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-700 hover:bg-gray-200"
+          className="absolute cursor-pointer right-4 top-4 rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-700 hover:bg-gray-200"
           aria-label="Close form modal"
         >
           Close

@@ -129,16 +129,10 @@ const Page = ({ data, branchData }) => {
   // Main render (exactly as original, but `courses` now comes from API)
   return (
     <section>
-      <div className="main_container mx-auto mt-5 px-4 sm:px-6 lg:px-8">
+      <div className="main_container mx-auto mt-5 pt-5 px-4 sm:px-6 lg:px-8">
         <Heading data={data?.heading} />
 
-        <ReusableForm
-          formType="enquiry"
-          onSubmit={handleSubmit}
-          buttonText="Submit"
-          className="w-full"
-          successMessage="Thank you! We'll contact you soon."
-        />
+      
 
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

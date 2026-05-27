@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const prevValueRef = useRef(value);
   const onVerifiedRef = useRef(onVerified);
+  const otpInputRefs = useRef([]);
 
   const [showOtp, setShowOtp] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -21,6 +22,12 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const API_URL = "https://apierp.infozit.com";
 
   useEffect(() => { onVerifiedRef.current = onVerified; }, [onVerified]);
+
+  useEffect(() => {
+    if (showOtp && !isVerified) {
+      setTimeout(() => otpInputRefs.current[0]?.focus(), 50);
+    }
+  }, [showOtp, isVerified]);
 
   // Reset when number changes
   useEffect(() => {
@@ -129,16 +136,16 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     const newOtp = [...otp];
     newOtp[index] = val;
     setOtp(newOtp);
-    if (val && index < 5) document.getElementById(`otp-input-${index + 1}`)?.focus();
+    if (val && index < 5) otpInputRefs.current[index + 1]?.focus();
   };
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-      document.getElementById(`otp-input-${index - 1}`)?.focus();
+      otpInputRefs.current[index - 1]?.focus();
       const newOtp = [...otp]; newOtp[index - 1] = ""; setOtp(newOtp);
     }
-    if (e.key === "ArrowLeft" && index > 0) document.getElementById(`otp-input-${index - 1}`)?.focus();
-    if (e.key === "ArrowRight" && index < 5) document.getElementById(`otp-input-${index + 1}`)?.focus();
+    if (e.key === "ArrowLeft" && index > 0) otpInputRefs.current[index - 1]?.focus();
+    if (e.key === "ArrowRight" && index < 5) otpInputRefs.current[index + 1]?.focus();
   };
 
   const handlePaste = (e, index) => {
@@ -148,7 +155,22 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     const newOtp = [...otp];
     pasted.split("").forEach((ch, i) => { if (index + i < 6) newOtp[index + i] = ch; });
     setOtp(newOtp);
-    document.getElementById(`otp-input-${Math.min(index + pasted.length, 5)}`)?.focus();
+    otpInputRefs.current[Math.min(index + pasted.length, 5)]?.focus();
+  };
+
+  const handleCloseOtpModal = () => {
+    setShowOtp(false);
+    setOtp(Array(6).fill(""));
+    // Re-affirm the current phone value to parent so it does not get cleared
+    try {
+      if (typeof onChange === "function") {
+        // prefer sending raw value; parent handlers should accept event or raw value
+        onChange(value);
+      }
+      if (onVerifiedRef.current) onVerifiedRef.current(isVerified);
+    } catch (e) {
+      // ignore
+    }
   };
 
   return (
@@ -208,44 +230,80 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
       )}
 
       {showOtp && !isVerified && (
-        <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-          <p className="text-sm text-blue-700 font-medium mb-3">
-            Enter the 6-digit OTP for +91 {value}
-          </p>
-
-          <div className="flex gap-2 mb-4">
-            {otp.map((val, i) => (
-              <input key={i} id={`otp-input-${i}`} value={val}
-                onChange={(e) => handleOtpChange(e.target.value, i)}
-                onKeyDown={(e) => handleKeyDown(e, i)}
-                onPaste={(e) => handlePaste(e, i)}
-                maxLength={1} inputMode="numeric"
-                className={`w-11 h-10 text-center border-2 rounded-lg text-lg font-normal focus:outline-none transition-all
-                  ${val ? "border-[#2a619d] bg-white text-[#2a619d]" : "border-gray-300 bg-white"}
-                  focus:border-[#2a619d] focus:ring-2 focus:ring-[#2a619d]/20`}
-              />
-            ))}
-          </div>
-
-          <div className="flex gap-2">
-            <button type="button" onClick={handleSendOtp} disabled={isResendDisabled || isLoading}
-              className={`flex-1 py-2 rounded-md text-xs font-medium transition-all
-                ${isResendDisabled || isLoading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border border-[#2a619d] text-[#2a619d] hover:bg-blue-50 active:scale-95"}`}>
-              {isResendDisabled && timer > 0 ? `Resend in ${formatTimer(timer)}` : isLoading ? "Sending..." : "Resend OTP"}
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 p-4">
+          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl">
+            <button
+              type="button"
+              onClick={handleCloseOtpModal}
+              className="absolute right-4 top-4 rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-700 transition hover:bg-gray-200"
+              aria-label="Close OTP verification popup"
+            >
+              Close
             </button>
+            <div className="border-b px-6 py-4">
+              <h3 className="text-xl font-semibold text-gray-900">Verify Mobile Number</h3>
+              <p className="mt-1 text-sm text-gray-600">
+                Enter the 6-digit OTP sent to +91 {value}
+              </p>
+            </div>
 
-            <button type="button" onClick={handleVerifyOtp} disabled={!isOtpComplete || isLoading}
-              className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all
-                ${isOtpComplete && !isLoading ? "bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-sm" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}>
-              {isLoading && showOtp
-                ? <span className="flex items-center justify-center gap-1.5">
-                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-                    </svg>Verifying...
-                  </span>
-                : "Verify OTP"}
-            </button>
+            <div className="px-6 py-5">
+              <div className="mb-5 flex justify-between gap-2">
+                {otp.map((val, i) => (
+                  <input
+                    key={i}
+                    ref={(element) => {
+                      otpInputRefs.current[i] = element;
+                    }}
+                    value={val}
+                    onChange={(e) => handleOtpChange(e.target.value, i)}
+                    onKeyDown={(e) => handleKeyDown(e, i)}
+                    onPaste={(e) => handlePaste(e, i)}
+                    maxLength={1}
+                    inputMode="numeric"
+                    className={`h-12 w-12 rounded-lg border-2 text-center text-lg font-semibold focus:outline-none transition-all sm:h-14 sm:w-14
+                      ${val ? "border-[#2a619d] bg-white text-[#2a619d]" : "border-gray-300 bg-white text-gray-900"}
+                      focus:border-[#2a619d] focus:ring-2 focus:ring-[#2a619d]/20`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={isResendDisabled || isLoading}
+                  className={`flex-1 rounded-md py-3 text-sm font-medium transition-all
+                    ${isResendDisabled || isLoading ? "cursor-not-allowed bg-gray-100 text-gray-400" : "border border-[#2a619d] bg-white text-[#2a619d] hover:bg-blue-50 active:scale-95"}`}
+                >
+                  {isResendDisabled && timer > 0 ? `Resend in ${formatTimer(timer)}` : isLoading ? "Sending..." : "Resend OTP"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  disabled={!isOtpComplete || isLoading}
+                  className={`flex-1 rounded-md py-3 text-sm font-semibold transition-all
+                    ${isOtpComplete && !isLoading ? "bg-green-600 text-white shadow-sm hover:bg-green-700 active:scale-95" : "cursor-not-allowed bg-gray-200 text-gray-400"}`}
+                >
+                  {isLoading && showOtp ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Verifying...
+                    </span>
+                  ) : (
+                    "Verify OTP"
+                  )}
+                </button>
+              </div>
+
+              <p className="mt-4 text-center text-xs text-gray-500">
+                Complete OTP verification to continue filling the form.
+              </p>
+            </div>
           </div>
         </div>
       )}

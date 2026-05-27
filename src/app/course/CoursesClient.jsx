@@ -590,7 +590,7 @@ export default function CoursesClient() {
         <Popupform
           show={showModal}
           onClose={() => setShowModal(false)}
-          course={selectedCourse?.heading}
+          course={selectedCourse}
           courseName={selectedCourse}
           source={28}
           onSubmit={handleSubmit}
