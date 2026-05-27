@@ -7,26 +7,49 @@ import Particles from "../coursePage/Particles";
 import GetData from "@/utility/GetData";
 import Bannerheading from "@/utility/Bannerheading";
 import PrimaryButton from "@/utility/PrimaryButton";
-import Popupform from "../Popupform";
+import Popupform from "../clientcomponents/forms/Popupform";
 
 
 const Banner = ({
   data,
   formDetails,
+  courseLabel = "",
   category = false,
-  branch = "course",
+  branch = "",
   isSelfPaced = false,
 }) => {
+  const normalizeCourseLabel = (value) => {
+    if (!value) return "";
+    if (typeof value === "string") return value;
+    if (Array.isArray(value)) {
+      const firstValue = value.find((item) => item !== undefined && item !== null);
+      return normalizeCourseLabel(firstValue);
+    }
+    if (typeof value === "object") {
+      return (
+        value.heading ||
+        value.programName ||
+        value.courseName ||
+        value.course ||
+        value.title ||
+        value.name ||
+        ""
+      );
+    }
+    return "";
+  };
+
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const [selectedCourse, setSelectedCourse] = useState(courseLabel || formDetails || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   if (!data) return null;
 
   const handleOpenModal = (details) => {
-    console.log("Opening modal with course:", details); // Debug log
-    setSelectedCourse(details);
+    const courseObj = details || courseLabel || formDetails || null;
+    console.log("Opening modal with course object:", courseObj); // Debug log
+    setSelectedCourse(courseObj);
     setShowModal(true);
   };
 
@@ -65,19 +88,19 @@ const Banner = ({
       {/* Debug log to check if Popupform renders */}
       {console.log("Modal state:", showModal)}
       
-      {/* Popupform for regular courses */}
-      {!category && !isSelfPaced && (
+      {/* Popupform for all pages when modal is open */}
+      {showModal && (
         <Popupform
           show={showModal}
           onClose={() => !isSubmitting && setShowModal(false)}
-          course={branch}
-          courseName={selectedCourse}
+          course={selectedCourse || courseLabel || formDetails || branch}
+          courseName={selectedCourse || courseLabel || formDetails}
           source={30}
-          title={data?.button?.name || "Enroll Now"}
+          title={"Enroll Now"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
-          formType="banner"
-          buttonText={data?.button?.name || "Enroll Now"}
+          formType="EnrollNow"
+          buttonText={"Enroll Now"}
           successMessage="Thank you! We'll contact you soon."
         />
       )}

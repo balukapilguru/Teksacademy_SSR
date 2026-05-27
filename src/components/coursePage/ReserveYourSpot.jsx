@@ -1,24 +1,23 @@
 "use client";
-import React, { useState } from "react";
-import { FaRegCheckCircle, FaArrowCircleRight } from "react-icons/fa";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
-import PrimaryButton from "@/utility/PrimaryButton";
+import ReusableForm from "@/components/ReusableForm";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
-import Popupform from "../clientcomponents/forms/Popupform";
 
-const ReserveYourSpot = ({ data, formDetails, course, source }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(
-    formDetails?.courseName || formDetails?.course || ""
-  );
+const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source }) => {
   const router = useRouter();
 
   if (!data) return null;
+
+  const courseDisplayName =
+    courseName || course || formDetails?.courseName || formDetails?.course || "";
+  const initialValues = {
+    course: courseDisplayName,
+  };
 
   const {
     heading = [],
@@ -27,12 +26,7 @@ const ReserveYourSpot = ({ data, formDetails, course, source }) => {
     reserveYourSpotForm = {},
   } = data;
 
-  const { formTitle, formSubtitle, formDescription } = reserveYourSpotForm;
-
-  const handleOpenModal = () => {
-    setSelectedCourse(formDetails?.courseName || formDetails?.course || "");
-    setShowModal(true);
-  };
+  const { formTitle, formSubtitle } = reserveYourSpotForm;
 
   const handleSubmit = async (formValues, mappedPayload) => {
     try {
@@ -114,7 +108,7 @@ const ReserveYourSpot = ({ data, formDetails, course, source }) => {
               )}
             </div>
 
-            {/* Form Section - Unified popup enquiry form */}
+            {/* Inline Reserve Your Spot Form */}
             <div className="lg:col-span-2 w-full md:w-[60%] lg:w-[60%] xl:w-[100%] mt-8 lg:mt-0">
               <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-gray-100">
                 <div className="text-left mb-4">
@@ -128,25 +122,19 @@ const ReserveYourSpot = ({ data, formDetails, course, source }) => {
                   )}
                 </div>
                 <div className="mt-6">
-                  <PrimaryButton variant="filled" onClick={handleOpenModal}>
-                    {formTitle || "Request Callback"}
-                  </PrimaryButton>
+                  <ReusableForm
+                    formType="reserveSpot"
+                    onSubmit={handleSubmit}
+                    initialValues={initialValues}
+                    title={formTitle || "Reserve Your Spot"}
+                    subtitle={formSubtitle || "Complete the form to reserve your seat and get a callback."}
+                    buttonText={formTitle || "Reserve Your Spot"}
+                    successMessage="Thank you! We'll contact you soon."
+                    source={source}
+                  />
                 </div>
               </div>
             </div>
-            <Popupform
-              show={showModal}
-              onClose={() => setShowModal(false)}
-              course={course || formDetails?.courseName || ""}
-              courseName={selectedCourse}
-              source={source}
-              title={formTitle || "Reserve Your Spot"}
-              subtitle={formSubtitle || "Complete the form to reserve your seat and get a callback."}
-              onSubmit={handleSubmit}
-              formType="enquiry"
-              buttonText={formTitle || "Reserve Your Spot"}
-              successMessage="Thank you! We'll contact you soon."
-            />
           </div>
         </div>
 

@@ -10,7 +10,7 @@ const Home = async () => {
   let aboutusdata = null;
 
   try {
-    const res = await fetch(`${baseUrl}/api/v1/home/about-us`, {
+    const res = await fetch(`${baseUrl}/api/v1/discover/about-us`, {
       next: { revalidate: 60 },
     });
 

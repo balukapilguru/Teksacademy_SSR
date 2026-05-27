@@ -1,10 +1,9 @@
 
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import PrimaryButton from "@/utility/PrimaryButton";
-import Popupform from "@/components/clientcomponents/forms/Popupform";
+import ReusableForm from "@/components/ReusableForm";
 
 const vector = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/vector.webp";
 const tekslogo = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/teks_logo.webp";
@@ -84,13 +83,11 @@ const blueItems = [
     },
 ];
 
-export default function Excel(data) {
+export default function Excel({ data, courseName }) {
     const router = useRouter();
-    const [showModal, setShowModal] = useState(false);
 
     const buttonText = data?.button?.text || "Request Call Back";
-    const formTitle = buttonText;
-    const courseName = data?.heading || "Course Enquiry";
+    const courseDisplayName = courseName || "";
 
     const handleSubmit = async (formValues, mappedPayload) => {
         try {
@@ -127,7 +124,7 @@ export default function Excel(data) {
 
     return (
         <div className="xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel_bg.webp')] bg-cover bg-center">
-            <div className="main_container py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10">
+            <div className="main_container">
                 <div className="flex flex-col items-center gap-y-2 sm:gap-y-4 lg:gap-y-8 2xl:gap-y-14 3xl:gap-y-20">
                     <div className=" flex flex-col items-center">
                         <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
@@ -215,40 +212,27 @@ export default function Excel(data) {
                                         after:content-[''] after:absolute after:left-[-7px] after:bottom-[-6px] after:w-4  after:h-4 after:bg-[#FE543D] after:rounded-full">
                                 </div>
                                 <div className="w-full">
-                                    <div className="bg-[#2A619D] p-5 px-6  2xl:p-10 mx-7 sm:mx-14  lg:mx-2 xl:ml-10 2xl:ml-24 3xl:ml-28 xl:mr-0  rounded-lg">
+                                    <div className="bg-[#2A619D] p-1 px-6  2xl:p-10 mx-7 sm:mx-14  lg:mx-2 xl:ml-10 2xl:ml-16 3xl:ml-28 xl:mr-0  rounded-lg">
                                         <div className="text-white mb-5">
                                             <h3 className="text-2xl font-semibold mb-3">{buttonText}</h3>
-                                            <p className="text-sm sm:text-base text-white/80">
+                                            {/* <p className="text-sm sm:text-base text-white/80">
                                                 Submit your details and our team will call you back with personalized guidance.
-                                            </p>
+                                            </p> */}
                                         </div>
-                                        <PrimaryButton
-                                            variant="filled"
-                                            className="w-full py-3"
-                                            onClick={() => setShowModal(true)}
-                                        >
-                                            {buttonText}
-                                        </PrimaryButton>
+                                        <ReusableForm
+                                            formType="requestCallback"
+                                            initialValues={courseDisplayName ? { course: courseDisplayName } : {}}
+                                            buttonText={buttonText}
+                                            onSubmit={handleSubmit}
+                                            className="bg-white rounded-xl p-4"
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <Popupform
-                show={showModal}
-                onClose={() => setShowModal(false)}
-                courseName={courseName}
-                onSubmit={handleSubmit}
-                title={formTitle}
-                subtitle="Complete the form below and verify OTP to receive a callback."
-                formType="enquiry"
-                buttonText={buttonText}
-                successMessage="Thank you! We'll contact you soon."
-            />
         </div>
-
     );
 }
