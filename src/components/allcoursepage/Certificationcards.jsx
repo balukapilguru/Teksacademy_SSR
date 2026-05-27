@@ -71,7 +71,7 @@ const Page = ({ data }) => {
           <PrimaryButton
             variant="outline"
             label="View All Courses"
-            href="/courses"
+            href="/course"
           />
         </div>
       </div>

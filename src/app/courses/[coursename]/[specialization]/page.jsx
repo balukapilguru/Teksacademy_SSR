@@ -71,7 +71,7 @@ export default async function Page({ params }) {
 
     const json = await res.json();
     courseData = json?.data;
-
+console.log(courseData,"coursedataaa")
     if (!courseData) notFound();
   } catch (error) {
     console.error("Course fetch failed:", error);
