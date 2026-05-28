@@ -5,7 +5,7 @@ import { BookOpen, Download, MessageCircle, Phone, Star } from "lucide-react";
 import Link from "next/link";
 
 const items = [
-  { label: "Courses", icon: BookOpen, href: "/courses" },
+  { label: "Courses", icon: BookOpen, href: "/course" },
   { label: "Chat", icon: MessageCircle, href: "https://wa.me/919000012345", isExternal: true },
   { label: "Review", icon: Star, href: "/reviews", highlight: true },
   { label: "Contact", icon: Phone, href: "tel:18001204748", isExternal: true },

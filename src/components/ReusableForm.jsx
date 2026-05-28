@@ -282,26 +282,6 @@ export default function ReusableForm({
         c.toLowerCase().includes(courseSearchTerm.toLowerCase())
       );
 
-      const isCourseFixed = initialValues && isFixedCourseValue(initialValues.course);
-
-      if (isCourseFixed) {
-        return (
-          <div key={fieldId} className="mb-4">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              {field.label} <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formValues[fieldId] || initialValues.course}
-              disabled
-              className={`w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed`
-              }
-            />
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-          </div>
-        );
-      }
-
       return (
         <div key={fieldId} className="mb-4 relative" ref={dropdownRef}>
           <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -312,8 +292,8 @@ export default function ReusableForm({
             className={`w-full px-4 py-2 border rounded-md flex items-center justify-between text-sm cursor-pointer
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
-            <span className={value ? "text-gray-900" : "text-gray-400"}>
-              {value || "Search or select a course"}
+            <span className={value || initialValues.course ? "text-gray-900" : "text-gray-400"}>
+              {value || initialValues.course || "Search or select a course"}
             </span>
             <svg className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
