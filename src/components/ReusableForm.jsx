@@ -293,7 +293,7 @@ export default function ReusableForm({
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
             <span className={value || initialValues.course ? "text-gray-900" : "text-gray-400"}>
-              {value || initialValues.course || "Search or select a course"}
+              {value || initialValues.course || "Select a course"}
             </span>
             <svg className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
