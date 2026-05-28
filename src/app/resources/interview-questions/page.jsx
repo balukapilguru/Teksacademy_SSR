@@ -30,6 +30,7 @@ const InterviewQuestionsPage = () => {
  
         if (result.success && result.data) {
           setInterviewData(result.data);
+          console.log(result.data,"interviewque")
         } else {
           setError("No data received from API");
         }

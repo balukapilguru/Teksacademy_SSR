@@ -6,7 +6,7 @@ import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import Loader from "../Loader";   // optional, you can style your own loader
-import CourseCard from "../allcoursepage/Coursecards";
+import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 
 const Page = ({ data, branchData }) => {
   const router = useRouter();
@@ -137,7 +137,7 @@ const Page = ({ data, branchData }) => {
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {courses.map((course, idx) => (
-              <CourseCard
+              <BranchCoursecards
                 key={idx}
                 course={course}
                 onGetDetailsClick={() => handleOpenModal(course)}
