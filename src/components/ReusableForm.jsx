@@ -9,6 +9,10 @@ const ALL_FIELDS = {
   email: { id: "email", label: "Email", type: "email", required: true, placeholder: "Enter your email" },
   phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
   course: { id: "course", label: "Course", type: "course", required: true },
+  career: { id: "career", label: "I want a career in", type: "select", required: true, options: ["Full Stack Java", "Full Stack Python", "Cyber Security", "Generative AI", "AWS + DevOps", "Data Science", "Data Analytics", "Digital Marketing"] }, 
+    // "BIM - Revit MEP, Navis" "AutoCAD", "Medical Coding", "SAP FICO", "SAP MM", "Testing - Automation", "Multimedia", "Advanced Excel", "Revit MEP Certification", "Business Analytics"
+  qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder:"select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
+  prefferd: { id: "prefferd", label: "Preferred mode", type: "select", required: true, options: ["Online (Live)", "Offline (Classroom)", "Hybrid"] },
   branch: { id: "branch", label: "Branch", type: "select", required: true, options: ["ameerpet", "kukatpally", "mehdipatnam", "hiteccity", "secunderabad", "dilsukhnagar", "bangalore", "visakhapatnam"] },
   city: { id: "city", label: "City", type: "text", required: true, placeholder: "Enter your city" },
   message: { id: "message", label: "Message", type: "textarea", required: false, placeholder: "Your message here...", rows: 4 },
@@ -67,7 +71,7 @@ export default function ReusableForm({
       support: ["name", "email", "phone", "course", "branch", "issue"],
       recruiter: ["name", "email", "phone", "companyName", "designation"],
       ebook: ["name", "email", "phone", "course", "branch"],
-      enquiry: ["name", "email", "phone", "course", "branch"],
+      home: ["name", "email", "phone", "career", "qualification", "prefferd"],
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
       banner: ["name", "email", "phone", "course", "branch", "city"],
@@ -139,7 +143,7 @@ export default function ReusableForm({
       support: "enquiryform",
       recruiter: "formdata",
       ebook: "Ebook—Website",
-      enquiry: "Website",
+      home: "Website",
       excel: "Request Callback—Website",
       syllabus: "Download Syllabus—Website",
       banner: "Enrollnow",
@@ -154,10 +158,13 @@ export default function ReusableForm({
       name: values.name || "",
       email: values.email || "",
       number: values.phone || "",
-      course: values.course || "",
+      course: values.course || values.career || "",
       city: values.city || "",
       branch: values.branch || "",
-      course_branch: values.branch || "",
+      course_branch: values.prefferd || "Online",
+      referredby: "website",
+      qualification: values.qualification || "B.Tech",
+      source_id: "home_form",
       company: values.companyName || "",
       designation: values.designation || "",
       message: values.message || "",
@@ -334,6 +341,28 @@ export default function ReusableForm({
       );
     }
 
+    if (fieldId === "career" || fieldId === "qualification" || fieldId === "prefferd") {
+      return (
+        <div key={fieldId} className="mb-4">
+          <label className="block text-xs font-medium text-gray-700 mb-1">
+            {field.label} <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={value}
+            onChange={(e) => handleChange(fieldId, e.target.value)}
+            className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
+          >
+            <option value="">Select {field.label}</option>
+            {field.options.map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+        </div>
+      );
+    }
+
     if (fieldId === "branch") {
       const isBranchFixed = initialValues && initialValues.branch && initialValues.branch.toString().trim() !== "";
 
@@ -347,7 +376,7 @@ export default function ReusableForm({
               type="text"
               value={formatFixedLabel(value || initialValues.branch)}
               disabled
-              className="w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
+              className="w-full px-2 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
             />
             {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
           </div>
@@ -362,7 +391,7 @@ export default function ReusableForm({
           <select
             value={value}
             onChange={(e) => handleChange(fieldId, e.target.value)}
-            className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+            className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
             <option value="">Select Branch</option>
@@ -388,7 +417,7 @@ export default function ReusableForm({
             value={value}
             onChange={(e) => handleChange(fieldId, e.target.value)}
             placeholder={field.placeholder}
-            className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+            className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -406,7 +435,7 @@ export default function ReusableForm({
           value={value}
           onChange={(e) => handleChange(fieldId, e.target.value)}
           placeholder={field.placeholder}
-          className={`w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+          className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
             ${error ? "border-red-500 bg-red-50" : "border-gray-300"}`}
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}

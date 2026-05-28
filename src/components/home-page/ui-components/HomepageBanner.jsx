@@ -48,9 +48,9 @@ export default function HomepageBanner({ bannerData }) {
 
           {/* Right Section: Form */}
           <div className="w-full flex justify-center lg:justify-end">
-            <div className="w-full max-w-md sm:max-w-lg">
+            <div className="w-full max-w-md sm:max-w-lg bg-white p-6 rounded-lg shadow">
               <ReusableForm
-                formType="enquiry"
+                formType="home"
                 buttonText="Submit"
                 successMessage="Thank you! We'll contact you soon."
                 className="w-full"

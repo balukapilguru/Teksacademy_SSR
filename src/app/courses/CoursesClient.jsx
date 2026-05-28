@@ -24,7 +24,7 @@ import ReusableForm from "@/components/ReusableForm";
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(`${baseUrl}/lead/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
