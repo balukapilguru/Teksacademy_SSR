@@ -9,6 +9,7 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import { RiArrowRightBoxFill } from "react-icons/ri";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { coursesList } from "@/data/courses";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const normalizeCourseText = (value) => {
   if (!value) return "";
@@ -107,7 +108,7 @@ const DownloadCourseBrochure = ({
 
   const handleSubmit = async (_formValues, mappedPayload) => {
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

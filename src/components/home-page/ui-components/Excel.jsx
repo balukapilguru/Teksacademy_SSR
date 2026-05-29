@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ReusableForm from "@/components/ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const vector = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/vector.webp";
 const tekslogo = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel/teks_logo.webp";
@@ -91,7 +92,7 @@ export default function Excel({ data, courseName }) {
 
     const handleSubmit = async (formValues, mappedPayload) => {
         try {
-            const response = await fetch("https://apierp.infozit.com/lead/create", {
+            const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

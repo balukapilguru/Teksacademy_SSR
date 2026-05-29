@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { buildApiUrl, teksSsrBaseUrl } from "@/lib/apiBaseUrls";
 
 export default function SignupPage() {
   const [step, setStep] = useState("signup");
@@ -62,9 +63,9 @@ export default function SignupPage() {
     if (!validate()) return;
 
     setSendingOtp(true);
-const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+const baseUrl = teksSsrBaseUrl;
     try {
-      const res = await fetch(`${baseUrl}/users/entityUserSignup`, {
+      const res = await fetch(buildApiUrl(baseUrl, "/users/entityUserSignup"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

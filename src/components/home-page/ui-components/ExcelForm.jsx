@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 // import { MobileOtpField } from "./ui-components/MobileOtpField"; 
 import { toast, Toaster } from "react-hot-toast"; 
 import { MobileOtpField } from "./MobileOtpField";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 // import Excel from "./Excel";
 
 
@@ -95,8 +96,10 @@ const ExcelForm = () => {
 
         {/*API*/ }
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL;
-            const { data, status } = await axios.post(`${API_URL}/lead/create`, formValues);
+            const { data, status } = await axios.post(
+                buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+                formValues
+            );
 
             if (status === 201) {
                 setFormValues(

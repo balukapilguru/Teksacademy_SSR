@@ -6,6 +6,8 @@ import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import Loader from "../Loader";   // optional, you can style your own loader
+import CourseCard from "../allcoursepage/Coursecards";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 
 const Page = ({ data, branchData }) => {
@@ -94,7 +96,7 @@ const pathname = usePathname();
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

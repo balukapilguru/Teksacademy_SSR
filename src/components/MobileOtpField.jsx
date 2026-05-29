@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-hot-toast";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const prevValueRef = useRef(value);
@@ -19,7 +20,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   // Get API URL from environment variable
-  const API_URL = "https://apierp.infozit.com";
+  const API_URL = blogsApplyBaseUrl;
 
   useEffect(() => { onVerifiedRef.current = onVerified; }, [onVerified]);
 
@@ -70,7 +71,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/lead/send-otp`, {
+      const res = await fetch(buildApiUrl(API_URL, "/lead/send-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ number: value }),
@@ -105,7 +106,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/lead/verify-otp`, {
+      const res = await fetch(buildApiUrl(API_URL, "/lead/verify-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ number: value, otp: finalOtp }),

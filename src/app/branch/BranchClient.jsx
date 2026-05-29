@@ -18,6 +18,10 @@ import ExploreBranch from "@/components/coursePage/ExploreBranch";
 import Faq from "@/components/coursePage/Faq";
 import CoursesOffered from "@/components/coursePage/CoursesOffered";
 import ReusableForm from "@/components/ReusableForm";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 const BRANCH_LABELS = {
   ameerpet: "Ameerpet",
@@ -60,7 +64,7 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +146,7 @@ function SectionHeading({ parts = [], className = "" }) {
 }
 
 // ─── 1. HERO SECTION ──────────────────────────────────────────────────────
-function HeroSection({ data, branchName = "", branchLocation }) {
+function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
   if (!data) return null;
   const branchLabel = getBranchLabel({ branchName, branchLocation, heroData: data });
 
@@ -152,7 +156,7 @@ function HeroSection({ data, branchName = "", branchLocation }) {
     title: data.title || data.heading || data.mainHeading,
     subtitle: data.subtitle || data.subTitle || data.label || "learn IT courses",
     about: data.about || data.description || data.desc,
-    buttonText: data.button?.text || data.button?.name || data.ctaText || "Enquiry Now",
+    buttonText: data.button?.text || data.button?.name || data.ctaText || "Enroll Now",
     buttonLink: data.button?.link || data.ctaLink || "/discover/contact-us",
     background:
       data.backgroundImage?.src ||
@@ -213,12 +217,13 @@ function HeroSection({ data, branchName = "", branchLocation }) {
                 </div>
               )}
 
-              <Link
-                href={branchData.buttonLink}
-                className="bg-[#FE543D] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] text-white p-2 xl:px-6 xl:py-3 rounded-md font-semibold shadow-md w-fit inline-block"
+              <button
+                type="button"
+                onClick={onEnrollClick}
+                className="bg-[#FE543D] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] text-white p-2 xl:px-6 xl:py-3 rounded-md font-semibold shadow-md w-fit inline-block cursor-pointer hover:bg-[#e14b36] transition"
               >
-                {branchData.buttonText} »
-              </Link>
+                Enroll Now »
+              </button>
             </div>
           </div>
 
@@ -455,6 +460,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
   const [data, setData] = useState(initialData);
   const [pageLoading, setPageLoading] = useState(!initialData);
   const [error, setError] = useState(null);
+  const [showEnrollPopup, setShowEnrollPopup] = useState(false);
 
   const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
   const branchApiPath = branchName
@@ -523,6 +529,17 @@ export default function BranchClient({ data: initialData = null, branchName = ""
         data={data.heroSection}
         branchName={branchName}
         branchLocation={data.branchLocation}
+        onEnrollClick={() => setShowEnrollPopup(true)}
+      />
+      <Popupform
+        show={showEnrollPopup}
+        onClose={() => setShowEnrollPopup(false)}
+        university={getBranchLabel({ branchName, branchLocation: data.branchLocation, heroData: data.heroSection })}
+        formType="enquiry"
+        title="Enroll Now"
+        subtitle="Fill in your details and verify your mobile number to reserve your seat."
+        buttonText="Enroll Now"
+        onSubmit={handleSubmit}
       />
       <Topscroll data={data.topScroll} />
       <CoursesOffered data={data.CoursesOffered} />
