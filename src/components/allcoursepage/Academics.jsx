@@ -231,8 +231,8 @@ console.log(data,"academimcs")
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
-            label="View All Courses"
-            href="/courses"
+            label="View All Course"
+            href="/course"
             onClick={() => {
               localStorage.setItem("selectedCategory", "academics");
               localStorage.setItem("selectedSubCategory", selectedCategory);

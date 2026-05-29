@@ -7,7 +7,7 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import Loader from "../Loader";   // optional, you can style your own loader
 import CourseCard from "../allcoursepage/Coursecards";
-import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { blogsApplyBaseUrl, buildApiUrl, teksSsrBaseUrl } from "@/lib/apiBaseUrls";
 import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 
 const Page = ({ data, branchData }) => {
@@ -186,7 +186,7 @@ const pathname = usePathname();
           <PrimaryButton
             variant="outline"
             label="View All Courses"
-            href="/courses"
+            href="/course"
           />
         </div>
       </div>

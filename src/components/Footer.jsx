@@ -76,7 +76,7 @@ export default function Footer() {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
         const res = await fetch(`${baseUrl}/api/v1/home/footer`, {
-          next: { revalidate: 60 }, // optional, works on server but fine here
+          next: { revalidate: 60 },
         });
         if (!res.ok) throw new Error('Failed to fetch footer data');
         const json = await res.json();
@@ -91,8 +91,8 @@ export default function Footer() {
     fetchFooterData();
   }, []);
 
-  if (loading) return null; // or a skeleton loader
-  if (error) return null;    // silently fail – you can add a fallback UI
+  if (loading) return null;
+  if (error) return null;
 
   const { image, officialAddress, socialMedia, sections, bottomBar } = footerData;
 
@@ -100,47 +100,64 @@ export default function Footer() {
     <footer className="relative bg-black text-white">
       <div>
         {/* Top Blue Bar – dynamic branch address/phone */}
+        {/* 
+          FIXED LAYOUT:
+          - Mobile (default): flex-col → each item takes full width, stacked vertically
+            Row 1: Address
+            Row 2: Phone  
+            Row 3: Email
+          - Desktop (md:flex-row): three columns in one row
+        */}
         <div className="bg-[#0E2849]">
-          <div className="main_container mx-auto pt-4 lg:py-4 xl:py-5">
+          <div className="main_container mx-auto py-4 lg:py-4 xl:py-5">
             <div className="w-full lg:w-11/12 xl:w-11/12 xs:p-4 lg:p-0 mx-auto">
-              <div className="relative flex flex-wrap items-center lg:gap-x-6 xs:gap-x-10 sm:gap-x-16 md:gap-x-28 md:gap-y-4 lg:justify-between text-center md:text-left xs:text-left">
-                <div className="mb-4 cursor-pointer md:mb-0">
+              {/* Mobile: column | Desktop: row */}
+              <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-y-5 md:gap-y-0 md:gap-x-6 lg:gap-x-8 text-left">
+                
+                {/* Address Block - Row 1 on mobile */}
+                <div className="cursor-pointer w-full md:w-auto">
                   <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <FaLocationDot className="w-5 md:h-5 2xl:mt-4" />
+                      <FaLocationDot className="w-5 md:h-5 2xl:mt-4 text-[#FE543D]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D] mb-1 text-start">Address:</span>
                       <Link href={branchMapLink} target="_blank" rel="noopener noreferrer">
-                        <span className="font-normal xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem]">
+                        <span className="font-normal xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem] text-white hover:text-[#FE543D] transition-colors">
                           {branchAddress}
                         </span>
                       </Link>
                     </div>
                   </div>
                 </div>
-                <div className="mb-4 md:mb-0">
-                  <div className="flex cursor-pointer items-center space-x-2">
+                
+                {/* Phone Block - Row 2 on mobile */}
+                <div className="cursor-pointer w-full md:w-auto">
+                  <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <IoIosCall className="w-5 md:h-5 2xl:mt-5" />
+                      <IoIosCall className="w-5 md:h-5 2xl:mt-5 text-[#FE543D]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D] mb-1">Phone:</span>
-                      <span className="font-medium xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem]">
+                      <span className="font-medium xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem] text-white">
                         {branchContact}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="mb-4 cursor-pointer md:mb-1">
+                
+                {/* Email Block - Row 3 on mobile */}
+                <div className="cursor-pointer w-full md:w-auto">
                   <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <IoMdMail className="w-5 md:h-5 2xl:mt-5" />
+                      <IoMdMail className="w-5 md:h-5 2xl:mt-5 text-[#FE543D]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D]">Email:</span>
                       <span className="font-normal xs:text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] 3xl:text-[1.3rem]">
-                        <a href="mailto:info@teksacademy.com">support@teksacademy.com</a>
+                        <a href="mailto:support@teksacademy.com" className="text-white hover:text-[#FE543D] transition-colors">
+                          support@teksacademy.com
+                        </a>
                       </span>
                     </div>
                   </div>
@@ -187,7 +204,7 @@ export default function Footer() {
                         rel="noopener noreferrer"
                         aria-label={`Visit our ${social.platform} page`}
                       >
-                        <Icon className="w-8 h-8 p-1.5 text-[#FE543D] bg-slate-600 rounded-full" />
+                        <Icon className="w-8 h-8 p-1.5 text-[#FE543D] bg-slate-600 rounded-full hover:bg-[#FE543D] hover:text-white transition-all duration-300" />
                       </Link>
                     );
                   })}
@@ -198,15 +215,17 @@ export default function Footer() {
               <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-y-6 gap-x-4">
                 {sections.map((section, idx) => (
                   <div key={idx} className="flex flex-col items-start mt-8">
-                    <h3 className="font-normal text-lg mb-4">{section.title}</h3>
+                    <h3 className="font-normal text-lg mb-4 text-white">{section.title}</h3>
                     <ul className="text-white space-y-2">
                       {section.items.map((item, i) => (
                         <li
                           key={i}
                           className="flex items-center text-[14px] font-normal hover:text-[#FC6441] tracking-wide"
                         >
-                          <BiLogoFlutter className="transform scale-x-[-1] mr-2 hover:text-[#FC6441]" />
-                          <Link href={item.url || '#'}>{item.name}</Link>
+                          <BiLogoFlutter className="transform scale-x-[-1] mr-2 text-[#FE543D]" />
+                          <Link href={item.url || '#'} className="hover:text-[#FE543D] transition-colors">
+                            {item.name}
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -227,7 +246,7 @@ export default function Footer() {
             </div>
             <div className="text-center mb-2 md:mb-0">{bottomBar.copyright}</div>
             <div className="text-center md:text-right mb-2 md:mb-0">
-              <Link href="https://infozit.com/" target="_blank">
+              <Link href="https://infozit.com/" target="_blank" className="hover:text-[#FE543D] transition-colors">
                 <div className="">{bottomBar.developerNote}</div>
               </Link>
             </div>

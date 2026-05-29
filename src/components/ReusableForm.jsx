@@ -70,7 +70,7 @@ export default function ReusableForm({
   // Define which fields to show for each form type
   const getFieldsForType = useCallback(() => {
     const formFields = {
-      default: ["name", "email", "phone", "course", "branch", "city", "message"],
+      default: ["name", "email", "phone", "course", "branch"],
       contact: ["name", "email", "phone", "course", "branch", "city"],
       support: ["name", "email", "phone", "course", "branch", "issue"],
       recruiter: ["name", "email", "phone", "companyName", "designation"],
@@ -78,11 +78,11 @@ export default function ReusableForm({
       home: ["name", "email", "phone", "career", "qualification"],
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
-      banner: ["name", "email", "phone", "course", "branch", "city"],
+      banner: ["name", "email", "phone", "course", "branch"],
       Career: ["name", "email", "phone", "course", "branch"],
-      EnrollNow: ["name", "email", "phone", "course", "branch", "city"],
-      requestCallback: ["name", "email", "phone", "course", "branch", "city"],
-      reserveSpot: ["name", "email", "phone", "course", "branch", "city"],
+      EnrollNow: ["name", "email", "phone", "course", "branch"],
+      requestCallback: ["name", "email", "phone", "course", "branch"],
+      reserveSpot: ["name", "email", "phone", "course", "branch"],
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
