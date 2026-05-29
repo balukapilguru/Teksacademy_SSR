@@ -71,7 +71,7 @@ const Page = ({ data }) => {
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
-            label="View All Courses"
+            label="View All Course"
             href="/course"
           />
         </div>

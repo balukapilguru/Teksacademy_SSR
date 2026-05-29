@@ -14,6 +14,7 @@ import {
   Sparkles,
   User,
   X,
+  FileText, // Ebook icon
 } from "lucide-react";
 import { MobileOtpField } from "@/components/MobileOtpField";
 import { coursesList } from "@/data/courses";
@@ -26,6 +27,7 @@ const WHATSAPP =
 const CHATBOT_SOURCE_ID = "63";
 const CHAT_STORAGE_KEY = "teks_mobile_chat_v1";
 const CHAT_PROFILE_KEY = "teks_mobile_chat_profile_v1";
+const EBOOK_URL = "/resources/ebook";
 
 const branches = [
   "Ameerpet",
@@ -168,11 +170,12 @@ const flow = {
   menu: () => [greet()],
 };
 
+// Navigation items - Scholarship replaced with Ebooks
 const items = [
   { label: "Courses", icon: BookOpen, href: "/course", type: "link" },
   { label: "Chat", icon: MessageCircle, type: "chat" },
   { label: "Contact", icon: Phone, href: PHONE_HREF, highlight: true, type: "call" },
-  { label: "Scholarship", icon: GraduationCap, href: PHONE_HREF, type: "call" },
+  { label: "Ebooks", icon: FileText, href: EBOOK_URL, type: "link" }, // Ebooks - navigates to /resources/ebook
   { label: "Brochure", icon: Download, type: "brochure" },
 ];
 
