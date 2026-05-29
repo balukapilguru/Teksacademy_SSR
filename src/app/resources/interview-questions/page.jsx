@@ -30,6 +30,13 @@ const InterviewQuestionsPage = () => {
  
         if (result.success && result.data) {
           setInterviewData(result.data);
+           if (result.data.meta) {
+            document.title = result.data.meta.title;
+            const metaDescription = document.querySelector('meta[name="description"]');
+            if (metaDescription) {
+              metaDescription.content = result.data.meta.description;
+            }
+          }
           console.log(result.data,"interviewque")
         } else {
           setError("No data received from API");
