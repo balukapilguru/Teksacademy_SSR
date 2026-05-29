@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 export default function Nutshell({ data, courseData, courseName = "" }) {
   const { title, services, button, image } = data || {};
@@ -24,7 +25,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

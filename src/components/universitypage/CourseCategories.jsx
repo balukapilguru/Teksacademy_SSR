@@ -7,13 +7,14 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Heading from "@/utility/Heading";
 import Loader from "../Loader";
 import ReusableForm from "../ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
   const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
   const handleSubmit = async (formValues, mappedPayload) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

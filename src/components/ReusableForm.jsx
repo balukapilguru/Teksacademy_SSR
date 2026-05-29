@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { MobileOtpField } from "./MobileOtpField";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 // Complete field configuration
 const ALL_FIELDS = {
@@ -63,6 +65,8 @@ export default function ReusableForm({
   successMessage = "Form submitted successfully!",
   className = ""
 }) {
+  const router = useRouter();
+
   // Define which fields to show for each form type
   const getFieldsForType = useCallback(() => {
     const formFields = {
@@ -71,7 +75,7 @@ export default function ReusableForm({
       support: ["name", "email", "phone", "course", "branch", "issue"],
       recruiter: ["name", "email", "phone", "companyName", "designation"],
       ebook: ["name", "email", "phone", "course", "branch"],
-      home: ["name", "email", "phone", "career", "qualification", "prefferd"],
+      home: ["name", "email", "phone", "career", "qualification"],
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
       banner: ["name", "email", "phone", "course", "branch", "city"],
@@ -99,7 +103,7 @@ export default function ReusableForm({
   const dropdownRef = useRef(null);
   const prevInitialValuesRef = useRef(null);
 
-  const API_URL = "https://apierp.infozit.com";
+  const API_URL = blogsApplyBaseUrl;
 
   useEffect(() => {
     const handler = (e) => {
@@ -235,7 +239,7 @@ export default function ReusableForm({
       if (onSubmit) {
         await onSubmit(formValues, payload);
       } else {
-        const response = await fetch(`${API_URL}/lead/create`, {
+        const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -246,12 +250,7 @@ export default function ReusableForm({
           throw new Error(errorData.message || "Submission failed");
         }
         
-        alert(successMessage);
-        const fields = getFieldsForType();
-        const resetValues = {};
-        fields.forEach(fieldId => { resetValues[fieldId] = ""; });
-        setFormValues(resetValues);
-        setIsOtpVerified(false);
+        router.push("/thankyou");
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -353,7 +352,7 @@ export default function ReusableForm({
             className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
-            <option value="">Select {field.label}</option>
+            <option value="" className="text-gray-400">{field.label}</option>
             {field.options.map(opt => (
               <option key={opt} value={opt}>{opt}</option>
             ))}

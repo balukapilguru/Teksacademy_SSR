@@ -20,11 +20,12 @@ import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { IoIosSearch } from "react-icons/io";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
 import ReusableForm from "@/components/ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
   const handleSubmit = async (formValues, mappedPayload) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch(`${baseUrl}/lead/create`, {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

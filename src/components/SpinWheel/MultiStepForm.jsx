@@ -1,6 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 import FormStepName from "./FormStepName";
 import FormStepEmail from "./FormStepEmail";
@@ -43,7 +44,7 @@ const MultiStepForm = ({ onSuccess, onClose }) => {
   });
 
   const TOTAL_STEPS = 5;
-  const baseUrl = "https://apierp.teksversity.com";
+  const baseUrl = blogsApplyBaseUrl;
 
   const handleFormChange = (newValues) => {
     setFormData((prev) => ({ ...prev, ...newValues }));
@@ -130,7 +131,7 @@ const MultiStepForm = ({ onSuccess, onClose }) => {
   const validateEmailAPI = async (email) => {
     setLoading((prev) => ({ ...prev, email: true }));
     try {
-      const res = await fetch(`${baseUrl}/lead/emailcheck`, {
+      const res = await fetch(buildApiUrl(baseUrl, "/lead/emailcheck"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -168,7 +169,7 @@ const MultiStepForm = ({ onSuccess, onClose }) => {
   const validateMobileAPI = async (mobile) => {
     setLoading((prev) => ({ ...prev, mobile: true }));
     try {
-      const res = await fetch(`${baseUrl}/lead/mobilecheck`, {
+      const res = await fetch(buildApiUrl(baseUrl, "/lead/mobilecheck"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

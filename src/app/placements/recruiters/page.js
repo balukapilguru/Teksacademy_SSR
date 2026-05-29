@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import ReusableForm from "@/components/ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 // import Recruitersform from "@/app/forms/Recruitersform";
 
 const Recruiters = () => {
@@ -15,7 +16,7 @@ const Recruiters = () => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

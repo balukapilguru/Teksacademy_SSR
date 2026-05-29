@@ -1,5 +1,6 @@
 "use client";
 import ReusableForm from "@/components/ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import { useRouter } from "next/navigation";
 
 export default function ContactUsPage() {
@@ -9,7 +10,7 @@ export default function ContactUsPage() {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

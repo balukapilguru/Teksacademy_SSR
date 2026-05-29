@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
 import { X } from "lucide-react";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const FeeStructure = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -11,7 +12,7 @@ const FeeStructure = () => {
 
   const handleSubmit = async (formValues, mappedPayload) => {
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(mappedPayload),

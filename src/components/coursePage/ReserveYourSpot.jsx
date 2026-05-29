@@ -7,6 +7,7 @@ import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
 import ReusableForm from "@/components/ReusableForm";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source }) => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
 
   const handleSubmit = async (formValues, mappedPayload) => {
     try {
-      const response = await fetch("https://apierp.teksversity.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(mappedPayload),
@@ -41,7 +42,6 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
         throw new Error(responseData.message || "Submission failed");
       }
 
-      toast.success("Form submitted successfully!");
       router.push("/thankyou");
     } catch (error) {
       toast.error(error.message || "Submission failed. Please try again.");

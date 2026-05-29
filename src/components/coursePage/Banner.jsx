@@ -8,6 +8,7 @@ import GetData from "@/utility/GetData";
 import Bannerheading from "@/utility/Bannerheading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import Popupform from "../clientcomponents/forms/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 
 const Banner = ({
@@ -58,7 +59,7 @@ const Banner = ({
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
