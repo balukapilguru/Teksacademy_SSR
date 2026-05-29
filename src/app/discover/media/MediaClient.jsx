@@ -201,31 +201,46 @@ const Media = () => {
                 className="rounded shadow"
               />
               
+              
             );
           }
+          
 
-          if (
-            activeTab === "influencer" &&
-            activeInfluencerTab === "instagram"
-          ) {
-            return (
-              <a
-                key={item.id}
-                href={item.videoUrl}
-                target="_blank"
-                className="block"
-              >
-                <Image
-                  src={imageUrl}
-                  alt={item.alt}
-                  width={400}
-                  height={400}
-                  className="rounded shadow"
-                />
-              </a>
-            );
-          }
+        if (
+  activeTab === "influencer" &&
+  activeInfluencerTab === "instagram"
+) {
+  return (
+    <a
+      key={item.id}
+      href={item.videoUrl}
+      target="_blank"
+      className="relative group"
+    >
+      <Image
+        src={imageUrl}
+        alt={item.alt}
+        width={400}
+        height={400}
+        className="rounded shadow"
+      />
 
+      {/* SAME overlay as YouTube */}
+      <div className="absolute inset-0 flex items-center justify-center bg-gray-950/40 rounded-lg  opacity-100 transition">
+        <div className="flex items-center justify-center w-10 h-10 xl:w-16 xl:h-16 border-4 border-gray-300 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="white"
+            className="w-6 h-6 xl:w-8 xl:h-8 opacity-80"
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+    </a>
+  );
+}
         return (
   <button
     key={item.id}
@@ -237,7 +252,7 @@ const Media = () => {
       alt={item.alt}
       width={400}
       height={240}
-      className="rounded shadow"
+      className="rounded shadow  "
     />
 
     {/* 🔥 Overlay */}

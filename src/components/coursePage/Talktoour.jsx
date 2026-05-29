@@ -11,9 +11,9 @@ export default function Letstalk({ data }) {
   if (!data) return null;
 
   const imageSrc = data?.callPopup?.image?.src
-    ? GetData({ url: data.callPopup.image.src })
+    ? GetData({ url: data?.callPopup?.image?.src })
     : "";
-
+console.log(imageSrc,"letstalk")
   return (
     <div className="py-2">
       <div className="bg-[#212121] text-white rounded-2xl flex flex-col md:flex-row items-center justify-between p-8 md:p-12 shadow-lg">

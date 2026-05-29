@@ -226,7 +226,7 @@ export default function Testimonials({ data }) {
                         }`}
                       >
                         <Image
-                          src={getImageUrl(item.thumbnail)}
+                          src={GetData(item.thumbnail)}
                           alt={item.name || "Student"}
                           width={280}
                           height={450}
@@ -310,7 +310,7 @@ export default function Testimonials({ data }) {
                     <div className="flex items-center gap-4 mb-3">
                       <div className="w-[100px] h-[100px] rounded-full overflow-hidden border bg-gray-200">
                         <Image
-                          src={getImageUrl(safeTestimonialCards[index2]?.image)}
+                          src={GetData(safeTestimonialCards[index2]?.image)}
                           alt={safeTestimonialCards[index2]?.name || "Student"}
                           width={100}
                           height={100}
@@ -354,7 +354,7 @@ export default function Testimonials({ data }) {
                       <div className="flex items-center gap-4 mb-3">
                         <div className="w-[100px] h-[100px] rounded-full overflow-hidden border bg-gray-200">
                           <Image
-                            src={getImageUrl(item.image)}
+                            src={GetData(item.image)}
                             alt={item.name || "Student"}
                             width={100}
                             height={100}

@@ -17,7 +17,6 @@ export async function generateMetadata({ params }) {
   }
 }
 
-
 /* =====================================================
    COMPONENT IMPORTS (UNCHANGED)
 ===================================================== */
@@ -51,7 +50,12 @@ import Hiring from "@/components/home-page/ui-components/Hiring";
 
 const isGenericCourseLabel = (value) => {
   const label = typeof value === "string" ? value.trim().toLowerCase() : "";
-  return !label || label === "course" || label === "course enquiry" || label === "course details";
+  return (
+    !label ||
+    label === "course" ||
+    label === "course enquiry" ||
+    label === "course details"
+  );
 };
 
 const getCourseLabelValue = (value) => {
@@ -123,8 +127,6 @@ export default async function Page({ params }) {
     data?.category === "certifications" ||
     data?.banner?.name?.toLowerCase().includes("certification");
 
-
-
   // const schemaData = data?.meta?.schemaCode;
 
   const isSelfPaced =
@@ -139,9 +141,7 @@ export default async function Page({ params }) {
     data?.banner?.name?.toLowerCase().includes("academic");
 
   const formDetails =
-    isCertification || isSelfPaced
-      ? data?.formDetails
-      : data?.specializations;
+    isCertification || isSelfPaced ? data?.formDetails : data?.specializations;
 
   /* =====================================================
      DATA MAPPING (UNCHANGED)
@@ -165,12 +165,11 @@ export default async function Page({ params }) {
   };
 
   const mostSearchedTerms = data?.mostSearchedTerms && {
-    locations: data.mostSearchedTerms.locations,
-    courses: data.mostSearchedTerms.courses,
-  };
+  courses: data.mostSearchedTerms.courses,
+};
+  console.log(mostSearchedTerms,"mst")
 
-  const excelSectionData =
-    data?.excel || data?.Excel;
+  const excelSectionData = data?.excel || data?.Excel;
 
   const courseLabel =
     getCourseLabelValue(data?.banner?.mainHeading) ||
@@ -178,27 +177,37 @@ export default async function Page({ params }) {
     getCourseLabelValue(data?.name) ||
     getCourseLabelValue(data?.banner?.name) ||
     getCourseLabelFromSlug(coursename);
-  const careerServicesData =
-    data?.careerServices ||
-    data?.careerService ||
-    {
+  const careerServicesData = data?.careerServices ||
+    data?.careerService || {
       title: ["Career Services in a", "Nutshell"],
       services: [
         {
           title: "Technical Seminars",
-          icon: { url: "assets/img/excel/orange-1.webp", name: "Technical Seminars" },
+          icon: {
+            url: "assets/img/excel/orange-1.webp",
+            name: "Technical Seminars",
+          },
         },
         {
           title: "Mock Interviews CRT & Job Ready Skills",
-          icon: { url: "assets/img/excel/orange-2.webp", name: "Mock Interviews" },
+          icon: {
+            url: "assets/img/excel/orange-2.webp",
+            name: "Mock Interviews",
+          },
         },
         {
           title: "Dedicated Job Portal",
-          icon: { url: "assets/img/excel/orange-3.webp", name: "Dedicated Job Portal" },
+          icon: {
+            url: "assets/img/excel/orange-3.webp",
+            name: "Dedicated Job Portal",
+          },
         },
         {
           title: "Internship opportunity in a IT Company",
-          icon: { url: "assets/img/excel/orange-4.webp", name: "Internship Opportunity" },
+          icon: {
+            url: "assets/img/excel/orange-4.webp",
+            name: "Internship Opportunity",
+          },
         },
       ],
       button: { text: "Request Call Back", link: "/forms/request-call-back" },
@@ -209,7 +218,7 @@ export default async function Page({ params }) {
       },
     };
 
-    console.log(data?.careerService,"data?.careerServices")
+  console.log(data?.careerService, "data?.careerServices");
   /* =====================================================
      COURSE FLOW (UNCHANGED)
   ===================================================== */
@@ -231,10 +240,11 @@ export default async function Page({ params }) {
         />
       )}
 
-      {data?.excel && (
-        <Excel data={data.excel} courseName={courseLabel} />
-      )}
+      {data?.excel && <Excel data={data.excel} courseName={courseLabel} />}
 
+{data?.ToolsAndFeatures && (
+        <ToolsAndFeatures data={data.ToolsAndFeatures} />
+      )}
       {data?.industryProjects && (
         <IndustryProjects data={data.industryProjects} />
       )}
@@ -251,13 +261,9 @@ export default async function Page({ params }) {
         <Admission data={data.OnlineAdmissionProcedure} />
       )}
 
-      {data?.platFormSupport && (
-        <Platform data={data.platFormSupport} />
-      )}
+      {data?.platFormSupport && <Platform data={data.platFormSupport} />}
 
-      {data?.testimonials && (
-        <Testimonials data={data.testimonials} />
-      )}
+      {data?.testimonials && <Testimonials data={data.testimonials} />}
 
       {/* {!isSelfPaced && !isAcademic && (
         <Programfee
@@ -281,90 +287,92 @@ export default async function Page({ params }) {
 
     ...(isCertification
       ? [
-        {
-          key: "course-overview",
-          component: data?.overViewOfOnline && (
-            <OverViewOfOnline
-              data={data.overViewOfOnline}
-              formDetails={formDetails}
-              courseName={courseLabel}
-              category={true}
-            />
-          ),
-        },
-        {
-          key: "certification-excel",
-          component: data?.Excel && <Excel data={data.Excel} courseName={courseLabel} />,
-        },
-        { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
-        {
-          key: "course-key-highlights",
-          component: data?.keyHighlights && (
-            <KeyHighLights data={data.keyHighlights} />
-          ),
-        },
-        {
-          key: "course-download-brochure",
-          component: data?.downloadOurCourseBrochure && (
-            <DownloadCourseBrochure
-              data={data.downloadOurCourseBrochure}
-              formDetails={formDetails}
-              courseName={courseLabel}
-              courseSlug={coursename}
-              category={true}
-            />
-          ),
-        },
-        { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
-      ]
+          {
+            key: "course-overview",
+            component: data?.overViewOfOnline && (
+              <OverViewOfOnline
+                data={data.overViewOfOnline}
+                formDetails={formDetails}
+                courseName={courseLabel}
+                category={true}
+              />
+            ),
+          },
+          {
+            key: "certification-excel",
+            component: data?.Excel && (
+              <Excel data={data.Excel} courseName={courseLabel} />
+            ),
+          },
+          { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
+          {
+            key: "course-key-highlights",
+            component: data?.keyHighlights && (
+              <KeyHighLights data={data.keyHighlights} />
+            ),
+          },
+          {
+            key: "course-download-brochure",
+            component: data?.downloadOurCourseBrochure && (
+              <DownloadCourseBrochure
+                data={data.downloadOurCourseBrochure}
+                formDetails={formDetails}
+                courseName={courseLabel}
+                courseSlug={coursename}
+                category={true}
+              />
+            ),
+          },
+          { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
+        ]
       : [
-        {
-          key: "course-overview",
-          component: data?.overViewOfOnline && (
-            <OverViewOfOnline
-              data={data.overViewOfOnline}
-              formDetails={formDetails}
-              courseName={courseLabel}
-              category={isCertification}
-              branch={data?.branch}
-              isSelfPaced={isSelfPaced}
-            />
-          ),
-        },
-        {
-          key: "course-why-online",
-          component: data?.whyOnline && (
-            <Whyacademics data={data.whyOnline} />
-          ),
-        },
-        {
-          key: "course-key-highlights",
-          component: data?.keyHighlights && (
-            <KeyHighLights data={data.keyHighlights} />
-          ),
-        },
-        {
-          key: "course-download-brochure",
-          component: data?.downloadOurCourseBrochure && (
-            <DownloadCourseBrochure
-              data={data.downloadOurCourseBrochure}
-              formDetails={formDetails}
-              courseName={courseLabel}
-              courseSlug={coursename}
-              category={isCertification}
-              branch={data?.branch}
-              isSelfPaced={isSelfPaced}
-            />
-          ),
-        },
-        {
-          key: "course-specializations",
-          component: data?.specializations && (
-            <Specializations data={data?.specializations} />
-          ),
-        },
-        { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
-      ]),
+          {
+            key: "course-overview",
+            component: data?.overViewOfOnline && (
+              <OverViewOfOnline
+                data={data.overViewOfOnline}
+                formDetails={formDetails}
+                courseName={courseLabel}
+                category={isCertification}
+                branch={data?.branch}
+                isSelfPaced={isSelfPaced}
+              />
+            ),
+          },
+          {
+            key: "course-why-online",
+            component: data?.whyOnline && (
+              <Whyacademics data={data.whyOnline} />
+            ),
+          },
+          {
+            key: "course-key-highlights",
+            component: data?.keyHighlights && (
+              <KeyHighLights data={data.keyHighlights} />
+            ),
+          },
+          {
+            key: "course-download-brochure",
+            component: data?.downloadOurCourseBrochure && (
+              <DownloadCourseBrochure
+                data={data.downloadOurCourseBrochure}
+                formDetails={formDetails}
+                courseName={courseLabel}
+                courseSlug={coursename}
+                category={isCertification}
+                branch={data?.branch}
+                isSelfPaced={isSelfPaced}
+              />
+            ),
+          },
+          {
+            key: "course-specializations",
+            component: data?.specializations && (
+              <Specializations data={data?.specializations} />
+            ),
+          },
+          { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
+        ]),
     {
       key: "course-hiring-partners",
       component: data?.hiringPartners && (
@@ -387,7 +395,6 @@ export default async function Page({ params }) {
      RENDER
   ===================================================== */
   return (
-
     <>
       {schemaData && (
         <script
@@ -414,18 +421,10 @@ export default async function Page({ params }) {
           />
         )}
 
-        <div className=" rounded-lg pt-5">
-          <Excel data={excelSectionData} courseName={courseLabel} />
-        </div>
-
-     
-          <div className="main_container rounded-lg pt-5">
-            <Nutshell data={careerServicesData} courseName={courseLabel} />
-          </div>
-       {console.log(careerServicesData,"careerServicesData")}
+       
+        {console.log(careerServicesData, "careerServicesData")}
 
         {reserveSpotData &&
-
           (isCertification || isSelfPaced ? (
             <ReserveYourSpot
               source={31}
@@ -442,21 +441,33 @@ export default async function Page({ params }) {
               courseName={courseLabel}
               branch={data?.branch}
             />
-
           ))}
+           {isCertification && (
+          <>
+            <div className="rounded-lg pt-5 hidden md:block">
+              <Excel data={excelSectionData} courseName={courseLabel} />
+            </div>
+
+            <div className="main_container rounded-lg pt-5 hidden md:block">
+              <Nutshell data={careerServicesData} courseName={courseLabel} />
+            </div>
+          </>
+        )}
 
         {sectionsConfig.map(
           (sec, idx) =>
             sec.component && (
-              <div key={sec.key || idx} className="main_container rounded-lg pt-5">
+              <div
+                key={sec.key || idx}
+                className="main_container rounded-lg pt-5"
+              >
                 {sec.component}
               </div>
-            )
+            ),
         )}
 
         {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
       </div>
     </>
-
   );
 }

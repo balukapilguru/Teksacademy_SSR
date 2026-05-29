@@ -17,7 +17,7 @@ const Aboutbanner = (data) => {
                 </p>
                 <div className='w-[78%] mx-auto flex  justify-center items-center'>
                     <Image
-                        src={GetData({ url: aboutusdata.image.src })}
+                        src={GetData({ url: aboutusdata?.image?.src })}
                         alt={aboutusdata?.image?.alt}
                         width={1200}
                         height={500}
