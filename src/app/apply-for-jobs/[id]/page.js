@@ -147,7 +147,7 @@ const JobDetail = () => {
         }
         const responseData = await response.json();
         console.log("Application submitted successfully:", responseData);
-        Swal.fire("Success", "Application submitted successfully!", "success");
+        router.push("/thankyou");
       })
       .catch((error) => {
         console.error("Error submitting application:", error);

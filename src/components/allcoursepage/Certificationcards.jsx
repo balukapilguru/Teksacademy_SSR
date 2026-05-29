@@ -4,11 +4,12 @@ import Heading from "@/utility/Heading";
 import CourseCard from "./Coursecards";
 import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
   const handleSubmit = async (formValues, mappedPayload) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

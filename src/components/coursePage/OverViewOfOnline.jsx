@@ -8,6 +8,7 @@ import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
 import { GiPentarrowsTornado } from "react-icons/gi";
 import RichTextRenderer from "../coursePage/RichTextRenderer";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 const OverViewOfOnline = ({
   data,
   formDetails,
@@ -45,7 +46,7 @@ const OverViewOfOnline = ({
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

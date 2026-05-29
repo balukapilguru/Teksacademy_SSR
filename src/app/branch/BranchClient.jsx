@@ -19,6 +19,9 @@ import Faq from "@/components/coursePage/Faq";
 import CoursesOffered from "@/components/coursePage/CoursesOffered";
 import ReusableForm from "@/components/ReusableForm";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+
+const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 const BRANCH_LABELS = {
   ameerpet: "Ameerpet",
@@ -61,7 +64,7 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
     console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

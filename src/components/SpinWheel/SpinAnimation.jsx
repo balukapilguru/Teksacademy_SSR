@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 // import { versityApi } from "../../serviceLayer/interseptor";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
   const [rotation, setRotation] = useState(0);
@@ -70,7 +71,7 @@ const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
   setSpinning(false);
 
   const { ProductId, sourceId, name, mobile, email } = formData;
-  const baseUrl = "https://apierp.teksversity.com";
+  const baseUrl = blogsApplyBaseUrl;
 
   try {
     const payload = {
@@ -83,7 +84,7 @@ const SpinAnimation = ({ leadId, onSpinComplete, formData }) => {
       sourceType: 34,
     };
 
-    const res = await fetch(`${baseUrl}/lead/spinwheel`, {
+    const res = await fetch(buildApiUrl(baseUrl, "/lead/spinwheel"), {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 /**
  * MobileOtpField — Reusable OTP Component
  */
 export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = blogsApplyBaseUrl;
 
   const [showOtp, setShowOtp] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -57,7 +58,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     }
 
     try {
-      const res = await axios.post(`${API_URL}/lead/send-otp`, {
+      const res = await axios.post(buildApiUrl(API_URL, "/lead/send-otp"), {
         number: value,
       });
 
@@ -105,7 +106,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     }
 
     try {
-      const res = await axios.post(`${API_URL}/lead/verify-otp`, {
+      const res = await axios.post(buildApiUrl(API_URL, "/lead/verify-otp"), {
         number: value,
         otp: finalOtp,
       });
