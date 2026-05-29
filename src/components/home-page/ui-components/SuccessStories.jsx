@@ -66,7 +66,7 @@ const SuccessStories = ({ successStoriesData }) => {
       <div className="flex justify-center gap-4 mb-10 flex-wrap">
         <button
           onClick={() => setActiveTab("placed")}
-          className={`px-6 py-2 rounded-md transition ${
+          className={`px-1 md:px-4 py-2 rounded-md transition ${
             activeTab === "placed"
               ? "bg-[#2a619d] text-white"
               : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"
@@ -76,7 +76,7 @@ const SuccessStories = ({ successStoriesData }) => {
         </button>
         <button
           onClick={() => setActiveTab("learning")}
-          className={`px-6 py-2 rounded-md transition ${
+          className={`px-1 md:px-4 py-2 rounded-md transition ${
             activeTab === "learning"
               ? "bg-[#2a619d] text-white"
               : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"

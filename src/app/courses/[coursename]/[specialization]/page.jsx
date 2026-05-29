@@ -17,7 +17,48 @@ import OverViewOfOnline from "@/components/coursePage/OverViewOfOnline";
 import CourseScrollBar from "@/components/coursePage/CourseScrollBar";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
+export async function generateMetadata({ params }) {
+  const { coursename, specialization } = await params;
 
+  try {
+    const res = await fetch(
+      `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`, // ✅ plural "courses"
+      { next: { revalidate: 60 } }
+    );
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+    const meta = json?.data?.meta;
+
+    return {
+      title: meta?.title || "Tekacademy Courses",
+      description: meta?.description || "Explore online courses at Tekacademy.",
+      openGraph: {
+        title: meta?.title || "Tekacademy Courses",
+        description: meta?.description || "Explore online courses at Tekacademy.",
+      },
+      twitter: {
+        title: meta?.title || "Tekacademy Courses",
+        description: meta?.description || "Explore online courses at Tekacademy.",
+      },
+    };
+  } catch {
+    // Return fallback metadata (not an empty object)
+    return {
+      title: "Tekacademy Courses",
+      description: "Explore online courses at Tekacademy.",
+      openGraph: {
+        title: "Tekacademy Courses",
+        description: "Explore online courses at Tekacademy.",
+      },
+      twitter: {
+        title: "Tekacademy Courses",
+        description: "Explore online courses at Tekacademy.",
+      },
+    };
+  }
+}
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
 const isGenericCourseLabel = (value) => {
@@ -69,38 +110,7 @@ const getCourseLabelFromSlug = (slug = "") => {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 };
 
-// export async function generateMetadata({ params }) {
-//   const { coursename, specialization } = await params;
 
-//   try {
-//     const res = await fetch(
-//       `${baseUrl}/api/v1/course/${coursename}/specializations/${specialization}`,
-//       { next: { revalidate: 60 } }
-//     );
-
-//     if (!res.ok) return {};
-
-//     const json = await res.json();
-//     const meta = json?.data?.meta;
-
-//     if (!meta) return {};
-
-//     return {
-//       title: meta.title || "Course",
-//       description: meta.description || "",
-//       openGraph: {
-//         title: meta.title,
-//         description: meta.description,
-//       },
-//       twitter: {
-//         title: meta.title,
-//         description: meta.description,
-//       },
-//     };
-//   } catch {
-//     return {};
-//   }
-// }
 export default async function Page({ params }) {
  const { coursename, specialization } = await params;
 
