@@ -7,7 +7,7 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import Loader from "../Loader";   // optional, you can style your own loader
 import CourseCard from "../allcoursepage/Coursecards";
-import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { blogsApplyBaseUrl, buildApiUrl, teksSsrBaseUrl } from "@/lib/apiBaseUrls";
 import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 
 const Page = ({ data, branchData }) => {
@@ -32,11 +32,14 @@ const Page = ({ data, branchData }) => {
 
       try {
         setLoading(true);
-        const baseUrl =
-          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
-          process.env.NEXT_TEKS_SSR_API_URL;
+        const baseUrl = teksSsrBaseUrl;
+
+        if (!baseUrl) {
+          throw new Error("Course API URL is not configured");
+        }
+
         const response = await fetch(
-          `${baseUrl}/api/v1/course?branches=${branchName}`
+          buildApiUrl(baseUrl, `/api/v1/course?branches=${encodeURIComponent(branchName)}`)
         );
 
         if (!response.ok) {
@@ -50,8 +53,7 @@ const Page = ({ data, branchData }) => {
           setCourses([]);
         }
       } catch (err) {
-        console.error("Error fetching courses:", err);
-        setError(err.message);
+        setError(err.message || "Unable to load courses");
         setCourses([]);
       } finally {
         setLoading(false);
@@ -156,7 +158,7 @@ const Page = ({ data, branchData }) => {
           <PrimaryButton
             variant="outline"
             label="View All Courses"
-            href="/courses"
+            href="/course"
           />
         </div>
       </div>
