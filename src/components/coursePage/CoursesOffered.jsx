@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Heading from "@/utility/Heading";
 
 import PrimaryButton from "@/utility/PrimaryButton";
@@ -12,7 +12,9 @@ import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 
 const Page = ({ data, branchData }) => {
   const router = useRouter();
+  const params = useParams(); // ✅ CORRECT PLACE
 
+  
   // State for fetched courses
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,45 +25,73 @@ const Page = ({ data, branchData }) => {
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   // Fetch courses from API (same as CoursesOffered)
-  useEffect(() => {
-    const fetchCourses = async () => {
-      let branchName = "ameerpet";
-      if (branchData?.branchLocation?.address) {
-        branchName = branchData.branchLocation.address.split(",")[0].toLowerCase();
-      }
+//  useEffect(() => {
+//   const fetchCourses = async () => {
+//     try {
+//       setLoading(true);
+//       const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+//       const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchName}`);
 
-      try {
-        setLoading(true);
-        const baseUrl =
-          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
-          process.env.NEXT_TEKS_SSR_API_URL;
-        const response = await fetch(
-          `${baseUrl}/api/v1/course?branches=${branchName}`
-        );
+//       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+//       const result = await response.json();
+//       if (result.success && result.data && Array.isArray(result.data)) {
+//         setCourses(result.data);
+//       } else {
+//         setCourses([]);
+//       }
+//     } catch (err) {
+//       console.error("Error fetching courses:", err);
+//       setError(err.message);
+//       setCourses([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-        const result = await response.json();
-        if (result.success && result.data && Array.isArray(result.data)) {
-          setCourses(result.data);
-        } else {
-          setCourses([]);
-        }
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-        setError(err.message);
-        setCourses([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, [branchData]);
-
+//   fetchCourses();
+// }, [branchName]);
+ // ✅ Add branchName as dependency (instead of branchData)
   // Existing handleSubmit (unchanged except router fix)
+
+const pathname = usePathname();
+  useEffect(() => {
+  // Extract branch name directly from params inside effect
+ const segments = pathname.split("/");
+  const rawBranchSlug = segments[segments.length - 1]; // last segment
+  let branchValue = "ameerpet";
+
+  if (rawBranchSlug) {
+    branchValue = rawBranchSlug.split("-").pop()?.toLowerCase() || "ameerpet";
+  }
+
+  console.log("Fetching courses for branch:", branchValue);
+
+  const fetchCourses = async () => {
+    try {
+      setLoading(true);
+      const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+      const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchValue}`);
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const result = await response.json();
+      if (result.success && result.data && Array.isArray(result.data)) {
+        setCourses(result.data);
+      } else {
+        setCourses([]);
+      }
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+      setError(err.message);
+      setCourses([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchCourses();
+}, [pathname]); // ✅ Depend on the actual URL slug, not derived variable
   const handleSubmit = async (formValues, mappedPayload) => {
     console.log("Mapped payload being sent:", mappedPayload);
 

@@ -41,10 +41,22 @@ const SuccessStories = () => {
       try {
         const res = await fetch(`${baseUrl}/api/v1/home/success-stories`);
         const response = await res.json();
-
+        
+if (response.success && response.data) {
+          setData(response.data);
+           if (response.data.meta) {
+            document.title = response.data.meta.title;
+            const metaDescription = document.querySelector('meta[name="description"]');
+            if (metaDescription) {
+              metaDescription.content = response.data.meta.description;
+            }
+          }
+          console.log(response.data,"interviewque")
+        }
         if (response?.success && response?.data) {
           setData(response.data);
         }
+        
       } catch (err) {
         console.error("Failed to fetch success stories", err);
       } finally {
