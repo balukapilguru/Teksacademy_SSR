@@ -110,100 +110,6 @@ function buildCounts(apiData) {
 }
 
 // ================================
-// BREADCRUMB
-// Rules:
-//   - No selection           → nothing rendered (heading = "All Courses")
-//   - Only category          → just heading, no breadcrumb trail needed
-//   - category + subCategory → "Industry Ready Programs > Certification"
-//   - category + sub + prog  → "Academics > Under Graduation > BBA"
-//
-// Clickable crumbs navigate UP the tree (reset children).
-// Last crumb is plain text (not clickable).
-// ================================
-
-const Breadcrumb = ({
-  selectedCategory,
-  selectedSubCategory,
-  selectedProgram,
-  setSelectedCategory,
-  setSelectedSubCategory,
-  setSelectedProgram,
-}) => {
-  // Only render when there is something BELOW the top category selected
-  if (!selectedCategory || (!selectedSubCategory && !selectedProgram)) {
-    return null;
-  }
-
-  const crumbs = [];
-
-  // Category crumb — always clickable (resets sub + program)
-  crumbs.push({
-    label: CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory),
-    onClick: () => {
-      setSelectedSubCategory(null);
-      setSelectedProgram(null);
-    },
-    active: false,
-  });
-
-  // SubCategory crumb
-  if (selectedSubCategory) {
-    const subLabel =
-      SUBCATEGORY_LABELS[selectedSubCategory] ||
-      formatLabel(selectedSubCategory);
-
-    if (selectedProgram) {
-      // Clickable — resets program only
-      crumbs.push({
-        label: subLabel,
-        onClick: () => setSelectedProgram(null),
-        active: false,
-      });
-    } else {
-      // Last crumb — not clickable
-      crumbs.push({
-        label: subLabel,
-        onClick: null,
-        active: true,
-      });
-    }
-  }
-
-  // Program crumb — always last, not clickable
-  if (selectedProgram) {
-    crumbs.push({
-      label: formatLabel(selectedProgram),
-      onClick: null,
-      active: true,
-    });
-  }
-
-  return (
-    <nav className="flex items-center flex-wrap gap-1 mb-1">
-      {crumbs.map((crumb, index) => (
-        <React.Fragment key={index}>
-          {index > 0 && (
-            <MdChevronRight className="text-gray-400 text-xl flex-shrink-0" />
-          )}
-          {crumb.active ? (
-            <span className="text-sm font-semibold text-gray-800">
-              {crumb.label}
-            </span>
-          ) : (
-            <button
-              onClick={crumb.onClick}
-              className="text-sm font-medium text-[#2a619d] hover:underline cursor-pointer"
-            >
-              {crumb.label}
-            </button>
-          )}
-        </React.Fragment>
-      ))}
-    </nav>
-  );
-};
-
-// ================================
 // SIDEBAR
 // ================================
 
@@ -664,16 +570,6 @@ export default function CoursesClient() {
         {/* Main content */}
         <div className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]">
 
-          {/* Breadcrumb — only renders when subCategory or program is selected */}
-          <Breadcrumb
-            selectedCategory={selectedCategory}
-            selectedSubCategory={selectedSubCategory}
-            selectedProgram={selectedProgram}
-            setSelectedCategory={setSelectedCategory}
-            setSelectedSubCategory={setSelectedSubCategory}
-            setSelectedProgram={setSelectedProgram}
-          />
-
           {/* Big heading */}
           <div className="text-3xl font-bold text-black mb-2">
             {activeHeading}
@@ -752,5 +648,4 @@ export default function CoursesClient() {
       </div>
     </div>
   );
-
 }
