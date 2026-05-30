@@ -31,12 +31,12 @@ const FinanceApp = () => {
               <div className='flex items-center gap-1'><TiStar className='text-[#fe543d]' /> Certification & placement support</div>
             </div>
           </div>
-          <div className="flex flex-col items-start lg:items-start xl:flex-row space-y-4 xl:space-y-0 xl:space-x-6 mt-6">
-            <Link href='https://apps.apple.com/in/app/teks-academy/id6741759994' target='_blank' className="flex items-center w-fit justify-center border gap-x-2 px-4 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] hover:border-[#2A619D]">
+          <div className="flex items-start lg:items-start xl:flex-row space-y-4 xl:space-y-0 xl:space-x-6 mt-6">
+            <Link href='https://apps.apple.com/in/app/teks-academy/id6741759994' target='_blank' className="flex items-center w-fit justify-center border md:gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] hover:border-[#2A619D]">
               <FaApple className='h-6 w-6' />
               <div className='flex justify-center font-semibold items-center text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1rem]'>Download for iOS</div>
             </Link>
-            <Link href='https://play.google.com/store/apps/details?id=com.teksacademystudentmobile&pcampaignid=web_share' target='_blank' className="flex items-center w-fit justify-center gap-x-2 px-4 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] border  hover:border-[#2A619D]">
+            <Link href='https://play.google.com/store/apps/details?id=com.teksacademystudentmobile&pcampaignid=web_share' target='_blank' className="flex items-center w-fit justify-center md:gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] border  hover:border-[#2A619D]">
               <BsAndroid className='h-6 w-6' />
               <div className='flex justify-center items-center font-semibold text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1rem]'>Download for Android</div>
             </Link>
@@ -45,7 +45,7 @@ const FinanceApp = () => {
         </div>
 
         {/* Right Section */}
-        <div className='w-full xl:w-1/2 lg:w-[70%] px-3 2xl:px-0 flex justify-start'>
+        <div className='w-full xl:w-1/2 lg:w-[70%] px-3 2xl:px-0 flex justify-center md:justify-start'>
           <Image
           width={560}
           height={250}

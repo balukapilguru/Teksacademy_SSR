@@ -484,11 +484,11 @@ export default function Navbar() {
 
           {/* MOBILE MENU BUTTON */}
           <button
-            className="lg:hidden p-1.5"
+            className="lg:hidden "
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <MdClose size={20} /> : <MdMenu size={20} />}
+            {mobileMenuOpen ? <MdClose size={28} /> : <MdMenu size={40} />}
           </button>
 
           {/* DESKTOP NAVIGATION MENU */}
