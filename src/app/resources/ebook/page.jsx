@@ -4,6 +4,8 @@ const ebookbanner =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/ebookbanner.webp";
 import Image from "next/image";
 import Loader from "@/components/Loader";
+import Popupform from "@/components/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
@@ -13,6 +15,7 @@ const Ebook = () => {
   const [ebookData, setEbookData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     const fetchEbooks = async () => {
@@ -52,9 +55,38 @@ const Ebook = () => {
   const communitySection = ebookData?.communitySection;
   const courses = ebookSection?.items || [];
 
-  const handleDownload = (ebookurl) => {
-    if (ebookurl) {
-      window.open(`${baseUrl}${ebookurl}`, "_blank");
+  const resolveEbookUrl = (path) => {
+    if (!path) return "";
+    let p = String(path).trim();
+    p = p.replace(/^(https?)\/\//i, "$1://");
+    if (/^https?:\/\//i.test(p)) return p;
+    if (p.startsWith("//")) return `https:${p}`;
+    return `${baseUrl}${p.startsWith("/") ? "" : "/"}${p}`;
+  };
+
+  const handleDownload = (course) => {
+    setSelectedCard(course);
+  };
+
+  const handleEbookSubmit = async (formValues, payload) => {
+    const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...payload,
+        productId: selectedCard?.productId,
+        sourceId: selectedCard?.sourceId,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Submission failed");
+    }
+
+    const ebookUrl = resolveEbookUrl(selectedCard?.ebookurl);
+    if (ebookUrl) {
+      window.open(ebookUrl, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -165,7 +197,7 @@ const Ebook = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => handleDownload(course.ebookurl)}
+                    onClick={() => handleDownload(course)}
                     className="p-1.5 px-4 border text-sm border-red-400 text-[#FE543D] rounded-lg hover:bg-red-100 self-start"
                   >
                     {course.button?.text || "Download"}
@@ -227,6 +259,18 @@ const Ebook = () => {
           </div>
         </div>
       )}
+
+      <Popupform
+        show={!!selectedCard}
+        onClose={() => setSelectedCard(null)}
+        course={selectedCard?.title || ""}
+        courseName={selectedCard?.title || ""}
+        title="Book a live demo for free"
+        formType="ebook"
+        buttonText="Download E-Book"
+        successMessage="Your e-book is opening in a new tab."
+        onSubmit={handleEbookSubmit}
+      />
     </div>
   );
 };
