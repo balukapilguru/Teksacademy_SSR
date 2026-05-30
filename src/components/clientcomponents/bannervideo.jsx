@@ -103,11 +103,12 @@ const BannerVideo = () => {
           onClick={() => setPlay(true)}
         >
           <Image
-            src={getThumbnailUrl()}
+            // src={getThumbnailUrl()}
+            src="/images/Teks _ Web copy.webp"
             alt="Homepage Banner"
             width={600}
             height={300}
-            className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d] transition-transform duration-300 group-hover:scale-[1.02]"
+            className="rounded-lg shadow-lg object-cover w-full md:h-80 m lg:h-96 border border-[#2a619d] transition-transform duration-300 group-hover:scale-[1.02]"
             unoptimized
           />
           {/* Play Button */}
@@ -147,11 +148,11 @@ const BannerVideo = () => {
           )}
           
           {/* Logos Grid/Row - Dynamically from API */}
-          <div className="flex flex-wrap justify-start items-center gap-4 md:gap-6 lg:gap-8">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8">
             {offeredBy.image.map((logo, index) => (
               <div
                 key={index}
-                className="flex items-start justify-start  md:p-1 bg-white rounded-lg shadow-sm"
+                className="flex items-start justify-center  md:p-1 bg-white rounded-lg shadow-sm"
               >
                 <Image
                   src={GetData({ url: logo.src })}

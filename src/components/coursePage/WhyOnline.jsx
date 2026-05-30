@@ -15,7 +15,7 @@ const WhyOnline = ({ data }) => {
       <div className=" ">
 
         {/* Header Section */}
-        <div className="text-left px-6">
+        <div className="text-left lg:px-6">
           {/* Heading Section */}
           <div className="mb-8">
             <h2>

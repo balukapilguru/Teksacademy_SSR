@@ -521,9 +521,11 @@ export default function CoursesClient() {
       } catch (err) {
         if (err.name !== "AbortError") setError("Failed to load courses");
       } finally {
-        setLoading(false);
-        setTimeout(() => setPageLoading(false), 800);
-      }
+  setLoading(false);
+  if (pageLoading) {
+    setPageLoading(false);
+  }
+}
     };
 
     fetchData();

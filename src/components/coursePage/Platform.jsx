@@ -13,6 +13,7 @@ import { LuClipboardList } from "react-icons/lu";
 
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
+import GetData from "@/utility/GetData";
 
 const Platform = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ const Platform = ({ data }) => {
     if (cleanSrc) {
       return (
         <Image
-          src={cleanSrc}
+          src={GetData({url:cleanSrc})}
           alt={iconName?.alt || "service icon"}
           className="w-10 h-10 object-contain"
           width={100}

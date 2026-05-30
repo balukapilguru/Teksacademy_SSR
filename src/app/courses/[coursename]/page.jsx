@@ -142,7 +142,7 @@ export default async function Page({ params }) {
 
   const formDetails =
     isCertification || isSelfPaced ? data?.formDetails : data?.specializations;
-
+console.log(data.advancedTools,"data.ToolsAndFeatures")
   /* =====================================================
      DATA MAPPING (UNCHANGED)
   ===================================================== */
@@ -242,8 +242,8 @@ export default async function Page({ params }) {
 
       {data?.excel && <Excel data={data.excel} courseName={courseLabel} />}
 
-{data?.ToolsAndFeatures && (
-        <ToolsAndFeatures data={data.ToolsAndFeatures} />
+{data?.advancedTools && (
+        <ToolsAndFeatures data={data.advancedTools} />
       )}
       {data?.industryProjects && (
         <IndustryProjects data={data.industryProjects} />

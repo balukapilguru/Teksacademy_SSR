@@ -33,7 +33,7 @@ export default function GalleryClient() {
 
   return (
     <div className="w-full min-h-screen bg-white py-10">
-      <h1 className="text-center text-4xl font-bold text-[#0E2849] mb-10">
+      <h1 className="text-center text-4xl font-bold text-[#2a619d] mb-10">
         Gallery
       </h1>
 

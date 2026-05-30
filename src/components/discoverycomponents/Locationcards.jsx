@@ -8,7 +8,7 @@ const LocationDetails = ({ data }) => {
   if (!branches) return null;
 
   return (
-    <section className="bg-[#0E2849] py-6">
+    <section className="bg-[#2a619d] py-6">
       <div className="max-w-7xl mx-auto px-4">
         {/* Heading */}
         <h2 className="text-center text-3xl md:text-4xl font-semibold text-white mb-10">

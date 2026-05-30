@@ -106,7 +106,7 @@ const SuccessStories = ({ successStoriesData }) => {
                     src={GetData({url:item.thumbnail?.src})}
                     alt={item.thumbnail?.alt || item.name}
                     fill
-                    className="group-hover:scale-105 transition-transform duration-300"
+                    className=" transition-transform duration-300"
                   />
                   {item.videoUrl && (
                     <div className="absolute inset-0 bg-black/40 opacity-0 flex items-center justify-center transition">

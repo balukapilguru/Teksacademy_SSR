@@ -72,7 +72,7 @@ const OverViewOfOnline = ({
 
   return (
     <div className="">
-      <section className="py-6 pt-6">
+      <section className="lg:py-6 pt-6">
      
         <div className="">
           <Heading data={heading} />
@@ -115,9 +115,9 @@ const OverViewOfOnline = ({
               </div>
 
               {button?.name && (
-                <div className="mt-auto pt-6">
+                <div className="mt-auto lg:pt-6 justify-items-center lg:justify-items-start">
                   <button
-                    className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent font-semibold border border-[#2a619d] text-[#2a619d] px-6 py-2 rounded-md hover:bg-white hover:text-[#2a619d] transition-colors duration-300"
+                    className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap lg:text-lg bg-transparent font-semibold border border-[#2a619d] text-[#2a619d] px-3 lg:px-6 py-2 rounded-md hover:bg-white hover:text-[#2a619d] transition-colors duration-300  justify-center"
                     onClick={() => handleOpenModal(formDetails)}
                   >
                     Enroll Now

@@ -19,7 +19,7 @@ const convertToEmbedUrl = (url) => {
 
 export default function Testimonials({ data }) {
   const { tabs, studentVoices, testimonialCards, heading } = data;
-
+console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
   const [activeTab, setActiveTab] = useState("studentVoices");
   const [index2, setIndex2] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -165,7 +165,7 @@ export default function Testimonials({ data }) {
               key={tab.value}
               onClick={() => setActiveTab(tab.value)}
               variant={activeTab === tab.value ? "filled" : "outline"}
-              className="px-5 py-2 rounded-md text-sm"
+              className="lg:px-5 py-2 rounded-md text-sm"
             >
               {tab.name}
             </PrimaryButton>
@@ -226,7 +226,7 @@ export default function Testimonials({ data }) {
                         }`}
                       >
                         <Image
-                          src={GetData(item.thumbnail)}
+                          src={getImageUrl(item.thumbnail)}
                           alt={item.name || "Student"}
                           width={280}
                           height={450}
@@ -310,7 +310,7 @@ export default function Testimonials({ data }) {
                     <div className="flex items-center gap-4 mb-3">
                       <div className="w-[100px] h-[100px] rounded-full overflow-hidden border bg-gray-200">
                         <Image
-                          src={GetData(safeTestimonialCards[index2]?.image)}
+                          src={getImageUrl(safeTestimonialCards[index2]?.image)}
                           alt={safeTestimonialCards[index2]?.name || "Student"}
                           width={100}
                           height={100}
@@ -354,7 +354,7 @@ export default function Testimonials({ data }) {
                       <div className="flex items-center gap-4 mb-3">
                         <div className="w-[100px] h-[100px] rounded-full overflow-hidden border bg-gray-200">
                           <Image
-                            src={GetData(item.image)}
+                            src={getImageUrl(item.image)}
                             alt={item.name || "Student"}
                             width={100}
                             height={100}

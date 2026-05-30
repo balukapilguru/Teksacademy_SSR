@@ -112,13 +112,13 @@ export default function Footer() {
           <div className="main_container mx-auto py-4 lg:py-4 xl:py-5">
             <div className="w-full lg:w-11/12 xl:w-11/12 xs:p-4 lg:p-0 mx-auto">
               {/* Mobile: column | Desktop: row */}
-              <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-y-5 md:gap-y-0 md:gap-x-6 lg:gap-x-8 text-left">
+              <div className="relative grid grid-cols-2 md:grid-cols-3 md:items-center md:justify-between gap-y-5 md:gap-y-0 md:gap-x-6 lg:gap-x-8 text-left">
                 
                 {/* Address Block - Row 1 on mobile */}
                 <div className="cursor-pointer w-full md:w-auto">
                   <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <FaLocationDot className="w-5 md:h-5 2xl:mt-4 text-[#FE543D]" />
+                      <FaLocationDot className="w-5 md:h-5 2xl:mt-4 text-[#fff]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D] mb-1 text-start">Address:</span>
@@ -135,7 +135,7 @@ export default function Footer() {
                 <div className="cursor-pointer w-full md:w-auto">
                   <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <IoIosCall className="w-5 md:h-5 2xl:mt-5 text-[#FE543D]" />
+                      <IoIosCall className="w-5 md:h-5 2xl:mt-5 text-[#fff]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D] mb-1">Phone:</span>
@@ -150,7 +150,7 @@ export default function Footer() {
                 <div className="cursor-pointer w-full md:w-auto">
                   <div className="flex items-center space-x-2">
                     <span className="text-xl flex items-center">
-                      <IoMdMail className="w-5 md:h-5 2xl:mt-5 text-[#FE543D]" />
+                      <IoMdMail className="w-5 md:h-5 2xl:mt-5 text-[#fff]" />
                     </span>
                     <div className="flex flex-col">
                       <span className="text-[14px] text-[#FE543D]">Email:</span>
@@ -222,7 +222,7 @@ export default function Footer() {
                           key={i}
                           className="flex items-center text-[14px] font-normal hover:text-[#FC6441] tracking-wide"
                         >
-                          <BiLogoFlutter className="transform scale-x-[-1] mr-2 text-[#FE543D]" />
+                          <BiLogoFlutter className="transform scale-x-[-1] mr-2 text-[#fff]" />
                           <Link href={item.url || '#'} className="hover:text-[#FE543D] transition-colors">
                             {item.name}
                              

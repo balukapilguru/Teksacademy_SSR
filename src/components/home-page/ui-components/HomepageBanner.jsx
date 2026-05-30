@@ -47,7 +47,7 @@ export default function HomepageBanner({ bannerData }) {
           </div>
 
           {/* Right Section: Form */}
-          <div className="w-full flex justify-center lg:justify-end">
+          <div className="w-full flex justify-center lg:justify-end mt-5 lg:mt-0">
             <div className="w-full max-w-md sm:max-w-lg bg-white p-6 rounded-lg shadow">
           <div className="text-center mb-4">
                 <div className="text-2xl text-black font-bold">Get Expert Guidence</div>

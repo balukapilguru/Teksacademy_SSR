@@ -145,7 +145,7 @@ export default function Excel({ data, courseName }) {
                                 </div>
                             </div>
                             <div className="lg:col-span-6 ">
-                                <div className="flex justify-center h-full px-6 lg:px-4 xl:px-0 gap-x-2 xl:gap-x-6 2xl:gap-x-24 3xl:gap-x-28 items-center relative">
+                                <div className="flex justify-center h-full  lg:px-4 xl:px-0 gap-x-2 xl:gap-x-6 2xl:gap-x-24 3xl:gap-x-28 items-center relative">
                                     {/* 1st col */}
                                     <div className="flex items-center">
                                         <div className="flex flex-col gap-y-4 2xl:gap-y-8 3xl:gap-y-10">

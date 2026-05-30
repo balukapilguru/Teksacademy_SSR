@@ -11,6 +11,7 @@ import FinanceApp from "../ui-components/FinanceApp";
 import Hiring from "../ui-components/Hiring";
 import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
 import CertificationCourse from "@/components/allcoursepage/CertificationCourse";
+import MostSearchedTerms from "@/components/coursePage/Mostsearchedterms";
 
 export default async function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
@@ -44,8 +45,8 @@ export default async function Home() {
       component: (
         <SuccessStories successStoriesData={homeData?.ourSuccessStories} />
       ),
-      bg: "#fbf5f6",
-      border: "#fbf5f6",
+      bg: "#fff",
+      border: "#fff",
     },
 
     {
@@ -56,8 +57,8 @@ export default async function Home() {
 
     {
       component: <CertificationCourse data={homeData?.certificationCourse} />,
-      bg: "#fbf5f6",
-      border: "#fbf5f6",
+      bg: "#fff",
+      border: "#fff",
     },
    
     {
@@ -91,8 +92,13 @@ export default async function Home() {
       bg: "#fff",
       border: "#fff",
     },
+     {
+      component: <MostSearchedTerms data={homeData?.mostSearchedTerms} />,
+      bg: "#fff",
+      border: "#fff",
+    },
   ];
-console.log(homeData?.careerServices,"homeData?.careerServices")
+console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (
     <>
       <div>

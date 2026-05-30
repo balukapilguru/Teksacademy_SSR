@@ -57,7 +57,7 @@ export default function Hiringcompanies({ hiringData, courseName }) {
   // ----- 4. Render exactly the original UI (no changes) -----
   return (
     <div className="main_container">
-      <div className="flex xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/hiring_companies/hiring_bg.webp')] bg-cover bg-center">
+      <div className="flex bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/hiring_companies/hiring_bg.webp')] bg-cover bg-center">
         <div className="flex flex-col lg:flex-row lg:gap-x-10">
           {/* Left side: heading + person */}
           <div className="w-full lg:w-[33%] 2xl:w-[26%] flex justify-center 2xl:justify-start">
@@ -97,7 +97,7 @@ export default function Hiringcompanies({ hiringData, courseName }) {
                   height={430}
                   src={GetData({ url: personImageSrc })}
                   alt={personImageAlt}
-                  className="h-[16.25rem] md:h-[16rem] md:w-[11rem] w-[12.5rem] lg:h-[14rem] lg:w-[10.25rem] xl:h-[20.375rem] xl:w-[13.125rem] 3xl:h-[26rem] 3xl:w-[17rem]"
+                  className="h-[16rem] md:h-[16rem] md:w-[11rem] w-[12rem] lg:h-[14rem] lg:w-[10.25rem] xl:h-[20.375rem] xl:w-[13.125rem] 3xl:h-[26rem] 3xl:w-[17rem]"
                 />
               </div>
             </div>

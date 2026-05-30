@@ -467,14 +467,15 @@ export default function Navbar() {
           <div className="">
             <Link href="/">
               <Image
-                src={
-                  GetData({ url: mainbar.logo?.src }) || "/placeholder-logo.png"
-                }
+                // src={
+                //   GetData({ url: mainbar.logo?.src }) || "/placeholder-logo.png"
+                // }
+                src="/images/15 yrs_teks.png"
                 alt={mainbar.logo?.alt || "Logo"}
                 width={151}
                 height={48}
                 unoptimized
-                className="h-10 w-full md:h-12"
+                className="h-20 w-full object-contain md:h-12"
                 priority
               />
             </Link>

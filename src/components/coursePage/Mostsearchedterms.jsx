@@ -5,7 +5,7 @@ const MostSearchedTerms = ({ data }) => {
   // Only require courses (locations are optional)
   if (!data || !data.courses?.length) {
     return (
-      <section className="bg-[#0E2849] border border-[#0E2849] rounded-lg py-6 flex justify-center items-center">
+      <section className="bg-[#0E2849d] border border-[#2a619d] rounded-lg py-6 flex justify-center items-center">
         <div className="text-white text-center text-sm md:text-base">
           No most searched terms available
         </div>
@@ -17,7 +17,7 @@ const MostSearchedTerms = ({ data }) => {
 
   return (
     <section className="bg-[#0E2849]" aria-label="Most Searched Terms">
-      <div className="px-4 md:px-6 xl:px-0 py-4 lg:py-6 xl:py-6 main_container">
+      <div className=" md:px-6 xl:px-0 py-4 lg:py-6 xl:py-6 main_container">
         <div className="p-2 flex flex-wrap items-center gap-1">
           {courses.map((course, index) => {
             const slug = course
@@ -26,8 +26,8 @@ const MostSearchedTerms = ({ data }) => {
               .replace(/[^\w-]+/g, "");
 
             return (
-              <span key={index} className="flex items-center max-w-7xl">
-                <span className="text-white hover:text-blue-300 font-thin text-lg transition-colors duration-200">
+              <span key={index} className="flex items-center max-w-8xl">
+                <span className="text-white hover:text-blue-300 font-thin lg:text-xl transition-colors duration-200">
                   {course}
                 </span>
                 {courses.length !== index + 1 && (

@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const FinanceApp = () => {
   return (
-    <div className="main_container pt-6 pb-6">
+    <div className="main_container  pt-5 mlg:pt-6 lg:pb-6">
       <div className="flex flex-col lg:flex-row gap-y-4 items-center justify-between">
         {/* Left Section */}
         <div className="text-center w-full md:text-left xl:w-[60%] space-y-3 xl:space-y-6 2xl:space-y-8">
@@ -16,11 +16,11 @@ const FinanceApp = () => {
             The Future of Learning is Here <br />
             Teks Academy E-Learning App
           </h1> */}
-          <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-start">
-            <h2 className="text-[#2A619D]"> The Future of Learning is Here <br />
-              <div className='text-black'>Teks Academy E-Learning App</div></h2>
+          <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[26px] lg:leading-[48px] tracking-[-0.014em] flex justify-start">
+            <h2 className="text-[#2A619D]"> The Future of Learning is Here
+              <div className='text-black h-5'>Teks Academy E-Learning App</div></h2>
           </div>
-          <div className='2xl:w-4/5'>
+          <div className='2xl:w-4/5 '>
             <p className="text-gray-600  3xl:leading-relaxed font-normal tracking-[-0.020em] text-justify xl:leading-6 text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] 3xl:text-[1.6rem]">
               Hello technophiles, are you ready to learn 30+ IT & Non-IT advanced courses at your fingertips? Get the Teks Academy’s advanced E-Learning mobile app offers the opportunity to learn from expert mentors, track your progress, practice with real-time projects, and ace interviews – all in one powerful app.
             </p>

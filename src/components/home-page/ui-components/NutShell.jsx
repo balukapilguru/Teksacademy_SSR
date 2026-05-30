@@ -79,7 +79,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         <div className="grid md:grid-cols-2 gap-6 px-4 w-full">
 
           {/* LEFT SIDE */}
-          <div className="space-y-6 xl:mt-10">
+          <div className="space-y-6 xl:mt-10 ">
 
             {services?.map((item, index) => {
               const words = item.title.split(" ");
@@ -138,7 +138,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
           </div>
 
           {/* RIGHT SIDE IMAGE */}
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center mb-6 lg:mb-0">
             <Image
               src={GetData({url:image?.mobile})}
               alt={image?.alt}

@@ -90,7 +90,7 @@ const CertificationCourse = ({ data }) => {
 
   return (
     <section>
-      <div className="main_container mx-auto mt-4 pt-5">
+      <div className="main_container mx-auto  pt-5 ">
 
         {/* Heading */}
         <Heading data={data?.heading} as="h1" />
