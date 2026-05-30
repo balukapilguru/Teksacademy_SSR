@@ -220,7 +220,7 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-lg max-w-md w-full shadow-2xl transform transition-all relative"
+              className="bg-white rounded-lg max-w-md w-full shadow-2xl transform transition-all relative max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain"
               onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

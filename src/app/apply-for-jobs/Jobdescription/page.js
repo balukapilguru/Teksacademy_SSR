@@ -75,9 +75,9 @@ const Jobdescription = () => {
           <div className=" my-4 w-full">
             <hr></hr>
           </div>
-          <div className="flex gap-80  ">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <div> Posted On</div>
-            <div className="flex justify-end ml-16 gap-2">
+            <div className="flex justify-end gap-2">
               <button
                 className="flex focus:outline-none  active:outline-1 active:outline-blue-400  bg-[#2a619d]  rounded-md gap-3 h-10 w-24 justify-center pt-1 text-white cursor-pointer"
                 onClick={() => setOpen(!open)}
@@ -95,7 +95,7 @@ const Jobdescription = () => {
           </div>
         </div>
         {open && (
-          <div className="h-auto py-2 w-96 border bg-white fixed left-1/2 top-20 -translate-x-1/2 shadow-lg rounded-lg mt-10">
+          <div className="h-auto py-2 w-96 max-w-[calc(100vw-1rem)] border bg-white fixed left-1/2 top-20 -translate-x-1/2 shadow-lg rounded-lg mt-10">
             <h3 className="p-3 text-xl">Share This Job</h3>
             <div className=" my-4 w-full">
               <hr></hr>
@@ -192,7 +192,7 @@ const Jobdescription = () => {
             criteria only apply for the requirement
           </div>
 
-          <div className="flex justify-end ml-16 gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             <button
               className="flex focus:outline-none  active:outline-1 active:outline-blue-400  bg-[#2a619d]  rounded-md gap-3 h-10 w-24 justify-center pt-1 text-white cursor-pointer"
               onClick={() => setOpen(!open)}

@@ -148,18 +148,18 @@ const BannerVideo = () => {
           )}
           
           {/* Logos Grid/Row - Dynamically from API */}
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 lg:gap-8 items-center">
             {offeredBy.image.map((logo, index) => (
               <div
                 key={index}
-                className="flex items-start justify-center  md:p-1 bg-white rounded-lg shadow-sm"
+                className="flex items-center justify-center p-2 md:p-1 bg-white rounded-lg shadow-sm"
               >
                 <Image
                   src={GetData({ url: logo.src })}
                   alt={logo.alt || `Partner logo ${index + 1}`}
                   width={100}
                   height={100}
-                  className="object-contain h-16 w-auto"
+                  className="object-contain h-12 md:h-16 w-auto"
                   unoptimized
                 />
               </div>

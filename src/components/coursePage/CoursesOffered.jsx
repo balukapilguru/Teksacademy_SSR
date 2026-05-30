@@ -9,6 +9,7 @@ import Loader from "../Loader";   // optional, you can style your own loader
 import CourseCard from "../allcoursepage/Coursecards";
 import { blogsApplyBaseUrl, buildApiUrl, teksSsrBaseUrl } from "@/lib/apiBaseUrls";
 import BranchCoursecards from "../allcoursepage/BranchCoursecards";
+import Popupform from "../Popupform";
 
 const Page = ({ data, branchData }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Page = ({ data, branchData }) => {
   // Modal state (unchanged)
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [currentBranch, setCurrentBranch] = useState("");
 
   // Fetch courses from API (same as CoursesOffered)
 //  useEffect(() => {
@@ -66,6 +68,8 @@ const pathname = usePathname();
   }
 
   console.log("Fetching courses for branch:", branchValue);
+
+  setCurrentBranch(branchValue);
 
   const fetchCourses = async () => {
     try {
@@ -190,6 +194,20 @@ const pathname = usePathname();
           />
         </div>
       </div>
+
+      <Popupform
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        course={selectedCourse?.heading || ""}
+        courseName={selectedCourse?.heading || ""}
+        branch={currentBranch}
+        title="Enquire Now"
+        subtitle="Share your details and our counselor will reach out to you."
+        formType="default"
+        buttonText="Submit"
+        successMessage="Thanks! We will get in touch shortly."
+        onSubmit={handleSubmit}
+      />
     </section>
   );
 };
