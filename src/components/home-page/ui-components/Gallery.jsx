@@ -9,6 +9,7 @@ export default function Gallery({ gallery, data }) {
   const galleryData = gallery || data;
  
   if (!galleryData) return null;
+  
   return (
     
    <div className="">

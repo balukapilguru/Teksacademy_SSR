@@ -38,7 +38,7 @@ export default async function Home() {
   }
   // #fbf5f6 : pink
   // #fff : white
-
+ console.log(homeData.gallery,"homegallery")
   const sectionsConfig = [
     {
       component: (
@@ -59,11 +59,7 @@ export default async function Home() {
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
-    {
-      component: <Academics data={homeData?.academicsCards} />,
-      bg: "#fff",
-      border: "#fff",
-    },
+   
     {
       component: <Excel data={homeData?.excelWithTeksacademy}/>,
       bg: "#fbf5f6",
@@ -89,6 +85,7 @@ export default async function Home() {
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
+   
     {
       component: <Featuredin featuredIn={homeData?.featuredIn} />,
       bg: "#fff",

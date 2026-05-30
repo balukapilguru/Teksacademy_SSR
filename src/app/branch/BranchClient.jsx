@@ -559,6 +559,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
         <Awards awards={data.awards} />
       </section>
       <Gallery gallery={data.gallery} />
+      {console.log(data.gallery,"branchgallery")}
       <FeaturedIn featuredIn={data.featuredIn || data.featuredin} />
       <ExploreBranch data={data.branchLocation} />
      <Faq data={data.faq} />

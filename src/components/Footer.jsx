@@ -95,7 +95,7 @@ export default function Footer() {
   if (error) return null;
 
   const { image, officialAddress, socialMedia, sections, bottomBar } = footerData;
-
+{console.log(footerData,"nameee")}
   return (
     <footer className="relative bg-black text-white">
       <div>
@@ -225,9 +225,11 @@ export default function Footer() {
                           <BiLogoFlutter className="transform scale-x-[-1] mr-2 text-[#FE543D]" />
                           <Link href={item.url || '#'} className="hover:text-[#FE543D] transition-colors">
                             {item.name}
+                             
                           </Link>
                         </li>
                       ))}
+                     
                     </ul>
                   </div>
                 ))}
