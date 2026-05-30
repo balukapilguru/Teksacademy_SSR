@@ -274,12 +274,95 @@ body.hide-main-navbar .top-navbar {
 
 /* Add padding to all pages for mobile */
 @media (max-width: 767px) {
-  body {
+  body:not(.popup-open) {
     padding-bottom: 70px !important;
   }
   
   /* Ensure main content doesn't overflow */
   main {
     padding-bottom: 0 !important;
+  }
+}
+
+/* ---------------- RESPONSIVE GUARDRAILS ----------------
+   Universal defaults that prevent the most common layout
+   breakage across Mobile (320–767), Tablet (768–1023),
+   and Desktop (1024+). These do not override component
+   styles — they only kick in where nothing else applies. */
+
+/* Media never causes horizontal overflow */
+
+video,
+iframe,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Iframes still need explicit height when used responsively */
+iframe {
+  height: auto;
+}
+
+/* Long unbroken strings (URLs, emails, code) shouldn't blow out a row */
+p,
+span,
+li,
+td,
+th,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Tables become horizontally scrollable instead of breaking layout */
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile (320–767) */
+@media (max-width: 767px) {
+  /* Tighter section padding so content has room */
+  .main_container {
+    width: 92%;
+  }
+
+  /* Prevent fixed pixel widths from hard-cropping on tiny screens */
+  .w-96,
+  .w-80,
+  .w-72,
+  .w-64 {
+    max-width: 100%;
+  }
+
+  /* Dialogs / fixed popups should never exceed viewport */
+  .toast,
+  .popup,
+  [class*="fixed"][class*="w-"] {
+    max-width: calc(100vw - 1rem);
+  }
+}
+
+/* Tablet (768–1023) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main_container {
+    width: 94%;
+  }
+}
+
+/* Desktop (1024+) — gentle cap so very wide screens stay readable */
+@media (min-width: 1024px) {
+  .main_container {
+    width: 90%;
   }
 }

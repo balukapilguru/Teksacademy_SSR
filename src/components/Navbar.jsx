@@ -85,6 +85,7 @@ import GetData from "@/utility/GetData";
 import { SelectedCourseContext } from "@/context/SelectedCourseContext";
 import { useNavbar } from "@/components/coursePage/NavbarContext";
 import Loader from "./Loader";
+import Popupform from "./Popupform";
 
 // ============================================
 // CONSTANTS SECTION
@@ -1026,7 +1027,15 @@ export default function Navbar() {
       {/* ============================================ */}
       {/* CAREER GUIDANCE FORM MODAL */}
       {/* ============================================ */}
-    
+      <Popupform
+        show={showCareer}
+        onClose={handleCloseCareerForm}
+        title="1:1 Career Guidance"
+        subtitle="Talk to our experts and get personalized career advice."
+        formType="career"
+        buttonText="Book My Session"
+        successMessage="Thanks! Our career counselor will reach out shortly."
+      />
     </>
   );
 }

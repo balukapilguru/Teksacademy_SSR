@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 import Loader from "@/components/Loader";
+import Popupform from "@/components/Popupform";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 export default function EbookClient({ source }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
-  const modalRef = useRef(null);
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   // Fetch API Data
@@ -47,21 +48,40 @@ export default function EbookClient({ source }) {
   const section = data?.ebookSection || {};
   const courses = section.items || [];
 
-  // Close popup on outside click
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setSelectedCard(null);
+  const handleEbookSubmit = async (formValues, payload) => {
+    const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...payload,
+        productId: selectedCard?.productId,
+        sourceId: selectedCard?.sourceId,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Submission failed");
+    }
+
+    const ebookPath = selectedCard?.ebookurl || selectedCard?.ebookUrl;
+    if (ebookPath) {
+      const ebookUrl = resolveEbookUrl(ebookPath);
+      if (ebookUrl) {
+        window.open(ebookUrl, "_blank", "noopener,noreferrer");
       }
     }
+  };
 
-    if (selectedCard) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, [selectedCard]);
+  const resolveEbookUrl = (path) => {
+    if (!path) return "";
+    let p = String(path).trim();
+    // Fix malformed schemes like "https//host" or "http//host"
+    p = p.replace(/^(https?)\/\//i, "$1://");
+    if (/^https?:\/\//i.test(p)) return p;
+    if (p.startsWith("//")) return `https:${p}`;
+    return `${baseUrl}${p.startsWith("/") ? "" : "/"}${p}`;
+  };
 
   // Helper function to get image URL with fallback
   const getImageUrl = (imageSrc, productId) => {
@@ -220,23 +240,17 @@ export default function EbookClient({ source }) {
       )}
 
       {/* Popup Modal */}
-      {selectedCard && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999] p-4">
-          <div
-            ref={modalRef}
-            className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4"
-          >
-            {/* <Ebooksform
-              course={selectedCard.title}
-              downloadLink={`https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com${selectedCard.ebookurl}`}
-              productId={selectedCard.productId}
-              sourceId={selectedCard.sourceId}
-              source={source}
-              closePopup={() => setSelectedCard(null)}
-            /> */}
-          </div>
-        </div>
-      )}
+      <Popupform
+        show={!!selectedCard}
+        onClose={() => setSelectedCard(null)}
+        course={selectedCard?.title || ""}
+        courseName={selectedCard?.title || ""}
+        title="Book a live demo for free"
+        formType="ebook"
+        buttonText="Download E-Book"
+        successMessage="Your e-book is opening in a new tab."
+        onSubmit={handleEbookSubmit}
+      />
     </div>
   );
 }

@@ -777,6 +777,20 @@ export const MobileBottomNav = () => {
   const [showBrochure, setShowBrochure] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (showBrochure || showChat) {
+      document.body.classList.add("popup-open");
+    } else {
+      document.body.classList.remove("popup-open");
+    }
+    return () => {
+      if (!showBrochure && !showChat) {
+        document.body.classList.remove("popup-open");
+      }
+    };
+  }, [showBrochure, showChat]);
+
   const handleItemClick = (event, item) => {
     if (item.type === "chat") {
       event.preventDefault();
@@ -795,7 +809,8 @@ export const MobileBottomNav = () => {
       <div className="block lg:hidden">
         <nav
           aria-label="Mobile navigation"
-          className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_12px_rgba(0,0,0,0.08)]"
+          data-mobile-bottom-nav
+          className="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-10 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_12px_rgba(0,0,0,0.08)]"
         >
           <ul className="grid grid-cols-5">
             {items.map((item) => {
@@ -852,6 +867,14 @@ export const MobileBottomNav = () => {
         @media (max-width: 768px) {
           body {
             padding-bottom: 70px !important;
+          }
+          body.popup-open {
+            padding-bottom: 0 !important;
+          }
+          body.popup-open .mobile-bottom-nav {
+            z-index: -1 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
           }
         }
       `}</style>

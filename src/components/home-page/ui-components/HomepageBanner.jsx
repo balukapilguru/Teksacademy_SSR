@@ -14,7 +14,7 @@ export default function HomepageBanner({ bannerData }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:pl-6 items-start">
           
           {/* Left Section */}
-          <div className="w-full">
+          <div className="w-full mb-4">
             
             <BannerVideo
               video={bannerData?.video}
@@ -47,7 +47,7 @@ export default function HomepageBanner({ bannerData }) {
           </div>
 
           {/* Right Section: Form */}
-          <div className="w-full flex justify-center lg:justify-end">
+          <div className=" w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-md sm:max-w-lg bg-white p-6 rounded-lg shadow">
           <div className="text-center mb-4">
                 <div className="text-2xl text-black font-bold">Get Expert Guidence</div>
