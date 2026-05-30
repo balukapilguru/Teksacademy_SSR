@@ -629,7 +629,7 @@ export default function CoursesClient() {
                 />
               </div>
             </div>
-            <Sidebar
+            {/* <Sidebar
               counts={counts}
               selectedCategory={selectedCategory}
               setSelectedCategory={(c) => { setSelectedCategory(c); setMenuOpen(false); }}
@@ -640,12 +640,12 @@ export default function CoursesClient() {
               onCloseMobile={() => setMenuOpen(false)}
               handleProgramFilter={handleProgramFilter}
               onClearSearch={() => setSearchTerm("")}
-            />
+            /> */}
           </div>
         )}
 
         {/* Desktop sidebar */}
-        <div className="hidden mb-8 md:block w-80 flex-shrink-0">
+        {/* <div className="hidden mb-8 md:block w-80 flex-shrink-0">
           <Sidebar
             counts={counts}
             selectedCategory={selectedCategory}
@@ -657,7 +657,7 @@ export default function CoursesClient() {
             handleProgramFilter={handleProgramFilter}
             onClearSearch={() => setSearchTerm("")}
           />
-        </div>
+        </div> */}
 
         {/* Main content */}
         <div className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]">
@@ -702,7 +702,7 @@ export default function CoursesClient() {
             ) : error ? (
               <p className="text-[#2a619d] mt-6">{error}</p>
             ) : courses.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 {courses.map((course, index) => (
                   <div
                     key={course.id ?? `${course.programName || "course"}-${index}`}
