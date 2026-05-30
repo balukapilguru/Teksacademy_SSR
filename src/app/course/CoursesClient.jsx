@@ -602,7 +602,7 @@ export default function CoursesClient() {
 
       <div className="flex flex-col md:flex-row">
         {/* Mobile top bar */}
-        <div className="md:hidden flex items-center justify-between mb-3 px-2">
+        {/* <div className="md:hidden flex items-center justify-between mb-3 px-2">
           <button
             onClick={() => setMenuOpen((s) => !s)}
             className="cursor-pointer p-2 rounded-md hover:bg-gray-100"
@@ -614,7 +614,7 @@ export default function CoursesClient() {
             <span className="text-base font-medium">{activeHeading}</span>
           </div>
           <div style={{ width: 44 }} />
-        </div>
+        </div> */}
 
         {/* Mobile sidebar */}
         {menuOpen && (

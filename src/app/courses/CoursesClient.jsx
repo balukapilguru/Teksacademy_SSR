@@ -591,13 +591,13 @@ export default function CoursesClient() {
       <div className="flex flex-col md:flex-row">
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center justify-between mb-3 px-2">
-          <button
+          {/* <button
             onClick={() => setMenuOpen((s) => !s)}
             className="cursor-pointer p-2 rounded-md hover:bg-gray-100"
             aria-label="Toggle menu"
           >
             {menuOpen ? <IoMdClose size={22} /> : <FaBars size={22} />}
-          </button>
+          </button> */}
 
           <div className="flex-1 text-center">
             <span className="text-base font-medium">
