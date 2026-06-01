@@ -289,27 +289,42 @@ export default function CoursesClient() {
   // RESTORE FILTERS FROM LOCALSTORAGE (FIXED: now also restores program)
   // ================================
 
+  // useEffect(() => {
+  //   const savedCategory = localStorage.getItem("selectedCategory");
+  //   const savedSubCategory = localStorage.getItem("selectedSubCategory");
+  //   const savedProgram = localStorage.getItem("selectedProgram");
+
+  //   if (savedCategory) {
+  //     setSelectedCategory(savedCategory);
+  //     setContextCategory(savedCategory);
+  //   }
+
+  //   if (savedSubCategory) {
+  //     setSelectedSubCategory(savedSubCategory);
+  //     setContextSubCategory(savedSubCategory);
+  //   }
+
+  //   if (savedProgram) {
+  //     setSelectedProgram(savedProgram);
+  //     // Program is not in context, so no need to set context
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const savedCategory = localStorage.getItem("selectedCategory");
-    const savedSubCategory = localStorage.getItem("selectedSubCategory");
-    const savedProgram = localStorage.getItem("selectedProgram");
+  // Force default category instead of restoring junk
+  const defaultCategory = "industryReadySkills";
 
-    if (savedCategory) {
-      setSelectedCategory(savedCategory);
-      setContextCategory(savedCategory);
-    }
+  setSelectedCategory(defaultCategory);
+  setSelectedSubCategory(null);
+  setSelectedProgram(null);
 
-    if (savedSubCategory) {
-      setSelectedSubCategory(savedSubCategory);
-      setContextSubCategory(savedSubCategory);
-    }
+  setContextCategory(defaultCategory);
+  setContextSubCategory(null);
 
-    if (savedProgram) {
-      setSelectedProgram(savedProgram);
-      // Program is not in context, so no need to set context
-    }
-  }, []);
-
+  localStorage.removeItem("selectedCategory");
+  localStorage.removeItem("selectedSubCategory");
+  localStorage.removeItem("selectedProgram");
+}, []);
   // ================================
   // SYNC CONTEXT
   // ================================
