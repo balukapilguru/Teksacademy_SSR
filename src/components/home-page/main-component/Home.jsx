@@ -109,7 +109,7 @@ console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
           <section
             key={idx}
             style={{ backgroundColor: sec.bg, borderColor: sec.border }}
-            className="md:py-4 xl:py-6 rounded-lg"
+            className="rounded-lg"
           >
             {sec.component}
           </section>
