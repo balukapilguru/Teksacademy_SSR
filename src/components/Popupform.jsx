@@ -4,6 +4,26 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ReusableForm from "./ReusableForm";
 
+const normalizeCourseValue = (value) => {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) {
+    const firstValue = value.find((item) => item !== undefined && item !== null);
+    return normalizeCourseValue(firstValue);
+  }
+  if (typeof value === "object") {
+    return (
+      value.courseName ||
+      value.name ||
+      value.title ||
+      value.programName ||
+      value.heading ||
+      value.course ||
+      ""
+    );
+  }
+  return String(value);
+};
 
 const Popupform = ({
   show,
@@ -47,7 +67,7 @@ const Popupform = ({
   if (!mounted) return null;
 
   const initialValues = {
-    course: courseName || course || "",
+    course: normalizeCourseValue(courseName || course),
     ...(branch ? { branch } : {}),
   };
 

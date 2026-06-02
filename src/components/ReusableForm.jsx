@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { MobileOtpField } from "./MobileOtpField";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { COURSE_OPTIONS, BRANCH_OPTIONS } from "@/config/formConfig";
 
 // Complete field configuration
 const ALL_FIELDS = {
@@ -11,11 +12,11 @@ const ALL_FIELDS = {
   email: { id: "email", label: "Email", type: "email", required: true, placeholder: "Enter your email" },
   phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
   course: { id: "course", label: "Course", type: "course", required: true },
-  career: { id: "career", label: "I want a career in", type: "select", required: true, options: ["Full Stack Java", "Full Stack Python", "Cyber Security", "Generative AI", "AWS + DevOps", "Data Science", "Data Analytics", "Digital Marketing"] }, 
-    // "BIM - Revit MEP, Navis" "AutoCAD", "Medical Coding", "SAP FICO", "SAP MM", "Testing - Automation", "Multimedia", "Advanced Excel", "Revit MEP Certification", "Business Analytics"
+  career: { id: "career", label: "I want a career in", type: "select", required: true, options: COURSE_OPTIONS },
+    // The career selector uses the same approved course options as the main course dropdown.
   qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder:"select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
   prefferd: { id: "prefferd", label: "Preferred mode", type: "select", required: true, options: ["Online (Live)", "Offline (Classroom)", "Hybrid"] },
-  branch: { id: "branch", label: "Branch", type: "select", required: true, options: ["ameerpet", "kukatpally", "mehdipatnam", "hiteccity", "secunderabad", "dilsukhnagar", "bangalore", "visakhapatnam"] },
+  branch: { id: "branch", label: "Branch", type: "select", required: true, options: BRANCH_OPTIONS },
   city: { id: "city", label: "City", type: "text", required: true, placeholder: "Enter your city" },
   message: { id: "message", label: "Message", type: "textarea", required: false, placeholder: "Your message here...", rows: 4 },
   companyName: { id: "companyName", label: "Company Name", type: "text", required: true, placeholder: "Enter company name" },
@@ -23,27 +24,68 @@ const ALL_FIELDS = {
   issue: { id: "issue", label: "Issue / Query", type: "textarea", required: true, placeholder: "Describe your issue...", rows: 3 }
 };
 
-// Course options
-const COURSE_OPTIONS = [
-  "Full Stack Python", "Full Stack Java", "Data Science", "AWS & DevOps",
-  "Digital Marketing", "Cyber Security", "Data Analytics", "Business Analytics",
-  "Generative AI", "Medical Coding", "SAP FICO", "Testing Tools", "Excel", "AutoCAD", "BIM", "Revit"
-];
+const normalizeText = (text) =>
+  text
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
 
-const isFixedCourseValue = (course) => {
-  if (!course || !course.toString().trim()) return false;
-
-  const normalizedCourse = course.toString().trim().toLowerCase();
+const isMeaningfulCourseLabel = (value) => {
+  if (!value || !value.toString().trim()) return false;
+  const normalized = value.toString().trim().toLowerCase();
   return (
-    normalizedCourse !== "course" &&
-    normalizedCourse !== "course enquiry" &&
-    normalizedCourse !== "course details"
+    normalized !== "" &&
+    normalized !== "course" &&
+    normalized !== "course enquiry" &&
+    normalized !== "course details"
   );
 };
 
+const normalizeCourseInput = (value) => {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    const firstValue = value.find((item) => item !== undefined && item !== null);
+    return normalizeCourseInput(firstValue);
+  }
+
+  if (typeof value === "object") {
+    const label =
+      value.programName ||
+      value.heading ||
+      value.courseName ||
+      value.course ||
+      value.title ||
+      value.name ||
+      "";
+    return normalizeCourseInput(label);
+  }
+
+  const trimmedValue = value.toString().trim();
+  if (!isMeaningfulCourseLabel(trimmedValue)) return "";
+
+  const inputTokens = normalizeText(trimmedValue);
+  const exactMatch = COURSE_OPTIONS.find((option) => {
+    const optionTokens = normalizeText(option);
+    return optionTokens.join(" ") === inputTokens.join(" ");
+  });
+  if (exactMatch) return exactMatch;
+
+  const tokenMatch = COURSE_OPTIONS.find((option) => {
+    const optionTokens = normalizeText(option);
+    return optionTokens.every((token) => inputTokens.includes(token));
+  });
+  if (tokenMatch) return tokenMatch;
+
+  return trimmedValue;
+};
+
 const normalizeInitialValue = (fieldId, value) => {
-  if (fieldId === "course" && !isFixedCourseValue(value)) {
-    return "";
+  if (fieldId === "course" || fieldId === "career") {
+    return normalizeCourseInput(value);
   }
 
   return value || "";
@@ -80,7 +122,7 @@ export default function ReusableForm({
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
       banner: ["name", "email", "phone", "course", "branch"],
       Career: ["name", "email", "phone", "course", "branch"],
-      EnrollNow: ["name", "email", "phone", "course", "branch"],
+      Enrollnow: ["name", "email", "phone", "course", "branch"],
       requestCallback: ["name", "email", "phone", "course", "branch"],
       reserveSpot: ["name", "email", "phone", "course", "branch"],
     };
@@ -137,7 +179,7 @@ export default function ReusableForm({
     setFormValues(initial);
     setErrors({});
     setIsOtpVerified(false);
-    setCourseSearchTerm(initial.course || "");
+    setCourseSearchTerm(normalizeCourseInput(initial.course || ""));
     setShowCourseDropdown(false);
   }, [formType, initialValues, getFieldsForType]);
 
@@ -284,6 +326,23 @@ export default function ReusableForm({
     }
 
     if (fieldId === "course") {
+      const fixedCourseValue = normalizeCourseInput(initialValues.course || "");
+      if (fixedCourseValue) {
+        return (
+          <div key={fieldId} className="mb-4">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              {field.label} <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={fixedCourseValue}
+              disabled
+              className="w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+        );
+      }
+
       const filteredCourses = COURSE_OPTIONS.filter(c =>
         c.toLowerCase().includes(courseSearchTerm.toLowerCase())
       );
@@ -294,12 +353,21 @@ export default function ReusableForm({
             {field.label} <span className="text-red-500">*</span>
           </label>
           <div
-            onClick={() => setShowCourseDropdown(!showCourseDropdown)}
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowCourseDropdown((prev) => !prev)}
+            onFocus={() => setShowCourseDropdown(true)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setShowCourseDropdown((prev) => !prev);
+              }
+            }}
             className={`w-full px-4 py-2 border rounded-md flex items-center justify-between text-sm cursor-pointer
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
-            <span className={value || initialValues.course ? "text-gray-900" : "text-gray-400"}>
-              {value || initialValues.course || "Select a course"}
+            <span className={value ? "text-gray-900" : "text-gray-400"}>
+              {value || "Select a course"}
             </span>
             <svg className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
               fill="none" stroke="currentColor" viewBox="0 0 24 24">

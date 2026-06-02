@@ -142,7 +142,7 @@ export default async function Page({ params }) {
 
   const formDetails =
     isCertification || isSelfPaced ? data?.formDetails : data?.specializations;
-console.log(data.advancedTools,"data.ToolsAndFeatures")
+  console.log(data?.advancedTools, "data.ToolsAndFeatures");
   /* =====================================================
      DATA MAPPING (UNCHANGED)
   ===================================================== */

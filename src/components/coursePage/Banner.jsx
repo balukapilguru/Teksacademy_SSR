@@ -41,15 +41,14 @@ const Banner = ({
   };
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(courseLabel || formDetails || null);
+  const [selectedCourse, setSelectedCourse] = useState(courseLabel || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   if (!data) return null;
 
-  const handleOpenModal = (details) => {
-    const courseObj = details || courseLabel || formDetails || null;
-    console.log("Opening modal with course object:", courseObj); // Debug log
+  const handleOpenModal = () => {
+    const courseObj = courseLabel || normalizeCourseLabel(data?.banner?.name) || normalizeCourseLabel(formDetails) || branch || "";
     setSelectedCourse(courseObj);
     setShowModal(true);
   };
@@ -94,8 +93,8 @@ const Banner = ({
         <Popupform
           show={showModal}
           onClose={() => !isSubmitting && setShowModal(false)}
-          course={selectedCourse || courseLabel || formDetails || branch}
-          courseName={selectedCourse || courseLabel || formDetails}
+          course={normalizeCourseLabel(selectedCourse || courseLabel || formDetails || branch)}
+          courseName={normalizeCourseLabel(selectedCourse || courseLabel || formDetails)}
           source={30}
           title={"Enroll Now"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
@@ -155,7 +154,7 @@ const Banner = ({
               <PrimaryButton
                 variant="light"
                 className="text-lg"
-                onClick={() => handleOpenModal(formDetails)}
+                onClick={handleOpenModal}
               >
                 {data.button.name}
               </PrimaryButton>
@@ -164,7 +163,7 @@ const Banner = ({
           
           <button 
             className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
-            onClick={() => handleOpenModal(formDetails)}
+            onClick={handleOpenModal}
           >
             Enroll Now
           </button>
