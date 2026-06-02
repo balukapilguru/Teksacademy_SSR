@@ -174,7 +174,7 @@ const CertificationCourse = ({ data }) => {
 
         {/* View All Button */}
         {data?.viewAllButton && courses.length > 0 && (
-          <div className="flex justify-center pt-5">
+          <div className="flex justify-center py-5">
             <PrimaryButton
               variant="outline"
               label={data.viewAllButton.name}
