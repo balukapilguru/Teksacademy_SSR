@@ -155,21 +155,29 @@ const ApplyForJobs = () => {
         searchParam = `PUBLIC_JOBS ${debouncedSearchTerm}`;
       }
 
-      const queryParams = new URLSearchParams({
-        page: currentPage,
-        pageSize: itemsPerPage,
-        search: searchParam,
-        "filter[job_type]": filters.job_type,
-        "filter[workplace_type]": filters.workplace_type,
-        "filter[experience]": filters.experience,
-      });
+    const queryParams = new URLSearchParams({
+  page: currentPage,
+  pageSize: itemsPerPage,
+  search: debouncedSearchTerm || "",
+  type: jobTab, // 👈 clean separation instead of mixing into search
+  "filter[job_type]": filters.job_type,
+  "filter[workplace_type]": filters.workplace_type,
+  "filter[experience]": filters.experience,
+});
       const response = await fetch(
         `${apiUrl}/jobs/job-postings?${queryParams}`,
         authFetchOptions(),
       );
       if (response.ok) {
         const data = await response.json();
-        setJobs(data);
+        setJobs({
+  ...data,
+  reversedjobs:
+    data?.reversedjobs ||
+    data?.jobs ||
+    data?.data ||
+    [],
+});
       } else {
         const errorText = await response.text();
         console.error("Job fetch error:", response.status, errorText);
@@ -997,7 +1005,7 @@ const ApplyForJobs = () => {
                   value={searchTerm}
                   onChange={handleSearchChange}
                   placeholder="Search for jobs, companies, locations..."
-                  className="w-full border-2 border-gray-200 text-sm p-2 pl-4 pr-10 rounded-full focus:border-[#295F9D] focus:outline-none"
+                  className="w-full border-2 border-black text-sm p-2 pl-4 pr-10 rounded-full focus:border-[#295F9D] focus:outline-none"
                 />
                 <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg cursor-pointer" />
               </div>

@@ -35,10 +35,10 @@ const formatLabel = (str = "") => {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 };
 
-const CATEGORY_LABELS = {
-  certifications: "Industry Ready Programs",
-  academics: "Academics",
-};
+// const CATEGORY_LABELS = {
+//   certifications: "Industry Ready Programs",
+//   academics: "Academics",
+// };
 
 const SUBCATEGORY_LABELS = {
   certification: "Certification",
@@ -358,15 +358,29 @@ export default function CoursesClient() {
     }
   }, [router]);
 
-  useEffect(() => {
-    const savedCategory = localStorage.getItem("selectedCategory");
-    const savedSubCategory = localStorage.getItem("selectedSubCategory");
-    const savedProgram = localStorage.getItem("selectedProgram");
-    if (savedCategory) { setSelectedCategory(savedCategory); setContextCategory(savedCategory); }
-    if (savedSubCategory) { setSelectedSubCategory(savedSubCategory); setContextSubCategory(savedSubCategory); }
-    if (savedProgram) setSelectedProgram(savedProgram);
-  }, []);
+  // useEffect(() => {
+  //   const savedCategory = localStorage.getItem("selectedCategory");
+  //   const savedSubCategory = localStorage.getItem("selectedSubCategory");
+  //   const savedProgram = localStorage.getItem("selectedProgram");
+  //   if (savedCategory) { setSelectedCategory(savedCategory); setContextCategory(savedCategory); }
+  //   if (savedSubCategory) { setSelectedSubCategory(savedSubCategory); setContextSubCategory(savedSubCategory); }
+  //   if (savedProgram) setSelectedProgram(savedProgram);
+  // }, []);
 
+  useEffect(() => {
+  // Clear everything when entering page
+  localStorage.removeItem("selectedCategory");
+  localStorage.removeItem("selectedSubCategory");
+  localStorage.removeItem("selectedProgram");
+
+  // Reset state cleanly
+  setSelectedCategory(null);
+  setSelectedSubCategory(null);
+  setSelectedProgram(null);
+
+  setContextCategory(null);
+  setContextSubCategory(null);
+}, []);
   useEffect(() => {
     if (contextCategory && contextCategory !== selectedCategory)
       setSelectedCategory(contextCategory);
@@ -477,13 +491,13 @@ export default function CoursesClient() {
   };
 
   // ── Heading: always shows the deepest active label ──
-  const activeHeading = selectedProgram
-    ? formatLabel(selectedProgram)
-    : selectedSubCategory
-      ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
-      : selectedCategory
-        ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
-        : "All Courses";
+  const activeHeading = "All Courses"
+    // ? formatLabel(selectedProgram)
+    // : selectedSubCategory
+    //   ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
+    //   : selectedCategory
+    //     ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
+    //     : "All Courses";
 
   if (pageLoading) {
     return (

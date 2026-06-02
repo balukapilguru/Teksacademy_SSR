@@ -224,7 +224,7 @@ console.log(data.advancedTools,"data.ToolsAndFeatures")
   ===================================================== */
   const CourseFlowWrapper = () => (
     <CourseFlowProvider>
-      {data?.offeringUniversity && formDetails && (
+      {/* {data?.offeringUniversity && formDetails && (
         <CourseInfoTable
           data={{
             offeringUniversity: data.offeringUniversity,
@@ -238,7 +238,7 @@ console.log(data.advancedTools,"data.ToolsAndFeatures")
           formDetails={formDetails}
           branch={data?.branch}
         />
-      )}
+      )} */}
 
       {data?.excel && <Excel data={data.excel} courseName={courseLabel} />}
 
@@ -256,6 +256,7 @@ console.log(data.advancedTools,"data.ToolsAndFeatures")
           courseName={courseLabel}
         />
       )}
+      {console.log(data,"career")}
 
       {data?.OnlineAdmissionProcedure && (
         <Admission data={data.OnlineAdmissionProcedure} />
