@@ -5,50 +5,61 @@ import Image from "next/image";
 import Loader from "@/components/Loader";
 import ReusableForm from "@/components/ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
-// import Recruitersform from "@/app/forms/Recruitersform";
+import { useRouter } from "next/navigation";
+import GetData from "@/utility/GetData";
 
 const Recruiters = () => {
   const [data, setData] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
+  // 🔥 Format name properly
+  const formatName = (name = "") =>
+    name
+      .split("_")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+  // ✅ Submit handler
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
-
     try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(mappedPayload),
+        }
+      );
 
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
+      const res = await response.json();
 
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
+      if (!response.ok) throw new Error(res.message);
 
       router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
+    } catch (err) {
+      console.error(err);
     }
   };
-  // Fetch API
+
+  // ✅ Fetch API
   useEffect(() => {
     const fetchData = async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+      const baseUrl =
+        process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+        process.env.NEXT_TEKS_SSR_API_URL;
 
       try {
-        const res = await fetch(`${baseUrl}/api/recruiters`);
+        const res = await fetch(
+          `${baseUrl}/api/v1/placements/recruiters`
+        );
         const json = await res.json();
-        console.log("API Response:", json); // Debug log
-        setData(json?.data || {});
+
+        // IMPORTANT: correct mapping
+        setData(json?.data?.recruitersSection || {});
       } catch (err) {
-        console.error("Failed to fetch recruiters:", err);
+        console.error("Fetch failed:", err);
       } finally {
         setLoading(false);
       }
@@ -57,183 +68,123 @@ const Recruiters = () => {
     fetchData();
   }, []);
 
-  // Safe extraction with fallbacks
-  const hero = data?.heroSection || {};
+  if (loading) return <Loader />;
+
+  // ✅ Safe extraction
   const title = data?.title || "Recruiters";
-  const heading = hero?.heading || "Become Hiring Partner with Us";
-  const subHeading = hero?.subHeading || "Build Your Future Workforce!";
-  const description = hero?.description || "";
-  const highlights = hero?.highlights || [];
-  const hiringFee = hero?.hiringFee || "Zero";
-  const talentPool = hero?.talentPool || "Access to Job-Ready Talent Pool";
-  const hiringModes = hero?.hiringModes || "Flexible Hiring Modes";
-  const placementSupport = hero?.placementSupport || "Full Placement Support";
-
+  const hero = data?.heroSection || {};
   const recruiterCards = data?.recruitersCardsSection?.cards || [];
-
-  // Form fields data
-  const formFields = data?.formFields || {
-    firstName: { label: "First Name", placeholder: "Enter your full name", required: true },
-    email: { label: "Email", placeholder: "Enter your email address", required: true },
-    mobile: { label: "Mobile no", placeholder: "Enter mobile number", required: true },
-    companyName: { label: "Company Name", placeholder: "Type company name...", required: true },
-    designation: { label: "Designation", placeholder: "Enter your job title (e.g. Product Manager...)", required: true },
-    branch: { label: "Branch", placeholder: "Select a Branch", required: true }
-  };
-
-  if (loading) {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-  }
-
+console.log(recruiterCards,"cards")
   return (
     <>
-      <div>
-        {/* Title */}
-        <div className="pb-5 flex justify-center items-center w-full">
-          <div className="relative w-fit flex flex-col">
-            <h1 className="mt-6 font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
-              <span className="text-[#2A619D]">{title}</span>
-            </h1>
-            <svg
-              className="mt-6 absolute top-8 w-full h-auto"
-              viewBox="0 0 110 12"
-            >
-              <path
-                d="M0 10 Q80 -2 190 27"
-                stroke="orangered"
-                strokeWidth="1.03"
-                fill="transparent"
-              />
-            </svg>
-          </div>
-        </div>
+      {/* TITLE */}
+      <div className="text-center mt-6">
+        <h1 className="text-2xl font-semibold text-[#2A619D]">
+          {title}
+        </h1>
+      </div>
 
-        {/* Hero Section */}
-        <div className="bg-[#2A619D]">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:gap-x-20 xl:py-6 lg:py-4">
+      {/* HERO */}
+      <div className="bg-[#2A619D] mt-6">
+        <div className="main_container grid lg:grid-cols-2 justify-items-end py-10 text-white">
 
-              {/* LEFT */}
-              <div className="flex pt-9 flex-col 2xl:w-4/5 text-white">
+          {/* LEFT */}
+          <div>
+            <h2 className="text-2xl xl:text-3xl font-medium text-white leading-tight md:text-2xl mb-4">
+              {hero.heading}
+            </h2>
 
-                {/* Headings */}
-                <div>
-                  <div className="font-semibold xl:text-[2rem] lg:text-[1.5rem] md:text-[1.2rem] xs:text-[1rem] xs:pl-4 md:pl-5 lg:pl-0">
-                    {heading}
-                  </div>
-                  <div className="font-semibold xl:text-[2rem] lg:text-[1.4rem] md:text-[1.2rem] xs:text-[1rem] xs:pl-4 md:pl-5 lg:pl-0">
-                    {subHeading}
-                  </div>
-                </div>
+            <h3 className="text-lg font-semibold mt-1">
+              {hero.subHeading}
+            </h3>
 
-                {/* Description */}
-                <div className="xl:text-[1.1rem] text-justify lg:text-[1rem] lg:pt-3 lg:pb-3 xs:text-[0.7rem] md:text-[0.8rem] md:pr-3 xs:pr-3 xs:pl-4 md:pl-5 lg:pl-0">
-                  <br />
-                  {description || "Teks Academy bridges the gap between industry and talent with hands-on, job-ready training. 29+ companies trust us for skilled hires in Full Stack, Data Science, GIS, and ERP. Partner with us for free and access trained professionals from 30+ courses. Let's build a future-ready, skilled workforce together!"}
-                </div>
-
-                {/* Highlights/Features */}
-                <div className="grid grid-cols-2 bg-[#2C5581]  gap-4 mt-6 ">
-                  <div className=" p-3 rounded-lg">
-                    <div className="font-bold text-white text-lg pl-7">Hiring Fee for Recruiters – {hiringFee}</div>
-                    <div className="font-bold text-white mt-8 text-lg pl-7">{placementSupport}</div>
-
-                  </div>
-                  <div className="bg-[#2C5581] p-4 rounded-lg">
-                    <div className="font-bold text-white  text-lg ">{talentPool}</div>
-
-                    <div className="font-bold text-white text-lg mt-8">{hiringModes}</div>
-                  </div>
-                </div>
-
-                {/* Highlights List */}
-                {highlights.length > 0 && (
-                  <div className="bg-[#2C5581] px-8 font-bold rounded-lg shadow-xl xl:mt-8 text-white lg:mt-10 xs:mt-9 xs:ml-4 xs:mr-4 md:mt-9 md:ml-6 lg:ml-0 md:mr-10 lg:mr-0 py-10">
-                    <div className="grid grid-cols-2 gap-y-4">
-                      {highlights.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="flex justify-start text-center xl:text-[1rem] lg:text-[0.8rem] md:text-[0.8rem] xs:text-[0.7rem]"
-                        >
-                          • {item.text || item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* RIGHT FORM */}
-              <div className="w-96 flex justify-center items-center bg-white rounded-lg shadow-lg p-6">
-              <ReusableForm
-                formType="recruiter"
-                onSubmit={handleSubmit}
-                buttonText="Submit"
-                className="w-full"
-                successMessage="Thank you! We'll contact you soon."
-              />
-              </div>
-
+            {/* 🔥 FIXED DESCRIPTION */}
+            <div className="mt-4 text-md space-y-4 text-justify">
+              {Array.isArray(hero.description)
+                ? hero.description.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))
+                : <p>{hero.description}</p>}
             </div>
+
+            {/* HIGHLIGHTS */}
+            <div className="grid grid-cols-2 gap-4 space-y-3.5 mt-6 bg-[#2C5581] p-4 rounded">
+              {hero.highlights?.map((h) => (
+                <p key={h.id} className="text-md font-medium">
+                  • {h.text}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT FORM */}
+          <div className="bg-white max-w-md rounded-lg p-6 text-black">
+            <ReusableForm
+              formType="recruiter"
+              onSubmit={handleSubmit}
+              buttonText="Submit"
+            />
           </div>
         </div>
       </div>
 
-      {/* Recruiter Cards */}
-      {recruiterCards.length > 0 && (
-        <div>
-          <div className="main_container overflow-hidden">
-            <div className="mb-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-white lg:gap-6 2xl:gap-4 gap-y-0 3xl:gap-x-4 w-full mt-6 lg:mt-8 2xl:mt-12 3xl:mt-14">
-                {recruiterCards.map((ele, idx) => (
-                  ele?.thumbnail?.src && (
-                    <div
-                      key={ele.id || idx}
-                      onClick={() => ele?.videoUrl && setSelectedVideo(ele.videoUrl)}
-                      className="cursor-pointer hover:opacity-80 transition-opacity"
-                    >
-                      <Image
-                        src={ele.thumbnail.src}
-                        alt={ele.thumbnail.alt || ele.name || "Recruiter"}
-                        width={400}
-                        height={300}
-                        className="w-full h-auto rounded-lg"
-                      />
-                      {ele.name && (
-                        <p className="text-center mt-2 font-medium">{ele.name}</p>
-                      )}
-                    </div>
-                  )
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 🔥 RECRUITER CARDS (REAL UI FIX) */}
+      <div className="main_container py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-      {/* Video Modal */}
+          {recruiterCards.map((ele) => {
+            const name = formatName(ele.name);
+
+            return (
+              <div
+                key={ele.id}
+                onClick={() => setSelectedVideo(ele.videoUrl)}
+                className="flex items-center justify-between  rounded-xl p-4 cursor-pointer hover:shadow-md transition"
+              >
+                {/* LEFT TEXT */}
+                
+
+                {/* RIGHT IMAGE */}
+                <div className="relative w-full ">
+                  <Image
+                   src={ele.thumbnail.src}
+                    // src={GetData({url:ele.thumbnail)}}
+                    alt={ele.thumbnail.alt}
+                    width={560}
+                    height={160}
+                    className="rounded-mdw-full  object-cover"
+                  />
+
+                  {/* PLAY BUTTON */}
+                  
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* VIDEO MODAL */}
       {selectedVideo && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
           onClick={() => setSelectedVideo(null)}
         >
-          <div className="relative w-full max-w-4xl mx-4">
+          <div
+            className="relative w-full max-w-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <video
               controls
               autoPlay
               className="w-full rounded-lg"
-              onClick={(e) => e.stopPropagation()}
             >
               <source src={selectedVideo} type="video/mp4" />
-              Your browser does not support the video tag.
             </video>
+
             <button
               onClick={() => setSelectedVideo(null)}
-              className="absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"
+              className="absolute -top-10 right-0 text-white text-xl"
             >
               ✕
             </button>
