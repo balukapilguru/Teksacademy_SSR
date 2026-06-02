@@ -46,7 +46,7 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
     if (studentVoices && studentVoices.length > 0) {
       const interval = setInterval(() => {
         setCurrentVideoIndex((prev) => (prev + 1) % studentVoices.length);
-      }, 3000);
+      }, 5000);
 
       return () => clearInterval(interval);
     }
