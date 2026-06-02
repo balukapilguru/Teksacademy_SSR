@@ -976,7 +976,7 @@ const ApplyForJobs = () => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder="Search for jobs, companies, locations..."
-                className="w-full border-2 border-gray-200 text-sm p-2 pl-4 pr-10 rounded-full focus:border-[#295F9D] focus:outline-none"
+                className="w-full border-2  text-sm p-2 pl-4 pr-10 rounded-full focus:border-[#295F9D]  border-[#295F9D] focus:outline-none"
               />
               <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg cursor-pointer" />
             </div>

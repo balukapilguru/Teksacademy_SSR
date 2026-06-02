@@ -60,7 +60,7 @@ const BannerVideo = () => {
   // Get thumbnail URL - uses GetData utility which handles S3 protocol
   const getThumbnailUrl = () => {
     if (!bannerData?.thumbnail) {
-      return "/fallback-thumbnail.jpg";
+      return "/images/Teks _ Web copy.webp";
     }
     return GetData({ url: bannerData.thumbnail });
   };
@@ -103,8 +103,8 @@ const BannerVideo = () => {
           onClick={() => setPlay(true)}
         >
           <Image
-            // src={getThumbnailUrl()}
-            src="/images/Teks _ Web copy.webp"
+            src={getThumbnailUrl()}
+            // src="/images/Teks _ Web copy.webp"
             alt="Homepage Banner"
             width={600}
             height={300}

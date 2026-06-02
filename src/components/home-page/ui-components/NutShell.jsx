@@ -131,7 +131,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
             <button
               type="button"
               onClick={() => setShowModal(true)}
-              className="mt-6 px-6 py-2 border border-[#2a619d] text-[#2a619d] rounded-lg hover:bg-[#2a619d] hover:text-white transition"
+              className="mt-6 mb-4  px-6 py-2 border border-[#2a619d] text-[#2a619d] rounded-lg hover:bg-[#2a619d] hover:text-white transition"
             >
               {button?.text || "Request Callback"}
             </button>

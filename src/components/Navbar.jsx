@@ -468,10 +468,10 @@ export default function Navbar() {
           <div className="">
             <Link href="/">
               <Image
-                // src={
-                //   GetData({ url: mainbar.logo?.src }) || "/placeholder-logo.png"
-                // }
-                src="/images/15 yrs_teks.png"
+                src={
+                  GetData({ url: mainbar.logo?.src }) || "/placeholder-logo.png"
+                }
+                // src="/images/15 yrs_teks.png"
                 alt={mainbar.logo?.alt || "Logo"}
                 width={151}
                 height={48}
@@ -629,6 +629,7 @@ export default function Navbar() {
                                   width={40}
                                   height={40}
                                   unoptimized
+                 
                                   className="w-full h-full object-cover"
                                 />
                               </div>

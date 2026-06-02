@@ -304,7 +304,7 @@ console.log(data.advancedTools,"data.ToolsAndFeatures")
               <Excel data={data.Excel} courseName={courseLabel} />
             ),
           },
-          { component: data?.whyOnline && <WhyOnline data={data.whyOnline} /> },
+          { component: data?.whyOnline && <WhyOnline data={data.whyOnline}  /> },
           {
             key: "course-key-highlights",
             component: data?.keyHighlights && (
@@ -448,7 +448,7 @@ console.log(data.advancedTools,"data.ToolsAndFeatures")
               <Excel data={excelSectionData} courseName={courseLabel} />
             </div>
 
-            <div className="main_container rounded-lg pt-5 hidden md:block">
+            <div className="main_container rounded-lg pt-5 hidden md:block bg-[#fbf5f6] ">
               <Nutshell data={careerServicesData} courseName={courseLabel} />
             </div>
           </>

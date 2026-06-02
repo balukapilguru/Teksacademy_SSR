@@ -431,12 +431,12 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
 
           <div
             ref={modalRef}
-            className="bg-white rounded-xl w-[95%] max-w-3xl shadow-lg p-4 relative z-50 transform transition-all duration-300 ease-out scale-95 animate-fadeIn"
+            className=" rounded-xl w-[95%] max-w-3xl shadow-lg p-4 relative z-50 transform transition-all duration-300 ease-out scale-95 animate-fadeIn"
           >
             <button
               onClick={closeModal}
               aria-label="Close video modal"
-              className="absolute -top-3 -right-3 text-gray-600 hover:text-black text-2xl bg-white rounded-full shadow-md p-2 z-50 hover:scale-110 transition-transform"
+              className="absolute  -top-24 right-4 lg:-top-10 lg:right-32 text-gray-600 hover:text-black text-2xl bg-white rounded-full shadow-md p-2 z-50 hover:scale-110 transition-transform"
             >
               <IoMdClose aria-hidden="true" />
               <span className="sr-only">Close video</span>
@@ -452,7 +452,7 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
                   controlsList="nodownload noplaybackrate"
                   disablePictureInPicture
                   onEnded={handleVideoEnd}
-                  className="absolute p-6 top-0 left-0 w-full h-full rounded-lg"
+                  className="absolute -top-32 lg:-top-1/2 lg:left-1/2  lg:translate-y-1/4 lg:-translate-x-1/3 p-6 w-full h-full lg:w-1/2 lg:h-full rounded-lg"
                 />
               ) : (
                 <iframe
