@@ -241,22 +241,33 @@ const SuccessStories = ({ successStoriesData }) => {
       </div>
 
       {/* VIDEO MODAL — untouched */}
-      {selectedVideo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 bg-opacity-50">
-          <div className="absolute h-[60%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg">
-            <button
-              onClick={() => setSelectedVideo(null)}
-              className="cursor-pointer text-white w-full text-right p-1 pr-2 text-xl font-bold"
-            >
-              ✖
-            </button>
-            <video autoPlay loop className="rounded-lg w-full h-full">
-              <source src={GetData({url:selectedVideo})} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      )}
+     {selectedVideo && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    
+    <div className="relative w-full max-w-xs bg-black rounded-lg shadow-xl overflow-hidden">
+      
+      {/* Close Button */}
+      <button
+        onClick={() => setSelectedVideo(null)}
+        className="absolute top-2 right-3 z-10 text-white text-2xl font-bold hover:scale-110 transition"
+      >
+        ✖
+      </button>
+
+      {/* Video */}
+      <div className="w-full aspect-video">
+        <video
+          autoPlay
+          controls
+          className="w-full h-full object-cover"
+        >
+          <source src={GetData({ url: selectedVideo })} type="video/mp4" />
+        </video>
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   );
 };
