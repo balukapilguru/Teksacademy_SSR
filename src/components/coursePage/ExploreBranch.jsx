@@ -82,7 +82,7 @@ const ExploreBranch = ({ branchLocation, data }) => {
     />
   </div>
 </div> */}
-<div className="flex justify-center w-1/2">
+<div className="flex justify-center lg:w-1/2">
                     <iframe
                         title="title"
                         src={link}

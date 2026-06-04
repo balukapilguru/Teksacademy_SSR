@@ -54,6 +54,7 @@ export default async function Home() {
         <Hiring hiringData={homeData?.hiringPartners} />
       ), bg: "#fff", border: "#fff"
     },
+    
 
     {
       component: <CertificationCourse data={homeData?.certificationCourse} />,
