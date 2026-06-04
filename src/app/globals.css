@@ -93,9 +93,9 @@ input:-webkit-autofill:focus {
 
 .marquee-content {
   display: flex;
-  min-width: 200%; /* 🔥 replaces max-content */
-  animation: marquee 25s linear infinite;
-  gap: 2rem;
+  min-width: 300%; /* 🔥 replaces max-content */
+  animation: marquee 55s linear infinite;
+  gap: 3rem;
 }
 
 /* prevent shrinking */
@@ -117,7 +117,7 @@ input:-webkit-autofill:focus {
 /* responsive tuning */
 @media (max-width: 1024px) {
   .marquee-content {
-    animation-duration: 30s;
+    animation-duration: 40s;
     gap: 1.5rem;
   }
 }
@@ -130,9 +130,9 @@ input:-webkit-autofill:focus {
 }
 
 /* pause on hover */
-.marquee:hover .marquee-content {
+/* .marquee:hover .marquee-content {
   animation-play-state: paused;
-}
+} */
 
 /* fade edges (optional) */
 .marquee::before,

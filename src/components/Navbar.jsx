@@ -492,7 +492,9 @@ export default function Navbar() {
           </button>
 
           {/* DESKTOP NAVIGATION MENU */}
-          <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-10">
+          <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-10
+          
+          ">
             {elements.map((item, index) => (
               <li
                 key={`desktop-nav-${index}`}
