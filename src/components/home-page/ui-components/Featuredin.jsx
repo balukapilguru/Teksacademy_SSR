@@ -9,8 +9,8 @@ export default  function Featuredin ({featuredIn})  {
   if (!featuredIn) return null;
   return (
    
-      <div className="">
-       <div className="main_container mx-auto mt-4 pt-5">
+      <div className="py-4">
+       <div className="main_container mx-auto">
          <div className=" text-center">
            <div className=" pl-3 md:pl-0 text-center">
             <Heading data={featuredIn?.heading}/>

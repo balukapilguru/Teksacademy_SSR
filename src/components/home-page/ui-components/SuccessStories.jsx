@@ -56,7 +56,7 @@ const SuccessStories = ({ successStoriesData }) => {
   );
 
   return (
-    <div className="main_container py-4">
+    <div className="main_container">
       {/* Heading */}
       <div className="justify-items-center mb-8">
         <Heading data={headingText} text={headingText} />
