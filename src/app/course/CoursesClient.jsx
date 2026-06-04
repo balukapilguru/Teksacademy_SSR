@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -305,6 +305,7 @@ const Sidebar = ({
 // ================================
 
 export default function CoursesClient() {
+  const contentRef = useRef(null);
   const [courses, setCourses] = useState([]);
   const [counts, setCounts] = useState(null);
 
@@ -489,6 +490,12 @@ export default function CoursesClient() {
       )
     );
   };
+  useEffect(() => {
+  contentRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+}, [currentPage]);
 
   // ── Heading: always shows the deepest active label ──
   const activeHeading = "All Courses"
@@ -508,7 +515,7 @@ export default function CoursesClient() {
   }
 
   return (
-    <div className="main_container mx-auto rounded-xl">
+    <div className="main_container h-auto mx-auto rounded-xl">
       {showModal && selectedCourse && (
         <Popupform
           show={showModal}
@@ -582,7 +589,8 @@ export default function CoursesClient() {
         </div> */}
 
         {/* Main content */}
-        <div className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]">
+        <div
+        ref={contentRef} className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]">
 
           {/* Big heading */}
           <div className="text-3xl font-bold text-black mb-2">

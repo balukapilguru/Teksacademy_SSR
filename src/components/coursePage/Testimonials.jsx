@@ -26,6 +26,7 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
   const [modalVideo, setModalVideo] = useState(null);
   const [visibleCount, setVisibleCount] = useState(5);
   const modalRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -64,15 +65,20 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
     };
   }, [modalVideo]);
 
-  useEffect(() => {
-    if (!testimonialCards || testimonialCards.length === 0) return;
+ useEffect(() => {
+  if (
+    isPaused ||
+    !testimonialCards ||
+    testimonialCards.length === 0
+  )
+    return;
 
-    const interval = setInterval(() => {
-      setIndex2((prev) => (prev + 1) % testimonialCards.length);
-    }, 3000);
+  const interval = setInterval(() => {
+    setIndex2((prev) => (prev + 1) % testimonialCards.length);
+  }, 3000);
 
-    return () => clearInterval(interval);
-  }, [testimonialCards]);
+  return () => clearInterval(interval);
+}, [isPaused, testimonialCards]);
 
   const closeModal = () => {
     setModalVideo(null);
@@ -280,14 +286,18 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
         )}
 
         {activeTab === "testimonialCards" && (
-          <div className="relative w-full flex justify-center items-center min-h-[300px]">
+         <div
+  className="relative w-full flex justify-center items-center min-h-[300px]"
+  onMouseEnter={() => setIsPaused(true)}
+  onMouseLeave={() => setIsPaused(false)}
+>
             {safeTestimonialCards.length > 0 ? (
               <>
                 {/* LEFT ARROW */}
                 <button
                   onClick={prev2}
                   aria-label="Previous testimonial"
-                  className="absolute -left-2 sm:left-0 bg-white p-2 rounded-full shadow-md hover:scale-110 transition z-10"
+                  className="absolute -left-2 sm:left-0 bg-white p-2 rounded-full shadow-md hover:scale-110  transition z-10"
                 >
                   <span aria-hidden="true">❮</span>
                   <span className="sr-only">Previous testimonial</span>
@@ -429,31 +439,31 @@ console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="fixed inset-0" onClick={closeModal} />
 
-          <div
-            ref={modalRef}
-            className=" rounded-xl w-[95%] max-w-3xl shadow-lg p-4 relative z-50 transform transition-all duration-300 ease-out scale-95 animate-fadeIn"
-          >
+         <div
+  ref={modalRef}
+  className="relative w-[85%] max-w-3xl  rounded-xl  p-4 z-50 flex items-center justify-center"
+>
             <button
               onClick={closeModal}
               aria-label="Close video modal"
-              className="absolute  -top-24 right-4 lg:-top-10 lg:right-32 text-gray-600 hover:text-black text-2xl bg-white rounded-full shadow-md p-2 z-50 hover:scale-110 transition-transform"
+              className="absolute  -top-24 right-4 lg:-top-1 lg:right-52 text-gray-600 hover:text-black text-2xl bg-white rounded-full shadow-md p-2 z-50 hover:scale-110 transition-transform"
             >
               <IoMdClose aria-hidden="true" />
               <span className="sr-only">Close video</span>
             </button>
 
-            <div className="relative pb-[56.25%] h-0">
+            <div className="w-full flex items-center justify-center">
               {modalVideo.endsWith(".mp4") ? (
                 <video
-                  key={modalVideo}
-                  src={modalVideo}
-                  autoPlay
-                  controls
-                  controlsList="nodownload noplaybackrate"
-                  disablePictureInPicture
-                  onEnded={handleVideoEnd}
-                  className="absolute -top-32 lg:-top-1/2 lg:left-1/2  lg:translate-y-1/4 lg:-translate-x-1/3 p-6 w-full h-full lg:w-1/2 lg:h-full rounded-lg"
-                />
+  key={modalVideo}
+  src={modalVideo}
+  autoPlay
+  controls
+  controlsList="nodownload noplaybackrate"
+  disablePictureInPicture
+  onEnded={handleVideoEnd}
+  className="w-full h-full max-h-[80vh] object-contain rounded-lg"
+/>
               ) : (
                 <iframe
                   key={modalVideo}
