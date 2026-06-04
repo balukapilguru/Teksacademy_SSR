@@ -121,10 +121,11 @@ export default function ReusableForm({
       excel: ["name", "email", "phone", "message", "branch"],
       syllabus: ["name", "email", "phone", "branch", "city", "course"],
       banner: ["name", "email", "phone", "course", "branch"],
-      Career: ["name", "email", "phone", "course", "branch"],
+      career: ["name", "email", "phone", "course", "branch"],
       Enrollnow: ["name", "email", "phone", "course", "branch"],
       requestCallback: ["name", "email", "phone", "course", "branch"],
       reserveSpot: ["name", "email", "phone", "course", "branch"],
+      Enquirynow: ["name", "email", "phone", "course", "branch"],
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
@@ -193,11 +194,12 @@ export default function ReusableForm({
       excel: "Request Callback—Website",
       syllabus: "Download Syllabus—Website",
       banner: "Enrollnow",
-      EnrollNow: "Enrollnow",
+      Enrollnow: "Enrollnow",
       requestCallback: "Request Callback—Website",
       reserveSpot: "Reserve Spot—Website",
       default: "Website",
-      Career: "Request Callback—Website"
+      career: "Request Callback—Website",
+      Enquirynow: "Enquirynow"
     };
     
     return {
