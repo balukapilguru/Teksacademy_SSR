@@ -13,14 +13,14 @@ function Faq({ data }) {
         <div className="w-full text-left mb-12">
           <div className="inline-block text-left">
             <h2 className="text-3xl sm:text-4xl font-bold text-left">
-              <span className="text-[#003366]">{data.heading?.[0] || 'Frequently Asked '}</span>
+              <span className="text-[#003366]">{data.heading?.[0] || 'Frequently Asked '} </span>
               <span className="text-[#e84c1f]">{data.heading?.[1] || 'Questions'}</span>
             </h2>
-            <div className="w-20 h-1 bg-[#e84c1f] mt-2 rounded-full"></div>
+            {/* <div className="w-20 h-1 bg-[#e84c1f] mt-2 rounded-full"></div> */}
           </div>
-          <p className="text-gray-500 text-base mt-4 max-w-2xl">
+          {/* <p className="text-gray-500 text-base mt-4 max-w-2xl">
             Find answers to common questions about our courses, training methods, and career support
-          </p>
+          </p> */}
         </div>
 
         {/* FAQ Accordion */}
