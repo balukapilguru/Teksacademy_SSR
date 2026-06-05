@@ -60,49 +60,18 @@ export default function CourseInfoTable({
     "Action",
   ];
 
-  const COURSE_SLUG_MAP = {
-  "full-stack-java": "Full Stack Java",
-  "full-stack-python": "Full Stack Python",
-  "cybersecurity": "Cybersecurity",
-  "gen-ai": "Gen AI",
-  "aws-devops": "AWS+ DevOps",
-  "data-science": "Data Science",
-  "data-analytics": "Data Analytics",
-  "digital-marketing": "Digital Marketing",
-  "bim-revit-mep-navis": "BIM- Revit MEP, NAVIS",
-  "autocad": "AutoCAD",
-  "medical-coding": "Medical Coding",
-  "sap-fico": "SAP FICO",
-  "sap-mm": "SAP MM",
-  "testing-automation": "Testing-Automation",
-  "multimedia": "Multimedia",
-  "advanced-excel": "Advanced Excel",
-  "revit-mep-certification": "Revit MEP Certification",
-  "business-analytics": "Business Analytics",
-};
-const extractSlug = (url = "") => {
-  return url
-    .toLowerCase()
-    .replace("courses/", "")
-    .replace("best-", "")
-    .replace("-course-training-institute", "")
-    .trim();
-};
-const resolveCourseName = (url) => {
-  const slug = extractSlug(url);
-  return COURSE_SLUG_MAP[slug] || slug.replace(/-/g, " ");
-};
-  const universities = data?.universities?.length
-    ? data.universities
-    : data?.offeringUniversity?.universityOfferings?.map((item) => ({
-        universityName: item.program,
-        image: item.image,
-        accreditations: item.trainingMode,
-        rating: item.rating,
-        duration: item.duration,
-        courseFee: item.courseFee,
-        button: item.button,
-      })) || [];
+  const universities =
+    data?.universities?.length
+      ? data.universities
+      : data?.offeringUniversity?.universityOfferings?.map((item) => ({
+          universityName: item.program,
+          image: item.image,
+          accreditations: item.trainingMode,
+          rating: item.rating,
+          duration: item.duration,
+          courseFee: item.courseFee,
+          button: item.button,
+        })) || [];
 
   if (universities.length === 0) {
     return (
@@ -139,9 +108,7 @@ const resolveCourseName = (url) => {
             show={showGetDetailsModal}
             onClose={() => setShowGetDetailsModal(false)}
             course={
-              selectedUniversity?.universityName ||
-              courseName ||
-              branch
+              selectedUniversity?.universityName || courseName || branch
             }
             courseName={
               selectedUniversity?.universityName || courseName
@@ -157,10 +124,11 @@ const resolveCourseName = (url) => {
         )}
 
         <div className="mt-10">
-          <div className="w-full overflow-x-auto rounded-2xl shadow-xl border">
 
+          {/* DESKTOP TABLE */}
+          <div className="hidden lg:block w-full overflow-x-auto rounded-2xl shadow-xl border">
             {/* HEADER */}
-            <div className="min-w-[1000px] grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] text-white text-sm px-6 py-4 bg-[#47557c]">
+            <div className="grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] text-white text-sm px-6 py-4 bg-[#47557c]">
               {columns.map((col, i) => (
                 <div key={i}>{col}</div>
               ))}
@@ -170,54 +138,41 @@ const resolveCourseName = (url) => {
             {universities.map((row, index) => (
               <div
                 key={index}
-                className="min-w-[1000px] grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] items-center px-4 py-5 border-b"
+                className="grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] items-center px-4 py-5 border-b"
               >
-                {/* Offering Program (TEXT ONLY) */}
-                <div className="text-sm font-medium whitespace-nowrap">
+                <div className="text-sm font-medium">
                   {row.universityName}
                 </div>
 
-                {/* Offered By (IMAGES ONLY) */}
-                <div className="grid grid-cols-3 items-center gap-1">
-                  {getImageSrcList(row).length > 0 ? (
-                    getImageSrcList(row).map((img, i) => (
-                      <Image
-                        key={i}
-                        src={GetData({ url: img?.src })}
-                        alt={img?.alt || row.universityName}
-                        width={120}
-                        height={55}
-                        className="object-contain w-auto"
-                        onError={() => handleImageError(`${index}-${i}`)}
-                      />
-                    ))
-                  ) : (
-                    <span className="text-xs text-gray-400">N/A</span>
-                  )}
+                <div className="grid grid-cols-3 gap-1">
+                  {getImageSrcList(row).map((img, i) => (
+                    <Image
+                      key={i}
+                      src={GetData({ url: img?.src })}
+                      alt={img?.alt || ""}
+                      width={120}
+                      height={55}
+                      className="object-contain"
+                      onError={() => handleImageError(`${index}-${i}`)}
+                    />
+                  ))}
                 </div>
 
-                {/* Accreditations */}
                 <div className="flex gap-2 flex-wrap">
                   {row.accreditations?.map((mode, i) => (
-                    <span
-                      key={i}
-                      className="text-xs bg-gray-100 px-2 py-1 rounded"
-                    >
+                    <span key={i} className="text-xs bg-gray-100 px-2 py-1 rounded">
                       {mode}
                     </span>
                   ))}
                 </div>
 
-                {/* Rating */}
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                   {row.rating}
                 </div>
 
-                {/* Duration */}
                 <div>{row.duration}</div>
 
-                {/* Fee */}
                 <div>
                   <div className="font-bold">{getCourseFee(row)}</div>
                   <div className="text-xs text-gray-500">
@@ -225,18 +180,66 @@ const resolveCourseName = (url) => {
                   </div>
                 </div>
 
-                {/* Action */}
-                <div>
-                  <PrimaryButton
-                    onClick={() => {
-                      setSelectedUniversity(row);
-                      handleCourseSelect(row);
-                      setShowGetDetailsModal(true);
-                    }}
-                  >
-                    {getButtonText(row)} →
-                  </PrimaryButton>
+                <PrimaryButton
+                  onClick={() => {
+                    setSelectedUniversity(row);
+                    handleCourseSelect(row);
+                    setShowGetDetailsModal(true);
+                  }}
+                >
+                  {getButtonText(row)} →
+                </PrimaryButton>
+              </div>
+            ))}
+          </div>
+
+          {/* MOBILE CARDS */}
+          <div className="lg:hidden space-y-4">
+            {universities.map((row, index) => (
+              <div key={index} className="border rounded-xl p-4 shadow-sm">
+                <h3 className="font-semibold mb-2">
+                  {row.universityName}
+                </h3>
+
+                <div className="flex gap-2 flex-wrap mb-2">
+                  {getImageSrcList(row).map((img, i) => (
+                    <Image
+                      key={i}
+                      src={GetData({ url: img?.src })}
+                      alt=""
+                      width={80}
+                      height={40}
+                      className="object-contain"
+                    />
+                  ))}
                 </div>
+
+                <div className="text-sm mb-1">
+                  <strong>Accreditations:</strong>{" "}
+                  {row.accreditations?.join(", ")}
+                </div>
+
+                <div className="text-sm mb-1">
+                  <strong>Rating:</strong> ⭐ {row.rating}
+                </div>
+
+                <div className="text-sm mb-1">
+                  <strong>Duration:</strong> {row.duration}
+                </div>
+
+                <div className="text-sm mb-3">
+                  <strong>Fee:</strong> {getCourseFee(row)}
+                </div>
+
+                <PrimaryButton
+                  onClick={() => {
+                    setSelectedUniversity(row);
+                    handleCourseSelect(row);
+                    setShowGetDetailsModal(true);
+                  }}
+                >
+                  {getButtonText(row)} →
+                </PrimaryButton>
               </div>
             ))}
           </div>
