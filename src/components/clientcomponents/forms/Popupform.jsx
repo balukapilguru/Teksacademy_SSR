@@ -54,6 +54,7 @@ export default function Popupform({
   formType = "enquiry",
   buttonText = "Submit",
   successMessage = "Thank you! We'll contact you soon.",
+  disableCourseField = false,
 }) {
   if (!show) return null;
 
@@ -83,6 +84,7 @@ export default function Popupform({
             onSubmit={onSubmit}
             buttonText={buttonText}
             successMessage={successMessage}
+            disableCourseField={disableCourseField}
           />
         </div>
       </div>

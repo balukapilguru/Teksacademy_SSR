@@ -105,7 +105,8 @@ export default function ReusableForm({
   initialValues = {},
   buttonText = "Submit",
   successMessage = "Form submitted successfully!",
-  className = ""
+  className = "",
+  disableCourseField = false
 }) {
   const router = useRouter();
 
@@ -329,7 +330,9 @@ export default function ReusableForm({
 
     if (fieldId === "course") {
       const fixedCourseValue = normalizeCourseInput(initialValues.course || "");
-      if (fixedCourseValue) {
+      const shouldDisable = disableCourseField || fixedCourseValue;
+      
+      if (shouldDisable && (fixedCourseValue || value)) {
         return (
           <div key={fieldId} className="mb-4">
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -337,7 +340,7 @@ export default function ReusableForm({
             </label>
             <input
               type="text"
-              value={fixedCourseValue}
+              value={fixedCourseValue || value}
               disabled
               className="w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
             />
@@ -357,16 +360,17 @@ export default function ReusableForm({
           <div
             role="button"
             tabIndex={0}
-            onClick={() => setShowCourseDropdown((prev) => !prev)}
-            onFocus={() => setShowCourseDropdown(true)}
+            onClick={() => !shouldDisable && setShowCourseDropdown((prev) => !prev)}
+            onFocus={() => !shouldDisable && setShowCourseDropdown(true)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
+              if (!shouldDisable && (e.key === "Enter" || e.key === " ")) {
                 e.preventDefault();
                 setShowCourseDropdown((prev) => !prev);
               }
             }}
             className={`w-full px-4 py-2 border rounded-md flex items-center justify-between text-sm cursor-pointer
-              ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
+              ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}
+              ${shouldDisable ? "bg-gray-100 cursor-not-allowed" : ""}`}
           >
             <span className={value ? "text-gray-900" : "text-gray-400"}>
               {value || "Select a course"}

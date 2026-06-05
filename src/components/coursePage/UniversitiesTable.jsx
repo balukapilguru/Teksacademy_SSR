@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Heading from "../../utility/Heading";
 import { Star } from "lucide-react";
@@ -11,7 +12,74 @@ import ReusableForm from "../ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import Popupform from "../clientcomponents/forms/Popupform";
 
-const handleSubmit = async (formValues, mappedPayload) => {
+// Course slug mapping
+const COURSE_SLUG_MAP = {
+  "full-stack-java": "Full Stack Java",
+  "full-stack-python": "Full Stack Python",
+  "cybersecurity": "Cybersecurity",
+  "gen-ai": "Gen AI",
+  "aws-devops": "AWS+ DevOps",
+  "data-science": "Data Science",
+  "data-analytics": "Data Analytics",
+  "digital-marketing": "Digital Marketing",
+  "bim-revit-mep-navis": "BIM- Revit MEP, NAVIS",
+  "bim-building-information-modeling": "BIM- Revit MEP, NAVIS",
+  "revit-mep": "BIM- Revit MEP, NAVIS",
+  "autocad": "AutoCAD",
+  "medical-coding": "Medical Coding",
+  "sap-fico": "SAP FICO",
+  "sap-mm": "SAP MM",
+  "testing-automation": "Testing-Automation",
+  "multimedia": "Multimedia",
+  "advanced-excel": "Advanced Excel",
+  "revit-mep-certification": "Revit MEP Certification",
+  "business-analytics": "Business Analytics",
+};
+
+// Extract slug from URL
+const extractSlug = (url = "") => {
+  let slug = url
+    .toLowerCase()
+    .replace("courses/", "")
+    .replace("best-", "")
+    .replace("-course-training-institute", "")
+    .replace("-development-course-training-institute", "")
+    .replace("-training-institute", "")
+    .trim();
+  
+  return slug;
+};
+
+// Fuzzy match slug to find the best course name
+const findBestCourseMatch = (slug, courseSlugMap) => {
+  // Exact match first
+  if (courseSlugMap[slug]) {
+    return courseSlugMap[slug];
+  }
+
+  // Partial match for common variations
+  const slugParts = slug.split("-");
+  for (const [mapSlug, courseName] of Object.entries(courseSlugMap)) {
+    const mapParts = mapSlug.split("-");
+    // If slug contains the first 2 parts of map slug, it's likely a match
+    if (
+      slugParts.some((part) => mapParts.some((mapPart) => part === mapPart)) &&
+      (slug.includes("bim") || slug.includes("revit") || slug.includes("autocad"))
+    ) {
+      if (mapSlug.includes("bim") || mapSlug.includes("revit")) {
+        return courseName;
+      }
+    }
+  }
+
+  // No match found, return formatted slug
+  return slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+const handleSubmit = async (formValues, mappedPayload, router) => {
   try {
     const response = await fetch(
       buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
@@ -28,6 +96,7 @@ const handleSubmit = async (formValues, mappedPayload) => {
       throw new Error(responseData.message || "Submission failed");
     }
 
+    // Redirect to thankyou page on success
     router.push("/thankyou");
   } catch (error) {
     console.error("Submission error:", error);
@@ -41,10 +110,23 @@ export default function CourseInfoTable({
   courseName = "",
   branch = "course",
 }) {
+  const router = useRouter();
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
+  const [courseNameFromUrl, setCourseNameFromUrl] = useState("");
   const { handleCourseSelect } = useCourseFlow();
   const [showGetDetailsModal, setShowGetDetailsModal] = useState(false);
+
+  // Extract course name from URL on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const currentUrl = window.location.pathname;
+      const slug = extractSlug(currentUrl);
+      const mappedCourseName =
+        findBestCourseMatch(slug, COURSE_SLUG_MAP) || courseName || slug;
+      setCourseNameFromUrl(mappedCourseName);
+    }
+  }, [courseName]);
 
   if (!data) return null;
 
@@ -107,19 +189,16 @@ export default function CourseInfoTable({
           <Popupform
             show={showGetDetailsModal}
             onClose={() => setShowGetDetailsModal(false)}
-            course={
-              selectedUniversity?.universityName || courseName || branch
-            }
-            courseName={
-              selectedUniversity?.universityName || courseName
-            }
+            course={courseNameFromUrl || selectedUniversity?.universityName || courseName || branch}
+            courseName={courseNameFromUrl || selectedUniversity?.universityName || courseName}
             source="Enrollnow"
             title="Enroll Now"
             subtitle="Fill in your details to get course guidance and a callback from our team."
-            onSubmit={handleSubmit}
+            onSubmit={(formValues, mappedPayload) => handleSubmit(formValues, mappedPayload, router)}
             formType="EnrollNow"
             buttonText="Enroll Now"
             successMessage="Thank you! We'll contact you soon."
+            disableCourseField={true}
           />
         )}
 
