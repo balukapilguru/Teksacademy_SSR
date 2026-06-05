@@ -57,10 +57,10 @@ const BannerVideo = () => {
     return GetData({ url: bannerData.video });
   };
 
-  // Get thumbnail URL - uses GetData utility which handles S3 protocol
+  // Get thumbnail URL - uses local image as default
   const getThumbnailUrl = () => {
     if (!bannerData?.thumbnail) {
-      return "/images/Teks _ Web copy.webp";
+      return "/src/assets/Video_thumbnail.jpg";
     }
     return GetData({ url: bannerData.thumbnail });
   };
@@ -104,11 +104,10 @@ const BannerVideo = () => {
         >
           <Image
             src={getThumbnailUrl()}
-            // src="/images/Teks _ Web copy.webp"
             alt="Homepage Banner"
             width={600}
             height={300}
-            className="rounded-lg shadow-lg object-cover w-full md:h-80 m lg:h-96 border border-[#2a619d] transition-transform duration-300 group-hover:scale-[1.02]"
+            className="rounded-lg shadow-lg object-cover w-full md:h-80 lg:h-96 border border-[#2a619d] transition-transform duration-300 group-hover:scale-[1.02]"
             unoptimized
           />
           {/* Play Button */}

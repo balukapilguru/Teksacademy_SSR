@@ -216,18 +216,18 @@ body.hide-main-navbar .top-navbar {
 
 /* Media never causes horizontal overflow */
 
-video,
+/* video,
 iframe,
 canvas,
 svg {
   max-width: 100%;
   height: auto;
-}
+} */
 
 /* Iframes still need explicit height when used responsively */
-iframe {
+/* iframe {
   height: auto;
-}
+} */
 
 /* Long unbroken strings (URLs, emails, code) shouldn't blow out a row */
 p,

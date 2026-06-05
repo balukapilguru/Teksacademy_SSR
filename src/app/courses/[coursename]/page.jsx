@@ -24,7 +24,6 @@ import Banner from "@/components/coursePage/Banner";
 import ReserveYourSpot from "@/components/coursePage/ReserveYourSpot";
 import ReserveYourSpots from "@/components/coursePage/ReserveYourSpots";
 import OverViewOfOnline from "@/components/coursePage/OverViewOfOnline";
-import HiringCompanies from "@/components/coursePage/HiringCompanies";
 import Accordian from "@/components/coursePage/Accordian";
 import WhyOnline from "@/components/coursePage/WhyOnline";
 import DownloadCourseBrochure from "@/components/coursePage/DownloadCourseBrochure";
@@ -445,11 +444,11 @@ export default async function Page({ params }) {
           ))}
            {isCertification && (
           <>
-            <div className="rounded-lg pt-5 hidden md:block">
+            <div className="rounded-lg pt-5">
               <Excel data={excelSectionData} courseName={courseLabel} />
             </div>
 
-            <div className="main_container rounded-lg pt-5 hidden md:block bg-[#fbf5f6] ">
+            <div className="main_container rounded-lg pt-5">
               <Nutshell data={careerServicesData} courseName={courseLabel} />
             </div>
           </>

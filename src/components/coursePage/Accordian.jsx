@@ -61,7 +61,7 @@ const FAQ = ({ faq }) => {
 
   return (
     <section id="questionSection">
-      <div className=" px-2 lg:px-5 py-3">
+      <div className="">
         <div className="py-4">
           <Heading data={faq?.heading} />
         </div>

@@ -154,7 +154,7 @@ export default function SupportPage() {
                       {category.description}
                     </p>
                     <p className="text-xs font-medium text-[#2a619d] group-hover:text-[#214d7d]">
-                      {category.action} →
+                      {category.action}
                     </p>
                   </div>
                 </div>
