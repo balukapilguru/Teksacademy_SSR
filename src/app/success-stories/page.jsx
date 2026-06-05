@@ -141,15 +141,15 @@ console.log(currentTab,"tab")
             </div>
 
             {heroSection?.galleryImages?.length > 0 && (
-              <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 lg:gap-6">
                 {heroSection.galleryImages.slice(0, 6).map((img, idx) => (
                   <div key={idx} className="rounded-lg overflow-hidden bg-white shadow-sm">
                     <Image
                       src={img.src}
                       alt={img.alt || `Gallery ${idx + 1}`}
                       width={200}
-                      height={150}
-                      className="w-full h-24 md:h-32 object-cover"
+                      height={180}
+                      className="  w-full h-24 md:h-32 object-cover"
                     />
                   </div>
                 ))}
@@ -256,7 +256,7 @@ console.log(currentTab,"tab")
           >
             <button
               onClick={closeVideoModal}
-              className="absolute top-2 right-2 text-white"
+              className="absolute top-2 font-extrabold right-2 text-orange-500"
             >
               ✕
             </button>

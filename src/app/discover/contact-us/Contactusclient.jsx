@@ -66,7 +66,7 @@ export default function ContactUsPage() {
         </svg>
       ),
       label: "WORKING HOURS",
-      value: "Mon – Sat: 9am – 6pm",
+      value: "Mon – Sat: 9am – 7pm",
     },
   ];
 

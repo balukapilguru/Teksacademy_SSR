@@ -497,6 +497,7 @@ export default function CoursesClient() {
   });
 }, [currentPage]);
 
+
   // ── Heading: always shows the deepest active label ──
   const activeHeading = "All Courses"
     // ? formatLabel(selectedProgram)
