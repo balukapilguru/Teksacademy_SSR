@@ -237,10 +237,10 @@ export default function Excel({ data, courseName }) {
                 className="hidden lg:block xs:bg-[url('https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/excel_bg.webp')] bg-cover bg-center"
             >
                 <div className="main_container">
-                    <div className="flex flex-col items-center gap-y-2 sm:gap-y-4 2xl:gap-y-14 3xl:gap-y-20">
+                    <div className="flex flex-col items-center my-10">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 w-full pb-4">
                             {/* Title */}
-                            <div className="lg:col-span-12 flex justify-center">
+                            <div className="lg:col-span-12 flex justify-center mt-4">
                                 <span className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
                                     <span>Excel with&nbsp;</span>
                                     <span className="text-[#2A619D]">Teks&nbsp;Academy</span>
