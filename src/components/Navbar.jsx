@@ -483,13 +483,13 @@ export default function Navbar() {
           </div>
 
           {/* MOBILE MENU BUTTON */}
-          <button
-            className="lg:hidden "
+          <div
+            className="block lg:hidden "
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <MdClose size={28} /> : <MdMenu size={40} />}
-          </button>
+          </div>
 
           {/* DESKTOP NAVIGATION MENU */}
       <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">

@@ -18,6 +18,9 @@ const MostSearchedTerms = ({ data }) => {
   return (
     <section className="bg-[#0E2849]" aria-label="Most Searched Terms">
       <div className=" md:px-6 xl:px-0 py-4 lg:py-6 xl:py-6 main_container">
+         <h2 className="text-start text-2xl md:text-3xl font-semibold text-white mb-3">
+         Search Terms
+        </h2>
         <div className="p-2 flex flex-wrap items-center gap-1">
           {courses.map((course, index) => {
             const slug = course
