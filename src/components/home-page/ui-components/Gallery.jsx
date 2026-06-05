@@ -18,14 +18,6 @@ export default function Gallery({ gallery, data }) {
   const openModal = (index) => setActiveIndex(index);
   const closeModal = () => setActiveIndex(null);
   
-  const showNext = () => {
-    setActiveIndex((prev) => (prev + 1) % galleryData?.images?.length);
-  };
-  
-  const showPrev = () => {
-    setActiveIndex((prev) => (prev - 1 + galleryData?.images?.length) % galleryData?.images?.length);
-  };
-
   // Mobile carousel navigation
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % galleryData?.images?.length);
@@ -92,8 +84,6 @@ export default function Gallery({ gallery, data }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (activeIndex !== null) {
-        if (e.key === 'ArrowRight') showNext();
-        if (e.key === 'ArrowLeft') showPrev();
         if (e.key === 'Escape') closeModal();
       }
     };
@@ -141,7 +131,7 @@ export default function Gallery({ gallery, data }) {
                 }}
                 onTouchStart={pauseAutoSlide}
                 onTouchEnd={resumeAutoSlide}
-                className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 bg-[#2a619d] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#1e4a7a] transition-all z-20 shadow-lg"
+                className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 bg-[#2a619d] text-white rounded-full w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#1e4a7a] transition-all z-20 shadow-lg"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -188,7 +178,7 @@ export default function Gallery({ gallery, data }) {
                 }}
                 onTouchStart={pauseAutoSlide}
                 onTouchEnd={resumeAutoSlide}
-                className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 bg-[#2a619d] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#1e4a7a] transition-all z-20 shadow-lg"
+                className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 bg-[#2a619d] text-white rounded-full w-8 h-8 sm:w-12 sm:h-8 flex items-center justify-center hover:bg-[#1e4a7a] transition-all z-20 shadow-lg"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -199,30 +189,18 @@ export default function Gallery({ gallery, data }) {
         </div>
       </div>
 
-      {/* Popup Modal */}
+      {/* Popup Modal - No Left/Right Arrows */}
       {activeIndex !== null && galleryData?.images?.[activeIndex] && (
         <div 
           className="fixed inset-0 bg-black/90 flex items-center justify-center z-[99999]"
           onClick={closeModal}
         >
-          {/* Close Button - Perfectly Centered */}
+          {/* Close Button Only */}
           <button 
             onClick={closeModal} 
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 bg-black/50 rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-black/80 transition-all group"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 bg-black/50 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-black/80 transition-all group"
           >
             <span className="text-white text-3xl sm:text-4xl font-light leading-none">×</span>
-          </button>
-
-          {/* Previous Button - Perfectly Centered Vertically */}
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              showPrev();
-            }} 
-            className="absolute left-4 sm:left-6 z-50 bg-black/50 rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-black/80 transition-all group"
-            style={{ top: '50%', transform: 'translateY(-50%)' }}
-          >
-            <span className="text-white text-4xl sm:text-5xl font-light leading-none">‹</span>
           </button>
 
           {/* Image Container */}
@@ -238,23 +216,6 @@ export default function Gallery({ gallery, data }) {
               className="w-auto h-auto max-w-full max-h-[80vh] sm:max-h-[85vh] object-contain rounded-lg"
               priority
             />
-          </div>
-
-          {/* Next Button - Perfectly Centered Vertically */}
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              showNext();
-            }} 
-            className="absolute right-4 sm:right-6 z-50 bg-black/50 rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-black/80 transition-all group"
-            style={{ top: '50%', transform: 'translateY(-50%)' }}
-          >
-            <span className="text-white text-4xl sm:text-5xl font-light leading-none">›</span>
-          </button>
-
-          {/* Image Counter */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base bg-black/50 px-3 py-1 rounded-full z-50">
-            {activeIndex + 1} / {galleryData?.images?.length}
           </div>
         </div>
       )}
