@@ -2,6 +2,7 @@ import Aboutbanner from '@/components/discoverycomponents/Aboutbanner';
 import Heading from '@/utility/Heading';
 import Aboutmission from '@/components/discoverycomponents/Aboutmission';
 import Locationcards from '@/components/discoverycomponents/Locationcards';
+import Successteam from '@/components/discoverycomponents/Successteam';
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata() {
@@ -63,7 +64,9 @@ const Home = async () => {
 
       <Aboutbanner data={aboutusdata} />
       <Aboutmission data={aboutusdata} />
+       <Successteam data={aboutusdata}/>
       <Locationcards data={aboutusdata} />
+     
     </div>
   );
 };

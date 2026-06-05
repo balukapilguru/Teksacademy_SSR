@@ -1,8 +1,9 @@
+import Image from "next/image";
 import React from "react";
 
 const MissionVision = ({ data }) => {
   const sections = data?.ourVision?.blocks;
-
+  const successteam = data?.successTeam?.members
   if (!sections) return null;
 
   return (
@@ -22,6 +23,10 @@ const MissionVision = ({ data }) => {
             </p>
           </div>
         ))}
+
+      </div>
+    
+      <div>
 
       </div>
     </div>
