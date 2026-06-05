@@ -200,95 +200,101 @@ const Media = () => {
                 height={400}
                 className="rounded shadow"
               />
-              
-              
             );
           }
           
 
         if (
-  activeTab === "influencer" &&
-  activeInfluencerTab === "instagram"
-) {
-  return (
-    <a
-      key={item.id}
-      href={item.videoUrl}
-      target="_blank"
-      className="relative group"
-    >
-      <Image
-        src={imageUrl}
-        alt={item.alt}
-        width={400}
-        height={400}
-        className="rounded shadow"
-      />
+          activeTab === "influencer" &&
+          activeInfluencerTab === "instagram"
+        ) {
+          return (
+            <a
+              key={item.id}
+              href={item.videoUrl}
+              target="_blank"
+              className="relative group"
+            >
+              <Image
+                src={imageUrl}
+                alt={item.alt}
+                width={400}
+                height={400}
+                className="rounded shadow"
+              />
 
-      {/* SAME overlay as YouTube */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gray-950/40 rounded-lg  opacity-100 transition">
-        <div className="flex items-center justify-center w-10 h-10 xl:w-16 xl:h-16 border-4 border-gray-300 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="white"
-            className="w-6 h-6 xl:w-8 xl:h-8 opacity-80"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </div>
-      </div>
-    </a>
-  );
-}
+              {/* SAME overlay as YouTube */}
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-950/40 rounded-lg opacity-100 transition">
+                <div className="flex items-center justify-center w-10 h-10 xl:w-16 xl:h-16 border-4 border-gray-300 rounded-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    className="w-6 h-6 xl:w-8 xl:h-8 opacity-80"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+          );
+        }
         return (
-  <button
-    key={item.id}
-    onClick={() => setSelectedVideo(item.videoUrl)}
-    className="relative group"
-  >
-    <Image
-      src={imageUrl}
-      alt={item.alt}
-      width={400}
-      height={240}
-      className="rounded shadow  "
-    />
+          <button
+            key={item.id}
+            onClick={() => setSelectedVideo(item.videoUrl)}
+            className="relative group"
+          >
+            <Image
+              src={imageUrl}
+              alt={item.alt}
+              width={400}
+              height={240}
+              className="rounded shadow"
+            />
 
-    {/* 🔥 Overlay */}
-    <div className="absolute inset-0 flex items-center justify-center bg-gray-950/40 rounded-lg opacity-0 opacity-100 transition">
-      <div className="flex items-center justify-center w-10 h-10 xl:w-16 xl:h-16 border-4 border-gray-300 rounded-full">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="white"
-          className="w-6 h-6 xl:w-8 xl:h-8 opacity-80"
-        >
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      </div>
-    </div>
-  </button>
-);
+            {/* Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-950/40 rounded-lg opacity-100 transition">
+              <div className="flex items-center justify-center w-10 h-10 xl:w-16 xl:h-16 border-4 border-gray-300 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  className="w-6 h-6 xl:w-8 xl:h-8 opacity-80"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        );
         })}
       </div>
 
-      {/* Video Modal */}
+      {/* Video Modal - Updated with better height and responsive design */}
       {selectedVideo && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60">
-          <div className="bg-white p-4 rounded relative">
+        <div 
+          className="fixed inset-0 flex items-center justify-center bg-black/80 z-50"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div 
+            className="bg-white rounded-lg relative w-full max-w-5xl mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setSelectedVideo(null)}
-              className="absolute top-2 right-2"
+              className="absolute -top-10 right-0 text-white hover:text-gray-300 text-2xl font-bold z-10"
             >
               ✖
             </button>
-            <iframe
-              width="600"
-              height="360"
-              src={selectedVideo}
-              allowFullScreen
-            />
+            <div className="relative pt-[56.25%]">
+              <iframe
+                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                src={selectedVideo}
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
           </div>
         </div>
       )}
