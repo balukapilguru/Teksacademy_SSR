@@ -224,7 +224,7 @@ export default async function Page({ params }) {
   ===================================================== */
   const CourseFlowWrapper = () => (
     <CourseFlowProvider>
-      {/* {data?.offeringUniversity && formDetails && (
+      {data?.offeringUniversity && formDetails && (
         <CourseInfoTable
           data={{
             offeringUniversity: data.offeringUniversity,
@@ -238,7 +238,7 @@ export default async function Page({ params }) {
           formDetails={formDetails}
           branch={data?.branch}
         />
-      )} */}
+      )}
 
       {data?.excel && <Excel data={data.excel} courseName={courseLabel} />}
 
