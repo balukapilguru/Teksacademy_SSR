@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 
 const leftleaf =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/left_leaf.webp";
@@ -143,7 +145,7 @@ const Awards = (awards) => {
                 onClick={prevSlide}
                 className="p-1 text-[#002b80]"
               >
-                ◀
+                <IoIosArrowBack />
               </button>
 
               {/* Dots */}
@@ -166,8 +168,8 @@ const Awards = (awards) => {
                 onClick={nextSlide}
                 className="p-1 text-[#002b80]"
               >
-                ▶
-              </button>
+                 <IoIosArrowForward />
+                </button>
             </div>
           </div>
         )}
