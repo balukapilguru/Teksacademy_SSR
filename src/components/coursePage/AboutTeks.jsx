@@ -14,7 +14,7 @@ const AboutTeks = ({ data }) => {
   if (!data) return null;
 
   const { title, heading, description, statistics, button, image } = data;
-
+console.log(data,"aboutbrach")
   const headingParts = Array.isArray(heading)
     ? heading
     : typeof heading === "string"
@@ -25,7 +25,7 @@ const AboutTeks = ({ data }) => {
   const secondHeading = headingParts.slice(1).join(" ") || "";
 
   return (
-    <section className="py-14 bg-[#f8fafd]">
+    <section className="py-14 ">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
         <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden shadow-lg">
           <Image

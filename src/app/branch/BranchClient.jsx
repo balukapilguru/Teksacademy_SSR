@@ -543,10 +543,10 @@ export default function BranchClient({ data: initialData = null, branchName = ""
       />
       <Topscroll data={data.topScroll} />
       <CoursesOffered data={data.CoursesOffered} />
-      <section className="md:py-4 xl:py-6 bg-white">
+      <section className="md:py-4 xl:py-0  bg-[#fbf5f6]">
         <Excel data={data.Excel} />
       </section>
-      <section className="bg-[#eaf0f6]">
+      <section className="bg-[#eaf0f6]  rounded-lg ">
         <AboutTeks data={data.AboutTeks} />
       </section>
       <section className="md:py-4 xl:py-6 bg-white">
@@ -558,7 +558,10 @@ export default function BranchClient({ data: initialData = null, branchName = ""
       <section className="md:py-4 xl:py-6 bg-white">
         <Awards awards={data.awards} />
       </section>
-      <Gallery gallery={data.gallery} />
+      <section className="bg-[#fbf5f6]">
+         <Gallery gallery={data.gallery} />
+      </section>
+     
       {console.log(data.gallery,"branchgallery")}
       <FeaturedIn featuredIn={data.featuredIn || data.featuredin} />
       <ExploreBranch data={data.branchLocation} />

@@ -224,7 +224,8 @@ const Ebook = () => {
                 <p className="text-gray-200 mb-6">{communitySection.description}</p>
                 {communitySection.button && (
                   <a
-                    href={communitySection.button.ebookurl || "#"}
+                    href={communitySection.button.ebookurl || "#" }
+                    target="_blank"
                     className="inline-flex items-center bg-[#FE543D] text-white px-6 py-3 rounded-lg hover:bg-[#e04a35] transition-colors"
                   >
                     {communitySection.button.name}
