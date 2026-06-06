@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const FinanceApp = () => {
   return (
-    <div className="main_container  pt-2  lg:pb-6">
+    <div className="main_container    lg:pb-6">
       <div className="flex flex-col lg:flex-row gap-y-2 items-center justify-between">
         {/* Left Section */}
         <div className="text-center w-full md:text-left xl:w-[60%] space-y-3 md:space-x-0 ">
@@ -48,8 +48,8 @@ const FinanceApp = () => {
         <div className='w-full xl:w-1/2 lg:w-[70%] px-3 2xl:px-0 flex justify-center md:justify-start'>
           <Image
           width={560}
-          height={250}
-          src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/mobile_download.webp" alt="download app image" className='object-cover xl:w-[65vh] w-auto h-auto' />
+          height={200}
+          src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/mobile__app.webp" alt="download app image" className='object-cover xl:w-[65vh] w-auto h-auto mt-5' />
         </div>
       </div>
     </div>
