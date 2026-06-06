@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/Loading";
+import Heading from "@/utility/Heading";
  
 const InterviewQuestionsPage = () => {
   const router = useRouter();
@@ -96,14 +97,11 @@ const InterviewQuestionsPage = () => {
       {/* Header Section */}
       <div className="flex justify-center items-center w-full">
         <div className="w-fit flex flex-col mt-2 lg:mt-5">
-          <div className="font-semibold text-2xl lg:text-4xl flex justify-center gap-2">
-            <h1 className="text-[#2A619D]">
-              {heroSection?.heading?.[0] || "Interview"}
-            </h1>
-            <h1 className="text-[#2A619D]">
-              {heroSection?.heading?.[1] || "Questions"}
-            </h1>
-          </div>
+          <Heading
+            data={heroSection?.heading || ["Interview", "Questions"]}
+            as="h1"
+            className="!text-2xl lg:!text-4xl !font-semibold !text-center !mb-0"
+          />
         </div>
       </div>
  

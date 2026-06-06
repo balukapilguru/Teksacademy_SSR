@@ -5,6 +5,7 @@ import { IoMicOutline } from "react-icons/io5";
 import { MdOndemandVideo } from "react-icons/md";
 import Image from "next/image";
 import Loader from "@/components/Loader";
+import Heading from "@/utility/Heading";
 
 const Media = () => {
   const [activeTab, setActiveTab] = useState("news-papers");
@@ -133,9 +134,13 @@ const Media = () => {
 
   return (
     <div className="main_container">
-      <h1 className="text-center text-2xl font-semibold mt-6">
-        {mediaData?.title || "Media"}
-      </h1>
+      <div className="text-center mt-6">
+        <Heading
+          data={mediaData?.title || "Media"}
+          as="h1"
+          className="!text-2xl !font-semibold !mb-0"
+        />
+      </div>
 
       {/* Tabs */}
       <div className="flex justify-center gap-6 border-b mt-6">

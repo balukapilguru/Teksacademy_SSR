@@ -25,7 +25,6 @@ const SuccessStories = ({ successStoriesData }) => {
   const placementCards = currentSection?.placementCards || [];
 
   const heading = successStoriesData?.heading || ["Our Success", "Stories"];
-  const headingText = Array.isArray(heading) ? heading.join(" ") : heading;
 
 
 
@@ -59,7 +58,7 @@ const SuccessStories = ({ successStoriesData }) => {
     <div className="main_container">
       {/* Heading */}
       <div className="justify-items-center mb-8">
-        <Heading data={headingText} text={headingText} />
+        <Heading data={heading} />
       </div>
 
       {/* Tabs */}
