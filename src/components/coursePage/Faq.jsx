@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Heading from '@/utility/Heading';
 
 function Faq({ data }) {
   if (!data?.faq?.length) return null;
@@ -10,12 +11,13 @@ function Faq({ data }) {
     <section className="w-full py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header - LEFT ALIGNED */}
-        <div className="w-full text-left mb-12">
+        <div className="w-full text-left mb-6">
           <div className="inline-block text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-left">
-              <span className="text-[#003366]">{data.heading?.[0] || 'Frequently Asked '} </span>
-              <span className="text-[#e84c1f]">{data.heading?.[1] || 'Questions'}</span>
-            </h2>
+            <Heading
+              data={data.heading || ['Frequently Asked', 'Questions']}
+              as="h2"
+              // className="!text-3xl sm:!text-4xl !font-bold !text-left !mb-0"
+            />
             {/* <div className="w-20 h-1 bg-[#e84c1f] mt-2 rounded-full"></div> */}
           </div>
           {/* <p className="text-gray-500 text-base mt-4 max-w-2xl">
@@ -34,7 +36,7 @@ function Faq({ data }) {
                   : 'border-gray-200 shadow-sm bg-white hover:shadow-md'
               }`}
             >
-              <button
+              <div
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left"
               >
@@ -48,7 +50,7 @@ function Faq({ data }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
-              </button>
+              </div>
               
               {open === i && (
                 <div className="px-6 pb-5">

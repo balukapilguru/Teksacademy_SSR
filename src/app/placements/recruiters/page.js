@@ -6,7 +6,7 @@ import Loader from "@/components/Loader";
 import ReusableForm from "@/components/ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import { useRouter } from "next/navigation";
-import GetData from "@/utility/GetData";
+import Heading from "@/utility/Heading";
 
 const Recruiters = () => {
   const [data, setData] = useState(null);
@@ -79,9 +79,11 @@ console.log(recruiterCards,"cards")
     <>
       {/* TITLE */}
       <div className="text-center mt-6">
-        <h1 className="text-2xl font-semibold text-[#2A619D]">
-          {title}
-        </h1>
+        <Heading
+          data={title}
+          as="h1"
+          className="!text-2xl !font-semibold !mb-0"
+        />
       </div>
 
       {/* HERO */}

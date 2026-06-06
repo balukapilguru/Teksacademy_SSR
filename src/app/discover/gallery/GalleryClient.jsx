@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
+import Heading from "@/utility/Heading";
 
 export default function GalleryClient() {
   const baseUrl =
@@ -33,9 +34,13 @@ export default function GalleryClient() {
 
   return (
     <div className="w-full min-h-screen bg-white py-10">
-      <h1 className="text-center text-4xl font-bold text-[#2a619d] mb-10">
-        Gallery
-      </h1>
+      <div className="text-center mb-10">
+        <Heading
+          data="Gallery"
+          as="h1"
+          className="!text-4xl !font-bold !mb-0"
+        />
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-5 lg:px-20">
         {galleryData.map((img, index) => (

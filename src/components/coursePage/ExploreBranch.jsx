@@ -32,16 +32,11 @@ const ExploreBranch = ({ branchLocation, data }) => {
       {/* Heading Section */}
       <div className="flex justify-center items-center w-full mb-8">
         <div className="flex flex-col items-center">
-          <div className="font-semibold leading-tight tracking-[-0.014em] flex justify-center gap-1">
-            <Heading 
-              className="text-[#2A619D]" 
-              data={Array.isArray(heading) ? heading[0] : heading?.split(' ')[0]} 
-            />
-            <Heading 
-              className="text-[#e84c1f]" 
-              data={Array.isArray(heading) ? heading[1] : heading?.split(' ').slice(1).join(' ')} 
-            />
-          </div>
+          <Heading
+            data={heading}
+            as="h2"
+            className="!text-3xl lg:!text-4xl !font-semibold !text-center"
+          />
       
         </div>
       </div>
