@@ -36,7 +36,7 @@ function Faq({ data }) {
                   : 'border-gray-200 shadow-sm bg-white hover:shadow-md'
               }`}
             >
-              <button
+              <div
                 onClick={() => setOpen(open === i ? null : i)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left"
               >
@@ -50,7 +50,7 @@ function Faq({ data }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
-              </button>
+              </div>
               
               {open === i && (
                 <div className="px-6 pb-5">
