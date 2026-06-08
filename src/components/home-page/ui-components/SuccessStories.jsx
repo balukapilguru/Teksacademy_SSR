@@ -258,7 +258,7 @@ const SuccessStories = ({ successStoriesData }) => {
         <video
           autoPlay
           controls
-          className="w-full h-full object-cover"
+          className="w-full h-auto object-cover"
         >
           <source src={GetData({ url: selectedVideo })} type="video/mp4" />
         </video>
