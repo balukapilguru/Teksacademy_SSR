@@ -116,7 +116,7 @@ const CertificationCourse = ({ data }) => {
         {!loading && visibleCourses.length > 0 ? (
           <>
             {/* DESKTOP: 4-col grid — untouched */}
-            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className=" sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {visibleCourses.map((course, idx) => (
                 <CourseCard
                   key={course.programName || course.id || idx}
@@ -130,15 +130,15 @@ const CertificationCourse = ({ data }) => {
             <div className="sm:hidden">
               <div className="flex flex-col items-center gap-2">
                 {/* Card — full width, no side arrows cramping it */}
-                <div className="w-full">
+                {/* <div className="w-full">
                   <CourseCard
                     key={visibleCourses[mobileIndex]?.programName || visibleCourses[mobileIndex]?.id || mobileIndex}
                     course={visibleCourses[mobileIndex]}
                     onGetDetailsClick={handleOpenModal}
                   />
-                </div>
+                </div> */}
                 {/* Arrows + Dots row */}
-                <div className="flex items-center justify-center gap-3 mt-1">
+                {/* <div className="flex items-center justify-center gap-3 mt-1">
                   <ArrowBtn
                     direction="prev"
                     onClick={() => setMobileIndex((i) => Math.max(0, i - 1))}
@@ -160,7 +160,7 @@ const CertificationCourse = ({ data }) => {
                     onClick={() => setMobileIndex((i) => Math.min(visibleCourses.length - 1, i + 1))}
                     disabled={mobileIndex === visibleCourses.length - 1}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </>

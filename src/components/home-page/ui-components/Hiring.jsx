@@ -1,6 +1,7 @@
 'use client';
 import Image from "next/image";
 import GetData from "@/utility/GetData";
+import Heading from "@/utility/Heading";
 
 export default function Hiringcompanies({ hiringData, courseName }) {
   const headingParts = hiringData?.hiringPartnersHeading || ["700+ Hiring", "Partners"];
@@ -48,7 +49,13 @@ export default function Hiringcompanies({ hiringData, courseName }) {
     <div className="main_container py-6">
     
       <div className="bg-red-50 bg-cover bg-center py-4 sm:py-8 overflow-hidden">
-          <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">Hiring Partners</div>
+        <div className="pl-10">
+            <Heading
+          data={hiringData?.hiringPartnersHeading}
+          text={hiringData?.hiringPartnersHeading}
+        />
+        </div>
+       
         <div className="w-full">
           <div className="flex flex-col gap-y-6 px-4 sm:px-6 lg:px-8">
             {marqueeRows.map((row, idx) => (
