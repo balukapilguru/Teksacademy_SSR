@@ -1,9 +1,12 @@
-'use client';
+"use client";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
 
 export default function Hiringcompanies({ hiringData, courseName }) {
-  const headingParts = hiringData?.hiringPartnersHeading || ["700+ Hiring", "Partners"];
+  const headingParts = hiringData?.hiringPartnersHeading || [
+    "700+ Hiring",
+    "Partners",
+  ];
   const subheading =
     hiringData?.hiringPartnersSubheading ||
     "Get ready to grab your dream job! Join the talent pool with access to the world's best hiring companies.";
@@ -34,7 +37,7 @@ export default function Hiringcompanies({ hiringData, courseName }) {
     const finalImages = images.slice(0, totalNeeded);
 
     const rows = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       rows.push({
         images: finalImages.slice(i * 5, i * 5 + 5),
       });
@@ -46,32 +49,35 @@ export default function Hiringcompanies({ hiringData, courseName }) {
 
   return (
     <div className="main_container py-6">
-    
       <div className="bg-red-50 bg-cover bg-center py-4 sm:py-8 overflow-hidden">
-          <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">Hiring Partners</div>
+        <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
+          Hiring Partners
+        </div>
         <div className="w-full">
-          <div className="flex flex-col gap-y-6 px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:gap-y-2 lg:gap-y-6 px-4 sm:px-6 lg:px-8">
             {marqueeRows.map((row, idx) => (
               <div key={idx} className="marquee-container">
-                <div 
+                <div
                   className="marquee-track"
                   style={{
-                    animation: `marquee ${idx === 0 ? 25 : idx === 1 ? 30 : idx === 2 ? 20 : 35}s linear infinite`
+                    animation: `marquee ${idx === 0 ? 25 : idx === 1 ? 30 : idx === 2 ? 20 : 35}s linear infinite`,
                   }}
                 >
                   {/* Triple the images to ensure no gap */}
-                  {[...row.images, ...row.images, ...row.images].map((img, i) => (
-                    <div key={i} className="marquee-item">
-                      <Image
-                        src={GetData({ url: img.image })}
-                        alt={img.alt}
-                        width={180}
-                        height={70}
-                        className="object-contain"
-                        priority={false}
-                      />
-                    </div>
-                  ))}
+                  {[...row.images, ...row.images, ...row.images].map(
+                    (img, i) => (
+                      <div key={i} className="marquee-item">
+                        <Image
+                          src={GetData({ url: img.image })}
+                          alt={img.alt}
+                          width={140}
+                          height={70}
+                          className="object-contain"
+                          priority={false}
+                        />
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             ))}

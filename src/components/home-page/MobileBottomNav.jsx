@@ -44,7 +44,7 @@ const mainActions = [
   { label: "Find My Course", next: "find" },
   { label: "View Courses", next: "courses" },
   { label: "Placement Info", next: "placements" },
-  { label: "Download Brochure", next: "brochure" },
+  { label: "Download Curriculum", next: "brochure" },
 ];
 
 const makeId = () =>
@@ -176,7 +176,7 @@ const items = [
   { label: "Chat", icon: MessageCircle, type: "chat" },
   { label: "Contact", icon: Phone, href: PHONE_HREF, highlight: true, type: "call" },
   { label: "Ebooks", icon: FileText, href: EBOOK_URL, type: "link" }, // Ebooks - navigates to /resources/ebook
-  { label: "Brochure", icon: Download, type: "brochure" },
+  { label: "Curriculum", icon: Download, type: "brochure" },
 ];
 
 const findCourse = (courseName) => {
@@ -337,7 +337,7 @@ function BrochureModal({ onClose }) {
       alert("Form submitted. Thank you!");
       onClose();
     } catch (error) {
-      console.error("Brochure form submission error:", error);
+      console.error("Curriculum form submission error:", error);
       alert(error.message || "Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
@@ -346,8 +346,8 @@ function BrochureModal({ onClose }) {
 
   return (
     <ModalShell
-      title="Download Brochure"
-      subtitle={`Fill the form and select a course to download the related syllabus brochure. Phone: ${PHONE_DISPLAY}`}
+      title="Download Curriculum"
+      subtitle={`Fill the form and select a course to download the related curriculum. Phone: ${PHONE_DISPLAY}`}
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -481,8 +481,8 @@ function BrochureModal({ onClose }) {
           disabled={submitting}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2a619d] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#214d7d] disabled:bg-gray-400"
         >
-          <Download className="h-4 w-4" />
-          {submitting ? "Submitting..." : "Download Brochure"}
+          {/* <Download className="h-4 w-4" /> */}
+          {submitting ? "Submitting..." : "Download Curriculum"}
         </button>
       </form>
     </ModalShell>
