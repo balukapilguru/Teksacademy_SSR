@@ -66,7 +66,7 @@ const FAQ = ({ faq }) => {
           <Heading data={faq?.heading} />
         </div>
 
-        <div className="rounded-lg border-gray-200 border shadow-md ">
+        <div className="rounded-lg border-gray-200 border shadow-md mb-4">
           {faq.faq.map((item, index) => (
             <div
               key={index}

@@ -127,6 +127,8 @@ export default function ReusableForm({
       requestCallback: ["name", "email", "phone", "course", "branch"],
       reserveSpot: ["name", "email", "phone", "course", "branch"],
       Enquirynow: ["name", "email", "phone", "course", "branch"],
+      RequestDemo: ["name", "email", "phone", "course", "branch"]
+      
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
@@ -200,7 +202,8 @@ export default function ReusableForm({
       reserveSpot: "Reserve Spot—Website",
       default: "Website",
       career: "Request Callback—Website",
-      Enquirynow: "Enquirynow"
+      Enquirynow: "Enquirynow",
+      RequestDemo: "Request Demo - Website"
     };
     
     return {
