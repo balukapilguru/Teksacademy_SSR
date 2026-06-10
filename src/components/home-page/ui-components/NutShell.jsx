@@ -40,7 +40,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
   };
 
   return (
-    <div className="main_container pb-5">
+    <div className="main_container md:pb-5">
       {showModal && (
         <Popupform
           show={showModal}

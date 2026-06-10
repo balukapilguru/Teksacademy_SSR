@@ -6,8 +6,10 @@ import Image from "next/image";
 import Loader from "@/components/Loader";
 import Popupform from "@/components/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import GetData from "@/utility/GetData";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+const baseUrl =
+  process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 const S3_BASE_URL = "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com";
 
@@ -32,7 +34,9 @@ const Ebook = () => {
           setEbookData(result.data);
           if (result.data.meta) {
             document.title = result.data.meta.title;
-            const metaDescription = document.querySelector('meta[name="description"]');
+            const metaDescription = document.querySelector(
+              'meta[name="description"]',
+            );
             if (metaDescription) {
               metaDescription.content = result.data.meta.description;
             }
@@ -69,15 +73,18 @@ const Ebook = () => {
   };
 
   const handleEbookSubmit = async (formValues, payload) => {
-    const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...payload,
-        productId: selectedCard?.productId,
-        sourceId: selectedCard?.sourceId,
-      }),
-    });
+    const response = await fetch(
+      buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...payload,
+          productId: selectedCard?.productId,
+          sourceId: selectedCard?.sourceId,
+        }),
+      },
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -101,7 +108,9 @@ const Ebook = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <p className="text-red-500 text-lg">Failed to load eBooks. Please try again later.</p>
+        <p className="text-red-500 text-lg">
+          Failed to load eBooks. Please try again later.
+        </p>
       </div>
     );
   }
@@ -130,8 +139,8 @@ const Ebook = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="flex flex-col xl:flex-row justify-center gap-6 xl:gap-12 px-6 lg:px-16 py-8 xl:py-12">
-        <div className="relative w-full max-w-lg">
+      <div className="flex flex-col xl:flex-row justify-center gap-6 xl:gap-12 px-4 lg:px-16 py-3 xl:py-12">
+        <div className="relative w-full max-w-lg hidden md:block">
           <Image
             src={ebookbanner}
             alt="Ebook Preview image"
@@ -141,7 +150,7 @@ const Ebook = () => {
           />
         </div>
         <div className="text-black max-w-lg">
-          <h4 className="text-[16px] font-semibold text-[#2a619d]">
+          <h4 className="text-[16px] font-semibold text-[#2a619d] hidden md:block">
             Best {ebookSection?.heading || "E-Books"}
           </h4>
           <h2 className="sm:text-2xl text-2xl font-bold py-2">
@@ -221,12 +230,14 @@ const Ebook = () => {
                 <h3 className="text-xl lg:text-2xl font-bold mb-4 text-[#FE543D]">
                   {communitySection.heading?.[1]}
                 </h3>
-                <p className="text-gray-200 mb-6">{communitySection.description}</p>
+                <p className="text-gray-200 mb-6">
+                  {communitySection.description}
+                </p>
                 {communitySection.button && (
                   <a
-                    href={communitySection.button.ebookurl || "#" }
+                    href={communitySection.button.ebookurl || "#"}
                     target="_blank"
-                    className="inline-flex items-center bg-[#FE543D] text-white px-6 py-3 rounded-lg hover:bg-[#e04a35] transition-colors"
+                    className="inline-flex items-center bg-[#FE543D] text-white md:px-6 md:py-3 p-1.5 rounded-lg hover:bg-[#e04a35] transition-colors"
                   >
                     {communitySection.button.name}
                     <svg
@@ -245,17 +256,18 @@ const Ebook = () => {
                   </a>
                 )}
               </div>
-              <div className="lg:w-1/2 p-8 lg:p-12">
-                <div className="relative h-64 lg:h-80">
-                  {/* ✅ Community image also uses S3 pattern */}
-                  <Image
-                    src={`${S3_BASE_URL}${communitySection.image?.src}`}
-                    alt={communitySection.image?.alt || "Community"}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </div>
+            <div className="lg:w-1/2 w-full p-2 lg:p-12 flex justify-center items-center">
+  <div className="relative w-full max-w-[520px] aspect-[16/9]">
+    <Image
+      src={`${S3_BASE_URL}${communitySection.image?.src}`}
+      alt={communitySection.image?.alt || "Community"}
+      width={1400}
+      height={600}
+      
+      className="object-cover rounded-xl"
+    />
+  </div>
+</div>
             </div>
           </div>
         </div>
@@ -276,4 +288,5 @@ const Ebook = () => {
   );
 };
 
+// src={GetData({url:communitySection.image?.src})}
 export default Ebook;

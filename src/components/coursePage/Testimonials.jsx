@@ -19,7 +19,7 @@ const convertToEmbedUrl = (url) => {
 
 export default function Testimonials({ data }) {
   const { tabs, studentVoices, testimonialCards, heading } = data;
-console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
+// console.log(studentVoices,testimonialCards,"testimonialCardstestimonialCards")
   const [activeTab, setActiveTab] = useState("studentVoices");
   const [index2, setIndex2] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);

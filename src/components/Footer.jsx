@@ -95,7 +95,7 @@ export default function Footer() {
   if (error) return null;
 
   const { image, officialAddress, socialMedia, sections, bottomBar } = footerData;
-{console.log(footerData,"nameee")}
+// {console.log(footerData,"nameee")}
   return (
     <footer className="relative bg-black text-white">
       <div>

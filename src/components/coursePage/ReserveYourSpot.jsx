@@ -65,8 +65,27 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
               )}
 
               {/* Logos */}
+{image?.length > 0 && (
+  <div className="  md:hidden  grid grid-cols-2 gap-4">
+    {image.map((uni, index) => (
+      <div
+        key={index}
+        className="flex justify-center items-center bg-white rounded-lg p-2 shadow"
+      >
+        <Image
+          src={GetData({ url: uni.src })}
+          alt={uni.alt || "Partner Logo"}
+          width={150}
+          height={70}
+          className="w-28 h-14 sm:w-32 sm:h-16 object-contain"
+        />
+      </div>
+    ))}
+  </div>
+)}
+
               {image?.length > 0 && (
-                <div className="overflow-hidden">
+                <div className="overflow-hidden hidden md:block">
                   <div className="scroll-container flex gap-4">
                     {[...image, ...image].map((uni, index) => (
                       <div

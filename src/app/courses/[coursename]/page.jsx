@@ -46,6 +46,7 @@ import Programfee from "@/components/coursePage/Programfee";
 import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
 import Hiring from "@/components/home-page/ui-components/Hiring";
+import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
 
 const isGenericCourseLabel = (value) => {
   const label = typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -217,7 +218,7 @@ export default async function Page({ params }) {
       },
     };
 
-  console.log(data?.careerService, "data?.careerServices");
+  // console.log(data?.car`eerService, "data?.careerServices");
   /* =====================================================
      COURSE FLOW (UNCHANGED)
   ===================================================== */
@@ -304,23 +305,36 @@ export default async function Page({ params }) {
               <Excel data={data.Excel} courseName={courseLabel} />
             ),
           },
-          { component: data?.whyOnline && <WhyOnline data={data.whyOnline}  /> },
+          // {component:data?.ourSuccessStories&&
+          // <div>
+          //   <SuccessStories successStoriesData={data?.ourSuccessStories} />
+          // </div>},
+         {
+  component:
+    data?.whyOnline && (
+      <div className="hidden md:block">
+        <WhyOnline data={data.whyOnline} />
+      </div>
+    ),
+},
           {
             key: "course-key-highlights",
             component: data?.keyHighlights && (
-              <KeyHighLights data={data.keyHighlights} />
+              <div className="pt-5 md:pt-10"> <KeyHighLights data={data.keyHighlights} /></div>
+             
             ),
           },
           {
             key: "course-download-brochure",
             component: data?.downloadOurCourseBrochure && (
-              <DownloadCourseBrochure
+              <div className="pt-5 md:pt-10"> <DownloadCourseBrochure
                 data={data.downloadOurCourseBrochure}
                 formDetails={formDetails}
                 courseName={courseLabel}
                 courseSlug={coursename}
                 category={true}
-              />
+              /></div>
+             
             ),
           },
           { key: "course-flow-wrapper", component: <CourseFlowWrapper /> },
@@ -379,16 +393,17 @@ export default async function Page({ params }) {
         <Hiring hiringData={data.hiringPartners} />
       ),
     },
+     {
+      key: "course-lets-talk",
+      component: data?.letsTalk && <Talktoour data={data.letsTalk} />,
+    },
     {
       key: "course-questions",
       component: data?.questionSection && (
         <Accordian faq={data.questionSection} />
       ),
     },
-    {
-      key: "course-lets-talk",
-      component: data?.letsTalk && <Talktoour data={data.letsTalk} />,
-    },
+   
   ];
   const schemaData = data?.meta?.schemaCode;
   /* =====================================================
@@ -448,7 +463,7 @@ export default async function Page({ params }) {
               <Excel data={excelSectionData} courseName={courseLabel} />
             </div>
 
-            <div className="main_container rounded-lg pt-5">
+            <div className="main_container rounded-lg ">
               <Nutshell data={careerServicesData} courseName={courseLabel} />
             </div>
           </>
@@ -459,7 +474,7 @@ export default async function Page({ params }) {
             sec.component && (
               <div
                 key={sec.key || idx}
-                className="main_container rounded-lg pt-5"
+                className="main_container rounded-lg"
               >
                 {sec.component}
               </div>

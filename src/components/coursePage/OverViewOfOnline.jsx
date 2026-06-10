@@ -72,12 +72,12 @@ const OverViewOfOnline = ({
 
   return (
     <div className="">
-      <section className="lg:py-6 pt-6">
+      <section className="lg:py-6 pt-0">
      
         <div className="">
           <Heading data={heading} />
 
-          <div className="grid lg:grid-cols-2 gap-12 mt-6">
+          <div className="grid lg:grid-cols-2 gap-5 md:gap-10 mt-6">
             <div className="flex justify-center">
               <Image
                 src={GetData({ url: imageSrc })}

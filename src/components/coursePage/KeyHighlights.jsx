@@ -9,10 +9,8 @@ import { HiArrowRightCircle } from "react-icons/hi2";
 const sectionColors = ["bg-white", "bg-gray-50", "bg-white", "bg-gray-50"];
 
 const Page = ({ data }) => {
- 
   const { sections = [], tabsData = {}, heading = "" } = data || {};
 
- 
   const [active, setActive] = useState(sections?.[0]?.value || "");
   const tabsRef = useRef(null);
   const [showRightFade, setShowRightFade] = useState(true);
@@ -41,7 +39,7 @@ const Page = ({ data }) => {
           if (entry.isIntersecting) setActive(entry.target.id);
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     sections.forEach((sec) => {
@@ -57,6 +55,19 @@ const Page = ({ data }) => {
     };
   }, [sections]);
 
+  useEffect(() => {
+    const container = tabsRef.current;
+    if (!container) return;
+
+    const activeBtn = container.querySelector(`[data-id="${active}"]`);
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [active]);
 
   if (!sections.length) {
     return (
@@ -67,11 +78,12 @@ const Page = ({ data }) => {
     );
   }
 
-  
   return (
     <div className=" mx-auto" id="keyHighlights">
-      <h2> <Heading data={heading} /></h2>
-     
+      <h2>
+        {" "}
+        <Heading data={heading} />
+      </h2>
 
       {/* Desktop View */}
       <div className="hidden md:flex gap-6">
@@ -108,9 +120,7 @@ const Page = ({ data }) => {
                     <HiArrowRightCircle className="text-[#2a619d] mt-1 w-5 h-5 flex-shrink-0" />
                     <span>{point}</span>
                   </li>
-                )) || (
-                  <p className="text-gray-500">No points available.</p>
-                )}
+                )) || <p className="text-gray-500">No points available.</p>}
               </ul>
             </section>
           ))}
@@ -128,6 +138,7 @@ const Page = ({ data }) => {
             {sections.map((s) => (
               <button
                 key={s.value}
+                data-id={s.value}
                 onClick={() => setActive(s.value)}
                 className={`flex-shrink-0 px-4 py-2 rounded-full border font-medium whitespace-nowrap transition-all ${
                   active === s.value
@@ -156,16 +167,17 @@ const Page = ({ data }) => {
                   <div className="text-xl font-bold mb-4">{sec.name}</div>
                   <ul className="space-y-2">
                     {tabsData?.[sec.value]?.keyPoints?.map((point, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-800">
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-gray-800"
+                      >
                         <HiArrowRightCircle className="text-[#2a619d] mt-1 w-5 h-5 flex-shrink-0" />
                         <span>{point}</span>
                       </li>
-                    )) || (
-                      <p className="text-gray-500">No points available.</p>
-                    )}
+                    )) || <p className="text-gray-500">No points available.</p>}
                   </ul>
                 </div>
-              )
+              ),
           )}
         </div>
       </div>
@@ -174,4 +186,3 @@ const Page = ({ data }) => {
 };
 
 export default Page;
-
