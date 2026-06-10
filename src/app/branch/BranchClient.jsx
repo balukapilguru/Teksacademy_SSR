@@ -222,7 +222,7 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
                 onClick={onEnrollClick}
                 className="bg-[#FE543D] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] text-white p-2 xl:px-6 xl:py-3 rounded-md font-semibold shadow-md w-fit inline-block cursor-pointer hover:bg-[#e14b36] transition"
               >
-                Enroll Now »
+                Get Directions »
               </button>
             </div>
           </div>
@@ -569,3 +569,14 @@ export default function BranchClient({ data: initialData = null, branchName = ""
     </main>
   );
 }
+
+
+// https://maps.app.goo.gl/NHgBnjTc11wp2WUQ7 ---securabad
+// https://maps.app.goo.gl/DEJPLcRep2foBWXUA ---ameerpet
+// https://maps.app.goo.gl/uDTBbgm23Meb4ZYTA  ---hiteccity
+// https://maps.app.goo.gl/rqc7zPPy5uFn718AA   ---kukatpally
+// https://maps.app.goo.gl/Qmx1zFRAAQ8xRxq6A ---dilsukhnagar
+// https://maps.app.goo.gl/xsxXrR3icySgjRer6  ---mehdipatnam
+// https://maps.app.goo.gl/KKTvLKe9hmEgBhtF8 ---visakhapatnam
+// https://maps.app.goo.gl/izVbbyxCUguL8HoC8 ---bangalore
+// https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8 --salem

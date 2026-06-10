@@ -19,7 +19,7 @@ const LogoMarquee = ({ hiringData }) => {
     return (
       <div className="w-full py-12 px-5 flex justify-center items-center">
         <div className="text-lg text-gray-500">
-          No hiring partners data available
+          No vvc partners data available
         </div>
       </div>
     );

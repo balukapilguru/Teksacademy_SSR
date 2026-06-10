@@ -1018,12 +1018,13 @@ export default function Navbar() {
       {/* BACK TO TOP BUTTON */}
       {/* ============================================ */}
       {scrolled && (
-        <button          onClick={scrollToTop}
-          className="fixed bottom-4 right-4 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
-          aria-label="Back to top"
-        >
-          <AiOutlineArrowUp size={18} />
-        </button>
+       <button
+  onClick={scrollToTop}
+  className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
+  aria-label="Back to top"
+>
+  <AiOutlineArrowUp size={18} />
+</button>
       )}
 
       {/* ============================================ */}
