@@ -67,7 +67,7 @@ const Banner = ({
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      console.log("bannerbanner", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
@@ -96,7 +96,7 @@ const Banner = ({
           course={normalizeCourseLabel(selectedCourse || courseLabel || formDetails || branch)}
           courseName={normalizeCourseLabel(selectedCourse || courseLabel || formDetails)}
           source={30}
-          title={"Enroll Now"}
+          title={"Demo Request"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
           formType="EnrollNow"
@@ -162,16 +162,16 @@ const Banner = ({
           )}
           
           <button 
-            className="mt-6 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
+            className="mt-6 mb-3 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
             onClick={handleOpenModal}
           >
-            Enroll Now
+            Demo Request
           </button>
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex justify-center md:justify-end relative lg:mt-0">
-          <div className="w-full max-w-lg md:max-w-lg">
+        <div className="hidden  md:flex justify-center md:justify-end relative lg:mt-0">
+          <div className="w-full max-w-lg md:max-w-lg ">
             <Image
               src={GetData({ url: data?.bannerImage?.src })}
               alt={data.imageAlt || "Course Banner"}

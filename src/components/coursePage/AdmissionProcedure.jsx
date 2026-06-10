@@ -62,15 +62,15 @@ console.log(admissionSteps,"stepsData")
   return (
     <section id="OnlineAdmissionProcedure">
       <div className="">
-        <div className=" mx-auto py-3">
+        <div className=" mx-auto md:py-3">
           {/* Header */}
-          <Heading data={data?.heading} />
-          <div className="text-md">
+          <Heading data={data?.heading} className="hidden md:block" />
+          <div className="text-md hidden md:block">
             {description}
           </div>
           {/* Steps Section */}
-          <div className="bg-white rounded-3xl shadow-xl p-4 mb-12 mt-3">
-            <div className="relative mb-2">
+          <div className="bg-white rounded-3xl shadow-xl p-4 mb-12 md:mt-3">
+            <div className="relative mb-2 ">
               <div className="text-2xl font-bold text-gray-900 mb-6 text-center">
                 {stepsHeading}
               </div>
@@ -83,7 +83,7 @@ console.log(admissionSteps,"stepsData")
                     className="flex flex-col md:flex-col items-center text-center md:items-center relative mb-10 md:mb-0 w-full md:w-auto"
                   >
                     {/* === Mobile view === */}
-                    <div className="flex flex-col md:hidden items-center mb-6">
+                    <div className="flex flex-col md:hidden items-center md:mb-6">
                       {/* Step Number */}
                       <div
                         className={`px-4 py-1 rounded-full mb-2 shadow-md font-medium text-sm ${index < 5
@@ -96,7 +96,7 @@ console.log(admissionSteps,"stepsData")
 
                       {/* Icon */}
                       <div
-                        className={`w-14 h-14 flex items-center justify-center rounded-full ${step.color} text-white shadow-lg mb-3`}
+                        className={`w-14 h-14  p-1.5 flex items-center justify-center rounded-full ${step.color} text-white shadow-lg mb-3`}
                       >
                         {/* {step.icon} */}
                         <Image 
@@ -111,7 +111,7 @@ console.log(admissionSteps,"stepsData")
                         <h3 className="font-semibold text-gray-800 text-base">
                           {step.title}
                         </h3>
-                        <div className="text-gray-600 text-sm">{step.description}</div>
+                        <div className="text-gray-600 text-sm hidden md:block">{step.description}</div>
                       </div>
                     </div>
 
@@ -119,10 +119,10 @@ console.log(admissionSteps,"stepsData")
                     {index < steps.length - 1 && (
                       <>
                         {/* Dashed vertical line */}
-                        <div className="block md:hidden absolute top-[147px] h-[50px] border-l-4 border-dashed border-gray-400 z-[-1]" />
+                        <div className="block md:hidden absolute top-[130px] h-[50px] border-l-4 border-dashed border-gray-400 z-[-1]" />
 
                         {/* Down arrow */}
-                        <div className="block md:hidden absolute top-[195px] text-gray-500">
+                        <div className="block md:hidden absolute top-[170px] text-gray-500">
                           <BiSolidDownArrow size={16} />
                         </div>
                       </>

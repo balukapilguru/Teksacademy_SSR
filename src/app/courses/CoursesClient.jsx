@@ -34,7 +34,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response: for coursepages", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");

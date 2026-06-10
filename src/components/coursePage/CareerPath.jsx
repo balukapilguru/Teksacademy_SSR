@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
@@ -8,7 +8,6 @@ import {
   Code,
   Database,
   Cpu,
-  Network,
   Monitor,
   Wrench,
   Layers,
@@ -18,19 +17,33 @@ import { useRouter } from 'next/navigation';
 import Heading from '@/utility/Heading';
 import Popupform from '../clientcomponents/forms/Popupform';
 import { blogsApplyBaseUrl, buildApiUrl } from '@/lib/apiBaseUrls';
+import { FaArrowRightLong } from 'react-icons/fa6';
 
- 
 const CareerPath = ({ data, formDetails, courseName = '' }) => {
-
   const { heading } = data || {};
   const router = useRouter();
+
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
 
+  const [visibleCount, setVisibleCount] = useState(2);
+  const [expanded, setExpanded] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
-  const courseDisplayName = courseName || formDetails?.courseName || formDetails?.course || formDetails || '';
+  const courseDisplayName =
+    courseName || formDetails?.courseName || formDetails?.course || formDetails || '';
   const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ✅ detect screen
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const toggleFlip = (id) => {
     setFlippedCardId((prev) => (prev === id ? null : id));
@@ -48,25 +61,20 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
       'devops engineer': Cloud,
       'technical consultant': Briefcase,
     };
-    const key = role?.toLowerCase() || '';
-    const Icon = roleMap[key] || Briefcase;
+    const Icon = roleMap[role?.toLowerCase()] || Briefcase;
     return <Icon className="w-7 h-7 text-white" />;
   };
 
-
-
   const getRoleColors = (index) => {
     const colors = [
-      { bg: 'bg-blue-500', color: 'from-blue-500 to-blue-700' },
-      { bg: 'bg-green-500', color: 'from-green-500 to-green-700' },
-      { bg: 'bg-purple-500', color: 'from-purple-500 to-purple-700' },
-      { bg: 'bg-orange-500', color: 'from-orange-500 to-orange-700' },
-      { bg: 'bg-red-500', color: 'from-red-500 to-red-700' },
-      { bg: 'bg-teal-500', color: 'from-teal-500 to-teal-700' },
-      { bg: 'bg-indigo-500', color: 'from-indigo-500 to-indigo-700' },
-      { bg: 'bg-pink-500', color: 'from-pink-500 to-pink-700' },
-      { bg: 'bg-amber-500', color: 'from-amber-500 to-amber-700' },
-      { bg: 'bg-cyan-500', color: 'from-cyan-500 to-cyan-700' },
+      { bg: 'bg-blue-500' },
+      { bg: 'bg-green-500' },
+      { bg: 'bg-purple-500' },
+      { bg: 'bg-orange-500' },
+      { bg: 'bg-red-500' },
+      { bg: 'bg-teal-500' },
+      { bg: 'bg-indigo-500' },
+      { bg: 'bg-pink-500' },
     ];
     return colors[index % colors.length];
   };
@@ -80,36 +88,29 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
   const handleFormSubmit = async (_formValues, mappedPayload) => {
     setIsSubmitting(true);
-    console.log('Mapped payload being sent:', mappedPayload);
-
     try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, '/lead/create'), {
+      const res = await fetch(buildApiUrl(blogsApplyBaseUrl, '/lead/create'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mappedPayload),
       });
 
-      const responseData = await response.json();
-      console.log('API Response:', responseData);
-
-      if (!response.ok) {
-        throw new Error(responseData.message || 'Submission failed');
-      }
+      if (!res.ok) throw new Error('Submission failed');
 
       setShowModal(false);
       router.push('/thankyou');
-    } catch (error) {
-      console.error('Submission error:', error);
-      throw error;
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // ✅ FIX: slice only on mobile
+  const jobsToShow = isMobile
+    ? (data?.jobCards || []).slice(0, visibleCount)
+    : (data?.jobCards || []);
+
   return (
-    <div className="mx-auto py-6 p-4 rounded-xl">
+    <div className="mx-auto py-6 md:p-4 p-2 rounded-xl">
       {showModal && (
         <Popupform
           show={showModal}
@@ -118,185 +119,127 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
           courseName={selectedCourse}
           source={30}
           title="Enroll Now"
-          subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
-          formType="EnrollNow"
-          buttonText="Enroll Now"
-          successMessage="Thank you! We'll contact you soon."
         />
       )}
 
-
       <Heading data={heading} />
+
       <div className="text-gray-700 text-lg md:text-xl pb-6">
-        {data?.description || 'Explore roles, opportunities'}
+        {data?.description}
       </div>
 
-      <div className="">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {data?.jobCards?.map((job, index) => {
-            const isFlipped = flippedCardId === job.role;
-            const colors = getRoleColors(index);
+      {/* GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {jobsToShow.map((job, index) => {
+          const isFlipped = flippedCardId === job.role;
+          const colors = getRoleColors(index);
 
-            return (
-              <div key={job.role} className="group perspective cursor-pointer">
-                <div
-                  className={`card-3d relative h-56 w-full group-hover:rotate-y-180 rounded-lg transition-transform duration-700 ${isFlipped ? 'rotate-y-180' : ''
-                    }`}
-                  onClick={() => toggleFlip(job.role)}
-                >
-                  <div className="backface-hidden bg-white rounded-lg p-6 border border-gray-200 shadow-sm flex flex-col justify-between">
-                    <div className="flex items-center justify-start mb-2">
-                      <div className={`${colors.bg} p-4 rounded-lg`}>
-                        <IconRenderer role={job.role} />
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 text-left">
-                      {job.role}
-                    </h3>
-                    <div className="flex items-start justify-start text-sm text-gray-700">
-                      <Users className="w-4 h-4 text-gray-500 mr-1" />
-                      {job.jobMeter}
-                    </div>
+          return (
+            <div key={job.role} className="group perspective cursor-pointer">
+              <div
+                className={`card-3d relative h-56 w-full rounded-lg transition-transform duration-700 ${
+                  isFlipped ? 'rotate-y-180' : ''
+                }`}
+                onClick={() => toggleFlip(job.role)}
+              >
+                {/* FRONT */}
+                <div className="backface-hidden bg-white rounded-lg p-6 border shadow-sm flex flex-col justify-between">
+                  <div className={`${colors.bg} p-4 rounded-lg w-fit`}>
+                    <IconRenderer role={job.role} />
                   </div>
-
-                  <div
-                    className={`backface-hidden rotate-y-180 rounded-lg p-3 border border-gray-200 shadow-sm flex flex-col justify-center ${colors.bg}`}
-                  >
-                    <h4 className="text-md font-semibold mb-2 text-white text-center">
-                      {job.onHover?.title || 'Salary Packages'}
-                    </h4>
-                    <table className="w-full text-white border border-white border-collapse text-sm">
-                      <thead className="bg-white/10">
-                        <tr>
-                          <th className="px-2 py-1 text-left border border-white font-normal">
-                            Experience
-                          </th>
-                          <th className="px-2 py-1 text-left border border-white font-normal">
-                            Package
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {job.onHover?.table?.map((row, rowIndex) => (
-                          <tr
-                            key={row.label}
-                            className={rowIndex % 2 === 0 ? 'bg-white/10' : ''}
-                          >
-                            <td className="px-2 py-1 border border-white">
-                              {row.label}
-                            </td>
-                            <td className="px-2 py-1 border border-white">
-                              {row.value}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <h3 className="text-xl font-bold">{job.role}</h3>
+                  <div className="text-sm text-gray-600 flex items-center">
+                    <Users className="w-4 h-4 mr-1" />
+                    {job.jobMeter}
                   </div>
                 </div>
-              </div>
-            );
-          })}
+
+                {/* BACK */}
+  <div
+  className={`backface-hidden rotate-y-180 rounded-lg p-4 ${colors.bg} shadow-md flex flex-col`}
+>
+  {/* Title */}
+  <h4 className="text-white text-center font-semibold mb-3">
+    Salary Package (LPA)
+  </h4>
+
+  {/* Table Wrapper */}
+ <div className=" rounded-md overflow-hidden">
+  
+  {/* Header */}
+  <div className="grid grid-cols-2 text-sm font-semibold text-gray-700 border border-white borderwhite">
+    <div className="px-4 py-2 border-r border-white text-white">
+      Experience
+    </div>
+    <div className="px-4 py-2 text-white">
+      Package
+    </div>
+  </div>
+
+  {/* Body */}
+  <div className="max-h-[140px] overflow-y-auto">
+    {job.onHover?.table?.map((row, i) => (
+      <div
+        key={i}
+        className="grid grid-cols-2 text-sm text-gray-700 border-b border-white last:border-none"
+      >
+        <div className="px-6 py-2  lg:w-[8.9rem]  border-r border-white text-white border-l">
+          {row.label}
+        </div>
+        <div className="px-4 py-2 text-white">
+          {row.value}
         </div>
       </div>
-
-      <div className="max-w-7xl mx-auto mt-12 text-center">
-        <button
-          className="px-8 h-9 cursor-pointer bg-[#2a619d] text-white font-semibold rounded-lg shadow-md hover:bg-[#a01830] transition duration-300"
-          onClick={() => handleOpenModal(formDetails)}
-        >
-          {data?.button?.text || 'Enroll Now'} →
-        </button>
+    ))}
+  </div>
+</div>
+</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <AnimatePresence>
-        {selectedRole && selectedJob && (
-          <motion.div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-            onClick={() => setSelectedRole(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="bg-white rounded-lg max-w-md w-full shadow-2xl transform transition-all relative max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+      {/* ✅ BUTTON ONLY MOBILE */}
+      {isMobile && (
+        <div className="flex justify-end mt-2">
+          {!expanded && visibleCount < data?.jobCards?.length && (
+            <button
+              onClick={() => {
+                const next = visibleCount + 4;
+                setVisibleCount(next);
+                if (next >= data.jobCards.length) setExpanded(true);
+              }}
+              className="bg-[#2a619d] text-white font-semibold px-3 py-2 rounded-full"
             >
-              <button
-                onClick={() => setSelectedRole(null)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-10"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-
-              <div className="p-8">
-                <div className="flex items-start gap-4 mb-8">
-                  <div
-                    className={`${getRoleColors(
-                      data.jobCards.findIndex((j) => j.role === selectedRole)
-                    ).bg} p-4 rounded-2xl flex-shrink-0`}
-                  >
-                    <div className="p-2 text-white">
-                      <IconRenderer role={selectedJob?.role} />
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-2xl font-bold text-gray-900 mb-2">
-                      {selectedJob.role}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-600 text-sm">
-                        {selectedJob.jobMeter}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  {selectedJob.onHover?.table?.map((row) => (
-                    <div
-                      key={row.label}
-                      className="flex items-center justify-between gap-2"
-                    >
-                      <div className="flex items-center gap-2 flex-1">
-                        <div
-                          className={`w-5 h-5 ${getRoleColors(
-                            data.jobCards.findIndex(
-                              (j) => j.role === selectedRole
-                            )
-                          ).bg
-                            } rounded-md flex items-center justify-center flex-shrink-0`}
-                        >
-                          <Briefcase className="w-3.5 h-3.5 text-white" />
-                        </div>
-                        <span className="text-gray-700 capitalize text-sm">
-                          {row.label}
-                        </span>
-                      </div>
-                      <span
-                        className={`text-base font-bold bg-gradient-to-r ${getRoleColors(
-                          data.jobCards.findIndex(
-                            (j) => j.role === selectedRole
-                          )
-                        ).color
-                          } bg-clip-text text-transparent`}
-                      >
-                        {row.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex gap-2">
+                Load More
+                <span className="mt-1.5">
+                  <FaArrowRightLong />
+                </span>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </button>
+          )}
+
+          {expanded && (
+            <button
+              onClick={() => {
+                setVisibleCount(2);
+                setExpanded(false);
+              }}
+              className="bg-[#2a619d] text-white font-semibold px-3 py-2 rounded-full"
+            >
+              <div className="flex gap-2">
+                Show Less
+                <span className="mt-1.5">
+                  <FaArrowRightLong />
+                </span>
+              </div>
+            </button>
+          )}
+        </div>
+      )}
 
       <style jsx>{`
         .perspective {
@@ -308,10 +251,7 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
         .backface-hidden {
           backface-visibility: hidden;
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          inset: 0;
         }
         .rotate-y-180 {
           transform: rotateY(180deg);
@@ -322,4 +262,3 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 };
 
 export default CareerPath;
-

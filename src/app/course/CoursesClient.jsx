@@ -1,5 +1,11 @@
 "use client";
-import React, { useContext, useEffect, useState, useCallback, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -82,8 +88,8 @@ function buildCounts(apiData) {
         total: Number(ug.total || 0),
         programs: ug.programs
           ? Object.fromEntries(
-            Object.entries(ug.programs).map(([k, v]) => [k, Number(v)])
-          )
+              Object.entries(ug.programs).map(([k, v]) => [k, Number(v)]),
+            )
           : undefined,
       };
     }
@@ -94,8 +100,8 @@ function buildCounts(apiData) {
         total: Number(pg.total || 0),
         programs: pg.programs
           ? Object.fromEntries(
-            Object.entries(pg.programs).map(([k, v]) => [k, Number(v)])
-          )
+              Object.entries(pg.programs).map(([k, v]) => [k, Number(v)]),
+            )
           : undefined,
       };
     }
@@ -149,9 +155,10 @@ const Sidebar = ({
             if (onCloseMobile) onCloseMobile();
           }}
           className={`mt-3 w-full flex items-center justify-between p-3 rounded-lg cursor-pointer transition
-            ${!selectedCategory
-              ? "border-[#2a619d] bg-[#faf3f3] text-[#2a619d]"
-              : "hover:bg-gray-100 text-gray-700"
+            ${
+              !selectedCategory
+                ? "border-[#2a619d] bg-[#faf3f3] text-[#2a619d]"
+                : "hover:bg-gray-100 text-gray-700"
             }`}
         >
           <span className="flex items-center gap-2">
@@ -183,8 +190,9 @@ const Sidebar = ({
                   className="cursor-pointer flex justify-between w-full p-3 py-2 text-md rounded-sm hover:bg-gray-200 transition"
                 >
                   <span
-                    className={`flex items-center gap-2 ${isSelected ? "text-[#2a619d]" : "text-gray-700"
-                      }`}
+                    className={`flex items-center gap-2 ${
+                      isSelected ? "text-[#2a619d]" : "text-gray-700"
+                    }`}
                   >
                     {category === "certifications" && (
                       <IoRibbonOutline size={18} className="mt-1" />
@@ -196,10 +204,11 @@ const Sidebar = ({
                   </span>
                   <div className="flex items-center gap-1">
                     <span
-                      className={`px-2 py-1 text-sm rounded-full ${isSelected
+                      className={`px-2 py-1 text-sm rounded-full ${
+                        isSelected
                           ? "bg-[#2a619d] text-white"
                           : "bg-gray-200 text-gray-700"
-                        }`}
+                      }`}
                     >
                       {details.total}
                     </span>
@@ -227,17 +236,19 @@ const Sidebar = ({
                                 if (onCloseMobile) onCloseMobile();
                               }}
                               className={`flex justify-between items-center w-full text-sm h-9 rounded-md transition cursor-pointer
-                                ${isSubSelected
-                                  ? "text-[#2a619d] bg-[#fff5f7] border border-[#2a619d]"
-                                  : "text-gray-600 hover:bg-gray-200"
+                                ${
+                                  isSubSelected
+                                    ? "text-[#2a619d] bg-[#fff5f7] border border-[#2a619d]"
+                                    : "text-gray-600 hover:bg-gray-200"
                                 }`}
                             >
                               <span className="pl-2">{subLabel}</span>
                               <span
-                                className={`px-2 py-1 mr-2 text-sm ${isSubSelected
+                                className={`px-2 py-1 mr-2 text-sm ${
+                                  isSubSelected
                                     ? "text-[#2a619d]"
                                     : "text-gray-700"
-                                  }`}
+                                }`}
                               >
                                 {subDetails?.total || 0}
                               </span>
@@ -263,9 +274,10 @@ const Sidebar = ({
                                           if (onCloseMobile) onCloseMobile();
                                         }}
                                         className={`cursor-pointer w-full justify-between flex text-[14px] px-2 h-9 rounded-md
-                                          ${selectedProgram === progKey
-                                            ? "text-[#2a619d] font-semibold"
-                                            : "text-gray-500 hover:bg-gray-50 hover:text-[#2a619d]"
+                                          ${
+                                            selectedProgram === progKey
+                                              ? "text-[#2a619d] font-semibold"
+                                              : "text-gray-500 hover:bg-gray-50 hover:text-[#2a619d]"
                                           }`}
                                       >
                                         <span className="flex flex-row items-center gap-2">
@@ -273,21 +285,22 @@ const Sidebar = ({
                                           {formatLabel(progKey)}
                                         </span>
                                         <span
-                                          className={`flex align-center justify-center rounded-full w-8 h-8 items-center px-2 ${selectedProgram === progKey
+                                          className={`flex align-center justify-center rounded-full w-8 h-8 items-center px-2 ${
+                                            selectedProgram === progKey
                                               ? "text-[#2a619d]"
                                               : "text-gray-700"
-                                            }`}
+                                          }`}
                                         >
                                           {progValue}
                                         </span>
                                       </button>
-                                    )
+                                    ),
                                   )}
                                 </div>
                               )}
                           </div>
                         );
-                      }
+                      },
                     )}
                   </div>
                 )}
@@ -328,36 +341,56 @@ export default function CoursesClient() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [pageLoading, setPageLoading] = useState(true);
-
+  const [selectedDomain, SetSelectedDomain] = useState(null);
   const pageSize = 9;
-  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+    process.env.NEXT_TEKS_SSR_API_URL;
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+  const handleSubmit = useCallback(
+    async (formValues, mappedPayload) => {
+      console.log("Mapped payload being sent:", mappedPayload);
 
-    try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
+      try {
+        const response = await fetch(
+          buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(mappedPayload),
+          },
+        );
 
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
+        const responseData = await response.json();
+        console.log("API Response:", responseData);
 
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
+        if (!response.ok) {
+          throw new Error(responseData.message || "Submission failed");
+        }
+
+        router.push("/thankyou");
+      } catch (error) {
+        console.error("Submission error:", error);
+        throw error;
       }
+    },
+    [router],
+  );
 
-      router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
-    }
-  }, [router]);
+  const FetchCourses = async () => {
+    const url = selectedDomain
+      ? `${baseUrl}/api/v1/course?domain=${selectedDomain}`
+      : `${baseUrl}/api/v1/course`;
+    const res = await fetch(url);
+    const json = await res.json();
+    setCourses(json.data || []);
+  };
+  useEffect(() => {
+    FetchCourses();
+  }, [selectedDomain]);
 
   // useEffect(() => {
   //   const savedCategory = localStorage.getItem("selectedCategory");
@@ -369,19 +402,19 @@ export default function CoursesClient() {
   // }, []);
 
   useEffect(() => {
-  // Clear everything when entering page
-  localStorage.removeItem("selectedCategory");
-  localStorage.removeItem("selectedSubCategory");
-  localStorage.removeItem("selectedProgram");
+    // Clear everything when entering page
+    localStorage.removeItem("selectedCategory");
+    localStorage.removeItem("selectedSubCategory");
+    localStorage.removeItem("selectedProgram");
 
-  // Reset state cleanly
-  setSelectedCategory(null);
-  setSelectedSubCategory(null);
-  setSelectedProgram(null);
+    // Reset state cleanly
+    setSelectedCategory(null);
+    setSelectedSubCategory(null);
+    setSelectedProgram(null);
 
-  setContextCategory(null);
-  setContextSubCategory(null);
-}, []);
+    setContextCategory(null);
+    setContextSubCategory(null);
+  }, []);
   useEffect(() => {
     if (contextCategory && contextCategory !== selectedCategory)
       setSelectedCategory(contextCategory);
@@ -390,8 +423,10 @@ export default function CoursesClient() {
   }, [contextCategory, contextSubCategory]);
 
   useEffect(() => {
-    if (selectedCategory !== contextCategory) setContextCategory(selectedCategory);
-    if (selectedSubCategory !== contextSubCategory) setContextSubCategory(selectedSubCategory);
+    if (selectedCategory !== contextCategory)
+      setContextCategory(selectedCategory);
+    if (selectedSubCategory !== contextSubCategory)
+      setContextSubCategory(selectedSubCategory);
 
     selectedCategory
       ? localStorage.setItem("selectedCategory", selectedCategory)
@@ -423,7 +458,8 @@ export default function CoursesClient() {
           params.append("branch", selectedProgram);
         } else {
           if (selectedCategory) params.append("category", selectedCategory);
-          if (selectedSubCategory) params.append("subCategory", selectedSubCategory);
+          if (selectedSubCategory)
+            params.append("subCategory", selectedSubCategory);
         }
 
         if (searchTerm.trim()) params.append("search", searchTerm.trim());
@@ -431,7 +467,10 @@ export default function CoursesClient() {
         params.append("limit", String(pageSize));
 
         const url = `${baseUrl}/api/v1/course?${params.toString()}`;
-        const res = await fetch(url, { cache: "no-store", signal: controller.signal });
+        const res = await fetch(url, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
         const data = await res.json();
         console.log("API Response:", data);
         setCourses(data.data || []);
@@ -442,16 +481,23 @@ export default function CoursesClient() {
       } catch (err) {
         if (err.name !== "AbortError") setError("Failed to load courses");
       } finally {
-  setLoading(false);
-  if (pageLoading) {
-    setPageLoading(false);
-  }
-}
+        setLoading(false);
+        if (pageLoading) {
+          setPageLoading(false);
+        }
+      }
     };
 
     fetchData();
     return () => controller.abort();
-  }, [selectedCategory, selectedSubCategory, selectedProgram, searchTerm, currentPage, baseUrl]);
+  }, [
+    selectedCategory,
+    selectedSubCategory,
+    selectedProgram,
+    searchTerm,
+    currentPage,
+    baseUrl,
+  ]);
 
   const handleProgramFilter = useCallback((branchValue) => {
     setSelectedProgram(branchValue);
@@ -477,7 +523,9 @@ export default function CoursesClient() {
     }
     return pages.map((p, index) =>
       p === "..." ? (
-        <span key={`dots-${index}`} className="px-2 text-gray-500 select-none">...</span>
+        <span key={`dots-${index}`} className="px-2 text-gray-500 select-none">
+          ...
+        </span>
       ) : (
         <button
           key={`page-${p}-${index}`}
@@ -487,25 +535,24 @@ export default function CoursesClient() {
         >
           {p}
         </button>
-      )
+      ),
     );
   };
   useEffect(() => {
-  contentRef.current?.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-}, [currentPage]);
-
+    contentRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [currentPage]);
 
   // ── Heading: always shows the deepest active label ──
-  const activeHeading = "All Courses"
-    // ? formatLabel(selectedProgram)
-    // : selectedSubCategory
-    //   ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
-    //   : selectedCategory
-    //     ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
-    //     : "All Courses";
+  const activeHeading = "All Courses";
+  // ? formatLabel(selectedProgram)
+  // : selectedSubCategory
+  //   ? SUBCATEGORY_LABELS[selectedSubCategory] || formatLabel(selectedSubCategory)
+  //   : selectedCategory
+  //     ? CATEGORY_LABELS[selectedCategory] || formatLabel(selectedCategory)
+  //     : "All Courses";
 
   if (pageLoading) {
     return (
@@ -591,15 +638,19 @@ export default function CoursesClient() {
 
         {/* Main content */}
         <div
-        ref={contentRef} className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]">
-
+          ref={contentRef}
+          className="pt-4 px-6 border-l-2 mt-4 w-full rounded-lg mb-4 border-blue-100 bg-[#f1f6ff]"
+        >
           {/* Big heading */}
           <div className="text-3xl font-bold text-black mb-2">
             {activeHeading}
           </div>
 
           <div className="flex flex-col md:flex-row md:justify-between">
-            <div className="text-black">Browse our comprehensive course catalog</div>
+            <div className="text-black">
+              Browse our comprehensive course catalog
+            </div>
+
             <div className="bg-white mt-4 w-full md:w-80 border-blue-100 border-2 rounded-lg">
               <div className="relative">
                 <IoIosSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400 text-lg" />
@@ -614,6 +665,27 @@ export default function CoursesClient() {
             </div>
           </div>
 
+       <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+  {["all", "coding", "data", "cloud", "designing", "marketing", "cyber"].map((domain) => {
+    const isAll = domain === "all";
+
+    return (
+      <button
+        key={domain}
+        onClick={() => SetSelectedDomain(isAll ? null : domain)}
+        className={`px-3 py-1.5 rounded-full text-xs md:text-sm font-medium border whitespace-nowrap transition
+          ${
+            (isAll && selectedDomain === null) || selectedDomain === domain
+              ? "bg-[#2a619d] text-white border-[#2a619d]"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+          }`}
+      >
+        <span>{isAll ? "All" : `#${domain}`}</span>
+      </button>
+    );
+  })}
+</div>
+
           {/* Cards */}
           <div className="mb-4 mt-4">
             {loading ? (
@@ -626,7 +698,9 @@ export default function CoursesClient() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 {courses.map((course, index) => (
                   <div
-                    key={course.id ?? `${course.programName || "course"}-${index}`}
+                    key={
+                      course.id ?? `${course.programName || "course"}-${index}`
+                    }
                     className="rounded-lg hover:shadow-lg transition"
                   >
                     <CourseCard
@@ -649,19 +723,27 @@ export default function CoursesClient() {
           {!loading && totalPages > 1 && (
             <div className="flex justify-center items-center my-8">
               <button
-                onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                onClick={() =>
+                  currentPage > 1 && setCurrentPage(currentPage - 1)
+                }
                 disabled={currentPage === 1}
-                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-                  }`}
+                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${
+                  currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+                }`}
               >
                 <IoIosArrowBack />
               </button>
               {renderPageButtons()}
               <button
-                onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+                onClick={() =>
+                  currentPage < totalPages && setCurrentPage(currentPage + 1)
+                }
                 disabled={currentPage === totalPages}
-                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"
-                  }`}
+                className={`w-9 h-9 flex items-center justify-center border rounded-md mx-1 hover:bg-gray-200 disabled:opacity-40 ${
+                  currentPage === totalPages
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
               >
                 <IoIosArrowForward />
               </button>

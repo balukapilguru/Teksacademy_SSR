@@ -301,7 +301,7 @@ console.log(courseData,"coursedataaa")
 
         {keyHighlights && (
           <div
-            className="rounded-lg border main_container pt-5"
+            className="rounded-lg border main_container pt-5 "
             style={{ backgroundColor: "#ffffff", borderColor: "#ffffff" }}
           >
             <KeyHighLights data={keyHighlights} />

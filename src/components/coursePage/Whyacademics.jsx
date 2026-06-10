@@ -12,7 +12,7 @@ const WhyOnline = ({ data }) => {
 
   if (!data) return null;
   return (
-    <section className=" py-4 bg-white relative">
+    <section className=" py-4 bg-white relative ">
       <div className=" ">
         {/* Header Section */}
         <div className="text-left">
@@ -25,7 +25,7 @@ const WhyOnline = ({ data }) => {
 
           {/* Image Section */}
           {data?.image?.src && data.image.src !== "null" && (
-            <div className="my-8 flex justify-center">
+            <div className="my-8 md:flex justify-center hidden ">
               <div className="relative w-full max-w-2xl h-64 md:h-80 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
                   src={data.image.src}
