@@ -1,104 +1,81 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import Heading from "@/utility/Heading";
 
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
-import ReusableForm from "../ReusableForm";
-import Loader from "../Loader";   // optional, you can style your own loader
-import CourseCard from "../allcoursepage/Coursecards";
-import { blogsApplyBaseUrl, buildApiUrl, teksSsrBaseUrl } from "@/lib/apiBaseUrls";
+import Loader from "../Loader";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import BranchCoursecards from "../allcoursepage/BranchCoursecards";
 import Popupform from "../Popupform";
 
-const Page = ({ data, branchData }) => {
-  const router = useRouter();
-  const params = useParams(); // ✅ CORRECT PLACE
+const getBranchFromPath = (pathname = "") => {
+  const branchSlug = pathname.split("/").filter(Boolean).pop() || "";
 
-  
-  // State for fetched courses
+  return (
+    branchSlug
+      .replace(/^best-software-training-institute-/, "")
+      .replace(/^software-training-institute-/, "")
+      .replace(/-branch$/, "")
+      .toLowerCase() || "ameerpet"
+  );
+};
+
+const CoursesOffered = ({ data, branchData }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Modal state (unchanged)
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [currentBranch, setCurrentBranch] = useState("");
 
-  // Fetch courses from API (same as CoursesOffered)
-//  useEffect(() => {
-//   const fetchCourses = async () => {
-//     try {
-//       setLoading(true);
-//       const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
-//       const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchName}`);
-
-//       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-//       const result = await response.json();
-//       if (result.success && result.data && Array.isArray(result.data)) {
-//         setCourses(result.data);
-//       } else {
-//         setCourses([]);
-//       }
-//     } catch (err) {
-//       console.error("Error fetching courses:", err);
-//       setError(err.message);
-//       setCourses([]);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   fetchCourses();
-// }, [branchName]);
- // ✅ Add branchName as dependency (instead of branchData)
-  // Existing handleSubmit (unchanged except router fix)
-
-const pathname = usePathname();
   useEffect(() => {
-  // Extract branch name directly from params inside effect
- const segments = pathname.split("/");
-  const rawBranchSlug = segments[segments.length - 1]; // last segment
-  let branchValue = "ameerpet";
+    const propCourses = data?.courses || data?.courseList || data?.coursesList || [];
+    const branchValue =
+      branchData?.slug ||
+      branchData?.branchSlug ||
+      branchData?.name ||
+      getBranchFromPath(pathname);
 
-  if (rawBranchSlug) {
-    branchValue = rawBranchSlug.split("-").pop()?.toLowerCase() || "ameerpet";
-  }
+    setCurrentBranch(branchValue);
 
-  console.log("Fetching courses for branch:", branchValue);
-
-  setCurrentBranch(branchValue);
-
-  const fetchCourses = async () => {
-    try {
-      setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
-      const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchValue}`);
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      const result = await response.json();
-      if (result.success && result.data && Array.isArray(result.data)) {
-        setCourses(result.data);
-      } else {
-        setCourses([]);
-      }
-    } catch (err) {
-      console.error("Error fetching courses:", err);
-      setError(err.message);
-      setCourses([]);
-    } finally {
+    if (propCourses.length > 0) {
+      setCourses(propCourses);
       setLoading(false);
+      setError(null);
+      return;
     }
-  };
 
-  fetchCourses();
-}, [pathname]); // ✅ Depend on the actual URL slug, not derived variable
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const baseUrl =
+          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+          process.env.NEXT_TEKS_SSR_API_URL;
+        const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchValue}`);
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const result = await response.json();
+        setCourses(result.success && Array.isArray(result.data) ? result.data : []);
+      } catch (err) {
+        console.error("Error fetching courses:", err);
+        setError(err.message);
+        setCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [data, branchData, pathname]);
+
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
-
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
@@ -109,7 +86,6 @@ const pathname = usePathname();
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
@@ -122,32 +98,36 @@ const pathname = usePathname();
     }
   };
 
-  // Modal handler (unchanged)
   const handleOpenModal = (course) => {
     setSelectedCourse(course);
     setShowModal(true);
   };
 
-  // Loading state
+  const courseName =
+    selectedCourse?.heading ||
+    selectedCourse?.programName ||
+    selectedCourse?.title ||
+    selectedCourse?.name ||
+    "";
+
   if (loading) {
     return (
       <section>
         <div className="main_container mx-auto mt-5 px-4 sm:px-6 lg:px-8">
-          <Heading data={data?.heading} />
+          <Heading data={data?.heading || "Course Offered"} />
           <div className="flex justify-center items-center h-40">
-            <Loader />   {/* or a simple spinner */}
+            <Loader />
           </div>
         </div>
       </section>
     );
   }
 
-  // Error state
   if (error) {
     return (
       <section>
         <div className="main_container mx-auto mt-5 px-4 sm:px-6 lg:px-8">
-          <Heading data={data?.heading} />
+          <Heading data={data?.heading || "Course Offered"} />
           <div className="text-center text-red-600 py-10">
             <p>Failed to load courses: {error}</p>
             <button
@@ -162,35 +142,30 @@ const pathname = usePathname();
     );
   }
 
-  // Main render (exactly as original, but `courses` now comes from API)
   return (
     <section>
       <div className="main_container mx-auto mt-5 pt-5 px-4 sm:px-6 lg:px-8">
-        <Heading data={data?.heading} />
-
-      
+        <Heading data={data?.heading || "Course Offered"} />
 
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {courses.map((course, idx) => (
               <BranchCoursecards
-                key={idx}
+                key={course.id || course.programName || course.heading || idx}
                 course={course}
                 onGetDetailsClick={() => handleOpenModal(course)}
               />
             ))}
           </div>
         ) : (
-          <p className="flex justify-center h-40 w-full">
-            No courses available.
-          </p>
+          <p className="flex justify-center h-40 w-full">No courses available.</p>
         )}
 
         <div className="flex justify-center pt-5">
           <PrimaryButton
             variant="outline"
-            label="View All Courses"
-            href="/course"
+            label={data?.moreCourses?.text || "View All Courses"}
+            href={data?.moreCourses?.link || "/course"}
           />
         </div>
       </div>
@@ -198,8 +173,8 @@ const pathname = usePathname();
       <Popupform
         show={showModal}
         onClose={() => setShowModal(false)}
-        course={selectedCourse?.heading || ""}
-        courseName={selectedCourse?.heading || ""}
+        course={courseName}
+        courseName={courseName}
         branch={currentBranch}
         title="Enquire Now"
         subtitle="Share your details and our counselor will reach out to you."
@@ -212,4 +187,4 @@ const pathname = usePathname();
   );
 };
 
-export default Page;
+export default CoursesOffered;

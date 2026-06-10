@@ -16,6 +16,12 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
 
   const buttons = course.button || [];
   const isSingle = buttons.length === 1;
+  const batchTitle = course.batchInfo?.title || "New Batch Starts On";
+  const batchDate = course.batchInfo?.date || course.batchStartDate || course.batchDate;
+
+  const openEnquiryPopup = () => {
+    onGetDetailsClick?.(course.heading, course);
+  };
 
   return (
     <div className="">
@@ -92,6 +98,19 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
             })}
           </div>
 
+          {batchDate && (
+            <button
+              type="button"
+              onClick={openEnquiryPopup}
+              className="bg-[#e6662a] hover:bg-[#d85a20] p-2 pl-2 text-white rounded-md text-sm w-full cursor-pointer text-center transition-colors"
+            >
+              {batchTitle} :{" "}
+              <span className="font-bold pl-2 pr-2 text-sm text-white">
+                {batchDate}
+              </span>
+            </button>
+          )}
+
           {/* Buttons */}
           <div
             className={`flex gap-4 mt-4 mb-1 ${isSingle ? "justify-center" : "justify-between"
@@ -104,9 +123,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
                 label={btn.name}
                 href={btn.link || null}
                 className={isSingle ? "w-full" : "flex-1"} // ✅ Full width if single
-                onClick={() =>
-                  btn.form && onGetDetailsClick(course.heading, course)
-                }
+                onClick={() => btn.form && openEnquiryPopup()}
               />
             ))}
           </div>

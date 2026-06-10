@@ -20,6 +20,7 @@ import CoursesOffered from "@/components/coursePage/CoursesOffered";
 import ReusableForm from "@/components/ReusableForm";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { storeBranchData } from "@/lib/branchStorage";
 
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
@@ -32,6 +33,7 @@ const BRANCH_LABELS = {
   dilsukhnagar: "Dilsukhnagar",
   bangalore: "Bangalore",
   visakhapatnam: "Visakhapatnam",
+  salem: "Salem",
 };
 
 const getBranchNameFromSlug = (value = "") => {
@@ -57,36 +59,42 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
   const fromHeroTitle = heroData?.title || heroData?.heading || heroData?.mainHeading || "";
   const branchFromHero = fromHeroTitle.match(/in\s+([A-Za-z\s-]+)$/i)?.[1] || "";
 
-  return branchFromHero || fromLocation;
+  return branchFromHero || fromLocation || "Secunderabad";
 };
 
-  const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+// ─── Submit Handler with SessionStorage (NO URL PARAMETERS) ───────────────
+const handleSubmit = async (formValues, mappedPayload) => {
+  console.log("Mapped payload being sent:", mappedPayload);
 
-    try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
+  try {
+    const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mappedPayload),
+    });
 
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
+    const responseData = await response.json();
+    console.log("API Response:", responseData);
 
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
-
-      window.location.href = "/thankyou";
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(responseData.message || "Submission failed");
     }
-  };
-const FeaturedIn = Featuredin;
 
+    // Store branch data in sessionStorage before redirect
+    const branchName = formValues.branch || "Secunderabad";
+    storeBranchData(branchName);
+    
+    // Redirect to thank you page WITHOUT query parameters
+    window.location.href = "/thankyou";
+  } catch (error) {
+    console.error("Submission error:", error);
+    throw error;
+  }
+};
+
+const FeaturedIn = Featuredin;
 
 const aboutFallbackImage =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/About_teks/teks_about_banner2.webp";
@@ -207,9 +215,9 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
                 </h1>
               )}
 
-              <div className="text-[#F24E1E] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] font-semibold xl:mt-4">
+              {/* <div className="text-[#F24E1E] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] font-semibold xl:mt-4">
                 {branchData.subtitle} →
-              </div>
+              </div> */}
 
               {branchData.about && (
                 <div className="3xl:leading-9 font-light text-justify text-[0.8rem] xl:text-lg lg:text-md lg:leading-6 2xl:text-[1.2rem] 3xl:text-[1.5rem] text-white">
@@ -229,22 +237,20 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
 
           {/* Form Section - 40% */}
           <div className="flex-[40%] bg-white rounded-xl 2xl:flex-[25%] 3xl:mx-14 2xl:p-4 3xl:p-6 lg:p-4 mx-6 lg:mx-40 p-3 xl:mx-0">
-           <ReusableForm
-          formType="enquiry"
-          onSubmit={handleSubmit}
-          initialValues={branchLabel ? { branch: branchLabel } : {}}
-          buttonText="Submit"
-          className="w-full"
-          successMessage="Thank you! We'll contact you soon."
-        />
+            <ReusableForm
+              formType="enquiry"
+              onSubmit={handleSubmit}
+              initialValues={branchLabel ? { branch: branchLabel } : {}}
+              buttonText="Submit"
+              className="w-full"
+              successMessage="Thank you! We'll contact you soon."
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-// ─── 3. COURSES OFFERED ───────────────────────────────────────────────────
 
 // ─── 5. ABOUT SECTION ────────────────────────────────────────────────────
 function BranchAboutSection({ data }) {
@@ -492,6 +498,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
 
         const json = await res.json();
         setData(json?.data || null);
+        console.log("Fetching branch data from:", json?.data);
       } catch (err) {
         if (err.name !== "AbortError") {
           console.error("Branch page data fetch error:", err);
@@ -542,11 +549,11 @@ export default function BranchClient({ data: initialData = null, branchName = ""
         onSubmit={handleSubmit}
       />
       <Topscroll data={data.topScroll} />
-      <CoursesOffered data={data.CoursesOffered} />
-      <section className="md:py-4 xl:py-0  bg-[#fbf5f6]">
+      <CoursesOffered data={data.courseOffered || data.CoursesOffered} />
+      <section className="md:py-4 xl:py-0 bg-[#fbf5f6]">
         <Excel data={data.Excel} />
       </section>
-      <section className="bg-[#eaf0f6]  rounded-lg ">
+      <section className="bg-[#eaf0f6] rounded-lg">
         <AboutTeks data={data.AboutTeks} />
       </section>
       <section className="md:py-4 xl:py-6 bg-white">
@@ -559,24 +566,11 @@ export default function BranchClient({ data: initialData = null, branchName = ""
         <Awards awards={data.awards} />
       </section>
       <section className="bg-[#fbf5f6]">
-         <Gallery gallery={data.gallery} />
+        <Gallery gallery={data.gallery} />
       </section>
-     
-      {console.log(data.gallery,"branchgallery")}
       <FeaturedIn featuredIn={data.featuredIn || data.featuredin} />
       <ExploreBranch data={data.branchLocation} />
-     <Faq data={data.faq} />
+      <Faq data={data.faq} />
     </main>
   );
 }
-
-
-// https://maps.app.goo.gl/NHgBnjTc11wp2WUQ7 ---securabad
-// https://maps.app.goo.gl/DEJPLcRep2foBWXUA ---ameerpet
-// https://maps.app.goo.gl/uDTBbgm23Meb4ZYTA  ---hiteccity
-// https://maps.app.goo.gl/rqc7zPPy5uFn718AA   ---kukatpally
-// https://maps.app.goo.gl/Qmx1zFRAAQ8xRxq6A ---dilsukhnagar
-// https://maps.app.goo.gl/xsxXrR3icySgjRer6  ---mehdipatnam
-// https://maps.app.goo.gl/KKTvLKe9hmEgBhtF8 ---visakhapatnam
-// https://maps.app.goo.gl/izVbbyxCUguL8HoC8 ---bangalore
-// https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8 --salem
