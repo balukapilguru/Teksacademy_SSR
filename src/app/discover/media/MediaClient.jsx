@@ -170,7 +170,7 @@ const Media = () => {
       {/* Influencer sub tabs */}
       {activeTab === "influencer" &&
         influencerData.subTabs.length > 1 && (
-          <div className="flex justify-center text-sm md:text-md xl:text-xl md:gap-6 lg:gap-8 mt-4">
+          <div className="flex justify-center text-sm md:text-md xl:text-xl gap-3 md:gap-6 lg:gap-8 mt-4">
             {influencerData.subTabs.map((sub) => (
               <button
                 key={sub.id}

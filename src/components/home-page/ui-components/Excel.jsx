@@ -131,7 +131,7 @@ export default function Excel({ data, courseName }) {
             ════════════════════════════════════════ */}
             <div className="block lg:hidden w-full" style={{ background: "linear-gradient(160deg, #f8f4f2 0%, #eef4fb 100%)" }}>
                 {/* Header */}
-                <div className="flex flex-col items-center pt-8 pb-5 px-5">
+                <div className="flex flex-col items-center pt-5 pb-5 px-5">
                     {/* Logo + title row */}
                     <div className="flex items-center gap-3 mb-1">
                         <Image src={tekslogo} alt="Teks Academy Logo" width={52} height={52} className="w-12 h-12 object-contain" />

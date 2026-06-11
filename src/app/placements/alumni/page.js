@@ -229,13 +229,13 @@ const Alumni = () => {
                 key={ele.id}
                 className="mb-2 xl:gap-y-2 w-full flex justify-center items-center flex-col"
               >
-                <div className="w-full flex justify-center items-center">
+                <div className="w-full ">
                   <Image
                     src={ele.imgUrl}
-                    className="h-36 sm:h-32 lg:h-36 2xl:h-40 3xl:h-48 w-full rounded-xl object-cover"
+                    className="h-auto   w-full rounded-xl object-cover"
                     alt={ele.alt}
                     width={300}
-                    height={200}
+                    height={180}
                   />
                 </div>
                 <div className="w-full flex flex-col justify-around">

@@ -28,9 +28,9 @@ const ExploreBranch = ({ branchLocation, data }) => {
     : description?.secondDescription;
 
   return (
-    <div className="main_container mx-auto px-4 lg:px-6 py-8 lg:py-12">
+    <div className="main_container mx-auto px-4 lg:px-6 py-5 lg:py-3">
       {/* Heading Section */}
-      <div className="flex justify-center items-center w-full mb-8">
+      <div className="flex justify-center items-center w-full mb-3">
         <div className="flex flex-col items-center">
           <Heading
             data={heading}
@@ -82,7 +82,7 @@ const ExploreBranch = ({ branchLocation, data }) => {
                         title="title"
                         src={link}
                         width="100%"
-                        height="500"
+                        height="350"
                         loading="lazy"
                         className="rounded-xl shadow-lg border-2 w-full border-gray-200 "
                         allowFullScreen=""

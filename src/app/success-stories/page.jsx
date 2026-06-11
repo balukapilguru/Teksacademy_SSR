@@ -186,7 +186,7 @@ console.log(currentTab,"tab")
 
       {/* NORMAL CARDS (Tab 1 & 2) */}
       {activeTab !== 2 && (
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4">
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 md:gap-3 px-4">
           {allItems.map((item, index) => (
             <div
               key={index}

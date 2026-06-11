@@ -8,7 +8,7 @@ function Faq({ data }) {
   const [open, setOpen] = useState(null);
   
   return (
-    <section className="w-full py-16 bg-white">
+    <section className="w-full py-5 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header - LEFT ALIGNED */}
         <div className="w-full text-left mb-6">

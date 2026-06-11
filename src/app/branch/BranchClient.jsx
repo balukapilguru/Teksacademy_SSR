@@ -553,16 +553,16 @@ export default function BranchClient({ data: initialData = null, branchName = ""
       <section className="md:py-4 xl:py-0 bg-[#fbf5f6]">
         <Excel data={data.Excel} />
       </section>
-      <section className="bg-[#eaf0f6] rounded-lg">
+      {/* <section className="bg-[#eaf0f6] rounded-lg">
         <AboutTeks data={data.AboutTeks} />
-      </section>
-      <section className="md:py-4 xl:py-6 bg-white">
+      </section> */}
+      <section className="md:py-4 xl:py-0 bg-white">
         <Nutshell data={data.careerServices} />
       </section>
       <section className="md:py-4 xl:py-6 bg-[#eaf0f6]">
         <SuccessStoriesComponent successStoriesData={data.ourSuccessStories} />
       </section>
-      <section className="md:py-4 xl:py-6 bg-white">
+      <section className="md:py-4 xl:py-3 bg-white">
         <Awards awards={data.awards} />
       </section>
       <section className="bg-[#fbf5f6]">

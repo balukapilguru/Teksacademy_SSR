@@ -15,7 +15,7 @@ export default function Letstalk({ data }) {
     : "";
 console.log(imageSrc,"letstalk")
   return (
-    <div className="py-2">
+    <div className="py-2 mt-5">
       <div className="bg-[#212121] text-white rounded-2xl flex flex-col md:flex-row items-center justify-between p-8 md:p-12 shadow-lg">
         <div className="max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-bold mb-2">

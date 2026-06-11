@@ -110,7 +110,7 @@ console.log(recruiterCards,"cards")
             </div>
 
             {/* HIGHLIGHTS */}
-            <div className="grid grid-cols-2 gap-4 space-y-3.5 mt-6 bg-[#2C5581] p-4 rounded">
+            <div className="grid grid-cols-2 gap-4 space-y-3.5 mt-6 bg-[#2C5581] p-4 mb-3 rounded">
               {hero.highlights?.map((h) => (
                 <p key={h.id} className="text-md font-medium">
                   • {h.text}
