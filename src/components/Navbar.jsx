@@ -747,15 +747,15 @@ export default function Navbar() {
                 {item.dropdown && item.dropdown.length > 0 ? (
                   <>
                     <button
-                      className="w-full flex items-center justify-between p-2 font-semibold text-left hover:bg-gray-50 rounded text-sm"
+                      className="flex items-center p-2 font-semibold text-left hover:bg-gray-50 rounded text-sm"
                       onClick={() => toggleMobileSubMenu(item.name)}
                     >
                       <span>{item.name}</span>
                       <span>
                         {mobileSubMenu === item.name ? (
-                          <FaAngleUp className="text-xs" />
+                          <FaAngleUp className="text-xs ml-1 mt-2 text-xs" />
                         ) : (
-                          <FaAngleDown className="text-xs" />
+                          <FaAngleDown className="text-xs ml-1 mt-2 text-xs" />
                         )}
                       </span>
                     </button>

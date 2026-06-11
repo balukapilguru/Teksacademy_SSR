@@ -107,7 +107,7 @@ const BannerVideo = () => {
             alt="Homepage Banner"
             width={600}
             height={300}
-            className="rounded-lg shadow-lg object-cover w-full md:h-80 lg:h-96 border border-[#2a619d] transition-transform duration-300 group-hover:scale-[1.02]"
+            className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
             unoptimized
           />
           {/* Play Button */}
