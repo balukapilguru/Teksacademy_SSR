@@ -96,10 +96,10 @@ const Banner = ({
           course={normalizeCourseLabel(selectedCourse || courseLabel || formDetails || branch)}
           courseName={normalizeCourseLabel(selectedCourse || courseLabel || formDetails)}
           source={30}
-          title={"Demo Request"}
+          title={"Request a Demo"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
-          formType="EnrollNow"
+          formType="RequestDemo"
           buttonText={"Enroll Now"}
           successMessage="Thank you! We'll contact you soon."
         />
@@ -165,7 +165,7 @@ const Banner = ({
             className="mt-6 mb-3 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
             onClick={handleOpenModal}
           >
-            Demo Request
+            Request a Demo
           </button>
         </div>
 
