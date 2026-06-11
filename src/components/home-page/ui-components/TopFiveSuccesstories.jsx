@@ -165,9 +165,7 @@ const UnifiedSuccessStories = ({ data }) => {
                       />
                       {item.videoUrl && (
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-                          <div className="bg-white rounded-full p-3 text-[#2a619d] text-xl">
-                            ▶
-                          </div>
+                         
                         </div>
                       )}
                     </div>
@@ -282,54 +280,7 @@ const UnifiedSuccessStories = ({ data }) => {
                   No placement stories available
                 </p>
               ) : (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-full rounded-lg overflow-hidden shadow hover:shadow-lg transition">
-                    <div className="relative aspect-video w-full">
-                      <Image
-                        src={GetData({
-                          url: placedPlacementCards[mobileIndex].image?.src,
-                        })}
-                        alt={
-                          placedPlacementCards[mobileIndex].image?.alt ||
-                          placedPlacementCards[mobileIndex].name
-                        }
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center gap-3 mt-1">
-                    <ArrowBtn
-                      direction="prev"
-                      onClick={() => setMobileIndex((i) => Math.max(0, i - 1))}
-                      disabled={mobileIndex === 0}
-                    />
-                    <div className="flex gap-2">
-                      {Array.from({ length: placedPlacementCards.length }).map(
-                        (_, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setMobileIndex(i)}
-                            className={`h-2 rounded-full transition-all duration-200 ${
-                              i === mobileIndex
-                                ? "bg-[#2a619d] w-5"
-                                : "bg-gray-300 w-2"
-                            }`}
-                          />
-                        )
-                      )}
-                    </div>
-                    <ArrowBtn
-                      direction="next"
-                      onClick={() =>
-                        setMobileIndex((i) =>
-                          Math.min(placedPlacementCards.length - 1, i + 1)
-                        )
-                      }
-                      disabled={mobileIndex === placedPlacementCards.length - 1}
-                    />
-                  </div>
-                </div>
+               null
               )}
             </div>
           </div>
@@ -439,7 +390,7 @@ const UnifiedSuccessStories = ({ data }) => {
               </div>
 
               {/* DOTS NAVIGATION */}
-              <div className="absolute bottom-[-40px] left-0 right-0 flex justify-center gap-3 mt-4">
+              <div className="absolute bottom-[-15px] left-0 right-0 flex justify-center gap-3  mb-4">
                 {learningTestimonialCards.map((_, i) => (
                   <button
                     key={i}

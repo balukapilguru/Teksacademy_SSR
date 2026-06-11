@@ -81,7 +81,7 @@ export default function IndustryProjects({ data }) {
 
         {/* Buttons → ONLY MOBILE */}
         {isMobile && (
-          <div className="flex justify-end mr-3 mt-6">
+          <div className="flex justify-center mr-3 mt-6">
             {!expanded && visibleCount < projects.length && (
               <button
                 onClick={() => {

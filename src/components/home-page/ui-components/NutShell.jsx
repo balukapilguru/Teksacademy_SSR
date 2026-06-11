@@ -163,11 +163,11 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         </div>
 
         {/* CTA Button */}
-        <div className="mt-5">
+        <div className="mt-5 flex justify-center">
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="w-full py-3 rounded-xl border-2 border-[#2a619d] text-[#2a619d] font-bold text-sm tracking-wide hover:bg-[#2a619d] hover:text-white transition-all active:scale-[0.98]"
+            className="md:w-full py-3 px-2 md:px-0 rounded-xl border-2 border-[#2a619d] text-[#2a619d] font-bold text-sm tracking-wide hover:bg-[#2a619d] hover:text-white transition-all active:scale-[0.98]"
           >
             {button?.text || "Request Call Back"}
           </button>

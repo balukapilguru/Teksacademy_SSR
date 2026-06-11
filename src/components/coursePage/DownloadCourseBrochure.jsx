@@ -117,6 +117,7 @@ const DownloadCourseBrochure = ({
       });
 
       const responseData = await response.json();
+      console.log(responseData,"responsee")
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
@@ -205,6 +206,7 @@ const DownloadCourseBrochure = ({
                 <span>{data.button.name}</span>
               </PrimaryButton>
             )}
+            <div className="pl-4 font-semibold text-sm text-[#e7622c]">{data.downloadCount}</div>
           </div>
 
           {/* Right Image */}
