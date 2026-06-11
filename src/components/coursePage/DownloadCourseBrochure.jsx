@@ -156,7 +156,7 @@ const DownloadCourseBrochure = ({
             onClose={() => setShowModal(false)}
             course={courseDisplayName}
             courseName={courseDisplayName}
-            title="Download Brochure"
+            title="Download Curriculum"
             subtitle="Fill in your details to download the course brochure."
             onSubmit={handleSubmit}
             formType="syllabus"

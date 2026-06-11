@@ -46,7 +46,7 @@ import Programfee from "@/components/coursePage/Programfee";
 import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
 import Hiring from "@/components/home-page/ui-components/Hiring";
-import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
+import TopFiveSuccesstories from "@/components/home-page/ui-components/TopFiveSuccesstories";
 
 const isGenericCourseLabel = (value) => {
   const label = typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -305,10 +305,10 @@ export default async function Page({ params }) {
               <Excel data={data.Excel} courseName={courseLabel} />
             ),
           },
-          // {component:data?.ourSuccessStories&&
-          // <div>
-          //   <SuccessStories successStoriesData={data?.ourSuccessStories} />
-          // </div>},
+          {component:data?.ourSuccessStories&&
+          <div>
+            <TopFiveSuccesstories data={data?.ourSuccessStories} />
+          </div>},
          {
   component:
     data?.whyOnline && (
