@@ -69,7 +69,7 @@ import {
 } from "react-icons/fa";
 import { FaRegNewspaper, FaSearch } from "react-icons/fa";
 import { FaBuildingColumns, FaMobileScreen } from "react-icons/fa6";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { TbCertificate } from "react-icons/tb";
 import { LuCircleDotDashed } from "react-icons/lu";
 import { AiFillSafetyCertificate, AiOutlineArrowUp } from "react-icons/ai";
@@ -117,7 +117,7 @@ const DROPDOWN_ICON_MAP = {
 // ============================================
 function getDropdownIcon(drop) {
   const key = drop.title || drop.name || "";
-  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d}" />;
+  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d]" />;
 }
 
 // ============================================
@@ -747,15 +747,15 @@ export default function Navbar() {
                 {item.dropdown && item.dropdown.length > 0 ? (
                   <>
                     <button
-                      className="flex items-center p-2 font-semibold text-left hover:bg-gray-50 rounded text-sm"
+                      className="flex items-center space-x-2 p-2 font-semibold text-left hover:bg-gray-50 rounded text-sm"
                       onClick={() => toggleMobileSubMenu(item.name)}
                     >
                       <span>{item.name}</span>
                       <span>
                         {mobileSubMenu === item.name ? (
-                          <FaAngleUp className="text-xs ml-1 mt-2 text-xs" />
+                          <FaChevronUp className="text-xs" />
                         ) : (
-                          <FaAngleDown className="text-xs ml-1 mt-2 text-xs" />
+                          <FaChevronDown className="text-xs" />
                         )}
                       </span>
                     </button>
@@ -1035,10 +1035,10 @@ export default function Navbar() {
         onClose={handleCloseCareerForm}
         title="1:1 Career Guidance"
         subtitle="Talk to our experts and get personalized career advice."
-        formType="career"
+        formType="career" 
         buttonText="Book My Session"
         successMessage="Thanks! Our career counselor will reach out shortly."
       />
     </>
-  );
+  ); 
 }
