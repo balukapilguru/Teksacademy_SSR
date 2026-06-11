@@ -96,20 +96,22 @@ const APPLY_FOR_JOBS_LABEL = "Apply for Jobs";
 // Icon map for dropdown items
 const DROPDOWN_ICON_MAP = {
   // Resources
-  "Ebook": <FaBook className="text-sm text-[#2a619d]" />,
+  Ebook: <FaBook className="text-sm text-[#2a619d]" />,
   "Video Lectures": <FaVideo className="text-sm text-[#2a619d]" />,
-  "Interview Questions": <FaQuestionCircle className="text-sm text-[#2a619d]" />,
-  
+  "Interview Questions": (
+    <FaQuestionCircle className="text-sm text-[#2a619d]" />
+  ),
+
   // Discover
   "About Us": <FaInfoCircle className="text-sm text-[#2a619d]" />,
-  "Gallery": <FaImages className="text-sm text-[#2a619d]" />,
-  "Media": <MdCampaign className="text-sm text-[#2a619d]" />,
+  Gallery: <FaImages className="text-sm text-[#2a619d]" />,
+  Media: <MdCampaign className="text-sm text-[#2a619d]" />,
   "Contact Us": <MdContactPhone className="text-sm text-[#2a619d]" />,
-  "Support": <MdSupportAgent className="text-sm text-[#2a619d]" />,
-  
+  Support: <MdSupportAgent className="text-sm text-[#2a619d]" />,
+
   // Placements
-  "Alumni": <FaUserGraduate className="text-sm text-[#2a619d]" />,
-  "Recruiters": <FaBuilding className="text-sm text-[#2a619d]" />,
+  Alumni: <FaUserGraduate className="text-sm text-[#2a619d]" />,
+  Recruiters: <FaBuilding className="text-sm text-[#2a619d]" />,
 };
 
 // ============================================
@@ -117,7 +119,11 @@ const DROPDOWN_ICON_MAP = {
 // ============================================
 function getDropdownIcon(drop) {
   const key = drop.title || drop.name || "";
-  return DROPDOWN_ICON_MAP[key] || <LuCircleDotDashed className="text-sm text-[#2a619d]" />;
+  return (
+    DROPDOWN_ICON_MAP[key] || (
+      <LuCircleDotDashed className="text-sm text-[#2a619d]" />
+    )
+  );
 }
 
 // ============================================
@@ -136,20 +142,20 @@ export default function Navbar() {
   const [isLoading, setIsLoading] = useState(true);
   const [backtoTop, setbacktoTop] = useState(false);
   const [showCareer, setshowCareer] = useState(false);
-  
+
   // ============================================
   // REFS SECTION
   // ============================================
   const menuRef = useRef(null);
   const headerRef = useRef(null);
-  
+
   // ============================================
   // HOOKS SECTION
   // ============================================
   const router = useRouter();
   const pathname = usePathname(); // Fixed: moved this before usage
   const { mainNavbarVisible } = useNavbar();
-  
+
   // Define route-based conditions after pathname is declared
   const isFindMyCourse = pathname === "/find-my-course";
   const isBlogs = pathname === "/blogs";
@@ -168,7 +174,9 @@ export default function Navbar() {
     const fetchNav = async () => {
       try {
         setIsLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+        const baseUrl =
+          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+          process.env.NEXT_TEKS_SSR_API_URL;
         const response = await fetch(`${baseUrl}/api/v1/home/navbar`, {
           method: "GET",
           next: { revalidate: 60 },
@@ -245,32 +253,41 @@ export default function Navbar() {
   // ============================================
   // MEMOIZED DATA PROCESSING
   // ============================================
-  const { topbar, mainbar, elements, topbarItems, coursesMenu } = useMemo(() => {
-    if (!navData)
+  const { topbar, mainbar, elements, topbarItems, coursesMenu } =
+    useMemo(() => {
+      if (!navData)
+        return {
+          topbar: {},
+          mainbar: {},
+          elements: [],
+          topbarItems: [],
+          coursesMenu: null,
+        };
+
+      const topbar = navData.topbar || {};
+      const mainbar = navData.mainbar || {};
+      const elements = mainbar.elements || [];
+
+      const topbarItemsObj = topbar.items || {};
+      const topbarItemsArray = Object.entries(topbarItemsObj).map(
+        ([key, value]) => {
+          if (!value.type && value.link) {
+            return { ...value, type: "link", key };
+          }
+          return { ...value, key };
+        },
+      );
+
+      const coursesMenu = elements.find((el) => el.name === "Courses");
+
       return {
-        topbar: {},
-        mainbar: {},
-        elements: [],
-        topbarItems: [],
-        coursesMenu: null,
+        topbar,
+        mainbar,
+        elements,
+        topbarItems: topbarItemsArray,
+        coursesMenu,
       };
-
-    const topbar = navData.topbar || {};
-    const mainbar = navData.mainbar || {};
-    const elements = mainbar.elements || [];
-
-    const topbarItemsObj = topbar.items || {};
-    const topbarItemsArray = Object.entries(topbarItemsObj).map(([key, value]) => {
-      if (!value.type && value.link) {
-        return { ...value, type: "link", key };
-      }
-      return { ...value, key };
-    });
-
-    const coursesMenu = elements.find((el) => el.name === "Courses");
-
-    return { topbar, mainbar, elements, topbarItems: topbarItemsArray, coursesMenu };
-  }, [navData]);
+    }, [navData]);
 
   const socialIcons = useMemo(
     () => ({
@@ -279,7 +296,7 @@ export default function Navbar() {
       youtube: FaYoutube,
       linkedin: FaLinkedinIn,
     }),
-    []
+    [],
   );
 
   // ============================================
@@ -324,7 +341,7 @@ export default function Navbar() {
                     item.type === "text" ||
                     (item.type === "link" &&
                       item.key !== "login" &&
-                      item.key !== "button")
+                      item.key !== "button"),
                 )
                 .map((item, index) => {
                   if (item.type === "text") {
@@ -348,8 +365,8 @@ export default function Navbar() {
                           isFindMyCourse
                             ? "/find-my-course"
                             : isBlogs
-                            ? "/blogs"
-                            : item.link || "#"
+                              ? "/blogs"
+                              : item.link || "#"
                         }
                         target="_self"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
@@ -357,9 +374,7 @@ export default function Navbar() {
                         {item.name === "Download Mobile App" && (
                           <FaMobileScreen size={14} />
                         )}
-                        {item.name === "Blogs" && (
-                          <FaRegNewspaper size={14} />
-                        )}
+                        {item.name === "Blogs" && <FaRegNewspaper size={14} />}
                         {item.name === "Find My Course" && (
                           <FaSearch size={14} />
                         )}
@@ -378,7 +393,7 @@ export default function Navbar() {
                   (item) =>
                     item.type === "button" ||
                     item.key === "login" ||
-                    item.type === "socialMedia"
+                    item.type === "socialMedia",
                 )
                 .map((item, index) => {
                   if (item.type === "button") {
@@ -492,7 +507,7 @@ export default function Navbar() {
           </div>
 
           {/* DESKTOP NAVIGATION MENU */}
-      <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
+          <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
             {elements.map((item, index) => (
               <li
                 key={`desktop-nav-${index}`}
@@ -629,7 +644,6 @@ export default function Navbar() {
                                   width={40}
                                   height={40}
                                   unoptimized
-                 
                                   className="w-full h-full object-cover"
                                 />
                               </div>
@@ -886,9 +900,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Link
-                    href={
-                      item.link && isValidLink(item.link) ? item.link : "#"
-                    }
+                    href={item.link && isValidLink(item.link) ? item.link : "#"}
                     className="block p-2 font-semibold hover:bg-gray-50 rounded text-sm"
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -907,17 +919,28 @@ export default function Navbar() {
 
                 if (item.type === "link" || (item.link && !item.type)) {
                   if (!isValidLink(item.link)) return null;
-
-                  return (
+                  const isDownloadApp =
+                    item.name?.toLowerCase().includes("download") &&
+                    item.link?.startsWith("http");
+                  return isDownloadApp ? (
+                    <a
+                      key={`mobile-top-link-${index}`}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
+                    >
+                      <FaMobileScreen size={15} />
+                      <span>{item.name}</span>
+                    </a>
+                  ) : (
                     <Link
                       key={`mobile-top-link-${index}`}
                       href={isFindMyCourse ? "/find-my-course" : item.link}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
                     >
-                      {item.name === "Download Mobile App" && (
-                        <FaMobileScreen size={15} />
-                      )}
                       {item.name === "Blogs" && <FaRegNewspaper size={15} />}
                       {item.name === "Find My Course" && <FaSearch size={15} />}
                       <span>{item.name}</span>
@@ -1018,13 +1041,13 @@ export default function Navbar() {
       {/* BACK TO TOP BUTTON */}
       {/* ============================================ */}
       {scrolled && (
-       <button
-  onClick={scrollToTop}
-  className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
-  aria-label="Back to top"
->
-  <AiOutlineArrowUp size={18} />
-</button>
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 cursor-pointer bg-[#2a619d] text-white h-10 w-10 rounded-full shadow-2xl hover:bg-[#e04a38] transition-all duration-300 z-50 flex items-center justify-center"
+          aria-label="Back to top"
+        >
+          <AiOutlineArrowUp size={18} />
+        </button>
       )}
 
       {/* ============================================ */}
@@ -1035,10 +1058,10 @@ export default function Navbar() {
         onClose={handleCloseCareerForm}
         title="1:1 Career Guidance"
         subtitle="Talk to our experts and get personalized career advice."
-        formType="career" 
+        formType="career"
         buttonText="Book My Session"
         successMessage="Thanks! Our career counselor will reach out shortly."
       />
     </>
-  ); 
+  );
 }
