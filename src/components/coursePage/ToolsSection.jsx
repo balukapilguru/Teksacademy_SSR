@@ -92,7 +92,7 @@ const [expanded, setExpanded] = useState(false);
   </div>
 
   {/* ✅ Mobile Buttons ONLY */}
-  <div className="flex justify-end mr-4 mt-6 md:hidden">
+  <div className="flex justify-center mr-4 mt-6 md:hidden">
     {!expanded && visibleCount < roles.length && (
       <button
         onClick={() => {

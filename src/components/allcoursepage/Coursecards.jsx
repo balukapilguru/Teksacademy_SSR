@@ -74,7 +74,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-4.5">
             {course.tags?.map((tag, i) => {
               let bgColor = "";
               let textColor = "";
@@ -82,7 +82,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
               if (tag.toLowerCase().includes("placement")) {
                 bgColor = "bg-[#f8efe9]";
                 textColor = "text-[#8d6420]";
-              } else if (tag.toLowerCase().includes("no cost emi")) {
+              } else if (tag.toLowerCase().includes("")) {
                 bgColor = "bg-[#e6f8f1]";
                 textColor = "text-[#2e7d32]";
               }
@@ -90,7 +90,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
               return (
                 <span
                   key={i}
-                  className={`text-xs px-3 py-1 rounded-md font-medium border ${bgColor} ${textColor} border-transparent`}
+                  className={`text-xs px-2 py-1 rounded-md font-medium border ${bgColor} ${textColor} border-transparent`}
                 >
                   {tag}
                 </span>
@@ -113,7 +113,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
 
           {/* Buttons */}
           <div
-            className={`flex gap-4 mt-4 mb-1 ${isSingle ? "justify-center" : "justify-between"
+            className={`flex gap-4 mt-1 mb-1 ${isSingle ? "justify-center" : "justify-between"
               }`}
           >
             {buttons.slice().reverse().map((btn, index) => (

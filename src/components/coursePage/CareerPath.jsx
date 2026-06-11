@@ -203,7 +203,7 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
       {/* ✅ BUTTON ONLY MOBILE */}
       {isMobile && (
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-center mt-2">
           {!expanded && visibleCount < data?.jobCards?.length && (
             <button
               onClick={() => {

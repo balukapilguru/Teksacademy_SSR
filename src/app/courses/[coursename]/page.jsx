@@ -153,6 +153,8 @@ export default async function Page({ params }) {
     tags: data.banner.tags || [],
     button: data.banner.button,
     bgImage: data.banner.bgImage,
+    bannerrating:data.banner.courseRating,
+    bannerRiview:data.banner.reviewsCount,
     bannerImage: data.banner.bannerImage,
   };
 

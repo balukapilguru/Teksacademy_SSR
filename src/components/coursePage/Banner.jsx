@@ -10,7 +10,6 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import Popupform from "../clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-
 const Banner = ({
   data,
   formDetails,
@@ -23,7 +22,9 @@ const Banner = ({
     if (!value) return "";
     if (typeof value === "string") return value;
     if (Array.isArray(value)) {
-      const firstValue = value.find((item) => item !== undefined && item !== null);
+      const firstValue = value.find(
+        (item) => item !== undefined && item !== null
+      );
       return normalizeCourseLabel(firstValue);
     }
     if (typeof value === "object") {
@@ -48,26 +49,32 @@ const Banner = ({
   if (!data) return null;
 
   const handleOpenModal = () => {
-    const courseObj = courseLabel || normalizeCourseLabel(data?.banner?.name) || normalizeCourseLabel(formDetails) || branch || "";
+    const courseObj =
+      courseLabel ||
+      normalizeCourseLabel(data?.banner?.name) ||
+      normalizeCourseLabel(formDetails) ||
+      branch ||
+      "";
     setSelectedCourse(courseObj);
     setShowModal(true);
   };
 
   const handleFormSubmit = async (formValues, mappedPayload) => {
     setIsSubmitting(true);
-    console.log("Mapped payload being sent:", mappedPayload);
 
     try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mappedPayload),
+        }
+      );
 
       const responseData = await response.json();
-      console.log("bannerbanner", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
@@ -82,34 +89,35 @@ const Banner = ({
       setIsSubmitting(false);
     }
   };
-
+const rating = parseFloat(data?.bannerrating);
+const review = parseFloat(data?.bannerRiview)
   return (
     <div className="relative main_container rounded-2xl text-white overflow-hidden">
-      {/* Debug log to check if Popupform renders */}
-      {console.log("Modal state:", showModal)}
-      
-      {/* Popupform for all pages when modal is open */}
+      {/* Popup */}
       {showModal && (
         <Popupform
           show={showModal}
           onClose={() => !isSubmitting && setShowModal(false)}
-          course={normalizeCourseLabel(selectedCourse || courseLabel || formDetails || branch)}
-          courseName={normalizeCourseLabel(selectedCourse || courseLabel || formDetails)}
+          course={normalizeCourseLabel(
+            selectedCourse || courseLabel || formDetails || branch
+          )}
+          courseName={normalizeCourseLabel(
+            selectedCourse || courseLabel || formDetails
+          )}
           source={30}
           title={"Request a Demo"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
           formType="RequestDemo"
-          buttonText={"Enroll Now"}
+          buttonText={"Request a Demo"}
           successMessage="Thank you! We'll contact you soon."
         />
       )}
 
-      {/* Background Gradient */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] z-0" />
 
-      {/* Background Image */}
-      <div className="absolute w-full inset-0 z-0 hidden md:block ">
+      <div className="absolute w-full inset-0 z-0 hidden md:block">
         <Image
           src={bgImage}
           alt="Background Pattern"
@@ -122,56 +130,75 @@ const Banner = ({
 
       <Particles />
 
-      <div className="relative z-10 max-w-8xl pl-4 pr-2  lg:pr-0 lg:pt-0 lg:pb-0 grid grid-cols-1  lg:grid-cols-2 lg:gap-10 items-center">
-        {/* LEFT COLUMN */}
-        <div className="md:pl-8 mt-2 lg:pt-0">
+      <div className="relative z-10 max-w-8xl pl-4 pr-2 lg:pr-0 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 items-center">
+        {/* LEFT */}
+        <div className="md:pl-8 mt-2">
+        
           <Bannerheading
             text={data.mainHeading}
             data={data?.mainHeading}
             className="mt-4"
           />
 
-          {data.description && (
+          {data.description ? (
             <div className="mt-2 text-gray-300 text-base text-justify sm:text-lg leading-relaxed">
               {data.description}
             </div>
-          )}
-
-          {data.desc && !data.description && (
+          ) : data.desc ? (
             <div className="mt-2 text-gray-300 text-base sm:text-lg leading-relaxed">
               {data.desc}
             </div>
-          )}
-
-          {!data.description && !data.desc && (
+          ) : (
             <div className="mt-2 text-gray-300 text-base sm:text-lg leading-relaxed">
               Step into the tech world with industry-ready Full Stack expertise.
             </div>
           )}
 
+          {/* ⭐ FIXED: Rating OUTSIDE condition */}
+         {!isNaN(rating) && rating > 0 && (
+  <div className="mt-4 flex items-center gap-2 text-white font-medium">
+    <span className="text-lg">{rating.toFixed(1)}</span>
+
+    <div className="flex text-yellow-400">
+      {[...Array(5)].map((_, i) => (
+        <span key={i}>★</span>
+      ))}
+    </div>
+{!isNaN(review) && review > 0 && (
+    <span className="text-gray-300 text-sm">
+      {review} Reviews
+    </span>
+)}
+  </div>
+)}
+
+          {/* CTA */}
           {data.button && !category && !isSelfPaced && (
-            <div className="mt-4 lg:mb-4 flex flex-wrap gap-4">
-              <PrimaryButton
-                variant="light"
-                className="text-lg"
-                onClick={handleOpenModal}
-              >
-                {data.button.name}
-              </PrimaryButton>
+            <div className="mt-2 lg:mb-4 flex flex-col gap-3">
+              <div className="flex flex-wrap gap-4">
+                <PrimaryButton
+                  variant="light"
+                  className="text-lg"
+                  onClick={handleOpenModal}
+                >
+                  {data.button.name}
+                </PrimaryButton>
+              </div>
             </div>
           )}
-          
-          <button 
-            className="mt-6 mb-3 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300" 
+
+          {/* Secondary Button */}
+          <button
+            className="mt-3 mb-3 cursor-pointer lg:mb-4 flex flex-wrap gap-4 text-lg bg-transparent border border-white text-white px-6 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-300"
             onClick={handleOpenModal}
           >
             Request a Demo
           </button>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="hidden  md:flex justify-center md:justify-end relative lg:mt-0">
-          <div className="w-full max-w-lg md:max-w-lg ">
+        {/* RIGHT */}
+        <div className="hidden md:flex justify-center md:justify-end relative">
+          <div className="w-full max-w-lg">
             <Image
               src={GetData({ url: data?.bannerImage?.src })}
               alt={data.imageAlt || "Course Banner"}
