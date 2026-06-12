@@ -10,6 +10,19 @@ const BannerVideo = () => {
   const [bannerData, setBannerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fetch banner data from backend API
   useEffect(() => {
@@ -57,8 +70,14 @@ const BannerVideo = () => {
     return GetData({ url: bannerData.video });
   };
 
-  // Get thumbnail URL - uses local image as default
+  // Get thumbnail URL - uses mobile thumbnail on mobile devices, API desktop thumbnail as fallback
   const getThumbnailUrl = () => {
+    // Use mobile-specific thumbnail on mobile devices
+    if (isMobile) {
+      return "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp";
+    }
+    
+    // Desktop: use API thumbnail or local default
     if (!bannerData?.thumbnail) {
       return "/src/assets/Video_thumbnail.jpg";
     }
@@ -109,6 +128,7 @@ const BannerVideo = () => {
             height={300}
             className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
             unoptimized
+            priority // Add priority for faster loading
           />
           {/* Play Button */}
           <div className="absolute top-4 right-4">
