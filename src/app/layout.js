@@ -13,6 +13,7 @@ import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
 import { MobileBottomNav } from "@/components/home-page/MobileBottomNav";
 import LayoutWrapper from "@/components/clientcomponents/LayoutWrapper";
+import { DesktopChatBot } from "@/components/DesktopChatBot"; // Import desktop chatbot
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -100,6 +101,9 @@ export default async function RootLayout({ children }) {
         
         {/* Mobile Bottom Navigation - Only visible on mobile devices */}
         <MobileBottomNav />
+        
+        {/* Desktop ChatBot - Only visible on desktop devices */}
+        <DesktopChatBot />
       </body>
     </html>
   );

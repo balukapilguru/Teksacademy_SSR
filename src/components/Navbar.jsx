@@ -503,7 +503,7 @@ export default function Navbar() {
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <MdClose size={28} /> : <MdMenu size={40} />}
+            {mobileMenuOpen ? <MdClose size={24} /> : <MdMenu size={30} />}
           </div>
 
           {/* DESKTOP NAVIGATION MENU */}
