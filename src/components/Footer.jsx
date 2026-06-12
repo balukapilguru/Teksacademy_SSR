@@ -30,6 +30,7 @@ const branchURL = [
   { url: 'best-software-training-institute-salem', address: 'Salem', contact: '+91 97885 77788', mapLink: 'https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8' },
   { url: 'best-software-training-institute-secunderabad', address: 'Secunderabad', contact: '+91 92814 66365', mapLink: 'https://maps.app.goo.gl/NHgBnjTc11wp2WUQ7' },
   { url: 'best-software-training-institute-visakhapatnam', address: 'Visakhapatnam', contact: '+91 91333 08352', mapLink: 'https://maps.app.goo.gl/KKTvLKe9hmEgBhtF8' },
+{ url: 'best-software-training-institute-kompally', address: 'Kompally', contact: '+91 7207657474', mapLink: 'https://www.google.com/maps/place/Teks+Academy+-+Kompally/data=!4m2!3m1!1s0x0:0x85fb983df3a2d364?sa=X&ved=1t:2428&hl=en-GB&ictx=111' },
 ];
 
 // Map API platform names to icon components

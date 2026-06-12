@@ -34,6 +34,7 @@ const BRANCH_LABELS = {
   bangalore: "Bangalore",
   visakhapatnam: "Visakhapatnam",
   salem: "Salem",
+  kompally: "Kompally",
 };
 
 const getBranchNameFromSlug = (value = "") => {
@@ -164,7 +165,7 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
     title: data.title || data.heading || data.mainHeading,
     subtitle: data.subtitle || data.subTitle || data.label || "learn IT courses",
     about: data.about || data.description || data.desc,
-    buttonText: data.button?.text || data.button?.name || data.ctaText || "Enroll Now",
+    buttonText: data.button?.text || data.button?.name || data.ctaText || "Get Directions",
     buttonLink: data.button?.link || data.ctaLink || "/discover/contact-us",
     background:
       data.backgroundImage?.src ||
@@ -543,9 +544,9 @@ export default function BranchClient({ data: initialData = null, branchName = ""
         onClose={() => setShowEnrollPopup(false)}
         university={getBranchLabel({ branchName, branchLocation: data.branchLocation, heroData: data.heroSection })}
         formType="enquiry"
-        title="Enroll Now"
+        title="Get Directions to Our Branch"
         subtitle="Fill in your details and verify your mobile number to reserve your seat."
-        buttonText="Enroll Now"
+        buttonText="Get Directions"
         onSubmit={handleSubmit}
       />
       <Topscroll data={data.topScroll} />

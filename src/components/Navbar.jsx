@@ -503,11 +503,11 @@ export default function Navbar() {
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <MdClose size={24} /> : <MdMenu size={30} />}
+            {mobileMenuOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
           </div>
 
           {/* DESKTOP NAVIGATION MENU */}
-          <ul className="hidden lg:flex items-center sm:text-sm md:text-md xl:text-sm 2xl:text-sm 3xl:text-sm lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
+          <ul className="hidden lg:flex items-center text-md sm:text-sm md:text-md xl:text-md 2xl:text-sm 3xl:text-sm lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
             {elements.map((item, index) => (
               <li
                 key={`desktop-nav-${index}`}
