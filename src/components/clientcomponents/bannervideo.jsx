@@ -17,10 +17,10 @@ const BannerVideo = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -34,14 +34,14 @@ const BannerVideo = () => {
           method: "GET",
           next: { revalidate: 60 },
         });
-        
+
         if (!response.ok) {
           throw new Error(`Failed to fetch banner data: ${response.status}`);
         }
-        
+
         const result = await response.json();
         console.log("Banner API Response:", result);
-        
+
         // Extract banner data from the response
         const banner = result?.data?.banner;
         if (banner) {
@@ -49,7 +49,7 @@ const BannerVideo = () => {
         } else {
           throw new Error("No banner data found in API response");
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error("Error fetching banner data:", err);
@@ -57,7 +57,7 @@ const BannerVideo = () => {
         setLoading(false);
       }
     };
-    
+
     fetchBannerData();
   }, []);
 
@@ -76,7 +76,7 @@ const BannerVideo = () => {
     if (isMobile) {
       return "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp";
     }
-    
+
     // Desktop: use API thumbnail or local default
     if (!bannerData?.thumbnail) {
       return "/src/assets/Video_thumbnail.jpg";
@@ -165,20 +165,20 @@ const BannerVideo = () => {
               {offeredBy.heading[0]}
             </h3>
           )}
-          
+
           {/* Logos Grid/Row - Dynamically from API */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 lg:gap-8 items-center">
             {offeredBy.image.map((logo, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center p-2 md:p-1 bg-white rounded-lg shadow-sm"
+                className="flex items-center justify-center lg:p-2 bg-white rounded-lg shadow-sm"
               >
                 <Image
                   src={GetData({ url: logo.src })}
                   alt={logo.alt || `Partner logo ${index + 1}`}
-                  width={100}
-                  height={100}
-                  className="object-contain h-12 md:h-16 w-auto"
+                  width={180}
+                  height={130}
+                  className="object-contain h-16 md:h-16 w-full" // Changed from h-12 to h-16 on mobile
                   unoptimized
                 />
               </div>
