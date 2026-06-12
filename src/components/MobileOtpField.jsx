@@ -16,13 +16,15 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const [isVerified, setIsVerified] = useState(false);
   const [canSendOtp, setCanSendOtp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
   const isOtpComplete = otp.every((digit) => digit !== "");
 
-  // Get API URL from environment variable
   const API_URL = blogsApplyBaseUrl;
 
-  useEffect(() => { onVerifiedRef.current = onVerified; }, [onVerified]);
+  useEffect(() => { 
+    onVerifiedRef.current = onVerified; 
+  }, [onVerified]);
 
   useEffect(() => {
     if (showOtp && !isVerified) {
@@ -39,7 +41,8 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
       setIsVerified(false);
       setTimer(0);
       setIsResendDisabled(true);
-      setCanSendOtp(true);
+      setCanSendOtp(true); // Reset to true when number changes
+      setOtpError("");
       if (onVerifiedRef.current) onVerifiedRef.current(false);
     }
   }, [value]);
@@ -50,7 +53,11 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     if (showOtp && isResendDisabled && timer > 0) {
       interval = setInterval(() => {
         setTimer((prev) => {
-          if (prev <= 1) { clearInterval(interval); setIsResendDisabled(false); return 0; }
+          if (prev <= 1) { 
+            clearInterval(interval); 
+            setIsResendDisabled(false); 
+            return 0; 
+          }
           return prev - 1;
         });
       }, 1000);
@@ -61,7 +68,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const formatTimer = (s) =>
     `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
-  // Send OTP - using env variable
+  // Send OTP
   const handleSendOtp = useCallback(async () => {
     if (isVerified) return;
     if (!value || !/^\d{10}$/.test(value)) {
@@ -70,6 +77,8 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     }
 
     setIsLoading(true);
+    setOtpError("");
+    
     try {
       const res = await fetch(buildApiUrl(API_URL, "/lead/send-otp"), {
         method: "POST",
@@ -82,11 +91,11 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         setShowOtp(true);
         setOtp(Array(6).fill(""));
         setIsVerified(false);
-        setCanSendOtp(false);
-        setTimer(300);
+        setCanSendOtp(false); // Disable send OTP button after sending
+        setTimer(300); // 5 minutes
         setIsResendDisabled(true);
+        setOtpError("");
         if (onVerifiedRef.current) onVerifiedRef.current(false);
-
         toast.success("OTP sent successfully!");
       } else {
         toast.error(data?.message || "Failed to send OTP");
@@ -99,12 +108,17 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     }
   }, [value, isVerified, API_URL]);
 
-  // Verify OTP - using env variable
+  // Verify OTP
   const handleVerifyOtp = useCallback(async () => {
     const finalOtp = otp.join("");
-    if (finalOtp.length !== 6) { toast.error("Enter the complete 6-digit OTP"); return; }
+    if (finalOtp.length !== 6) { 
+      setOtpError("Enter the complete 6-digit OTP");
+      return; 
+    }
 
     setIsLoading(true);
+    setOtpError("");
+    
     try {
       const res = await fetch(buildApiUrl(API_URL, "/lead/verify-otp"), {
         method: "POST",
@@ -117,15 +131,23 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         setIsVerified(true);
         setShowOtp(false);
         setOtp(Array(6).fill(""));
+        setOtpError("");
+        setCanSendOtp(false); // Keep disabled since verified
         toast.success("Mobile number verified successfully!");
         if (onVerifiedRef.current) onVerifiedRef.current(true);
       } else {
         setIsVerified(false);
-        if (onVerifiedRef.current) onVerifiedRef.current(false);
+        setOtpError(data?.message || "Invalid OTP. Please try again.");
         toast.error(data?.message || "Invalid OTP. Please try again.");
+        if (onVerifiedRef.current) onVerifiedRef.current(false);
+        // Clear OTP fields on wrong OTP
+        setOtp(Array(6).fill(""));
+        // Focus on first input
+        setTimeout(() => otpInputRefs.current[0]?.focus(), 100);
       }
     } catch (err) {
       console.error("Verify OTP error:", err);
+      setOtpError("Verification failed. Please try again.");
       toast.error("Verification failed. Please try again.");
     } finally {
       setIsLoading(false);
@@ -134,6 +156,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
 
   const handleOtpChange = (val, index) => {
     if (!/^\d?$/.test(val)) return;
+    setOtpError("");
     const newOtp = [...otp];
     newOtp[index] = val;
     setOtp(newOtp);
@@ -143,7 +166,10 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       otpInputRefs.current[index - 1]?.focus();
-      const newOtp = [...otp]; newOtp[index - 1] = ""; setOtp(newOtp);
+      const newOtp = [...otp]; 
+      newOtp[index - 1] = ""; 
+      setOtp(newOtp);
+      setOtpError("");
     }
     if (e.key === "ArrowLeft" && index > 0) otpInputRefs.current[index - 1]?.focus();
     if (e.key === "ArrowRight" && index < 5) otpInputRefs.current[index + 1]?.focus();
@@ -153,6 +179,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
     if (!pasted) return;
+    setOtpError("");
     const newOtp = [...otp];
     pasted.split("").forEach((ch, i) => { if (index + i < 6) newOtp[index + i] = ch; });
     setOtp(newOtp);
@@ -162,15 +189,18 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const handleCloseOtpModal = () => {
     setShowOtp(false);
     setOtp(Array(6).fill(""));
-    // Re-affirm the current phone value to parent so it does not get cleared
+    setOtpError("");
+    setTimer(0);
+    setIsResendDisabled(true);
+    setCanSendOtp(true); // IMPORTANT: Re-enable the Send OTP button when closing popup
+    // Don't reset isVerified - keep it as is
     try {
       if (typeof onChange === "function") {
-        // prefer sending raw value; parent handlers should accept event or raw value
         onChange(value);
       }
       if (onVerifiedRef.current) onVerifiedRef.current(isVerified);
     } catch (e) {
-      // ignore
+      console.error(e);
     }
   };
 
@@ -198,9 +228,13 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         </div>
 
         {!isVerified && (
-          <button type="button" onClick={handleSendOtp} disabled={!canSendOtp || isLoading}
+          <button 
+            type="button" 
+            onClick={handleSendOtp} 
+            disabled={!canSendOtp || isLoading}
             className={`px-4 py-2 rounded-md text-xs font-semibold transition-all whitespace-nowrap
-              ${!canSendOtp || isLoading ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-[#2a619d] text-white hover:bg-[#214d7d] active:scale-95 shadow-sm"}`}>
+              ${(!canSendOtp || isLoading) && !showOtp ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-[#2a619d] text-white hover:bg-[#214d7d] active:scale-95 shadow-sm"}
+              ${showOtp ? "opacity-50 cursor-not-allowed" : ""}`}>
             {isLoading && !showOtp
               ? <span className="flex items-center gap-1.5">
                   <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -249,6 +283,13 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
             </div>
 
             <div className="px-6 py-5">
+              {/* OTP Error Message */}
+              {otpError && (
+                <div className="mb-4 p-2 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-red-600 text-sm text-center">{otpError}</p>
+                </div>
+              )}
+
               <div className="mb-5 flex justify-between gap-2">
                 {otp.map((val, i) => (
                   <input
@@ -264,7 +305,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
                     inputMode="numeric"
                     className={`h-12 w-12 rounded-lg border-2 text-center text-lg font-semibold focus:outline-none transition-all sm:h-14 sm:w-14
                       ${val ? "border-[#2a619d] bg-white text-[#2a619d]" : "border-gray-300 bg-white text-gray-900"}
-                      focus:border-[#2a619d] focus:ring-2 focus:ring-[#2a619d]/20`}
+                      ${otpError ? "border-red-500" : "focus:border-[#2a619d] focus:ring-2 focus:ring-[#2a619d]/20"}`}
                   />
                 ))}
               </div>

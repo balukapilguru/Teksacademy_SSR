@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { MobileOtpField } from "./MobileOtpField";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import { COURSE_OPTIONS, BRANCH_OPTIONS } from "@/config/formConfig";
@@ -13,8 +14,7 @@ const ALL_FIELDS = {
   phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
   course: { id: "course", label: "Course", type: "course", required: true },
   career: { id: "career", label: "I want a career in", type: "select", required: true, options: COURSE_OPTIONS },
-    // The career selector uses the same approved course options as the main course dropdown.
-  qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder:"select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
+  qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder: "select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
   prefferd: { id: "prefferd", label: "Preferred mode", type: "select", required: true, options: ["Online (Live)", "Offline (Classroom)", "Hybrid"] },
   branch: { id: "branch", label: "Branch", type: "select", required: true, options: BRANCH_OPTIONS },
   city: { id: "city", label: "City", type: "text", required: true, placeholder: "Enter your city" },
@@ -87,7 +87,6 @@ const normalizeInitialValue = (fieldId, value) => {
   if (fieldId === "course" || fieldId === "career") {
     return normalizeCourseInput(value);
   }
-
   return value || "";
 };
 
@@ -128,7 +127,6 @@ export default function ReusableForm({
       reserveSpot: ["name", "email", "phone", "course", "branch"],
       Enquirynow: ["name", "email", "phone", "course", "branch"],
       RequestDemo: ["name", "email", "phone", "course", "branch"]
-      
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
@@ -260,7 +258,8 @@ export default function ReusableForm({
       if (error) newErrors[fieldId] = error;
     });
 
-    if (fields.includes("phone") && !isOtpVerified) {
+    // Only check OTP verification if phone field exists and has a value
+    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
       newErrors.phone = "Please verify your mobile number with OTP";
     }
 
@@ -273,10 +272,23 @@ export default function ReusableForm({
     if (errors[fieldId]) {
       setErrors(prev => ({ ...prev, [fieldId]: "" }));
     }
+    
+    // Reset OTP verification when phone number changes
+    if (fieldId === "phone") {
+      setIsOtpVerified(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Additional validation for OTP
+    const fields = getFieldsForType();
+    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
+      toast.error("Please verify your mobile number with OTP");
+      return;
+    }
+    
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -286,6 +298,7 @@ export default function ReusableForm({
       
       if (onSubmit) {
         await onSubmit(formValues, payload);
+        toast.success(successMessage);
       } else {
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
@@ -298,11 +311,18 @@ export default function ReusableForm({
           throw new Error(errorData.message || "Submission failed");
         }
         
+        const result = await response.json();
+        console.log("Submission success:", result);
+        
+        // Show success message
+        toast.success(successMessage);
+        
+        // Redirect to thank you page
         router.push("/thankyou");
       }
     } catch (error) {
       console.error("Submission error:", error);
-      alert(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -319,12 +339,18 @@ export default function ReusableForm({
       return (
         <div key={fieldId} className="mb-4">
           <MobileOtpField
-            value={value}
+            value={value || ""}
             onChange={(e) => {
-              const v = typeof e === "string" ? e : e && e.target ? e.target.value : "";
+              const v = typeof e === "string" ? e : (e && e.target ? e.target.value : "");
               handleChange(fieldId, v);
             }}
-            onVerified={setIsOtpVerified}
+            onVerified={(verified) => {
+              setIsOtpVerified(verified);
+              // Clear phone error when verified
+              if (verified && errors.phone) {
+                setErrors(prev => ({ ...prev, phone: "" }));
+              }
+            }}
             error={error}
           />
         </div>
@@ -343,7 +369,7 @@ export default function ReusableForm({
             </label>
             <input
               type="text"
-              value={fixedCourseValue || value}
+              value={fixedCourseValue || value || ""}
               disabled
               className="w-full px-4 py-2 border rounded-md text-sm bg-gray-100 cursor-not-allowed"
             />
@@ -424,7 +450,7 @@ export default function ReusableForm({
             {field.label} <span className="text-red-500">*</span>
           </label>
           <select
-            value={value}
+            value={value || ""}
             onChange={(e) => handleChange(fieldId, e.target.value)}
             className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
@@ -465,7 +491,7 @@ export default function ReusableForm({
             {field.label} <span className="text-red-500">*</span>
           </label>
           <select
-            value={value}
+            value={value || ""}
             onChange={(e) => handleChange(fieldId, e.target.value)}
             className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
@@ -490,7 +516,7 @@ export default function ReusableForm({
           </label>
           <textarea
             rows={field.rows}
-            value={value}
+            value={value || ""}
             onChange={(e) => handleChange(fieldId, e.target.value)}
             placeholder={field.placeholder}
             className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
@@ -508,7 +534,7 @@ export default function ReusableForm({
         </label>
         <input
           type={field.type}
-          value={value}
+          value={value || ""}
           onChange={(e) => handleChange(fieldId, e.target.value)}
           placeholder={field.placeholder}
           className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500

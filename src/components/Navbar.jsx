@@ -368,7 +368,7 @@ export default function Navbar() {
                               ? "/blogs"
                               : item.link || "#"
                         }
-                        target="_self"
+                        target="_blank"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                       >
                         {item.name === "Download Mobile App" && (
@@ -491,7 +491,7 @@ export default function Navbar() {
                 width={151}
                 height={48}
                 unoptimized
-                className="h-20 w-full object-contain md:h-12"
+                className="h-20 w-full object-contain md:h-12 xs:width-[120px] sm:w-[120px] md:w-[200px] lg:w-[280px] xl:w-[320px] 2xl:w-[320px] 3xl:w-[320px]"
                 priority
               />
             </Link>
@@ -503,11 +503,11 @@ export default function Navbar() {
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <MdClose size={28} /> : <MdMenu size={40} />}
+            {mobileMenuOpen ? <MdClose size={24} /> : <MdMenu size={30} />}
           </div>
 
           {/* DESKTOP NAVIGATION MENU */}
-          <ul className="hidden lg:flex items-center lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
+          <ul className="hidden lg:flex items-center sm:text-sm md:text-md xl:text-sm 2xl:text-sm 3xl:text-sm lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
             {elements.map((item, index) => (
               <li
                 key={`desktop-nav-${index}`}
