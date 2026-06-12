@@ -462,7 +462,7 @@ export default function Testimonials({ data }) {
   controlsList="nodownload noplaybackrate"
   disablePictureInPicture
   onEnded={handleVideoEnd}
-  className="w-full h-full max-h-[80vh] object-contain rounded-lg"
+  className="w-full h-full max-h-[80vh] object-contain rounded-lg bg-black"
 />
               ) : (
                 <iframe

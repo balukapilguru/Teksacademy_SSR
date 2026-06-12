@@ -94,7 +94,7 @@ const SuccessStories = ({ successStoriesData }) => {
               : "border border-[#2a619d] text-[#2a619d] hover:bg-[#2a619d] hover:text-white"
           }`}
         >
-          Placed Students
+         Student Voices
         </button>
         <button
           onClick={() => setActiveTab("learning")}
