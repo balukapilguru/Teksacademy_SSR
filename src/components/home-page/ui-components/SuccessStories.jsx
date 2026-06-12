@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Heading from "@/utility/Heading";
 import GetData from "@/utility/GetData";
@@ -27,7 +27,15 @@ const SuccessStories = ({ successStoriesData }) => {
   const heading = successStoriesData?.heading || ["Our Success", "Stories"];
 
   const maxLength = Math.min(videoCards.length, placementCards.length);
+   const videoRef = useRef(null);
+   const modalRef = useRef(null);
+   const handleFullScreen = () => {
+  const el = modalRef.current;
+  if (!el) return;
 
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+};
   // Reset indices when tab changes
   // useEffect(() => {
   //   setVideoIndex(0);
@@ -176,7 +184,6 @@ const SuccessStories = ({ successStoriesData }) => {
                 </div>
               </div>
               {/* Arrows + Dots row */}
-              
             </div>
           )}
         </div>
@@ -232,40 +239,36 @@ const SuccessStories = ({ successStoriesData }) => {
                 </div>
               </div>
               {/* Arrows + Dots row */}
-           <div className="flex items-center justify-center gap-3 mt-1">
-  <ArrowBtn
-    direction="prev"
-    onClick={() =>
-      setMobileIndex((i) => Math.max(0, i - 1))
-    }
-    disabled={mobileIndex === 0}
-  />
+              <div className="flex items-center justify-center gap-3 mt-1">
+                <ArrowBtn
+                  direction="prev"
+                  onClick={() => setMobileIndex((i) => Math.max(0, i - 1))}
+                  disabled={mobileIndex === 0}
+                />
 
-  {/* DOTS */}
-  <div className="flex gap-2">
-    {Array.from({ length: maxLength }).map((_, i) => (
-      <button
-        key={i}
-        onClick={() => setMobileIndex(i)}
-        className={`h-2 rounded-full transition-all duration-200 ${
-          i === mobileIndex
-            ? "bg-[#2a619d] w-5"
-            : "bg-gray-300 w-2"
-        }`}
-      />
-    ))}
-  </div>
+                {/* DOTS */}
+                <div className="flex gap-2">
+                  {Array.from({ length: maxLength }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setMobileIndex(i)}
+                      className={`h-2 rounded-full transition-all duration-200 ${
+                        i === mobileIndex
+                          ? "bg-[#2a619d] w-5"
+                          : "bg-gray-300 w-2"
+                      }`}
+                    />
+                  ))}
+                </div>
 
-  <ArrowBtn
-    direction="next"
-    onClick={() =>
-      setMobileIndex((i) =>
-        Math.min(maxLength - 1, i + 1)
-      )
-    }
-    disabled={mobileIndex === maxLength - 1}
-  />
-</div>
+                <ArrowBtn
+                  direction="next"
+                  onClick={() =>
+                    setMobileIndex((i) => Math.min(maxLength - 1, i + 1))
+                  }
+                  disabled={mobileIndex === maxLength - 1}
+                />
+              </div>
             </div>
           )}
         </div>
@@ -273,7 +276,7 @@ const SuccessStories = ({ successStoriesData }) => {
 
       {/* VIDEO MODAL — untouched */}
       {selectedVideo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
           <div className="relative w-full max-w-xs bg-black rounded-lg shadow-xl overflow-hidden">
             {/* Close Button */}
             <button
@@ -285,7 +288,10 @@ const SuccessStories = ({ successStoriesData }) => {
 
             {/* Video */}
             <div className="w-full aspect-video">
-              <video autoPlay controls className="w-full h-auto object-cover">
+              <video 
+              ref={videoRef}
+              controlsList="nofullscreen"
+              autoPlay controls className="w-full h-auto object-cover">
                 <source
                   src={GetData({ url: selectedVideo })}
                   type="video/mp4"

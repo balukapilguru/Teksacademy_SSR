@@ -4,6 +4,8 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
 import Loader from "@/components/Loader";
+import Popupform from "@/components/clientcomponents/forms/Popupform";
+import ReusableForm from "@/components/ReusableForm";
 
 const InterviewQuestionDetailPage = () => {
   const params = useParams();
@@ -15,7 +17,8 @@ const InterviewQuestionDetailPage = () => {
   const [error, setError] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [openQuestions, setOpenQuestions] = useState({});
-  
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
   useEffect(() => {
@@ -92,6 +95,7 @@ const InterviewQuestionDetailPage = () => {
   if (error || !questionData) {
     return (
       <div className="min-h-[400px] flex justify-center items-center">
+        
         <div className="text-center">
           <p className="text-red-600 mb-4">{error || "Interview questions not found"}</p>
           <button
@@ -119,7 +123,15 @@ const InterviewQuestionDetailPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       
-
+{showModal && selectedCourse && (
+  <Popupform
+    show={showModal}
+    onClose={() => setShowModal(false)}
+    course={selectedCourse.heading}
+    courseName={selectedCourse}
+    source={28}
+  />
+)}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -184,7 +196,13 @@ const InterviewQuestionDetailPage = () => {
           <div className="max-w-4xl mx-auto text-center px-4">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">{ctaSection.heading}</h2>
             <p className="text-blue-100 mb-6">{ctaSection.description}</p>
-            <button className="bg-[#FE543D] hover:bg-[#e6442e] text-white font-semibold px-8 py-3 rounded-lg">
+            <button className="bg-[#FE543D] hover:bg-[#e6442e] text-white font-semibold px-8 py-3 rounded-lg"
+            onClick={() => {
+  setSelectedCourse({
+    heading: ctaSection?.heading || "Interview Questions",
+  });
+  setShowModal(true);
+}}>
               {ctaSection.button?.text || "Enquire Now"}
             </button>
           </div>

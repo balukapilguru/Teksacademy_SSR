@@ -131,7 +131,7 @@ console.log(currentTab,"tab")
               )}
 
               {heroSection?.button && (
-                <Link href={heroSection.button.link || "/success-stories"}>
+                <Link href={heroSection.button.link || "/discover/contact-us"}>
                   <button className="bg-[#002b80] hover:bg-[#113c92] text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
                     {heroSection.button.text ||
                       "Explore Career Transitions"}
