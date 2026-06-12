@@ -465,7 +465,7 @@ export default async function Page({ params }) {
               <Excel data={excelSectionData} courseName={courseLabel} />
             </div>
 
-            <div className="main_container rounded-lg ">
+            <div className="main_container rounded-lg bg-[#fbf5f6] ">
               <Nutshell data={careerServicesData} courseName={courseLabel} />
             </div>
           </>

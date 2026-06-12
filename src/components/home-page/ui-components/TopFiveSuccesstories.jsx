@@ -106,9 +106,9 @@ const UnifiedSuccessStories = ({ data }) => {
   };
 
   return (
-    <div className="main_container">
+    <div className="main_container ">
       {/* Heading */}
-      <div className="justify-items-center mb-8">
+      <div className="justify-items-center mb-8 ">
         <Heading data={heading} />
       </div>
 
@@ -390,7 +390,7 @@ const UnifiedSuccessStories = ({ data }) => {
               </div>
 
               {/* DOTS NAVIGATION */}
-              <div className="absolute bottom-[-15px] left-0 right-0 flex justify-center gap-3  mb-4">
+              <div className="absolute bottom-[-15px] md:bottom-[-30px] left-0 right-0 flex justify-center gap-3  mb-4 ">
                 {learningTestimonialCards.map((_, i) => (
                   <button
                     key={i}

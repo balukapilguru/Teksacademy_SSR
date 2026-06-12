@@ -11,7 +11,7 @@ const WhyOnline = ({ data }) => {
 
   if (!data) return null
   return (
-    <section className=" py-4 bg-[#fbf5f6] relative rounded-lg">
+    <section className=" py-4 md:mt-12 bg-[#fbf5f6] relative rounded-lg">
       <div className=" ">
 
         {/* Header Section */}

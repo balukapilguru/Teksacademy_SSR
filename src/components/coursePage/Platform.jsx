@@ -18,7 +18,7 @@ import GetData from "@/utility/GetData";
 const Platform = ({ data }) => {
   const [open, setOpen] = useState(false);
   const modalRef = useRef(null);
-
+const [scrollY, setScrollY] = useState(0);
   const defaultData = {
     heading: ["Platform That Supports You", "End-to-End"],
     services: {
@@ -65,6 +65,7 @@ const Platform = ({ data }) => {
       );
     }
 
+  
     // fallback icons (only if backend fails)
     const fallbackIcons = [
       <FaBriefcase className="w-10 h-10 text-[#2a619d]" />,
@@ -95,6 +96,28 @@ const Platform = ({ data }) => {
     return () =>
       document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+  useEffect(() => {
+  if (!open) return;
+
+  const scrollY = window.scrollY;
+
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+
+  return () => {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+
+    window.scrollTo(0, scrollY);
+  };
+}, [open]);
 
   return (
     <section className="py-10">

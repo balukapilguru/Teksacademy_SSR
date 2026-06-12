@@ -8,7 +8,7 @@ async function getPrivacyPolicy() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`${baseUrl}/api/v1/home/privacy-policy`, {
+    const res = await fetch(`${baseUrl}/api/v1/policyagreements/terms-of-service`, {
       signal: controller.signal,
       // next: { revalidate: 60 }, // optional ISR
     });
