@@ -98,6 +98,10 @@ const Popupform = ({
   // If we intercept submission here, we may show success without actually creating the lead/CRM.
 
 
+  if (typeof document === "undefined") return null;
+
+  const portalTarget = document.getElementById("__next") || document.body;
+
   return createPortal(
     <>
       {/* Backdrop */}
