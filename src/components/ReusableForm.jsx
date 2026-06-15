@@ -305,10 +305,9 @@ export default function ReusableForm({
       console.log("Submitting payload:", payload);
       
       if (onSubmit) {
-        // If custom onSubmit is provided, call it
+        // If custom onSubmit is provided, call it (NO redirect/success dispatch until it succeeds)
         await onSubmit(formValues, payload);
-        // Dispatch success event for closing modal and redirection
-        window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
+        // success dispatch happens after this try block ends
       } else {
         // Default API submission
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
@@ -316,8 +315,9 @@ export default function ReusableForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        
+
         if (!response.ok) {
+
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || "Submission failed");
         }

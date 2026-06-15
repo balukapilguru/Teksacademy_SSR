@@ -91,25 +91,12 @@ const Popupform = ({
     ...(branch ? { branch } : {}),
   };
 
-  const handleFormSubmit = async (formValues, mappedPayload) => {
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      if (onSubmit) {
-        await onSubmit(formValues, mappedPayload);
-      }
-      // Dispatch success event for the popup to handle closing and redirection
-      window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
-      toast.success(successMessage);
-    } catch (error) {
-      console.error("Form submission error:", error);
-      toast.error(error.message || "Submission failed. Please try again.");
-      throw error;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // IMPORTANT:
+  // Do NOT handle submission here.
+  // ReusableForm already performs the /lead/create API call (when onSubmit prop is not used)
+  // and dispatches `formSubmissionSuccess` only after successful backend creation.
+  // If we intercept submission here, we may show success without actually creating the lead/CRM.
+
 
   return createPortal(
     <>
@@ -155,7 +142,6 @@ const Popupform = ({
           {/* Form */}
           <ReusableForm
             formType={formType}
-            onSubmit={handleFormSubmit}
             initialValues={initialValues}
             buttonText={buttonText}
             successMessage={successMessage}
@@ -163,8 +149,7 @@ const Popupform = ({
           />
         </div>
       </div>
-    </>,
-    document.body
+    </>
   );
 };
 
