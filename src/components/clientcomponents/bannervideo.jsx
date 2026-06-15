@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaRegPlayCircle } from "react-icons/fa";
 import GetData from "@/utility/GetData";
-
+const banner_image = "/images/Video_thumbnail.jpg";
 const BannerVideo = () => {
   const [play, setPlay] = useState(false);
   const [bannerData, setBannerData] = useState(null);
@@ -19,9 +19,9 @@ const BannerVideo = () => {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Fetch banner data from backend API
@@ -29,7 +29,9 @@ const BannerVideo = () => {
     const fetchBannerData = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+        const baseUrl =
+          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+          process.env.NEXT_TEKS_SSR_API_URL;
         const response = await fetch(`${baseUrl}/api/v1/home`, {
           method: "GET",
           next: { revalidate: 60 },
@@ -65,24 +67,27 @@ const BannerVideo = () => {
   const getVideoUrl = () => {
     if (!bannerData?.video) {
       // Default video path if API doesn't provide one
-      return GetData({ url: "/assets/videossection/glimpse_video_for_website.mp4" });
+      return GetData({
+        url: "/assets/videossection/glimpse_video_for_website.mp4",
+      });
     }
     return GetData({ url: bannerData.video });
   };
 
   // Get thumbnail URL - uses mobile thumbnail on mobile devices, API desktop thumbnail as fallback
-  const getThumbnailUrl = () => {
-    // Use mobile-specific thumbnail on mobile devices
-    if (isMobile) {
-      return "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp";
-    }
+  // const getThumbnailUrl = () => {
+  //   // Use mobile-specific thumbnail on mobile devices
+  //   if (isMobile) {
+  //     return "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp";
+  //   }
 
-    // Desktop: use API thumbnail or local default
-    if (!bannerData?.thumbnail) {
-      return "/src/assets/Video_thumbnail.jpg";
-    }
-    return GetData({ url: bannerData.thumbnail });
-  };
+  //   // Desktop: use API thumbnail or local default
+  //   if (!bannerData?.thumbnail) {
+  //     return "/src/assets/Video_thumbnail.jpg";
+  //   }
+  //     return "/src/assets/Video_thumbnail.jpg";
+  //   // return GetData({ url: bannerData.thumbnail });
+  // };
 
   // Get offeredBy data (partner logos)
   const getOfferedByData = () => {
@@ -111,7 +116,8 @@ const BannerVideo = () => {
   }
 
   const offeredBy = getOfferedByData();
-  const hasOfferedBy = offeredBy && offeredBy.image && offeredBy.image.length > 0;
+  const hasOfferedBy =
+    offeredBy && offeredBy.image && offeredBy.image.length > 0;
 
   return (
     <div className="w-full">
@@ -122,13 +128,23 @@ const BannerVideo = () => {
           onClick={() => setPlay(true)}
         >
           <Image
-            src={getThumbnailUrl()}
+            src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp"
             alt="Homepage Banner"
             width={600}
             height={300}
-            className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
+            className="block md:hidden rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
             unoptimized
-            priority // Add priority for faster loading
+            priority
+          />
+
+          <Image
+            src={banner_image}
+            alt="Homepage Banner"
+            width={600}
+            height={300}
+            className="hidden md:block rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
+            unoptimized
+            priority
           />
           {/* Play Button */}
           <div className="absolute top-4 right-4">
