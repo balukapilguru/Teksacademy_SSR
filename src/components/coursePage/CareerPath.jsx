@@ -125,7 +125,7 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
       <Heading data={heading} />
 
-      <div className="text-gray-700 text-lg md:text-xl pb-6">
+      <div className="text-gray-700 text-lg md:text-xl pb-6 mt-4">
         {data?.description}
       </div>
 

@@ -114,7 +114,7 @@ const Awards = (awards) => {
   return (
     <div className="main_container mx-auto py-2 lg:py-4 xl:py-6 2xl:py-8 3xl:py-10 justify-center items-center">
       {heading && (
-        <div className="text-center px-4 md:px-8 lg:px-0">
+        <div className="text-center px-4 md:px-8 lg:px-0 md:mb-7 mb-5">
           <Heading data={heading} />
         </div>
       )}

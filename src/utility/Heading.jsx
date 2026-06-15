@@ -1,72 +1,75 @@
 import React from "react";
 
-const splitHeadingString = (heading) => {
-  const trimmedHeading = heading.trim();
-  const commaMatch = trimmedHeading.match(/^(.+?,)\s*(.+)$/);
-
-  if (commaMatch) {
-    return [commaMatch[1], commaMatch[2]];
-  }
-
-  const lastSpaceIndex = trimmedHeading.lastIndexOf(" ");
-
-  if (lastSpaceIndex > 0) {
-    return [
-      trimmedHeading.slice(0, lastSpaceIndex),
-      trimmedHeading.slice(lastSpaceIndex + 1),
-    ];
-  }
-
-  return [trimmedHeading];
-};
-
 const Heading = ({
   data,
   as = "div",
   className = "",
   highlightClassName = "text-[#2a619d]",
 }) => {
-  if (!data) {
-    console.warn("Heading: No data provided");
-    return null;
-  }
+  if (!data) return null;
 
-  let headingArray = [];
+  const splitHeadingString = (heading) => {
+    const trimmed = heading.trim();
+    const commaMatch = trimmed.match(/^(.+?,)\s*(.+)$/);
 
-  if (Array.isArray(data)) {
-    headingArray = data;
-  } else if (data.firstHeading && Array.isArray(data.firstHeading)) {
-    headingArray = data.firstHeading;
-  } else if (data.heading && Array.isArray(data.heading)) {
-    headingArray = data.heading;
-  } else if (typeof data === "string") {
-    headingArray = splitHeadingString(data);
-  } else {
-    console.warn(data);
-    return null;
-  }
+    if (commaMatch) return [commaMatch[1], commaMatch[2]];
 
-  const validHeadings = headingArray.filter(
-    (item) => item && typeof item === "string" && item.trim() !== ""
-  );
+    const lastSpace = trimmed.lastIndexOf(" ");
+    if (lastSpace > 0) {
+      return [
+        trimmed.slice(0, lastSpace),
+        trimmed.slice(lastSpace + 1),
+      ];
+    }
 
-  if (validHeadings.length === 0) return null;
+    return [trimmed];
+  };
+
+  let headingArray =
+    typeof data === "string" ? splitHeadingString(data) : data;
 
   const Tag = as;
 
   return (
-    <Tag
-      className={`text-2xl xl:text-3xl font-medium text-black leading-tight md:text-2xl mb-4 ${className}`.trim()}
-    >
-      {validHeadings.length > 1 ? (
+    <Tag className={`text-2xl xl:text-3xl font-medium ${className}`}>
+      {headingArray.length > 1 ? (
         <>
-          {validHeadings[0]}{" "}
-          <span className={highlightClassName}>
-            {validHeadings.slice(1).join(" ")}
+          {headingArray[0]}{" "}
+          <span className={`relative inline-block ${highlightClassName}`}>
+            {headingArray.slice(1).join(" ")}
+
+            {/* SVG underline */}
+            <svg
+              className="absolute left-0 top-full mt-1 w-full h-[10px]"
+              viewBox="0 0 100 10"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0 8 Q50 0 100 8"
+                stroke="orangered"
+                strokeWidth="1.5"
+                fill="transparent"
+              />
+            </svg>
           </span>
         </>
       ) : (
-        <span className={highlightClassName}>{validHeadings[0]}</span>
+        <span className="relative inline-block">
+          {headingArray[0]}
+
+          <svg
+            className="absolute left-0 top-full mt-1 w-full h-[10px]"
+            viewBox="0 0 100 10"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0 8 Q50 0 100 8"
+              stroke="orangered"
+              strokeWidth="1.5"
+              fill="transparent"
+            />
+          </svg>
+        </span>
       )}
     </Tag>
   );

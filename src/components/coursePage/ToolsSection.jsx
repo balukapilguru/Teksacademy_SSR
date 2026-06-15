@@ -33,7 +33,7 @@ const [expanded, setExpanded] = useState(false);
 
         {/* Tools Grid */}
       {/* Tools Grid */}
-<div className="bg-white rounded-2xl shadow-md p-6">
+<div className="bg-white rounded-2xl shadow-md p-6  md:mt-3">
 
   {/* ✅ Desktop / Tablet (md and above → show ALL) */}
   <div className="hidden md:grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-x-12 gap-y-8 md:gap-x-4 md:gap-y-6">

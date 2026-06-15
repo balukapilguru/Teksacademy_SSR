@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import GetData from "@/utility/GetData";
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import ReusableForm from "@/components/ReusableForm";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
@@ -108,7 +108,7 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
               {/* Course Benefits */}
               {benefits?.length > 0 && (
                 <div className="mt-8">
-                  <Heading data={benefitsHeading}/>
+                  <CoursepageHeading data={benefitsHeading}/>
                   {/* <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                     {benefitsHeading}
                   </h3> */}

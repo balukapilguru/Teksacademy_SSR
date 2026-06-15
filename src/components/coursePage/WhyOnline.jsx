@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import LegacyCard from "../coursePage/LegacyCard";
-import Heading from "../../utility/Heading";
+import CoursepageHeading from "../../utility/CoursepageHeading";
 import RichTextRenderer from "./RichTextRenderer";
 
 const WhyOnline = ({ data }) => {
@@ -19,7 +19,7 @@ const WhyOnline = ({ data }) => {
           {/* Heading Section */}
           <div className="mb-8">
             <h2>
-              <Heading data={data?.heading} />
+              <CoursepageHeading data={data?.heading} />
 
             </h2>
 

@@ -65,7 +65,23 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         <div className="text-center mb-5">
           <h2 className="text-xl font-bold text-gray-900">
             {title?.[0]}
-            <span className="text-[#2A619D]">{title?.[1]}</span>
+           
+             <span className="relative inline-block text-[#2A619D]">
+                  {title?.[1]}
+                  <svg
+                    className="absolute left-0 -bottom-2 w-full h-[14px]"
+                    viewBox="0 0 100 12"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 10 Q50 0 98 10"
+                      stroke="orangered"
+                      strokeWidth="2"
+                      fill="transparent"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
           </h2>
         </div>
 
@@ -183,7 +199,23 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         <div className="my-6 text-center">
           <h2 className="text-xl md:text-3xl font-semibold">
             {title?.[0]}
-            <span className="text-[#2A619D]">{title?.[1]}</span>
+           
+             <span className="relative inline-block text-[#2A619D]">
+                 {title?.[1]}
+                  <svg
+                    className="absolute left-0 -bottom-2 w-full h-[14px]"
+                    viewBox="0 0 100 12"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 10 Q50 0 98 10"
+                      stroke="orangered"
+                      strokeWidth="2"
+                      fill="transparent"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
           </h2>
         </div>
 

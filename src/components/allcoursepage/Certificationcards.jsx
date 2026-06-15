@@ -53,7 +53,7 @@ const Page = ({ data }) => {
           successMessage="Thank you! We'll contact you soon." />
 
         {courses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
             {courses.slice(0, 4).map((course, idx) => (
               <CourseCard
                 key={idx}

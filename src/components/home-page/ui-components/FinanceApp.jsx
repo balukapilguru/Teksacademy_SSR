@@ -17,7 +17,23 @@ const FinanceApp = () => {
             Teks Academy E-Learning App
           </h1> */}
           <div className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[26px] lg:leading-[48px] tracking-[-0.014em] flex justify-start">
-            <h2 className="text-[#2A619D]"> Download <span className='text-black h-5'> E-Learning App</span>
+            <h2 className="text-black "> Download
+             <span className="relative inline-block text-[#2A619D]">
+                 &nbsp;E-Learning App
+                  <svg
+                    className="absolute left-0 -bottom-2 w-full h-[14px]"
+                    viewBox="0 0 100 12"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 10 Q50 0 98 10"
+                      stroke="orangered"
+                      strokeWidth="2"
+                      fill="transparent"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
              </h2>
           </div>
           <div className='2xl:w-4/5 '>

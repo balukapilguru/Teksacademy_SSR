@@ -44,7 +44,7 @@ export default function GalleryClient() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-5 lg:px-20">
         {galleryData.map((img, index) => (
-          <div key={img.id} onClick={() => openModal(index)}>
+          <div key={`${img.id}-${index}`} onClick={() => openModal(index)}>
             <Image
               src={GetData({ url: img.imgsrc })}
               alt={img.alt}
