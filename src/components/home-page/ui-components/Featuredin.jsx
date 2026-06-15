@@ -1,5 +1,5 @@
 import GetData from '@/utility/GetData';
-import Heading from '@/utility/Heading';
+import CoursepageHeading from '@/utility/CoursepageHeading';
 import Image from 'next/image';
 import React from 'react'
 
@@ -13,7 +13,7 @@ export default  function Featuredin ({featuredIn})  {
        <div className="main_container mx-auto">
          <div className=" text-center">
            <div className=" pl-3 md:pl-0 text-center">
-            <Heading data={featuredIn?.heading}/>
+            <CoursepageHeading data={featuredIn?.heading}/>
              {/* <h2 className="text-2xl xl:text-4xl pl-4 lg:pl-0 font-medium text-black  whitespace-nowrap sm:text-2">
                {featuredIn?.heading} 
              </h2> */}

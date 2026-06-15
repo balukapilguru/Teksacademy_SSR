@@ -116,7 +116,7 @@ const CertificationCourse = ({ data }) => {
         {!loading && visibleCourses.length > 0 ? (
           <>
             {/* DESKTOP: 4-col grid — untouched */}
-            <div className=" sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className=" sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-7">
               {visibleCourses.map((course, idx) => (
                 <CourseCard
                   key={course.programName || course.id || idx}

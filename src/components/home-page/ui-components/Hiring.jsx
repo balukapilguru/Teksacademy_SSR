@@ -44,7 +44,7 @@ export default function Hiringcompanies({ hiringData, courseName }) {
   return (
     <div className="bg-[#fbf5f6] py-12 mt-7 border border-[#fbf5f6] rounded-lg shadow-md">
       <div className="text-center">
-        <div className="">
+        <div className="mb-3">
           <Heading
             data={hiringData?.hiringPartnersHeading}
             text={hiringData?.hiringPartnersHeading}

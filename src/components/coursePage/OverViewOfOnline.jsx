@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import mba from "@/app/assets/onilnemba.png";
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
 import { GiPentarrowsTornado } from "react-icons/gi";
@@ -75,7 +75,7 @@ const OverViewOfOnline = ({
       <section className="lg:py-6 pt-0">
      
         <div className="">
-          <Heading data={heading} />
+          <CoursepageHeading data={heading} />
 
           <div className="grid lg:grid-cols-2 gap-5 md:gap-10 mt-6">
             <div className="flex justify-center">

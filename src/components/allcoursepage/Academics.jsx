@@ -119,7 +119,7 @@ console.log(data,"academimcs")
 
   return (
     <section>
-      <div className="main_container mx-auto mt-4 pt-5">
+      <div className="main_container mx-auto mt-4 pt-5 ">
         <Heading data={data?.heading} as="h1" />
 
         {/* Category Tabs */}
@@ -173,7 +173,7 @@ console.log(data,"academimcs")
         {visibleCourses.length > 0 ? (
           <>
             {/* DESKTOP: 4-col grid — untouched */}
-            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
               {visibleCourses.map((course, idx) => (
                 <CourseCard
                   key={idx}

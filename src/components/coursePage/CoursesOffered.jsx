@@ -145,10 +145,10 @@ const CoursesOffered = ({ data, branchData }) => {
   return (
     <section>
       <div className="main_container mx-auto mt-5 pt-5 px-4 sm:px-6 lg:px-8">
-        <Heading data={data?.heading || "Course Offered"} />
+        <Heading data={data?.heading || "Courses Offered"} />
 
         {courses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
             {courses.map((course, idx) => (
               <BranchCoursecards
                 key={course.id || course.programName || course.heading || idx}

@@ -110,7 +110,7 @@ console.log(currentTab,"tab")
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               {heroSection?.badge && (
-                <div className="inline-block bg-[#002b80] text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+                <div className="inline-block bg-[#2A619D] text-white px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
                   {heroSection.badge}
                 </div>
               )}
@@ -132,7 +132,7 @@ console.log(currentTab,"tab")
 
               {heroSection?.button && (
                 <Link href={heroSection.button.link || "/discover/contact-us"}>
-                  <button className="bg-[#002b80] hover:bg-[#113c92] text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                  <button className="bg-[#2A619D] hover:bg-[#2A619D] text-white font-semibold px-6 py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
                     {heroSection.button.text ||
                       "Explore Career Transitions"}
                   </button>
@@ -175,8 +175,8 @@ console.log(currentTab,"tab")
             }}
             className={`px-6 py-2 rounded-md transition font-medium ${
               activeTab === index
-                ? "bg-[#002b80] text-white"
-                : "border border-blue-700 text-blue-700"
+                ? "bg-[#2A619D] text-white"
+                : "border border-[#2A619D] text-[#2A619D]"
             }`}
           >
             {tab.title}

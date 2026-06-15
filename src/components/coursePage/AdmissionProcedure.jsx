@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { BiSolidRightArrow, BiSolidDownArrow } from "react-icons/bi";
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
@@ -59,7 +59,7 @@ const Admission = ({ data }) => {
 
       <div className="mx-auto md:py-3">
         {/* Header */}
-        <Heading data={data?.heading} className="hidden md:block" />
+        <CoursepageHeading data={data?.heading} className="hidden md:block" />
         <div className="text-md hidden md:block">{description}</div>
 
         {/* Steps */}

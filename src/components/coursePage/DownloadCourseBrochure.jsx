@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiDownload } from "react-icons/fi";
 import Image from "next/image";
-import Heading from "../../utility/Heading";
+import CoursepageHeading from "../../utility/CoursepageHeading";
 import GetData from "@/utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { RiArrowRightBoxFill } from "react-icons/ri";
@@ -169,7 +169,7 @@ const DownloadCourseBrochure = ({
         <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
           {/* Left Content + Button */}
           <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
-            <h3><Heading data={data?.heading} /></h3>
+            <h3><CoursepageHeading data={data?.heading} /></h3>
 
 
             {/* Description */}

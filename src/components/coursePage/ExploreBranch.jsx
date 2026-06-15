@@ -1,7 +1,7 @@
 'use client';
 
 import GetData from '@/utility/GetData';
-import Heading from '@/utility/Heading';
+import CoursepageHeading from '@/utility/CoursepageHeading';
 import React from 'react';
 
 const ExploreBranch = ({ branchLocation, data }) => {
@@ -32,7 +32,7 @@ const ExploreBranch = ({ branchLocation, data }) => {
       {/* Heading Section */}
       <div className="flex justify-center items-center w-full mb-3">
         <div className="flex flex-col items-center">
-          <Heading
+          <CoursepageHeading
             data={heading}
             as="h2"
             className="!text-3xl lg:!text-4xl !font-semibold !text-center"

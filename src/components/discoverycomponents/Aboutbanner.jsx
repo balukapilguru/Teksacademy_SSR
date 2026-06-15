@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import Bannerheading from "@/utility/Bannerheading";
 import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 
 const Aboutbanner = (data) => {
   let aboutusdata = data?.data?.aboutUS;
@@ -10,7 +11,7 @@ const Aboutbanner = (data) => {
   return (
     <div className="xl:mt-4 2xl:mt-4 mt-4 w-[94%] lg:w-[76%] xl:w-[70%] 2xl:w-[60%] 3xl:w-[960px]  mx-auto  ">
       <div className="justify-items-center">
-        <Heading text={aboutusdata?.heading} data={aboutusdata?.heading} />
+        <CoursepageHeading text={aboutusdata?.heading} data={aboutusdata?.heading} />
 
         <p className="text-lg text-white leading-7 mb-6 text-justify bg-[#002b80] p-3 border border-[#002b80] rounded-lg ">
           {aboutusdata?.description}
@@ -27,7 +28,7 @@ const Aboutbanner = (data) => {
       </div>
       <div>
         <div className="text-center  mt-7 ">
-          <Heading text={mapData?.heading} data={mapData?.heading} />
+          <CoursepageHeading text={mapData?.heading} data={mapData?.heading} />
         </div>
 
         {/* Description */}

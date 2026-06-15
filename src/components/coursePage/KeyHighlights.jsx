@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Heading from "../../utility/Heading";
+import CoursepageHeading from "../../utility/CoursepageHeading";
 // import { HiArrowRightCircle } from "react-icons/lia";
 import { HiArrowRightCircle } from "react-icons/hi2";
 
@@ -82,7 +82,7 @@ const Page = ({ data }) => {
     <div className=" mx-auto" id="keyHighlights">
       <h2>
         {" "}
-        <Heading data={heading} />
+        <CoursepageHeading data={heading} />
       </h2>
 
       {/* Desktop View */}
