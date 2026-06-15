@@ -39,7 +39,7 @@ const Popupform = ({
   formType = "banner",
   buttonText = "Enroll Now",
   successMessage = "Thank you! We'll contact you soon.",
-  redirectToThankYou = true, // Add this prop
+  redirectToThankYou = true,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -90,13 +90,6 @@ const Popupform = ({
     course: normalizeCourseValue(courseName || course),
     ...(branch ? { branch } : {}),
   };
-
-  // IMPORTANT:
-  // Do NOT handle submission here.
-  // ReusableForm already performs the /lead/create API call (when onSubmit prop is not used)
-  // and dispatches `formSubmissionSuccess` only after successful backend creation.
-  // If we intercept submission here, we may show success without actually creating the lead/CRM.
-
 
   if (typeof document === "undefined") return null;
 
@@ -153,7 +146,8 @@ const Popupform = ({
           />
         </div>
       </div>
-    </>
+    </>,
+    portalTarget
   );
 };
 
