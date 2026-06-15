@@ -39,7 +39,7 @@ const Popupform = ({
   formType = "banner",
   buttonText = "Enroll Now",
   successMessage = "Thank you! We'll contact you soon.",
-  redirectToThankYou = true, // Add this prop
+  redirectToThankYou = true,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -91,25 +91,9 @@ const Popupform = ({
     ...(branch ? { branch } : {}),
   };
 
-  const handleFormSubmit = async (formValues, mappedPayload) => {
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      if (onSubmit) {
-        await onSubmit(formValues, mappedPayload);
-      }
-      // Dispatch success event for the popup to handle closing and redirection
-      window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
-      toast.success(successMessage);
-    } catch (error) {
-      console.error("Form submission error:", error);
-      toast.error(error.message || "Submission failed. Please try again.");
-      throw error;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (typeof document === "undefined") return null;
+
+  const portalTarget = document.getElementById("__next") || document.body;
 
   return createPortal(
     <>
@@ -155,7 +139,6 @@ const Popupform = ({
           {/* Form */}
           <ReusableForm
             formType={formType}
-            onSubmit={handleFormSubmit}
             initialValues={initialValues}
             buttonText={buttonText}
             successMessage={successMessage}
@@ -164,7 +147,7 @@ const Popupform = ({
         </div>
       </div>
     </>,
-    document.body
+    portalTarget
   );
 };
 
