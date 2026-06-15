@@ -110,7 +110,6 @@ export default function ReusableForm({
 }) {
   const router = useRouter();
 
-  // Define which fields to show for each form type
   const getFieldsForType = useCallback(() => {
     const formFields = {
       default: ["name", "email", "phone", "course", "branch"],
@@ -259,7 +258,6 @@ export default function ReusableForm({
       if (error) newErrors[fieldId] = error;
     });
 
-    // Only check OTP verification if phone field exists and has a value
     if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
       newErrors.phone = "Please verify your mobile number with OTP";
     }
@@ -274,7 +272,6 @@ export default function ReusableForm({
       setErrors(prev => ({ ...prev, [fieldId]: "" }));
     }
     
-    // Reset OTP verification when phone number changes
     if (fieldId === "phone") {
       setIsOtpVerified(false);
     }
@@ -283,21 +280,26 @@ export default function ReusableForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Additional validation for OTP
     const fields = getFieldsForType();
-    if (fields.includes("phone") && !isOtpVerified) {
-      // Ensure inline validation shows even if OTP component didn't set it
+    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
       setErrors((prev) => ({
         ...prev,
         phone: "Please verify your mobile number with OTP",
       }));
 
-      toast.error("Please verify your mobile number with OTP");
+      toast.error("Please verify your mobile number with OTP", {
+        duration: 4000,
+        icon: '🔒',
+        style: {
+          background: '#fee2e2',
+          color: '#991b1b',
+          border: '1px solid #fecaca',
+        },
+      });
       return;
     }
 
     if (!validateForm()) return;
-
 
     setIsSubmitting(true);
     try {
@@ -305,11 +307,8 @@ export default function ReusableForm({
       console.log("Submitting payload:", payload);
       
       if (onSubmit) {
-        // If custom onSubmit is provided, call it (NO redirect/success dispatch until it succeeds)
         await onSubmit(formValues, payload);
-        // success dispatch happens after this try block ends
       } else {
-        // Default API submission
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -317,7 +316,6 @@ export default function ReusableForm({
         });
 
         if (!response.ok) {
-
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || "Submission failed");
         }
@@ -325,15 +323,29 @@ export default function ReusableForm({
         const result = await response.json();
         console.log("Submission success:", result);
         
-        // Show success message
-        toast.success(successMessage);
+        toast.success(successMessage, {
+          duration: 3000,
+          icon: '🎉',
+          style: {
+            background: '#dcfce7',
+            color: '#166534',
+            border: '1px solid #bbf7d0',
+          },
+        });
         
-        // Dispatch success event for closing modal and redirection
         window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
       }
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.", {
+        duration: 4000,
+        icon: '❌',
+        style: {
+          background: '#fee2e2',
+          color: '#991b1b',
+          border: '1px solid #fecaca',
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -357,7 +369,6 @@ export default function ReusableForm({
             }}
             onVerified={(verified) => {
               setIsOtpVerified(verified);
-              // Clear phone error when verified
               if (verified && errors.phone) {
                 setErrors(prev => ({ ...prev, phone: "" }));
               }

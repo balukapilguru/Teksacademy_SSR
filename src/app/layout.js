@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Toaster } from 'react-hot-toast';
 
 import { ToastContainer } from "react-toastify";
 import SpinWheel from "@/components/SpinWheel/SpinWheel";
@@ -92,6 +93,37 @@ export default async function RootLayout({ children }) {
             <ToastContainer autoClose={1000} />
             <AppLoader />
            <LayoutWrapper>{children}</LayoutWrapper>
+             <Toaster
+          position="top-right"
+          containerStyle={{
+            position: "fixed",
+            zIndex: 999999, // This makes toast appear above everything
+            top: 0,
+            right: 0,
+          }}
+          toastOptions={{
+            duration: 4000,
+            style: {
+              zIndex: 999999,
+            },
+            success: {
+              duration: 3000,
+              style: {
+                background: "#10b981",
+                color: "#fff",
+                zIndex: 999999,
+              },
+            },
+            error: {
+              duration: 4000,
+              style: {
+                background: "#ef4444",
+                color: "#fff",
+                zIndex: 999999,
+              },
+            },
+          }}
+        />
             {/* <Suspense fallback={null}>
               <SpinWheel />
             </Suspense> */}
