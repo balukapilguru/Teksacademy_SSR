@@ -350,8 +350,8 @@ const FORM_CONFIGS = {
     staticPayload: {
       source: "Career Guidance",
       crm_source: "Career Guidance",
-      form_type: "career",
-      referredby: "career",
+      form_type: "Career Guidance",
+      referredby: "Career Guidance",
       timestamp: () => new Date().toISOString(),
     },
   },

@@ -1061,6 +1061,7 @@ export default function Navbar() {
         formType="career"
         buttonText="Book My Session"
         successMessage="Thanks! Our career counselor will reach out shortly."
+        redirectToThankYou={true}
       />
     </>
   );

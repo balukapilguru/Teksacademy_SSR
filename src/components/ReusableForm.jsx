@@ -17,7 +17,7 @@ const ALL_FIELDS = {
   qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder: "select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
   prefferd: { id: "prefferd", label: "Preferred mode", type: "select", required: true, options: ["Online (Live)", "Offline (Classroom)", "Hybrid"] },
   branch: { id: "branch", label: "Branch", type: "select", required: true, options: BRANCH_OPTIONS },
-  city: { id: "city", label: "City", type: "text", required: true, placeholder: "Enter your city" },
+  city: { id: "city", label: "City", type: "text", required: false, placeholder: "Enter your city" },
   message: { id: "message", label: "Message", type: "textarea", required: false, placeholder: "Your message here...", rows: 4 },
   companyName: { id: "companyName", label: "Company Name", type: "text", required: true, placeholder: "Enter company name" },
   designation: { id: "designation", label: "Designation", type: "text", required: true, placeholder: "Your designation" },
@@ -105,7 +105,8 @@ export default function ReusableForm({
   buttonText = "Submit",
   successMessage = "Form submitted successfully!",
   className = "",
-  disableCourseField = false
+  disableCourseField = false,
+  redirectToThankYou = true
 }) {
   const router = useRouter();
 
@@ -199,7 +200,7 @@ export default function ReusableForm({
       requestCallback: "Request Callback—Website",
       reserveSpot: "Reserve Spot—Website",
       default: "Website",
-      career: "Request Callback—Website",
+      career: "Career Guidance",
       Enquirynow: "Enquirynow",
       RequestDemo: "Request Demo - Website"
     };
@@ -284,12 +285,19 @@ export default function ReusableForm({
     
     // Additional validation for OTP
     const fields = getFieldsForType();
-    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
+    if (fields.includes("phone") && !isOtpVerified) {
+      // Ensure inline validation shows even if OTP component didn't set it
+      setErrors((prev) => ({
+        ...prev,
+        phone: "Please verify your mobile number with OTP",
+      }));
+
       toast.error("Please verify your mobile number with OTP");
       return;
     }
-    
+
     if (!validateForm()) return;
+
 
     setIsSubmitting(true);
     try {
@@ -297,9 +305,12 @@ export default function ReusableForm({
       console.log("Submitting payload:", payload);
       
       if (onSubmit) {
+        // If custom onSubmit is provided, call it
         await onSubmit(formValues, payload);
-        toast.success(successMessage);
+        // Dispatch success event for closing modal and redirection
+        window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
       } else {
+        // Default API submission
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -317,8 +328,8 @@ export default function ReusableForm({
         // Show success message
         toast.success(successMessage);
         
-        // Redirect to thank you page
-        router.push("/thankyou");
+        // Dispatch success event for closing modal and redirection
+        window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
       }
     } catch (error) {
       console.error("Submission error:", error);

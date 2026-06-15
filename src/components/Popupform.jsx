@@ -1,7 +1,8 @@
-// Popupform.jsx
 "use client";
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import ReusableForm from "./ReusableForm";
 
 const normalizeCourseValue = (value) => {
@@ -38,9 +39,12 @@ const Popupform = ({
   formType = "banner",
   buttonText = "Enroll Now",
   successMessage = "Thank you! We'll contact you soon.",
+  redirectToThankYou = true, // Add this prop
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -63,6 +67,22 @@ const Popupform = ({
     }
   }, [show]);
 
+  // Listen for custom form submission success event
+  useEffect(() => {
+    const handleFormSuccess = () => {
+      if (redirectToThankYou) {
+        router.push("/thankyou");
+      }
+      onClose();
+    };
+
+    window.addEventListener('formSubmissionSuccess', handleFormSuccess);
+    
+    return () => {
+      window.removeEventListener('formSubmissionSuccess', handleFormSuccess);
+    };
+  }, [redirectToThankYou, router, onClose]);
+
   if (!isVisible && !show) return null;
   if (!mounted) return null;
 
@@ -72,14 +92,22 @@ const Popupform = ({
   };
 
   const handleFormSubmit = async (formValues, mappedPayload) => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     try {
       if (onSubmit) {
         await onSubmit(formValues, mappedPayload);
       }
-      onClose();
+      // Dispatch success event for the popup to handle closing and redirection
+      window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
+      toast.success(successMessage);
     } catch (error) {
       console.error("Form submission error:", error);
+      toast.error(error.message || "Submission failed. Please try again.");
       throw error;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -131,6 +159,7 @@ const Popupform = ({
             initialValues={initialValues}
             buttonText={buttonText}
             successMessage={successMessage}
+            redirectToThankYou={redirectToThankYou}
           />
         </div>
       </div>
