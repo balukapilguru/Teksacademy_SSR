@@ -270,11 +270,11 @@ table {
   }
 
   /* Dialogs / fixed popups should never exceed viewport */
-  .toast,
+  /* .toast,
   .popup,
   [class*="fixed"][class*="w-"] {
     max-width: calc(100vw - 1rem);
-  }
+  } */
 }
 
 /* Tablet (768–1023) */
