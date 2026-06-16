@@ -30,7 +30,7 @@ const CONTACT_US_SOURCES = ["Contact Us - Website"];
 const REQUEST_DEMO_SOURCES = ["Request Demo - Website"];
 const EBOOK_SOURCES = ["Ebook—Website"];
 const JOB_MELA_SOURCES = ["Job Mela"];
-const WEBSITES = ["PythonWebinerAttendance"];
+// const WEBSITES = ["PythonWebinerAttendance"];
 const RECOMMENDED_COURSE_SOURCES = ["Recommended-Course", "ChatBot"];
 const CHATBOT_SOURCES = ["ChatBot"];
 const ENROLLNOW_SOURCES = ["Enrollnow"];
@@ -450,8 +450,8 @@ const FORM_CONFIGS = {
     successMessage: "Thank you! We'll contact you soon.",
     payloadMap: DEFAULT_PAYLOAD_MAP,
     staticPayload: {
-      source: "Reserve Spot—Website",
-      crm_source: "Reserve Spot—Website",
+      source: "Website",
+      crm_source: "Website",
       form_type: "reserveSpot",
       referredby: "reserveSpot",
       timestamp: () => new Date().toISOString(),
