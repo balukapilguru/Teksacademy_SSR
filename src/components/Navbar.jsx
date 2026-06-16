@@ -361,14 +361,8 @@ export default function Navbar() {
                     return (
                       <Link
                         key={`top-link-${index}`}
-                        href={
-                          isFindMyCourse
-                            ? "/find-my-course"
-                            : isBlogs
-                              ? "/blogs"
-                              : item.link || "#"
-                        }
-                        target="_blank"
+                        href={item.link || "#"}
+                         target="_blank"
                         className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                       >
                         {item.name === "Download Mobile App" && (
@@ -936,14 +930,17 @@ export default function Navbar() {
                     </a>
                   ) : (
                     <Link
-                      key={`mobile-top-link-${index}`}
-                      href={isFindMyCourse ? "/find-my-course" : item.link}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
+                      key={`top-link-${index}`}
+                      href={item.link || "#"}
+                       target="_blank"
+                      className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
                     >
-                      {item.name === "Blogs" && <FaRegNewspaper size={15} />}
-                      {item.name === "Find My Course" && <FaSearch size={15} />}
-                      <span>{item.name}</span>
+                      {item.name === "Download Mobile App" && (
+                        <FaMobileScreen size={14} />
+                      )}
+                      {item.name === "Blogs" && <FaRegNewspaper size={14} />}
+                      {item.name === "Find My Course" && <FaSearch size={14} />}
+                      {item.name}
                     </Link>
                   );
                 }
