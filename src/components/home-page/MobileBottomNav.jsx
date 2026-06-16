@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   BookOpen,
   ChevronRight,
@@ -19,6 +20,7 @@ import {
 import { MobileOtpField } from "@/components/MobileOtpField";
 import { coursesList } from "@/data/courses";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { toast } from "react-hot-toast";
 
 const PHONE_DISPLAY = "1800-120-4748";
 const PHONE_HREF = "tel:18001204748";
@@ -175,7 +177,7 @@ const items = [
   { label: "Courses", icon: BookOpen, href: "/course", type: "link" },
   { label: "Chat", icon: MessageCircle, type: "chat" },
   { label: "Contact", icon: Phone, href: PHONE_HREF, highlight: true, type: "call" },
-  { label: "Ebooks", icon: FileText, href: EBOOK_URL, type: "link" }, // Ebooks - navigates to /resources/ebook
+  { label: "Ebooks", icon: FileText, href: EBOOK_URL, type: "link" },
   { label: "Curriculum", icon: Download, type: "brochure" },
 ];
 
@@ -334,11 +336,11 @@ function BrochureModal({ onClose }) {
         window.open(selectedCourse.brochureLink, "_blank", "noopener,noreferrer");
       }
 
-      alert("Form submitted. Thank you!");
+      toast.success("Form submitted successfully! Thank you. 🎉");
       onClose();
     } catch (error) {
       console.error("Curriculum form submission error:", error);
-      alert(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -464,7 +466,6 @@ function BrochureModal({ onClose }) {
                       className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-blue-50"
                     >
                       <span className="block font-semibold text-gray-900">{course.shortTitle}</span>
-                      {/* <span className="block text-xs text-gray-500">{course.blurb}</span> */}
                     </div>
                   ))
                 ) : (
@@ -481,7 +482,6 @@ function BrochureModal({ onClose }) {
           disabled={submitting}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2a619d] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#214d7d] disabled:bg-gray-400"
         >
-          {/* <Download className="h-4 w-4" /> */}
           {submitting ? "Submitting..." : "Download Curriculum"}
         </button>
       </form>
@@ -490,6 +490,7 @@ function BrochureModal({ onClose }) {
 }
 
 function ChatPanel({ onClose, onOpenBrochure }) {
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [profile, setProfile] = useState({ name: "", phone: "", email: "" });
   const [profileErrors, setProfileErrors] = useState({});
@@ -497,6 +498,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
   const [profileSaved, setProfileSaved] = useState(false);
   const [typing, setTyping] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showFormAlert, setShowFormAlert] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -569,22 +571,34 @@ function ChatPanel({ onClose, onOpenBrochure }) {
       setProfile(cleanProfile);
       setProfileSaved(true);
       setMessages((prev) => [...prev, userMessage(cleanProfile.name), greet(cleanProfile.name)]);
-      alert("Form submitted. Thank you!");
+      
+      // Show success toast message only - no redirect
+      toast.success("Thank you for submitting the form! 🎉");
+      
     } catch (error) {
       console.error("Chat lead submission error:", error);
-      alert(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleAction = (action) => {
-    setMessages((prev) => [...prev, userMessage(action.label)]);
-
-    if (action.href) {
-      window.location.href = action.href;
+    // Check if profile is not saved and action is not a link
+    if (!profileSaved && !action.href) {
+      setShowFormAlert(true);
+      setTimeout(() => setShowFormAlert(false), 3000);
       return;
     }
+
+    // If action has href, navigate and close chat
+    if (action.href) {
+      router.push(action.href);
+      onClose();
+      return;
+    }
+
+    setMessages((prev) => [...prev, userMessage(action.label)]);
 
     if (action.next === "brochure") {
       onOpenBrochure();
@@ -602,8 +616,23 @@ function ChatPanel({ onClose, onOpenBrochure }) {
     }, 500);
   };
 
+  const handleLinkClick = (href) => {
+    router.push(href);
+    onClose();
+  };
+
+  const handleMenuClick = () => {
+    if (!profileSaved) {
+      setShowFormAlert(true);
+      setTimeout(() => setShowFormAlert(false), 3000);
+      return;
+    }
+    handleAction({ label: "Menu", next: "menu" });
+  };
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-[75] flex h-[100dvh] flex-col overflow-hidden bg-white text-gray-900 shadow-2xl lg:hidden">
+      {/* Header with Minus and X Icons */}
       <div className="flex items-center justify-between bg-[#2a619d] p-4 text-white">
         <div className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-full bg-white/20">
@@ -617,14 +646,16 @@ function ChatPanel({ onClose, onOpenBrochure }) {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close chat"
-          className="grid h-8 w-8 place-items-center rounded-full hover:bg-white/15"
-        >
-          <Minus className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close chat"
+            className="grid h-8 w-8 place-items-center rounded-full hover:bg-white/15"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-gray-50 p-4">
@@ -649,12 +680,12 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                 {message.text}
               </div>
               {message.link && (
-                <Link
-                  href={message.link.href}
-                  className="inline-flex text-xs font-semibold text-blue-600"
+                <button
+                  onClick={() => handleLinkClick(message.link.href)}
+                  className="inline-flex text-xs font-semibold text-blue-600 hover:underline"
                 >
                   {message.link.label}
-                </Link>
+                </button>
               )}
               {message.actions && message.role === "bot" && (
                 <div className="flex flex-wrap gap-1.5">
@@ -662,7 +693,13 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                     <button
                       key={`${action.label}-${action.next || action.href}`}
                       type="button"
-                      onClick={() => handleAction(action)}
+                      onClick={() => {
+                        if (action.href) {
+                          handleLinkClick(action.href);
+                        } else {
+                          handleAction(action);
+                        }
+                      }}
                       className="rounded-full border border-gray-200 bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-blue-600 hover:text-white"
                     >
                       {action.label}
@@ -678,6 +715,15 @@ function ChatPanel({ onClose, onOpenBrochure }) {
             )}
           </div>
         ))}
+
+        {/* Form Alert Message */}
+        {showFormAlert && (
+          <div className="flex justify-center">
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-lg text-sm max-w-[80%] animate-pulse">
+              ⚠️ Please fill the form first to access the menu and chat features.
+            </div>
+          </div>
+        )}
 
         {typing && (
           <div className="flex gap-2">
@@ -736,7 +782,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#FE543D] px-4 py-3 text-sm font-bold text-white disabled:bg-gray-400"
               >
                 <Send className="h-4 w-4" />
-                {submitting ? "Starting..." : "Start Chat"}
+                {submitting ? "Submitting..." : "Start Chat"}
               </button>
             </div>
           </form>
@@ -762,8 +808,8 @@ function ChatPanel({ onClose, onOpenBrochure }) {
         </a>
         <button
           type="button"
-          onClick={() => handleAction({ label: "Menu", next: "menu" })}
-          className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700"
+          onClick={handleMenuClick}
+          className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
         >
           Menu
           <ChevronRight className="h-3 w-3" />
