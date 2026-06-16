@@ -243,7 +243,7 @@ function ModalShell({ title, subtitle, onClose, children }) {
 }
 
 function FieldError({ children }) {
-  return <div className="min-h-4 text-xs font-medium text-red-600">{children}</div>;
+  return <div className="min-h-2 text-xs font-medium text-red-600">{children}</div>;
 }
 
 function FieldLabel({ children }) {
@@ -419,7 +419,7 @@ function BrochureModal({ onClose }) {
 
         <div className="relative" ref={courseBoxRef}>
           <FieldLabel>Course</FieldLabel>
-          <button
+          <div
             type="button"
             onClick={() => {
               setCourseSearch(values.course);
@@ -433,7 +433,7 @@ function BrochureModal({ onClose }) {
               {values.course || "Search or select a course"}
             </span>
             <ChevronRight className={`h-4 w-4 text-gray-400 transition ${showCourses ? "rotate-90" : ""}`} />
-          </button>
+          </div>
 
           {showCourses && (
             <div className="absolute left-0 right-0 top-full z-[90] mt-1 rounded-xl border border-gray-200 bg-white shadow-xl">
@@ -453,7 +453,7 @@ function BrochureModal({ onClose }) {
               <div className="max-h-52 overflow-y-auto py-1">
                 {filteredCourses.length ? (
                   filteredCourses.map((course) => (
-                    <button
+                    <div
                       key={course.slug}
                       type="button"
                       onClick={() => {
@@ -464,8 +464,8 @@ function BrochureModal({ onClose }) {
                       className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-blue-50"
                     >
                       <span className="block font-semibold text-gray-900">{course.shortTitle}</span>
-                      <span className="block text-xs text-gray-500">{course.blurb}</span>
-                    </button>
+                      {/* <span className="block text-xs text-gray-500">{course.blurb}</span> */}
+                    </div>
                   ))
                 ) : (
                   <div className="px-3 py-3 text-sm text-red-600">No matching course found.</div>
