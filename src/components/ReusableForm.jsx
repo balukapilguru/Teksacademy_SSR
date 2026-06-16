@@ -197,7 +197,7 @@ export default function ReusableForm({
       banner: "Enrollnow",
       Enrollnow: "Enrollnow",
       requestCallback: "Request Callback—Website",
-      reserveSpot: "Reserve Spot—Website",
+      reserveSpot: "Website",
       default: "Website",
       career: "Career Guidance",
       Enquirynow: "Enquirynow",

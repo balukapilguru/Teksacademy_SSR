@@ -450,8 +450,8 @@ const FORM_CONFIGS = {
     successMessage: "Thank you! We'll contact you soon.",
     payloadMap: DEFAULT_PAYLOAD_MAP,
     staticPayload: {
-      source: "Reserve Spot—Website",
-      crm_source: "Reserve Spot—Website",
+      source: "Website",
+      crm_source: "Website",
       form_type: "reserveSpot",
       referredby: "reserveSpot",
       timestamp: () => new Date().toISOString(),
