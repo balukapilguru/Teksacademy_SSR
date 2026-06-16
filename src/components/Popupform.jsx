@@ -40,6 +40,7 @@ const Popupform = ({
   buttonText = "Enroll Now",
   successMessage = "Thank you! We'll contact you soon.",
   redirectToThankYou = true,
+  extraData = {}, // New prop for additional data
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -67,13 +68,58 @@ const Popupform = ({
     }
   }, [show]);
 
-  // Listen for custom form submission success event
+  // Handle form submission from ReusableForm
+  const handleFormSubmit = async (formValues) => {
+    if (onSubmit) {
+      setIsSubmitting(true);
+      try {
+        const result = await onSubmit(formValues);
+        
+        // If submission successful and redirect is enabled
+        if (result?.success !== false && redirectToThankYou) {
+          // Check for pending syllabus URL
+          const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+          if (pendingUrl) {
+            // Open syllabus in new tab
+            window.open(pendingUrl, "_blank", "noopener,noreferrer");
+            sessionStorage.removeItem('pendingSyllabusUrl');
+          }
+          
+          // Redirect to thank you page
+          router.push("/thankyou");
+          
+          // Close popup after redirect
+          setTimeout(() => {
+            onClose();
+          }, 100);
+        }
+      } catch (error) {
+        console.error("Form submission error:", error);
+        toast.error(error.message || "Submission failed. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  // Listen for form submission success event from ReusableForm
   useEffect(() => {
-    const handleFormSuccess = () => {
+    const handleFormSuccess = (event) => {
+      // Check for pending syllabus URL
+      const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+      if (pendingUrl) {
+        // Open syllabus in new tab
+        window.open(pendingUrl, "_blank", "noopener,noreferrer");
+        sessionStorage.removeItem('pendingSyllabusUrl');
+      }
+
       if (redirectToThankYou) {
         router.push("/thankyou");
       }
-      onClose();
+      
+      setTimeout(() => {
+        onClose();
+      }, 100);
     };
 
     window.addEventListener('formSubmissionSuccess', handleFormSuccess);
@@ -81,7 +127,7 @@ const Popupform = ({
     return () => {
       window.removeEventListener('formSubmissionSuccess', handleFormSuccess);
     };
-  }, [redirectToThankYou, router, onClose]);
+  }, [redirectToThankYou, router, onClose, extraData]);
 
   if (!isVisible && !show) return null;
   if (!mounted) return null;
@@ -122,6 +168,7 @@ const Popupform = ({
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
             aria-label="Close"
+            disabled={isSubmitting}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -140,9 +187,18 @@ const Popupform = ({
           <ReusableForm
             formType={formType}
             initialValues={initialValues}
-            buttonText={buttonText}
+            buttonText={isSubmitting ? "Submitting..." : buttonText}
             successMessage={successMessage}
             redirectToThankYou={redirectToThankYou}
+            onSubmit={onSubmit ? handleFormSubmit : undefined}
+            onSuccess={() => {
+              // This will be called by ReusableForm on success
+              const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+              if (pendingUrl) {
+                window.open(pendingUrl, "_blank", "noopener,noreferrer");
+                sessionStorage.removeItem('pendingSyllabusUrl');
+              }
+            }}
           />
         </div>
       </div>
