@@ -53,7 +53,9 @@ const Jobdescription = () => {
       <div className="main_container">
         <div className="shadow-2xl rounded-lg ">
           <div className="flex justify-center items-center bg-red-200">
-            <img
+            <Image
+            width={20}
+            height={30}
               className="rounded-md p-1 border border-black mt-1 h-14 w-14"
               src={demo.imgsrc}
               alt="logo"

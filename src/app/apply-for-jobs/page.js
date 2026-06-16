@@ -28,7 +28,7 @@ import metadata from "../../app/metadata.json";
 import Loader from "@/components/Loader";
 
 
-const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
 
 
 const PUBLIC_API_KEY =
@@ -782,7 +782,8 @@ const ApplyForJobs = () => {
                   No Image
                 </div>
               ) : (
-                <img
+                <Image
+                fill
                   src={imageUrl}
                   alt={student.name}
                   className="w-full h-full object-cover object-top rounded-full border border-gray-300"

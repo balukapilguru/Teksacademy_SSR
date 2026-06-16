@@ -10,6 +10,7 @@ import { MdEmail } from "react-icons/md";
 import axios from "axios";
 import Head from "next/head";
 import { SlCalender } from "react-icons/sl";
+import Image from "next/image";
 // import "react-quill/dist/quill.snow.css";
 const mailicon =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/success_Stories/emailicon.webp";
@@ -335,7 +336,9 @@ const BlogDetails = () => {
                     rel="noopener noreferrer"
                     aria-label="Share on Twitter"
                   >
-                    <img src={twitter} alt="gmail" className="w-6 h-6 " />
+                    <Image 
+                    width={20}
+                    height={20} src={twitter} alt="gmail" className="w-6 h-6 " />
                   </a>
 
                   <a
@@ -348,7 +351,10 @@ const BlogDetails = () => {
                     rel="noopener noreferrer"
                     aria-label="Share via Email"
                   >
-                    <img src={mailicon} alt="gmail" className="w-10 h-10" />
+                    <Image 
+                    width={20}
+                    height={20}
+                    src={mailicon} alt="gmail" className="w-10 h-10" />
                   </a>
                 </div>
 
@@ -386,7 +392,10 @@ const BlogDetails = () => {
                         className="text-[#c0c0c0] flex justify-center items-center bg-black hover:text-[#c0c0c0] hover:bg-black rounded-full p-2 mr-1"
                         rel="noopener noreferrer"
                       >
-                        <img src={twitter} alt="gmail" className="w-5 h-5" />
+                     <Image 
+                    width={20}
+                    height={20}
+                     src={twitter} alt="gmail" className="w-5 h-5" />
                       </a>
 
                       <a
@@ -399,7 +408,10 @@ const BlogDetails = () => {
                         className="text-[#a7a7a7] hover:text-[#f10000] "
                         rel="noopener noreferrer"
                       >
-                        <img src={mailicon} alt="gmail" className="w-10 h-10" />
+                         <Image 
+                    width={20}
+                    height={20}
+                         src={mailicon} alt="gmail" className="w-10 h-10" />
                       </a>
                     </div>
                   </div>

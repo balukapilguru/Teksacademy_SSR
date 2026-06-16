@@ -265,7 +265,6 @@ export default function RegistrationForm() {
         "course bundle",
         "package details",
       ],
-   
     };
 
     const autofillMap = {};
@@ -482,13 +481,13 @@ export default function RegistrationForm() {
     return () => clearInterval(interval);
   }, [otpStatus.timer]);
 
-  useEffect(() => {
-    if (otpModal.open) {
-      setTimeout(() => {
-        otpRefs.current[0]?.focus();
-      }, 100);
-    }
-  }, [otpModal.open]);
+  // useEffect(() => {
+  //   if (otpModal.open) {
+  //     setTimeout(() => {
+  //       otpRefs.current[0]?.focus();
+  //     }, 100);
+  //   }
+  // }, [otpModal.open]);
   // ==================== INITIALIZE FORM VALUES ====================
 
   useEffect(() => {
@@ -594,29 +593,29 @@ export default function RegistrationForm() {
   };
 
   // ==================== VERIFY OTP ====================
-useEffect(() => {
-  if (formData?.fieldsList) {
-    // Validate all fields have required properties
-    const invalidFields = formData.fieldsList.filter(field => !field.key);
-    if (invalidFields.length > 0) {
-      console.error('Fields missing key property:', invalidFields);
-      showToast('Form configuration error. Please contact support.', 'error');
+  useEffect(() => {
+    if (formData?.fieldsList) {
+      // Validate all fields have required properties
+      const invalidFields = formData.fieldsList.filter((field) => !field.key);
+      if (invalidFields.length > 0) {
+        console.error("Fields missing key property:", invalidFields);
+        showToast("Form configuration error. Please contact support.", "error");
+      }
     }
-  }
+  }, [formData]);
 
-}, [formData]);
-
-
-useEffect(() => {
-  if (formData?.fieldsList) {
-    console.log('Fields List:', formData.fieldsList.map(f => ({ 
-      uuid: f.uuid, 
-      key: f.key, 
-      label: f.label 
-    })));
-  }
-}, [formData]);
-
+  useEffect(() => {
+    if (formData?.fieldsList) {
+      console.log(
+        "Fields List:",
+        formData.fieldsList.map((f) => ({
+          uuid: f.uuid,
+          key: f.key,
+          label: f.label,
+        })),
+      );
+    }
+  }, [formData]);
 
   const verifyOTP = async (autoSubmit = false, otpOverride = null) => {
     const finalOtp = otpOverride || otpValue; // otpValue is a string
@@ -1220,13 +1219,13 @@ useEffect(() => {
   // ==================== OTP MODAL COMPONENT ====================
 
   const OTPSection = () => {
-    if (!otpModal.open) return null;
-
     const inputRefOTP = useRef(null);
 
-    useEffect(() => {
-      inputRefOTP.current?.focus();
-    }, []);
+   useEffect(() => {
+  inputRefOTP.current?.focus();
+}, []);
+
+    if (!otpModal.open) return null;
 
     const handleChange = (e) => {
       const value = e.target.value.replace(/\D/g, "").slice(0, 6);
@@ -1357,11 +1356,11 @@ useEffect(() => {
 
   // ==================== EMAIL INPUT COMPONENT ====================
 
-  useEffect(() => {
-    if (otpModal.open) {
-      otpRefs.current[0]?.focus();
-    }
-  }, [otpModal.open]);
+  // useEffect(() => {
+  //   if (otpModal.open) {
+  //     otpRefs.current[0]?.focus();
+  //   }
+  // }, [otpModal.open]);
 
   const EmailInputScreen = () => {
     return (
@@ -1393,7 +1392,7 @@ useEffect(() => {
                     autoFocus
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    We'll send a 6-digit OTP to verify your email
+                    We&apos;ll send a 6-digit OTP to verify your email{" "}
                   </p>
                 </div>
 
@@ -1450,13 +1449,15 @@ useEffect(() => {
 
   // ==================== CLEANUP ====================
 
-  useEffect(() => {
-    return () => {
-      if (autoSubmitTimeoutRef.current) {
-        clearTimeout(autoSubmitTimeoutRef.current);
-      }
-    };
-  }, []);
+ useEffect(() => {
+  const timeoutId = autoSubmitTimeoutRef.current;
+
+  return () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+}, []);
 
   const mapBackendToForm = (fieldsList, userData) => {
     const mappedValues = {};
@@ -1478,7 +1479,7 @@ useEffect(() => {
       const mapped = mapBackendToForm(formData?.fieldsList, stored.data);
       setFormValues(mapped);
     }
-  }, [formData?.fieldsList]);
+  }, [formData?.fieldsList,formData]);
   // ==================== Auto Mapping Student data ====================
 
   // useEffect(() => {
@@ -1596,11 +1597,10 @@ useEffect(() => {
             </h2>
 
             <p className="text-gray-600 mb-6">
-             Thank you for registering for the batch! 🎉
-          <br></br>
-          The class joining link will be shared with you  via WhatsApp and email.
-          
-          Stay tuned and get ready to begin your learning journey!
+              Thank you for registering for the batch! 🎉
+              <br></br>
+              The class joining link will be shared with you via WhatsApp and
+              email. Stay tuned and get ready to begin your learning journey!
             </p>
 
             {/* WhatsApp Section */}

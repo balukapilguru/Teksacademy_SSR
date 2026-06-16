@@ -291,7 +291,7 @@ function BranchAboutSection({ data }) {
         </div>
         <div className="grid grid-cols-10 xl:grid-cols-11 px-6 gap-y-4 xl:px-0 2xl:mt-4 3xl:mt-0">
           <div className="col-span-10 xl:col-span-6">
-            <Img src={aboutImage} width={920} height={520} alt={image?.alt || "Teks Academy About Block"} className="border rounded-md h-40 sm:h-48 md:h-56 lg:h-[380px] xl:h-[340px] 2xl:h-[480px] 3xl:h-[500px] w-[900px] object-cover" />
+            <Image src={aboutImage} width={920} height={520} alt={image?.alt || "Teks Academy About Block"} className="border rounded-md h-40 sm:h-48 md:h-56 lg:h-[380px] xl:h-[340px] 2xl:h-[480px] 3xl:h-[500px] w-[900px] object-cover" />
           </div>
           <div className="col-span-10 xl:col-span-5 flex w-full justify-center items-center xl:px-4">
             <div className="text-[#FE543D] flex flex-col justify-center items-start xl:gap-y-3 2xl:w-[90%] 2xl:mx-auto">
@@ -321,7 +321,7 @@ function BranchAboutSection({ data }) {
                 <Link rel="preconnect" href={aboutButton.link || "/discover/about-us"}>
                   <button className="min-w-[48px] min-h-[48px] mt-3 flex bg-[#FE543D] justify-center items-center rounded-full text-white text-[0.84rem] lg:text-[0.8rem] xl:text-[1rem] w-[140px] h-10 xl:h-12 xl:w-[180px] 3xl:h-14 3xl:w-[220px] relative">
                     <span className="text-center -translate-x-1/4">{aboutButton.text || "Learn More"}</span>
-                    <Img src={aboutArrow} width={240} height={15} alt="learn more arrow" className="absolute right-0 top-0 h-full w-auto" />
+                    <Image src={aboutArrow} width={240} height={15} alt="learn more arrow" className="absolute right-0 top-0 h-full w-auto" />
                   </button>
                 </Link>
               </div>
@@ -337,7 +337,7 @@ function BranchAboutSection({ data }) {
               return (
                 <div key={stat.id || index} className="flex justify-center items-center gap-x-1 lg:gap-x-2">
                   <div className="border w-7 h-7 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 3xl:w-[72px] 3xl:h-[72px] flex justify-center items-center rounded-full bg-white">
-                    <Img src={statIcon} width={74} height={74} alt={stat.label || stat.title || "teks academy statistic"} className="w-2/3 h-2/3 object-contain" />
+                    <Image src={statIcon} width={74} height={74} alt={stat.label || stat.title || "teks academy statistic"} className="w-2/3 h-2/3 object-contain" />
                   </div>
                   <div className="text-justify font-semibold text-[8px] md:text-[9px] lg:text-[0.84rem] xl:text-[0.9rem] 2xl:text-[1rem] 3xl:text-[1.34rem]">
                     <div>{stat.count || stat.value}</div>
@@ -383,7 +383,7 @@ function CareerServices({ data }) {
             )}
           </div>
           <div className="relative h-72 rounded-2xl overflow-hidden">
-            <Img
+            <Image
               src={data.image?.desktop || data.image?.src}
               alt={data.image?.alt || "career"}
               fill
@@ -432,7 +432,7 @@ function SuccessStories({ data }) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {(current?.cards?.videoCards || current?.Cards?.videoCards || []).map((v, i) => (
             <div key={i} className="relative rounded-xl overflow-hidden aspect-video bg-gray-100 shadow">
-              <Img
+              <Image
                 src={v.thumbnail?.src || v.thumbnail}
                 alt={v.thumbnail?.alt || v.name}
                 fill
@@ -453,7 +453,7 @@ function SuccessStories({ data }) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {(current?.cards?.placementCards || current?.Cards?.placementCards || []).map((p, i) => (
             <div key={i} className="relative rounded-xl overflow-hidden aspect-[3/4] bg-gray-100 shadow">
-              <Img src={p.image?.src || p.image} alt={p.image?.alt || p.name} fill style={{ objectFit: "cover" }} />
+              <Image src={p.image?.src || p.image} alt={p.image?.alt || p.name} fill style={{ objectFit: "cover" }} />
             </div>
           ))}
         </div>
