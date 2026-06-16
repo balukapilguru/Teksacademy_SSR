@@ -200,7 +200,7 @@ export default function CourseInfoTable({
 
           {/* DESKTOP TABLE */}
           <div className="hidden lg:block w-full overflow-x-auto rounded-2xl shadow-xl border">
-            <div className="grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] text-white text-sm px-6 py-4 bg-[#47557c]">
+            <div className="grid grid-cols-7 text-white text-sm px-6 py-4 bg-[#47557c]">
               {columns.map((col, i) => (
                 <div key={i}>{col}</div>
               ))}
@@ -209,7 +209,7 @@ export default function CourseInfoTable({
             {universities.map((row, index) => (
               <div
                 key={index}
-                className="grid grid-cols-[220px_280px_220px_120px_140px_180px_180px] items-center px-4 py-5 border-b"
+                className="grid grid-cols-7 items-center px-4 py-5 border-b"
               >
                 <div className="text-sm font-medium">
                   {row.universityName}
