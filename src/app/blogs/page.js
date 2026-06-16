@@ -9,6 +9,7 @@ import { SlCalender } from "react-icons/sl";
 import metadata from "../../app/metadata.json";
 
 import Link from "next/link";
+import Image from "next/image";
 
 const courseList = [
   "Full Stack Python",
@@ -431,7 +432,9 @@ const BlogPaginationPage = () => {
                     >
                       {article?.category}
                     </p>
-                    <img
+                    <Image
+                    width={100}
+                    height={150}
                       src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                       alt={article?.title}
                       className="w-full h-48 rounded-md"
@@ -503,7 +506,9 @@ const BlogPaginationPage = () => {
                       key={index}
                       className="space-y-1 lg:space-y-0.5 flex items-center gap-3"
                     >
-                      <img
+                      <Image
+                      width={200}
+                      height={150}
                         src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                         alt={article?.title}
                         className="w-full h-20 rounded-md"

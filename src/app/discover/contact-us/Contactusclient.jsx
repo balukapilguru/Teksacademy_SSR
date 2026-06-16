@@ -123,7 +123,7 @@ export default function ContactUsPage() {
         <div className="w-full lg:w-[58%] flex flex-col p-4 lg:p-8">
           <h1 className="text-xl font-bold text-gray-900 mb-0.5">Contact Us</h1>
           <p className="text-xs text-gray-500 mb-4">
-            Fill in your details and we'll get back to you shortly.
+            Fill in your details and we&apos;ll get back to you shortly.
           </p>
 
           <ReusableForm

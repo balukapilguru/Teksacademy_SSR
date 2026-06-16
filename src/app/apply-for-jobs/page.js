@@ -782,7 +782,8 @@ const ApplyForJobs = () => {
                   No Image
                 </div>
               ) : (
-                <img
+                <Image
+                fill
                   src={imageUrl}
                   alt={student.name}
                   className="w-full h-full object-cover object-top rounded-full border border-gray-300"

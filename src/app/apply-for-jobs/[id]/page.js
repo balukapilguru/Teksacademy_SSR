@@ -690,11 +690,11 @@ const JobDetail = () => {
             <div className="2xl:w-6/12 lg:w-4/5 p-3 h-48 shadow-2xl rounded-lg mt-10">
               <div className="flex float-right items-center justify-center border-2 rounded-md p-1 mt-1 h-14 w-14">
                 {jobData?.jobPosting?.company_logo ? (
-                  <img
+                  <Image
                     src={`https://teksacademy.s3.ap-south-1.amazonaws.com/HRM/jobposting_companylogos/${jobData.jobPosting.company_logo}`}
                     alt="icon"
-                    width="40"
-                    height="40"
+                    width={40}
+                    height={40}
                   />
                 ) : (
                   <span className="border-2 rounded-md border-gray-200 p-2">

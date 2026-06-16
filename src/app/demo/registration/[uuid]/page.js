@@ -762,7 +762,7 @@ export default function RegistrationForm() {
               Registration Successful 🎉
             </h2>
             <p className="text-gray-600 mb-6">
-              Thank you for registering. We'll be in touch shortly.
+              Thank you for registering. We&apos;ll be in touch shortly.
             </p>
 
             {formData?.communityLink && (

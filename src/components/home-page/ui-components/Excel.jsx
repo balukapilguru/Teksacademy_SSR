@@ -312,7 +312,7 @@ export default function Excel({ data, courseName }) {
                     Request a Callback
                   </p>
                   <p className="text-teal-300 text-xs">
-                    We'll reach out within 24 hrs
+                    We&apos;ll reach out within 24 hrs
                   </p>
                 </div>
                 <button

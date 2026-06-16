@@ -132,7 +132,7 @@ export default function SupportPage() {
         <div className="relative w-full lg:w-[50%] bg-[#2a619d] flex flex-col p-7 lg:p-8 overflow-hidden">
           <h1 className="text-2xl font-bold text-white mb-2">Support Center</h1>
           <p className="text-sm text-white mb-6">
-            Fill in your details and we'll get back to you shortly.
+            Fill in your details and we&apos;ll get back to you shortly.
           </p>
           {/* Support Categories Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 mb-8">

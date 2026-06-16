@@ -96,7 +96,7 @@ export default function FindMyCourse() {
         Hot picks right now: Full Stack Java, Full Stack Python, Cybersecurity, Gen AI,
         AWS + DevOps, Data Science, Data Analytics, Digital Marketing, BIM-Revit MEP,
         AutoCAD, Medical Coding, SAP FICO, SAP MM, and Testing Automation.
-        Answer 5 quick questions, and we'll instantly match you with the course that
+        Answer 5 quick questions, and we&apos;ll instantly match you with the course that
         fits your goals best.
       </p>
 
