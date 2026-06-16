@@ -74,37 +74,35 @@ export default function FindMyCourse() {
   return (
     <main className="main_container py-4 ">
       {/* NEW BANNER SECTION - Full Stack Python Developer Certification Course */}
-      <section className="bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] text-white rounded-xl relative overflow-hidden z-0">
-        {/* Optional: subtle background pattern/glow */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl" />
-        </div>
-        
-        <div className="relative z-10 mx-auto px-16 py-16">
-          <div className="flex flex-col items-center text-center">
-            {/* Badge / chip */}
-            <span className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border border-white/20 mb-6">
-              <Sparkles className="h-3.5 w-3.5 mr-1.5" />Course Finder
-            </span>
-            
-            {/* Main Title */}
-            <div className="text-[37px] font-bold leading-tight tracking-tight">
-              Choose the right course in 60 seconds zero guesswork, maximum clarity.
-            </div>
-            
-            {/* Description */}
-            <p className="mt-6 text-sm md:text-sm text-white/80">
-            Hot picks right now: Full Stack Java, Full Stack Python, Cybersecurity, Gen AI, 
-            AWS + DevOps, Data Science, Data Analytics, Digital Marketing, BIM-Revit MEP, 
-            AutoCAD, Medical Coding, SAP FICO, SAP MM, and Testing Automation. 
-            Answer 5 quick questions, and we'll instantly match you with the course that 
-            fits your goals best.
-            </p>
+     <div className="rounded-xl text-white overflow-hidden 
+  bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.25),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.25),transparent_40%),linear-gradient(to_right,#0a0028,#011338,#1a0033)]">
 
-          </div>
-        </div>
-      </section>
+  <div className=" max-w-8xl px-6 sm:px-10 lg:px-16 py-12 sm:py-14 lg:py-16">
+    <div className="flex flex-col items-center text-center">
+
+      {/* Badge */}
+      <span className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border border-white/20 mb-6">
+        <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+        Course Finder
+      </span>
+
+      {/* Title */}
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight max-w-4xl">
+       Choose the right course in 60 seconds, zero guesswork, maximum clarity.
+      </h1>
+
+      {/* Description */}
+      <p className="md:mt-5 mt-3 text-sm sm:text-base text-white/80 max-w-2xl">
+        Hot picks right now: Full Stack Java, Full Stack Python, Cybersecurity, Gen AI,
+        AWS + DevOps, Data Science, Data Analytics, Digital Marketing, BIM-Revit MEP,
+        AutoCAD, Medical Coding, SAP FICO, SAP MM, and Testing Automation.
+        Answer 5 quick questions, and we'll instantly match you with the course that
+        fits your goals best.
+      </p>
+
+    </div>
+  </div>
+</div>
 
    
 

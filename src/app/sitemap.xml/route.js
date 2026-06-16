@@ -1,999 +1,405 @@
-// import { NextResponse } from "next/server";
-
-// export async function GET() {
-//   const baseUrl = process.env.NEXT_PUBLIC_TEKSSKILL_API_URL;
-
-//   const response = await fetch(
-//     `${baseUrl}/api/v1/sitemap.xml`,
-//     {
-//       cache: "no-store",
-//     }
-//   );
-
-//   const xml = await response.text();
-
-//   return new NextResponse(xml, {
-//     status: 200,
-//     headers: {
-//       "Content-Type": "application/xml",
-//     },
-//   });
-// }
-
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  // Static XML content (paste the entire sitemap here)
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+{/* <!--   created with Free Online Sitemap Generator www.xml-sitemaps.com   --> */}
 <url>
-<loc>https://teksversity.com/</loc>
-<lastmod>2026-01-28T22:39:36.736+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>1.00</priority>
+ <loc>https://teksacademy.com/</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>1.0</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses</loc>
-<lastmod>2026-01-28T22:39:36.736+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/course</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/university</loc>
-<lastmod>2026-01-28T22:39:36.736+00:00</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-full-stack-python-development-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/privacy-policy</loc>
-<lastmod>2026-01-28T22:39:36.736+00:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.70</priority>
+ <loc>https://teksacademy.com/courses/best-full-stack-java-development-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/terms-conditions</loc>
-<lastmod>2026-01-28T22:39:36.736+00:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.70</priority>
+ <loc>https://teksacademy.com/courses/best-data-science-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/university/amity-university</loc>
-<lastmod>2025-12-25T06:43:16.805+00:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.70</priority>
+ <loc>https://teksacademy.com/courses/best-awsplusdevops-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/university/jain-university</loc>
-<lastmod>2025-12-25T06:43:16.805+00:00</lastmod>
-<changefreq> monthly </changefreq>
-<priority>0.70</priority>
+ <loc>https://teksacademy.com/courses/best-digital-marketing-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/advanced-excel-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.566+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/courses/best-data-analytics-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/autocad-certification-training-course</loc>
-<lastmod>2026-01-20T05:03:34.568+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/courses/best-salesforce-admin-development-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/aws-and-devops-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.569+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/courses/best-bim-building-information-modeling-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba</loc>
-<lastmod>2026-01-20T05:03:34.570+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/courses/best-sap-fico-finance-and-controlling-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba/economics</loc>
-<lastmod>2026-01-21T12:56:43.659+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-medical-coding-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba/english</loc>
-<lastmod>2026-01-21T12:56:43.659+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-testingtools-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba/journalism-and-mass-communication</loc>
-<lastmod>2026-01-21T12:56:43.659+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-vlsi-course-training-institute-hyderabad</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba/political-science</loc>
-<lastmod>2026-01-21T12:56:43.660+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-multimedia-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/ba/sociology</loc>
-<lastmod>2026-01-21T12:56:43.660+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-advance-excel-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba</loc>
-<lastmod>2026-01-21T12:56:43.661+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-autocad-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/bachelor-of-business-administration</loc>
-<lastmod>2026-01-21T12:56:43.661+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-revit-mep-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/business-analytics</loc>
-<lastmod>2026-01-21T12:56:43.662+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-business-analytics-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/data-analytics</loc>
-<lastmod>2026-01-21T12:56:43.662+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-generative-ai-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/data-science-and-analytics</loc>
-<lastmod>2026-01-20T05:03:34.573+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-sapmm-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/digital-marketing</loc>
-<lastmod>2026-01-21T12:56:43.662+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/best-cyber-security-course-training-institute</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/healthcare-management</loc>
-<lastmod>2026-01-21T12:56:43.662+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/banking-financial-services-and-insurance-course</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bba/travel-and-tourism-management</loc>
-<lastmod>2026-01-21T12:56:43.663+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/courses/project-management-certification-course</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.9</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca</loc>
-<lastmod>2026-01-20T05:03:34.575+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-ameerpet</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/applied-data-engineering</loc>
-<lastmod>2026-01-21T12:56:43.663+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-hiteccity</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/artificial-intelligence</loc>
-<lastmod>2026-01-20T05:03:34.575+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-secunderabad</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/cloud-and-security</loc>
-<lastmod>2026-01-20T05:03:34.576+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-dilsukhnagar</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/cloud-computing</loc>
-<lastmod>2026-01-20T05:03:34.576+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-mehdipatnam</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/computer-science-and-it</loc>
-<lastmod>2026-01-20T05:03:34.576+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-kukatpally</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/cyber-security</loc>
-<lastmod>2026-01-20T05:03:34.576+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-bangalore</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/data-analytics</loc>
-<lastmod>2026-01-21T12:56:43.663+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-visakhapatnam</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/data-engineering</loc>
-<lastmod>2026-01-21T12:56:43.664+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/branch/best-software-training-institute-salem</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/data-science-and-analytics</loc>
-<lastmod>2026-01-20T05:03:34.577+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/success-stories</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/data-science</loc>
-<lastmod>2026-01-20T05:03:34.577+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/resources/ebook</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bca/software-engineering</loc>
-<lastmod>2026-01-20T05:03:34.577+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/resources/interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bcom</loc>
-<lastmod>2026-01-20T05:03:34.578+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/python-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bcom/accounting-and-finance</loc>
-<lastmod>2026-01-21T12:56:43.664+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/java-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bcom/bachelor-of-commerce</loc>
-<lastmod>2026-01-20T05:03:34.579+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/data-science-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bcom/international-finance-and-accounting</loc>
-<lastmod>2026-01-21T12:56:43.664+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/digital-marketing-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bfsi-certification-training-program</loc>
-<lastmod>2026-01-20T05:03:34.580+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/aws-dev-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/bim-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.581+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/bim-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/business-analytics-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.582+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/software-testing-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/cyber-security-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.583+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/vlsi-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/data-analytics-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.583+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+<loc>https://teksacademy.com/interview-questions/sap-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/data-science-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.584+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/salseforce-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/digital-marketing-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.585+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/medical-coding-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dr</loc>
-<lastmod>2026-01-20T05:03:34.586+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/multimedia-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dr/dr-in-honourable-doctorate</loc>
-<lastmod>2026-01-21T12:56:43.664+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/interview-questions/advanced-excel-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-artificial-intelligence-and-business-intelligence</loc>
-<lastmod>2026-01-21T12:56:43.665+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/auto-cad-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-cloud-computing-and-devops-engineering</loc>
-<lastmod>2026-01-21T12:56:43.666+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/revit-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-data-science-and-digital-marketing-analytics</loc>
-<lastmod>2026-01-21T12:56:43.667+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/data-analytics-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-data-science-and-full-stack-python</loc>
-<lastmod>2026-01-21T12:56:43.668+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/sap-mm-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-data-science-with-ai-and-ml</loc>
-<lastmod>2026-01-20T05:03:34.591+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/cyber-security-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-digital-marketing-and-business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.592+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/generative-ai-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-digital-marketing-and-ui-ux</loc>
-<lastmod>2026-01-20T05:03:34.593+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/business-analytics-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-full-stack-cloud-development</loc>
-<lastmod>2026-01-20T05:03:34.594+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/banking-financial-services-and-insurance-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-full-stack-development-and-software-testing</loc>
-<lastmod>2026-01-20T05:03:34.595+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/interview-questions/project-management-program-interview-questions</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-project-management-and-business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.595+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/discover/about-us</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-project-management-and-devops</loc>
-<lastmod>2026-01-20T05:03:34.596+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/discover/gallery</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/dual-certification-in-python-programming-and-data-visualization</loc>
-<lastmod>2026-01-20T05:03:34.597+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/discover/media</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/fast-track-course-in-aws-and-devops</loc>
-<lastmod>2026-01-20T05:03:34.598+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/discover/contact-us</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/fast-track-course-in-data-science</loc>
-<lastmod>2026-01-20T05:03:34.599+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/discover/support</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/fast-track-course-in-digital-marketing</loc>
-<lastmod>2026-01-20T05:03:34.599+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/placements/alumni</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/fast-track-course-in-full-stack-java</loc>
-<lastmod>2026-01-20T05:03:34.600+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/placements/recruiters</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/fast-track-course-in-full-stack-python</loc>
-<lastmod>2026-01-20T05:03:34.601+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
+ <loc>https://teksacademy.com/apply-for-jobs</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>weekly</changefreq>
+ <priority>0.8</priority>
 </url>
 <url>
-<loc>https://teksversity.com/courses/full-stack-java-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.602+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
+ <loc>https://teksacademy.com/blogs</loc>
+ <lastmod>2026-01-29T10:42:48+00:00</lastmod>
+ <changefreq>daily</changefreq>
+ <priority>0.8</priority>
 </url>
-<url>
-<loc>https://teksversity.com/courses/full-stack-python-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.603+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/generative-ai-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.603+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma</loc>
-<lastmod>2026-01-20T05:03:34.604+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/economics</loc>
-<lastmod>2026-01-21T12:56:43.668+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/english</loc>
-<lastmod>2026-01-21T12:56:43.669+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/jainology-and-comparative-religion-and-philosophy</loc>
-<lastmod>2026-01-21T12:56:43.669+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/journalism-and-mass-communication</loc>
-<lastmod>2026-01-21T12:56:43.669+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/public-policy-and-governance</loc>
-<lastmod>2026-01-21T12:56:43.669+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ma/public-policy</loc>
-<lastmod>2026-01-21T12:56:43.670+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba</loc>
-<lastmod>2026-01-20T05:03:34.606+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/ai-driven-business-strategy</loc>
-<lastmod>2026-01-20T05:03:34.607+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/ai-driven-finance</loc>
-<lastmod>2026-01-20T05:03:34.607+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/ai-driven-human-resources</loc>
-<lastmod>2026-01-20T05:03:34.607+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/ai-driven-marketing</loc>
-<lastmod>2026-01-20T05:03:34.607+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/artificial-intelligence</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/banking-and-finance</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/business-intelligence-and-analytics</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/data-science-and-analytics</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/data-science</loc>
-<lastmod>2026-01-20T05:03:34.608+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/digital-entrepreneurship</loc>
-<lastmod>2026-01-20T05:03:34.609+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/digital-marketing-and-e-commerce</loc>
-<lastmod>2026-01-20T05:03:34.609+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/digital-marketing-management</loc>
-<lastmod>2026-01-20T05:03:34.609+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/entrepreneurship-and-venture-creation</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/finance-and-business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/finance-and-marketing</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/finance</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/general-management</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/human-resource-analytics</loc>
-<lastmod>2026-01-20T05:03:34.610+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/human-resource-and-business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.611+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/human-resource-management-and-finance</loc>
-<lastmod>2026-01-20T05:03:34.611+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/human-resource-management</loc>
-<lastmod>2026-01-20T05:03:34.611+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/information-technology-management</loc>
-<lastmod>2026-01-20T05:03:34.611+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/international-finance-accredited-by-acca-uk</loc>
-<lastmod>2026-01-20T05:03:34.612+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/marketing-and-business-analytics</loc>
-<lastmod>2026-01-20T05:03:34.612+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/marketing-and-human-resource-management</loc>
-<lastmod>2026-01-20T05:03:34.612+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/marketing</loc>
-<lastmod>2026-01-21T12:56:43.670+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/project-management</loc>
-<lastmod>2026-01-21T12:56:43.670+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mba/supply-chain-production-and-operations-management</loc>
-<lastmod>2026-01-20T05:03:34.612+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca</loc>
-<lastmod>2026-01-20T05:03:34.613+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/ai-ml</loc>
-<lastmod>2026-01-20T05:03:34.613+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/artificial-intelligence</loc>
-<lastmod>2026-01-20T05:03:34.613+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/augmented-reality-and-virtual-reality</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/blockchain-technology-and-management</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/cloud-computing</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/computer-science-and-information-technology</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/cyber-security</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/data-analytics</loc>
-<lastmod>2026-01-20T05:03:34.614+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/data-science</loc>
-<lastmod>2026-01-20T05:03:34.615+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/devops</loc>
-<lastmod>2026-01-20T05:03:34.615+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/full-stack-development</loc>
-<lastmod>2026-01-20T05:03:34.615+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/natural-language-processing-large-language-models-development</loc>
-<lastmod>2026-01-20T05:03:34.615+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mca/software-engineering</loc>
-<lastmod>2026-01-20T05:03:34.615+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom</loc>
-<lastmod>2026-01-20T05:03:34.616+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom/accounting-and-finance</loc>
-<lastmod>2026-01-21T12:56:43.671+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom/financial-management</loc>
-<lastmod>2026-01-21T12:56:43.671+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom/financial-technology</loc>
-<lastmod>2026-01-20T05:03:34.617+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom/international-finance-accredited-by-acca-uk</loc>
-<lastmod>2026-01-21T12:56:43.671+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/mcom/professional-accounting-and-finance-accredited-by-cpa-us</loc>
-<lastmod>2026-01-21T12:56:43.671+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/medical-coding-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.619+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ms</loc>
-<lastmod>2026-01-20T05:03:34.619+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/ms/data-science</loc>
-<lastmod>2026-01-20T05:03:34.620+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/multimedia-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.620+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/pmp-certification-training-program</loc>
-<lastmod>2026-01-20T05:03:34.621+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-aws-and-devops</loc>
-<lastmod>2026-01-20T05:03:34.622+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-bim</loc>
-<lastmod>2026-01-20T05:03:34.623+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-data-analytics</loc>
-<lastmod>2026-01-20T05:03:34.623+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-data-science</loc>
-<lastmod>2026-01-20T05:03:34.624+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-digital-marketing</loc>
-<lastmod>2026-01-21T12:56:43.672+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-full-stack-development-java</loc>
-<lastmod>2026-01-21T12:56:43.673+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-full-stack-development-python</loc>
-<lastmod>2026-01-21T12:56:43.674+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/post-graduation-certification-in-multimedia</loc>
-<lastmod>2026-01-21T12:56:43.675+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/revit-mep-certification-course</loc>
-<lastmod>2026-01-20T05:03:34.628+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/salesforce-certification-training-program</loc>
-<lastmod>2026-01-20T05:03:34.629+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/sap-fico-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.630+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/sap-mm-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.631+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.90</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-3ds-max-expert-program</loc>
-<lastmod>2026-01-21T12:56:43.676+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-autocad-core-training-english</loc>
-<lastmod>2026-01-20T05:03:34.632+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-autocad-core-training-telugu</loc>
-<lastmod>2026-01-20T05:03:34.633+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-aws-cloud-course</loc>
-<lastmod>2026-01-20T05:03:34.634+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-bim-project-execution-course</loc>
-<lastmod>2026-01-20T05:03:34.635+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-c-programming-basics-telugu</loc>
-<lastmod>2026-01-20T05:03:34.636+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-core-python-telugu</loc>
-<lastmod>2026-01-20T05:03:34.636+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-digital-marketing-telugu</loc>
-<lastmod>2026-01-20T05:03:34.637+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-ielts-intensive-prep-course</loc>
-<lastmod>2026-01-20T05:03:34.638+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-pgdca-advanced-diploma-in-computer-applications</loc>
-<lastmod>2026-01-20T05:03:34.639+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-python</loc>
-<lastmod>2026-01-20T05:03:34.640+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-revit-mep-engineer-program-telugu</loc>
-<lastmod>2026-01-20T05:03:34.640+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-salesforce-career-program</loc>
-<lastmod>2026-01-20T05:03:34.641+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-seo-smm-complete-course</loc>
-<lastmod>2026-01-20T05:03:34.642+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/self-paced-learning-in-spoken-english</loc>
-<lastmod>2026-01-20T05:03:34.643+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/testing-tools-certification-program</loc>
-<lastmod>2026-01-20T05:03:34.643+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-<url>
-<loc>https://teksversity.com/courses/vlsi-certification-training-program</loc>
-<lastmod>2026-01-20T05:03:34.644+00:00</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.80</priority>
-</url>
-</urlset>`;
-
-
-
-  return new NextResponse(xml, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/xml",
-    },
-  });
-}
+</urlset>

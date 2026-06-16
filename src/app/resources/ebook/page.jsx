@@ -234,26 +234,35 @@ const Ebook = () => {
                   {communitySection.description}
                 </p>
                 {communitySection.button && (
-                  <a
-                    href={communitySection.button.ebookurl || "#"}
-                    target="_blank"
-                    className="inline-flex items-center bg-[#FE543D] text-white md:px-6 md:py-3 p-1.5 rounded-lg hover:bg-[#e04a35] transition-colors"
-                  >
-                    {communitySection.button.name}
-                    <svg
-                      className="w-5 h-5 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </a>
+                 <a
+  href={communitySection.button.ebookurl || "#"}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center justify-center gap-2 
+             bg-[#FE543D] text-white 
+             px-4 py-2.5 sm:px-5 sm:py-3 
+             text-sm sm:text-base font-semibold
+             rounded-lg 
+             hover:bg-[#e04a35] 
+             transition-all duration-200 
+             whitespace-nowrap"
+>
+  <span>{communitySection.button.name}</span>
+
+  <svg
+    className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M17 8l4 4m0 0l-4 4m4-4H3"
+    />
+  </svg>
+</a>
                 )}
               </div>
             <div className="lg:w-1/2 w-full p-2 lg:p-12 flex justify-center items-center">
