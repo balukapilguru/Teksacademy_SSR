@@ -6,7 +6,6 @@ import Image from "next/image";
 import Loader from "@/components/Loader";
 import Popupform from "@/components/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
-import GetData from "@/utility/GetData";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
@@ -18,6 +17,7 @@ const Ebook = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchEbooks = async () => {
@@ -65,35 +65,77 @@ const Ebook = () => {
     p = p.replace(/^(https?)\/\//i, "$1://");
     if (/^https?:\/\//i.test(p)) return p;
     if (p.startsWith("//")) return `https:${p}`;
-    return `${baseUrl}${p.startsWith("/") ? "" : "/"}${p}`;
+    return `${S3_BASE_URL}${p.startsWith("/") ? "" : "/"}${p}`;
   };
 
   const handleDownload = (course) => {
     setSelectedCard(course);
   };
 
-  const handleEbookSubmit = async (formValues, payload) => {
-    const response = await fetch(
-      buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...payload,
-          productId: selectedCard?.productId,
-          sourceId: selectedCard?.sourceId,
-        }),
-      },
-    );
+  // Handle form submission - opens syllabus in new tab
+  const handleFormSubmit = async (formValues) => {
+    if (!selectedCard) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Get the syllabus/ebook URL
+      const syllabusUrl = selectedCard?.ebookurl || selectedCard?.button?.ebookurl || selectedCard?.brochureLink;
+      
+      // Store the URL to open after submission
+      if (syllabusUrl) {
+        const resolvedUrl = resolveEbookUrl(syllabusUrl);
+        sessionStorage.setItem('pendingSyllabusUrl', resolvedUrl);
+      }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || "Submission failed");
-    }
+      // Prepare the payload
+      const payload = {
+        name: formValues.name?.trim() || "",
+        email: formValues.email?.trim() || "",
+        number: formValues.phone?.trim() || "",
+        branch: formValues.branch || "",
+        city: formValues.city || "",
+        course: selectedCard.title || "",
+        productId: selectedCard.productId || "",
+        sourceId: selectedCard.sourceId || "",
+        source: "Ebook—Website",
+        crm_source: "Ebook—Website",
+        form_type: "ebook",
+        referredby: "website",
+      };
 
-    const ebookUrl = resolveEbookUrl(selectedCard?.ebookurl);
-    if (ebookUrl) {
-      window.open(ebookUrl, "_blank", "noopener,noreferrer");
+      // Submit the lead
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Submission failed");
+      }
+
+      // Open syllabus in new tab
+      const savedUrl = sessionStorage.getItem('pendingSyllabusUrl');
+      if (savedUrl) {
+        window.open(savedUrl, "_blank", "noopener,noreferrer");
+        sessionStorage.removeItem('pendingSyllabusUrl');
+      }
+
+      // Close popup after successful submission
+      setSelectedCard(null);
+      
+      return { success: true };
+      
+    } catch (error) {
+      console.error("Ebook submission error:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -182,7 +224,6 @@ const Ebook = () => {
             >
               <div className="h-2/5 flex items-center justify-center">
                 <div className="p-3 md:p-4 h-20 w-20 md:h-[72px] md:w-[72px] lg:h-20 lg:w-20 3xl:h-[86px] 3xl:w-[86px] mx-auto flex items-center justify-center bg-white rounded-full">
-                  {/* ✅ Same S3 image pattern as InterviewQuestionsPage */}
                   <Image
                     src={`${S3_BASE_URL}${course.image?.src}`}
                     alt={course.image?.alt || course.title}
@@ -234,68 +275,78 @@ const Ebook = () => {
                   {communitySection.description}
                 </p>
                 {communitySection.button && (
-                 <a
-  href={communitySection.button.ebookurl || "#"}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex items-center justify-center gap-2 
-             bg-[#FE543D] text-white 
-             px-4 py-2.5 sm:px-5 sm:py-3 
-             text-sm sm:text-base font-semibold
-             rounded-lg 
-             hover:bg-[#e04a35] 
-             transition-all duration-200 
-             whitespace-nowrap"
->
-  <span>{communitySection.button.name}</span>
-
-  <svg
-    className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M17 8l4 4m0 0l-4 4m4-4H3"
-    />
-  </svg>
-</a>
+                  <a
+                    href={communitySection.button.ebookurl || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 
+                               bg-[#FE543D] text-white 
+                               px-4 py-2.5 sm:px-5 sm:py-3 
+                               text-sm sm:text-base font-semibold
+                               rounded-lg 
+                               hover:bg-[#e04a35] 
+                               transition-all duration-200 
+                               whitespace-nowrap"
+                  >
+                    <span>{communitySection.button.name}</span>
+                    <svg
+                      className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </a>
                 )}
               </div>
-            <div className="lg:w-1/2 w-full p-2 lg:p-12 flex justify-center items-center">
-  <div className="relative w-full max-w-[520px] aspect-[16/9]">
-    <Image
-      src={`${S3_BASE_URL}${communitySection.image?.src}`}
-      alt={communitySection.image?.alt || "Community"}
-      width={1400}
-      height={600}
-      
-      className="object-cover rounded-xl"
-    />
-  </div>
-</div>
+              <div className="lg:w-1/2 w-full p-2 lg:p-12 flex justify-center items-center">
+                <div className="relative w-full max-w-[520px] aspect-[16/9]">
+                  <Image
+                    src={`${S3_BASE_URL}${communitySection.image?.src}`}
+                    alt={communitySection.image?.alt || "Community"}
+                    width={1400}
+                    height={600}
+                    className="object-cover rounded-xl"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* Popup Form */}
       <Popupform
         show={!!selectedCard}
-        onClose={() => setSelectedCard(null)}
+        onClose={() => {
+          if (!isSubmitting) {
+            setSelectedCard(null);
+            sessionStorage.removeItem('pendingSyllabusUrl');
+          }
+        }}
         course={selectedCard?.title || ""}
         courseName={selectedCard?.title || ""}
-        title="Book a live demo for free"
+        source="Ebook—Website"
+        title="Download E-Book"
+        subtitle={`Fill in your details to download "${selectedCard?.title || ''}"`}
         formType="ebook"
         buttonText="Download E-Book"
         successMessage="Your e-book is opening in a new tab."
-        onSubmit={handleEbookSubmit}
+        redirectToThankYou={true}
+        onSubmit={handleFormSubmit}
+        // Pass the syllabus URL to be opened after submission
+        extraData={{
+          syllabusUrl: selectedCard?.ebookurl || selectedCard?.button?.ebookurl || selectedCard?.brochureLink,
+        }}
       />
     </div>
   );
 };
 
-// src={GetData({url:communitySection.image?.src})}
 export default Ebook;

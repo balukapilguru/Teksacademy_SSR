@@ -46,6 +46,7 @@ export const courses = [
     shortTitle: "Generative AI",
     duration: "4 months",
     price: "Rs. 35,000",
+    brochureLink: "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/syllabus/businessanalyst.pdf",
     blurb: "LLMs, prompt engineering, GPT, and LangChain",
     interest: "Coding",
     budget: "High",
