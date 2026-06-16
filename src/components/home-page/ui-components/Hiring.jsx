@@ -42,7 +42,7 @@ export default function Hiringcompanies({ hiringData, courseName }) {
   const marqueeRows = buildMarqueeRows(hiringData?.companies);
 
   return (
-    <div className="bg-[#fbf5f6] main_container py-12 mt-7 border border-[#fbf5f6] rounded-lg shadow-md">
+    <div className="bg-[#fbf5f6]  py-12 mt-7 border border-[#fbf5f6] rounded-lg shadow-md md:mt-5">
       <div className="text-center">
         <div className="mb-3">
           <Heading
