@@ -23,89 +23,137 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
     onGetDetailsClick?.(course.heading, course);
   };
 
+  // Helper function to get tag styling
+  const getTagStyles = (tag) => {
+    const lowerTag = tag.toLowerCase();
+    
+    if (lowerTag.includes("placement") || lowerTag.includes("assistance")) {
+      return {
+        bgColor: "bg-[#e8f5e9]",
+        textColor: "text-[#2e7d32]",
+        icon: "🎯"
+      };
+    }
+    if (lowerTag.includes("internship")) {
+      return {
+        bgColor: "bg-[#e3f2fd]",
+        textColor: "text-[#1565c0]",
+        icon: "💼"
+      };
+    }
+    if (lowerTag.includes("certification") || lowerTag.includes("ai")) {
+      return {
+        bgColor: "bg-[#f3e5f5]",
+        textColor: "text-[#6a1b9a]",
+        icon: "🤖"
+      };
+    }
+    if (lowerTag.includes("cyber") || lowerTag.includes("security")) {
+      return {
+        bgColor: "bg-[#e8eaf6]",
+        textColor: "text-[#283593]",
+        icon: "🛡️"
+      };
+    }
+    return {
+      bgColor: "bg-[#e6f8f1]",
+      textColor: "text-[#2e7d32]",
+      icon: "✨"
+    };
+  };
+
   return (
     <div className="">
       <div
         className="group rounded-xl bg-white overflow-hidden 
              shadow-[0_4px_14px_rgba(0,0,0,0.08)] 
-             border border-transparent hover:border-[#2a619d] transition-all duration-300"
+             border border-transparent hover:border-[#2a619d] transition-all duration-300 hover:shadow-xl"
       >
         {/* IMAGE WRAPPER */}
         <div className="relative w-full h-48 overflow-hidden">
           <Image
             src={GetData({ url: course?.image?.src })}
             alt={course.heading}
-
             height={288}
             width={192}
             className="object-cover transition-all duration-500 
-                 group-hover:blur-0 h-48 w-full group-hover:brightness-100"
+                 group-hover:scale-105 h-48 w-full"
           />
 
           <div
-            className="absolute inset-0 bg-black/10
+            className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent
                  transition-all duration-500 
-                 group-hover:bg-black/0 group-hover:backdrop-blur-0"
+                 group-hover:bg-black/20"
           />
         </div>
 
         {/* Content */}
-        <div className="p-3 space-y-2">
+        <div className="p-4 space-y-3">
           {/* Title */}
-          <h3 className="h-12 text-lg font-semibold text-[#162f51] leading-snug line-clamp-2">
+          <h3 className="text-md font-bold text-[#162f51] leading-snug line-clamp-2 min-h-[48px]">
             {course.heading}
           </h3>
 
           {/* Fee & Duration */}
           <div className="flex gap-3">
             <div className="flex-1 bg-[#faf2ec] rounded-lg p-2">
-              <div className="text-xs text-gray-600">Fee Range</div>
-              <div className="text-[#2a619d] text-sm mt-1 font-semibold">
-                {course.feeRange}
+              <div className="text-xs text-gray-500">💰 Fee</div>
+              <div className="text-[#e6662a] text-sm font-bold">
+                ₹{formatIndianRupees(course.feeRange)}
               </div>
             </div>
 
             <div className="flex-1 bg-[#eef4ff] rounded-lg p-2">
-              <div className="text-xs text-gray-600">Duration</div>
-              <div className="text-[#1d3b70] text-sm mt-1 font-semibold">
+              <div className="text-xs text-gray-500">⏱️ Duration</div>
+              <div className="text-[#1d3b70] text-sm font-bold">
                 {course.duration}
               </div>
             </div>
           </div>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-4.5">
-            {course.tags?.map((tag, i) => {
-              let bgColor = "";
-              let textColor = "";
+          {/* Placement & Internship - Single Line */}
+          <div className="flex gap-2">
+            <div className="flex-1 flex items-center justify-center gap-1.5 bg-[#e8f5e9] rounded-lg px-1 py-1.5">
+              <span className="text-xs">🎯</span>
+              <span className="text-[11px] font-semibold text-[#2e7d32]">Placement Assistance</span>
+            </div>
 
-              if (tag.toLowerCase().includes("placement")) {
-                bgColor = "bg-[#f8efe9]";
-                textColor = "text-[#8d6420]";
-              } else if (tag.toLowerCase().includes("")) {
-                bgColor = "bg-[#e6f8f1]";
-                textColor = "text-[#2e7d32]";
-              }
+            <div className="flex-1 flex items-center justify-center gap-1.5 bg-[#d2e7f6] rounded-lg px-1 py-1.5">
+              <span className="text-xs">💼</span>
+              <span className="text-[11px] font-semibold  text-[#1565c0]">100% Internship</span>
+            </div>
+          </div>
 
+          {/* Other Tags */}
+          <div className="flex flex-wrap gap-1.5">
+            {course.tags?.filter(tag => {
+              const lowerTag = tag.toLowerCase();
+              return !lowerTag.includes("placement") && 
+                     !lowerTag.includes("assistance") && 
+                     !lowerTag.includes("internship");
+            }).map((tag, i) => {
+              const styles = getTagStyles(tag);
               return (
                 <span
                   key={i}
-                  className={`text-xs px-2 py-1 rounded-md font-medium border ${bgColor} ${textColor} border-transparent`}
+                  className={`text-[11px] px-2 py-1 rounded-full font-medium ${styles.bgColor} ${styles.textColor} flex items-center gap-1`}
                 >
+                  <span>{styles.icon}</span>
                   {tag}
                 </span>
               );
             })}
           </div>
 
+          {/* Batch Date Button */}
           {batchDate && (
             <button
               type="button"
               onClick={openEnquiryPopup}
-              className="bg-[#e6662a] hover:bg-[#d85a20] p-2 pl-2 text-white rounded-md text-sm w-full cursor-pointer text-center transition-colors"
+              className="bg-[#e6662a] hover:bg-[#d85a20] p-2 text-white rounded-lg text-sm w-full cursor-pointer text-center transition-colors font-medium"
             >
-              {batchTitle} :{" "}
-              <span className="font-bold pl-2 pr-2 text-sm text-white">
+              📅 {batchTitle} :{" "}
+              <span className="font-bold">
                 {batchDate}
               </span>
             </button>
@@ -113,8 +161,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
 
           {/* Buttons */}
           <div
-            className={`flex gap-4 mt-1 mb-1 ${isSingle ? "justify-center" : "justify-between"
-              }`}
+            className={`flex gap-3 mt-2 ${isSingle ? "justify-center" : "justify-between"}`}
           >
             {buttons.slice().reverse().map((btn, index) => (
               <PrimaryButton
@@ -122,7 +169,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
                 variant={btn.form ? "filled" : "outline"}
                 label={btn.name}
                 href={btn.link || null}
-                className={isSingle ? "w-full" : "flex-1"} // ✅ Full width if single
+                className={isSingle ? "w-full" : "flex-1"}
                 onClick={() => btn.form && openEnquiryPopup()}
               />
             ))}
@@ -134,4 +181,3 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
 };
 
 export default CourseCard;
-

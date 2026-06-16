@@ -92,48 +92,48 @@ export default async function RootLayout({ children }) {
           <NavbarProvider>
             <ToastContainer autoClose={1000} />
             <AppLoader />
-           <LayoutWrapper>{children}</LayoutWrapper>
-             <Toaster
-          position="top-right"
-          containerStyle={{
-            position: "fixed",
-            zIndex: 999999, // This makes toast appear above everything
-            top: 0,
-            right: 0,
-          }}
-          toastOptions={{
-            duration: 4000,
-            style: {
-              zIndex: 999999,
-            },
-            success: {
-              duration: 3000,
-              style: {
-                background: "#10b981",
-                color: "#fff",
-                zIndex: 999999,
-              },
-            },
-            error: {
-              duration: 4000,
-              style: {
-                background: "#ef4444",
-                color: "#fff",
-                zIndex: 999999,
-              },
-            },
-          }}
-        />
+            <LayoutWrapper>{children}</LayoutWrapper>
+            <Toaster
+              position="top-right"
+              containerStyle={{
+                position: "fixed",
+                zIndex: 999999, // This makes toast appear above everything
+                top: 0,
+                right: 0,
+              }}
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  zIndex: 999999,
+                },
+                success: {
+                  duration: 3000,
+                  style: {
+                    background: "#10b981",
+                    color: "#fff",
+                    zIndex: 999999,
+                  },
+                },
+                error: {
+                  duration: 4000,
+                  style: {
+                    background: "#ef4444",
+                    color: "#fff",
+                    zIndex: 999999,
+                  },
+                },
+              }}
+            />
             {/* <Suspense fallback={null}>
               <SpinWheel />
             </Suspense> */}
-          
+
           </NavbarProvider>
         </SelectedCourseProvider>
-        
+
         {/* Mobile Bottom Navigation - Only visible on mobile devices */}
         <MobileBottomNav />
-        
+
         {/* Desktop ChatBot - Only visible on desktop devices */}
         <DesktopChatBot />
       </body>
