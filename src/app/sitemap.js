@@ -79,18 +79,18 @@ export default function sitemap() {
       changeFrequency: 'daily',
       priority: 0.9,
     },
-    {
-      url: 'https://teksacademy.com/courses/best-vlsi-course-training-institute-hyderabad',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: 'https://teksacademy.com/courses/best-multimedia-course-training-institute',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
+    // {
+    //   url: 'https://teksacademy.com/courses/best-vlsi-course-training-institute-hyderabad',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'daily',
+    //   priority: 0.9,
+    // },
+    // {
+    //   url: 'https://teksacademy.com/courses/best-multimedia-course-training-institute',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'daily',
+    //   priority: 0.9,
+    // },
     {
       url: 'https://teksacademy.com/courses/best-advance-excel-course-training-institute',
       lastModified: '2026-01-29T10:42:48+00:00',
@@ -133,18 +133,18 @@ export default function sitemap() {
       changeFrequency: 'daily',
       priority: 0.9,
     },
-    {
-      url: 'https://teksacademy.com/courses/banking-financial-services-and-insurance-course',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: 'https://teksacademy.com/courses/project-management-certification-course',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
+    // {
+    //   url: 'https://teksacademy.com/courses/banking-financial-services-and-insurance-course',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'daily',
+    //   priority: 0.9,
+    // },
+    // {
+    //   url: 'https://teksacademy.com/courses/project-management-certification-course',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'daily',
+    //   priority: 0.9,
+    // },
     {
       url: 'https://teksacademy.com/branch/best-software-training-institute-ameerpet',
       lastModified: '2026-01-29T10:42:48+00:00',
@@ -259,12 +259,12 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    {
-      url: 'https://teksacademy.com/interview-questions/vlsi-interview-questions',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
+    // {
+    //   url: 'https://teksacademy.com/interview-questions/vlsi-interview-questions',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'weekly',
+    //   priority: 0.8,
+    // },
     {
       url: 'https://teksacademy.com/interview-questions/sap-interview-questions',
       lastModified: '2026-01-29T10:42:48+00:00',
@@ -283,12 +283,12 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    {
-      url: 'https://teksacademy.com/interview-questions/multimedia-interview-questions',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
+    // {
+    //   url: 'https://teksacademy.com/interview-questions/multimedia-interview-questions',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'weekly',
+    //   priority: 0.8,
+    // },
     {
       url: 'https://teksacademy.com/interview-questions/advanced-excel-interview-questions',
       lastModified: '2026-01-29T10:42:48+00:00',
@@ -337,18 +337,18 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    {
-      url: 'https://teksacademy.com/interview-questions/banking-financial-services-and-insurance-interview-questions',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://teksacademy.com/interview-questions/project-management-program-interview-questions',
-      lastModified: '2026-01-29T10:42:48+00:00',
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
+    // {
+    //   url: 'https://teksacademy.com/interview-questions/banking-financial-services-and-insurance-interview-questions',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'weekly',
+    //   priority: 0.8,
+    // },
+    // {
+    //   url: 'https://teksacademy.com/interview-questions/project-management-program-interview-questions',
+    //   lastModified: '2026-01-29T10:42:48+00:00',
+    //   changeFrequency: 'weekly',
+    //   priority: 0.8,
+    // },
     {
       url: 'https://teksacademy.com/discover/about-us',
       lastModified: '2026-01-29T10:42:48+00:00',
