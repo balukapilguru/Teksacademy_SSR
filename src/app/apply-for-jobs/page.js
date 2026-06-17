@@ -159,7 +159,9 @@ const ApplyForJobs = () => {
   page: currentPage,
   pageSize: itemsPerPage,
   search: debouncedSearchTerm || "",
-  type: jobTab, // 👈 clean separation instead of mixing into search
+ job_verified_type: jobTab === "public"
+  ? "PUBLIC_JOBS"
+  : "TEKS_VERIFIED", // 👈 clean separation instead of mixing into search
   "filter[job_type]": filters.job_type,
   "filter[workplace_type]": filters.workplace_type,
   "filter[experience]": filters.experience,

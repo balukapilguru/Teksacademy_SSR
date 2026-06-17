@@ -297,7 +297,7 @@ export default function CourseInfoTable({
                 <div className="p-6 space-y-5">
                   {/* University/Provider Logos */}
                   {getImageSrcList(row).length > 0 && (
-                    <div className="border-b border-gray-100 pb-4">
+                    <div className="border-b border-gray-100 pb-1">
                       <div className="flex items-center gap-2 mb-3">
                         <Building2 className="w-4 h-4 text-gray-500" />
                         <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Partner Institutions</span>
@@ -324,7 +324,7 @@ export default function CourseInfoTable({
 
                   {/* Accreditations & Certifications */}
                   {row.accreditations && row.accreditations.length > 0 && (
-                    <div className="border-b border-gray-100 pb-4">
+                    <div className="border-b border-gray-100 pb-1">
                       <div className="flex items-center gap-2 mb-3">
                         <Shield className="w-4 h-4 text-emerald-600" />
                         <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Accreditations & Certifications</span>
