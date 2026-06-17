@@ -3,18 +3,15 @@ import { Suspense } from "react";
 import Script from "next/script";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Toaster } from 'react-hot-toast';
-
 import { ToastContainer } from "react-toastify";
-import SpinWheel from "@/components/SpinWheel/SpinWheel";
 import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
 import AppLoader from "@/components/AppLoader";
 import { MobileBottomNav } from "@/components/home-page/MobileBottomNav";
 import LayoutWrapper from "@/components/clientcomponents/LayoutWrapper";
-import { DesktopChatBot } from "@/components/DesktopChatBot"; // Import desktop chatbot
+import { DesktopChatBot } from "@/components/DesktopChatBot";
+import SpinWheel from "@/components/SpinWheel/SpinWheel";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,8 +22,13 @@ const poppins = Poppins({
 export const metadata = {
   title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
   description: "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
-  verification: {
-    google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
+  // verification: {
+  //   google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
+  // },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
 };
 
@@ -50,43 +52,111 @@ async function getLetstalkAPI() {
 export default async function RootLayout({ children }) {
   await getLetstalkAPI();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    name: "Best Software Training Institute in Hyderabad - Teks Academy",
+    alternateName: "Teks Academy",
+    url: "https://teksacademy.com/",
+    logo: "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/teksacademy_14years.png",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "18001204748",
+      contactType: "technical support",
+      contactOption: "TollFree",
+      areaServed: "IN",
+      availableLanguage: ["en", "Telugu", "Hindi"],
+    },
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${poppins.variable} font-sans antialiased`}
-        suppressHydrationWarning
-      >
+      <head>
+        {/* Google Analytics */}
         <Script
-          id="gtm-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];
-              w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-              var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-              j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-              f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-WN8JPCXV');`,
-          }}
-        />
-
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-20FD4911FZ"
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-PX8WDN3BHW"
           strategy="afterInteractive"
         />
 
         <Script
-          id="ga4-script"
+          id="ga-script"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-20FD4911FZ');
+              gtag('config', 'G-PX8WDN3BHW');
             `,
           }}
         />
+
+        {/* Google Tag Manager */}
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-TTHG2VN8');`,
+          }}
+        />
+
+        {/* Facebook Pixel */}
+        <Script
+          id="fb-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '866536869761081');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+
+        {/* JSON-LD structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      </head>
+
+      <body
+        className={`${poppins.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
+        {/* GTM noscript */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TTHG2VN8"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+
+        {/* Facebook Pixel noscript */}
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=866536869761081&ev=PageView&noscript=1"
+          />
+        </noscript>
 
         <SelectedCourseProvider>
           <NavbarProvider>
@@ -97,7 +167,7 @@ export default async function RootLayout({ children }) {
               position="top-right"
               containerStyle={{
                 position: "fixed",
-                zIndex: 999999, // This makes toast appear above everything
+                zIndex: 999999,
                 top: 0,
                 right: 0,
               }}
@@ -124,10 +194,9 @@ export default async function RootLayout({ children }) {
                 },
               }}
             />
-            {/* <Suspense fallback={null}>
+            <Suspense fallback={null}>
               <SpinWheel />
-            </Suspense> */}
-
+            </Suspense>
           </NavbarProvider>
         </SelectedCourseProvider>
 
