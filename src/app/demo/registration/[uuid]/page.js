@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { RiArrowDropDownLine } from "react-icons/ri";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
 
 export default function RegistrationForm() {
   const { uuid } = useParams();
@@ -644,7 +644,9 @@ export default function RegistrationForm() {
       if (!res.ok) {
         throw new Error(responseData?.message || "Submission failed");
       }
-
+      // Clear saved draft from localStorage
+      localStorage.removeItem(`form_${uuid}`);
+      
       setStatus((prev) => ({
         ...prev,
         submitted: true,
@@ -662,7 +664,6 @@ export default function RegistrationForm() {
       showToast(err.message || "Submission failed", "error", 4000);
     }
   };
-  localStorage.removeItem(`form_${uuid}`);
 
   // ==================== TOAST NOTIFICATION ====================
 
@@ -674,15 +675,14 @@ export default function RegistrationForm() {
         {toastMessages.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${
-              toast.type === "success"
+            className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${toast.type === "success"
                 ? "bg-green-50 border-l-4 border-green-500 text-green-800"
                 : toast.type === "error"
                   ? "bg-red-50 border-l-4 border-red-500 text-red-800"
                   : toast.type === "warning"
                     ? "bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800"
                     : "bg-blue-50 border-l-4 border-blue-500 text-blue-800"
-            }`}
+              }`}
           >
             {toast.type === "success" && <CheckCircle2 className="h-4 w-4" />}
             {toast.type === "error" && <AlertCircle className="h-4 w-4" />}
@@ -854,8 +854,8 @@ export default function RegistrationForm() {
                   field.type === "textarea" || field.type === "multiselect";
                 const fieldLabel = field.label || field.key;
                 const getPlaceholder = (field) => {
-                  const label = (field.label == undefined || field.label == null ) ? field.key?.toLowerCase() :field.label?.toLowerCase() || "";
-                  console.log(label,field, field.key,"treurywueyi")
+                  const label = (field.label == undefined || field.label == null) ? field.key?.toLowerCase() : field.label?.toLowerCase() || "";
+                  console.log(label, field, field.key, "treurywueyi")
 
                   if (label.includes("email"))
                     return "Enter your email address";
@@ -864,7 +864,7 @@ export default function RegistrationForm() {
                   if (label.includes("name")) return "Enter your full name";
                   if (label.includes("age")) return "Enter your age";
 
-                  return `Enter ${field.label ??field.key}`;
+                  return `Enter ${field.label ?? field.key}`;
                 };
 
                 return (
@@ -891,11 +891,10 @@ export default function RegistrationForm() {
                             (isEmail && isEmailVerified) ||
                             field.key === "branchId"
                           }
-                          className={`w-full h-10 px-3 pr-10 text-sm rounded-md border bg-white appearance-none ${
-                            errors[field.key]
+                          className={`w-full h-10 px-3 pr-10 text-sm rounded-md border bg-white appearance-none ${errors[field.key]
                               ? "border-red-500"
                               : "border-gray-300"
-                          } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none`}
+                            } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none`}
                         >
                           <option value="" disabled hidden>
                             {field.key === "branchId"
@@ -960,11 +959,10 @@ export default function RegistrationForm() {
                         }
                         onBlur={() => handleBlur(field)}
                         disabled={field.editable === false}
-                        className={`w-full h-20 px-2 py-1 text-sm rounded-md border ${
-                          errors[field.key]
+                        className={`w-full h-20 px-2 py-1 text-sm rounded-md border ${errors[field.key]
                             ? "border-red-500"
                             : "border-gray-300"
-                        } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none`}
+                          } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none`}
                       >
                         {field.options?.map((opt, i) => (
                           <option key={i} value={opt}>
@@ -984,77 +982,74 @@ export default function RegistrationForm() {
                         onBlur={() => handleBlur(field)}
                         rows={3}
                         disabled={field.editable === false}
-                        className={`w-full px-3 py-2 text-sm rounded-md border ${
-                          errors[field.key]
+                        className={`w-full px-3 py-2 text-sm rounded-md border ${errors[field.key]
                             ? "border-red-500"
                             : "border-gray-300"
-                        } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all`}
+                          } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all`}
                       />
                     )}
                     {!["select", "multiselect", "textarea"].includes(
                       field.type,
                     ) && (
-                      <div className="relative">
-                        <input
-                          type={
-                            isEmail
-                              ? "email"
-                              : isPhone
-                                ? "tel"
-                                : field.type || "text"
-                          }
-                          value={value || ""}
-                          placeholder={getPlaceholder(field)}
-                          onChange={(e) =>
-                            handleChange(field.key, e.target.value)
-                          }
-                          onBlur={() => handleBlur(field)}
-                          disabled={
-                            field.editable === false ||
-                            (isEmail && isEmailVerified) ||
-                            field.key === "courseName"
-                          }
-                          className={`w-full h-10 px-3 text-sm rounded-md border ${
-                            errors[field.key]
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none ${
-                            isEmail && isEmailVerified ? "bg-gray-50 pr-24" : ""
-                          }`}
-                        />
+                        <div className="relative">
+                          <input
+                            type={
+                              isEmail
+                                ? "email"
+                                : isPhone
+                                  ? "tel"
+                                  : field.type || "text"
+                            }
+                            value={value || ""}
+                            placeholder={getPlaceholder(field)}
+                            onChange={(e) =>
+                              handleChange(field.key, e.target.value)
+                            }
+                            onBlur={() => handleBlur(field)}
+                            disabled={
+                              field.editable === false ||
+                              (isEmail && isEmailVerified) ||
+                              field.key === "courseName"
+                            }
+                            className={`w-full h-10 px-3 text-sm rounded-md border ${errors[field.key]
+                                ? "border-red-500"
+                                : "border-gray-300"
+                              } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none ${isEmail && isEmailVerified ? "bg-gray-50 pr-24" : ""
+                              }`}
+                          />
 
-                        {/* RIGHT SIDE BUTTON / STATUS */}
-                        {isEmail && (
-                          <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                            {!isEmailVerified ? (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const email = formValues[emailFieldKey];
-                                  if (!email || !validateEmail(email)) {
-                                    showToast(
-                                      "Enter valid email first",
-                                      "error",
-                                    );
-                                    return;
-                                  }
-                                  sendOTP(email);
-                                  setShowOtpModal(true);
-                                }}
-                                className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
-                              >
-                                Verify
-                              </button>
-                            ) : (
-                              <span className="text-green-600 text-xs font-medium flex items-center gap-1">
-                                <CheckCircle2 className="h-4 w-4" />
-                                Verified
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          {/* RIGHT SIDE BUTTON / STATUS */}
+                          {isEmail && (
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                              {!isEmailVerified ? (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const email = formValues[emailFieldKey];
+                                    if (!email || !validateEmail(email)) {
+                                      showToast(
+                                        "Enter valid email first",
+                                        "error",
+                                      );
+                                      return;
+                                    }
+                                    sendOTP(email);
+                                    setShowOtpModal(true);
+                                  }}
+                                  className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
+                                >
+                                  Verify
+                                </button>
+                              ) : (
+                                <span className="text-green-600 text-xs font-medium flex items-center gap-1">
+                                  <CheckCircle2 className="h-4 w-4" />
+                                  Verified
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     {errors[field.key] && (
                       <span className="text-xs text-red-500 flex items-center gap-1">
                         <AlertCircle className="h-3 w-3" />
@@ -1198,11 +1193,10 @@ export default function RegistrationForm() {
               <button
                 type="submit"
                 disabled={status?.submitting || !isEmailVerified}
-                className={`w-full flex items-center justify-center text-sm font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-md transition-all transform hover:scale-[1.02] ${
-                  status?.submitting || !isEmailVerified
+                className={`w-full flex items-center justify-center text-sm font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-md transition-all transform hover:scale-[1.02] ${status?.submitting || !isEmailVerified
                     ? "opacity-70 cursor-not-allowed"
                     : "hover:shadow-lg"
-                }`}
+                  }`}
               >
                 {status?.submitting ? (
                   <>
