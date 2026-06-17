@@ -195,7 +195,7 @@ export default async function RootLayout({ children }) {
               }}
             />
             <Suspense fallback={null}>
-              <SpinWheel />
+              {/* <SpinWheel /> */}
             </Suspense>
           </NavbarProvider>
         </SelectedCourseProvider>

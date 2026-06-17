@@ -25,38 +25,37 @@ const nextConfig = {
         hostname: "teksacademy.com",
       },
       {
+        protocol: "https",
+        hostname: "teksversity.s3.us-east-1.amazonaws.com", // ✅ ADD THIS LINE
+      },
+      {
         protocol: "http",
         hostname: "localhost",
       },
     ],
+    // Add deviceSizes for better responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // Add your 301 redirects here
-async redirects() {
-  return [
-    // Redirect /course to /courses
-    {
-      source: '/course',
-      destination: '/courses',
-      permanent: true, // This creates a 308 redirect
-    },
-    // OR use statusCode: 301 for actual 301
-    // {
-    //   source: '/course',
-    //   destination: '/courses',
-    //   statusCode: 301,
-    // },
-
-    // Remove trailing slashes
-    {
-      source: '/:path*/',
-      destination: '/:path*',
-      permanent: true,
-    },
-  ];
-},
+  async redirects() {
+    return [
+      // Redirect /course to /courses
+      {
+        source: '/course',
+        destination: '/courses',
+        permanent: true, // 308 redirect
+      },
+      // Remove trailing slashes
+      {
+        source: '/:path*/',
+        destination: '/:path*',
+        permanent: true,
+      },
+      // Add your other redirects here
+    ];
+  },
 
   async headers() {
     return [
