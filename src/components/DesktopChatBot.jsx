@@ -347,9 +347,9 @@ function BrochureModal({ onClose }) {
         course_branch: values.branch,
         city: values.city.trim(),
         course: selectedCourse.shortTitle,
-        source: "Download Syllabus-Website",
-        crm_source: "Download Syllabus-Website",
-        form_type: "syllabus",
+        source: "'Download Syllabus—Website",
+        crm_source: "'Download Syllabus—Website",
+        form_type: "'Download Syllabus—Website",
         referredby: "website",
       });
 
