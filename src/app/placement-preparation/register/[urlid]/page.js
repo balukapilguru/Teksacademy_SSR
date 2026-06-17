@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
 
 export default function RegistrationForm() {
   const { urlid } = useParams();
