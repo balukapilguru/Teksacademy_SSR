@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: false,
+
   images: {
-    minimumCacheTTL: 31536000, 
+    minimumCacheTTL: 31536000,
     formats: ["image/avif", "image/webp"],
+
     remotePatterns: [
       {
         protocol: "https",
@@ -33,32 +36,18 @@ const nextConfig = {
         hostname: "localhost",
       },
     ],
+
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
-  // Redirects with 301 status code
   async redirects() {
     return [
-      // Redirect /course to /courses (301)
       {
-        source: '/course',
-        destination: '/courses',
-        statusCode: 301, // ✅ Changed from permanent: true to statusCode: 301
+        source: "/course",
+        destination: "/courses",
+        permanent: true,
       },
-      // Remove trailing slashes (301)
-      {
-        source: '/:path*/',
-        destination: '/:path*',
-        statusCode: 301, // ✅ Changed from permanent: true to statusCode: 301
-      },
-      // Add your other redirects here with 301
-      // Example:
-      // {
-      //   source: '/old-url',
-      //   destination: '/new-url',
-      //   statusCode: 301,
-      // },
     ];
   },
 
