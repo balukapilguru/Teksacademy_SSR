@@ -84,14 +84,23 @@ export default function sitemap() {
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
+
     changeFrequency:
-      route === "/" || route === "/blogs"
+      route === "/" ||
+      route === "/course" ||
+      route.startsWith("/courses") ||
+      route.startsWith("/branch")
         ? "daily"
         : "weekly",
+
     priority:
       route === "/"
         ? 1
+        : route === "/course"
+        ? 0.9
         : route.startsWith("/courses")
+        ? 0.9
+        : route.startsWith("/branch")
         ? 0.9
         : 0.8,
   }));

@@ -147,7 +147,7 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
                     initialValues={initialValues}
                     title={formTitle || "Reserve Your Spot"}
                     subtitle={formSubtitle || "Complete the form to reserve your seat and get a callback."}
-                    buttonText={formTitle || "Reserve Your Spot"}
+                    buttonText={'Submit' || "Reserve Your Spot"}
                     successMessage="Thank you! We'll contact you soon."
                     source={source}
                   />
