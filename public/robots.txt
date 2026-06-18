@@ -3,4 +3,4 @@ Disallow: /*?ref=
 Disallow: /privacy-policy
 Disallow: /policyagreements/terms-of-service
 Allow: /
-Sitemap: https://www.teksacademy.com/sitemap.xml
+Sitemap: https://teksacademy.com/sitemap.xml
