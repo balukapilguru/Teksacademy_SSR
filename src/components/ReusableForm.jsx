@@ -403,22 +403,23 @@ export default function ReusableForm({
         c.toLowerCase().includes(courseSearchTerm.toLowerCase())
       );
 
+      // Clear search input handler
+      const handleClearSearch = () => {
+        setCourseSearchTerm("");
+        // Focus the search input after clearing
+        const searchInput = document.getElementById('course-search-input');
+        if (searchInput) {
+          searchInput.focus();
+        }
+      };
+
       return (
         <div key={fieldId} className="mb-4 relative" ref={dropdownRef}>
           <label className="block text-xs font-medium text-gray-700 mb-1">
             {field.label} <span className="text-red-500">*</span>
           </label>
           <div
-            role="button"
-            tabIndex={0}
-            onClick={() => !shouldDisable && setShowCourseDropdown((prev) => !prev)}
-            onFocus={() => !shouldDisable && setShowCourseDropdown(true)}
-            onKeyDown={(e) => {
-              if (!shouldDisable && (e.key === "Enter" || e.key === " ")) {
-                e.preventDefault();
-                setShowCourseDropdown((prev) => !prev);
-              }
-            }}
+            onClick={() => setShowCourseDropdown((prev) => !prev)}
             className={`w-full px-4 py-2 border rounded-md flex items-center justify-between text-sm cursor-pointer
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}
               ${shouldDisable ? "bg-gray-100 cursor-not-allowed" : ""}`}
@@ -434,30 +435,50 @@ export default function ReusableForm({
 
           {showCourseDropdown && (
             <div className="absolute z-50 left-0 right-0 mt-1 bg-white border rounded-xl shadow-lg max-h-60 overflow-auto">
-              <div className="p-1 border-b">
-                <input
-                  type="text"
-                  value={courseSearchTerm}
-                  onChange={(e) => setCourseSearchTerm(e.target.value)}
-                  placeholder="Search courses..."
-                  className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-              {filteredCourses.map(course => (
-                <div
-                  key={course}
-                  onClick={() => {
-                    handleChange(fieldId, course);
-                    setCourseSearchTerm(course);
-                    setShowCourseDropdown(false);
-                  }}
-                  className={`px-4 py-1 text-sm cursor-pointer hover:bg-blue-50
-                    ${value === course ? "bg-blue-50 text-blue-600 font-semibold" : "text-gray-700"}`}
-                >
-                  {course}
+              <div className="p-1 border-b sticky top-0 bg-white">
+                <div className="relative">
+                  <input
+                    id="course-search-input"
+                    type="text"
+                    value={courseSearchTerm}
+                    onChange={(e) => setCourseSearchTerm(e.target.value)}
+                    placeholder="Search courses..."
+                    className="w-full px-3 py-2 pr-8 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  {/* Clear/Remove icon - shows only when there's text */}
+                  {courseSearchTerm && (
+                    <button
+                      type="button"
+                      onClick={handleClearSearch}
+                      className="absolute right-2 cursor-pointer top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                      aria-label="Clear search"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-              ))}
+              </div>
+              {filteredCourses.length > 0 ? (
+                filteredCourses.map(course => (
+                  <div
+                    key={course}
+                    onClick={() => {
+                      handleChange(fieldId, course);
+                      setCourseSearchTerm(course);
+                      setShowCourseDropdown(false);
+                    }}
+                    className={`px-4 py-1 text-sm cursor-pointer hover:bg-blue-50
+                      ${value === course ? "bg-blue-50 text-blue-600 font-semibold" : "text-gray-700"}`}
+                  >
+                    {course}
+                  </div>
+                ))
+              ) : (
+                <div className="px-4 py-2 text-sm text-gray-500">No courses found</div>
+              )}
             </div>
           )}
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}

@@ -38,6 +38,8 @@ const branches = [
   "Dilsukhnagar",
   "Bangalore",
   "Visakhapatnam",
+  "Salem",
+  "Kompally",
 ];
 
 const mainActions = [

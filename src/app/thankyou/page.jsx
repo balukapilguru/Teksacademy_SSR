@@ -16,6 +16,7 @@ const Thankyou = () => {
   useEffect(() => {
     // Get branch data from sessionStorage only if coming from a branch page
     const storedBranchData = getBranchData();
+    console.log("Stored branch data on thankyou page:", storedBranchData);
     setBranchData(storedBranchData);
 
     // Clear the stored branch data after reading
@@ -79,7 +80,7 @@ const Thankyou = () => {
             />
 
             {/* Get Direction Section - ONLY displayed when coming from a branch page */}
-            {branchData && (
+            {branchData && branchData.mapLink && (
               <div className="w-full mx-auto overflow-hidden mt-6">
                 <div className="flex flex-col gap-3">
                   <p className="text-center text-gray-700 font-semibold">
@@ -93,7 +94,7 @@ const Thankyou = () => {
                       className="inline-flex items-center justify-center gap-2 bg-[#FE543D] hover:bg-[#e84c1f] text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md"
                     >
                       <FaLocationDot className="text-white" />
-                      Get Direction to Our Branch
+                      Get Direction to Our {branchData.name} Branch
                     </Link>
                   </div>
                 </div>

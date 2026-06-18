@@ -35,6 +35,7 @@ const BRANCH_LABELS = {
   visakhapatnam: "Visakhapatnam",
   salem: "Salem",
   kompally: "Kompally",
+  
 };
 
 const getBranchNameFromSlug = (value = "") => {

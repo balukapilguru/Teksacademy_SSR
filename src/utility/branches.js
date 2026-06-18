@@ -45,6 +45,11 @@ export const BRANCHES = [
     value: "Salem",
     phone: "+91 97885 77788",
   },
+  {
+    name: "Kompally",
+    value: "Kompally",
+    phone: "+91 720765 7474",
+  }
 ];
 
 export const BRANCH_OPTIONS = BRANCHES.map((b) => ({

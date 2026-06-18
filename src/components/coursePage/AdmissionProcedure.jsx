@@ -6,9 +6,14 @@ import CoursepageHeading from "@/utility/CoursepageHeading";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
+import { useRouter } from "next/navigation";
+import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const Admission = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const router = useRouter();
 
   if (!data) return null;
 
@@ -42,6 +47,48 @@ const Admission = ({ data }) => {
 
   if (!steps.length) return null;
 
+  // Handle form submission - matching OverViewOfOnline pattern
+  const handleSubmit = async (formValues, mappedPayload) => {
+    console.log("Form values:", formValues);
+    console.log("Mapped payload being sent:", mappedPayload);
+
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
+      });
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      // Close modal and redirect to thank you page
+      setShowModal(false);
+      router.push("/thankyou");
+      
+    } catch (error) {
+      console.error("Submission error:", error);
+      // Keep modal open on error
+      setShowModal(true);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setSelectedCourse(data?.name || "");
+    setShowModal(true);
+  };
+
   return (
     <section id="OnlineAdmissionProcedure">
       {/* Modal */}
@@ -49,11 +96,16 @@ const Admission = ({ data }) => {
         <Popupform
           show={showModal}
           onClose={() => setShowModal(false)}
-          course={data?.name || ""}
-          courseName={data?.name || ""}
+          course={selectedCourse}
+          courseName={selectedCourse}
           source={30}
           title="Enroll Now"
+          subtitle="Fill in your details to get course guidance and a callback from our team."
+          onSubmit={handleSubmit}
+          formType="EnrollNow"
           buttonText="Enroll Now"
+          successMessage="Thank you! We'll contact you soon."
+          isLoading={isLoading}
         />
       )}
 
@@ -171,14 +223,14 @@ const Admission = ({ data }) => {
 
         {/* CTA */}
         <div className="flex justify-center">
-           <button
-          onClick={() => setShowModal(true)}
-          className="bg-[#2a619d]  cursor-pointer text-white py-2 px-6 rounded-lg font-medium hover:bg-white hover:text-[#2a619d] hover:border hover:border-[#2a619d] transition"
-        >
-          Enroll Now
-        </button>
+          <button
+            onClick={handleOpenModal}
+            className="bg-[#2a619d] cursor-pointer text-white py-2 px-6 rounded-lg font-medium hover:bg-white hover:text-[#2a619d] hover:border hover:border-[#2a619d] transition"
+            disabled={isLoading}
+          >
+            {isLoading ? "Submitting..." : "Enroll Now"}
+          </button>
         </div>
-       
       </div>
     </section>
   );
