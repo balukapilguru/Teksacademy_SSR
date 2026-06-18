@@ -432,9 +432,7 @@ const BlogPaginationPage = () => {
                     >
                       {article?.category}
                     </p>
-                    <Image
-                    width={100}
-                    height={150}
+                    <img
                       src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                       alt={article?.title}
                       className="w-full h-48 rounded-md"
@@ -506,9 +504,8 @@ const BlogPaginationPage = () => {
                       key={index}
                       className="space-y-1 lg:space-y-0.5 flex items-center gap-3"
                     >
-                      <Image
-                      width={200}
-                      height={150}
+                      <img
+                      
                         src={`https://teksacademy.s3.ap-south-1.amazonaws.com/website/blogs/${article?.image_url}`}
                         alt={article?.title}
                         className="w-full h-20 rounded-md"
