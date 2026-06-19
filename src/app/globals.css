@@ -11,6 +11,8 @@
 
 html,
 body {
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden; /* final safety */
 }
 
@@ -68,6 +70,7 @@ input:-webkit-autofill:focus {
 
 .main_container {
   width: 90%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -256,9 +259,15 @@ table {
 
 /* Mobile (320–767) */
 @media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   /* Tighter section padding so content has room */
   .main_container {
     width: 92%;
+    max-width: 100%;
   }
 
   /* Prevent fixed pixel widths from hard-cropping on tiny screens */

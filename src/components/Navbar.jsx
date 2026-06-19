@@ -92,6 +92,8 @@ import Popupform from "./Popupform";
 // ============================================
 const APPLY_FOR_JOBS_LINK = "/apply-for-jobs";
 const APPLY_FOR_JOBS_LABEL = "Apply for Jobs";
+const APP_DOWNLOAD_SECTION_ID = "download-mobile-app";
+const APP_DOWNLOAD_SCROLL_KEY = "scrollToDownloadApp";
 
 // Icon map for dropdown items
 const DROPDOWN_ICON_MAP = {
@@ -167,6 +169,29 @@ export default function Navbar() {
     return link && typeof link === "string" && link.trim() !== "";
   }, []);
 
+  const isDownloadMobileAppItem = useCallback((item) => {
+    return item?.name?.toLowerCase().includes("download mobile app");
+  }, []);
+
+  const scrollToDownloadAppSection = useCallback(() => {
+    const section = document.getElementById(APP_DOWNLOAD_SECTION_ID);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      return true;
+    }
+    return false;
+  }, []);
+
+  const handleDownloadAppClick = useCallback(() => {
+    if (pathname === "/") {
+      scrollToDownloadAppSection();
+      return;
+    }
+
+    sessionStorage.setItem(APP_DOWNLOAD_SCROLL_KEY, "true");
+    router.push("/");
+  }, [pathname, router, scrollToDownloadAppSection]);
+
   // ============================================
   // DATA FETCHING
   // ============================================
@@ -192,6 +217,24 @@ export default function Navbar() {
     };
     fetchNav();
   }, []);
+
+  useEffect(() => {
+    if (pathname !== "/" || sessionStorage.getItem(APP_DOWNLOAD_SCROLL_KEY) !== "true") {
+      return;
+    }
+
+    let attempts = 0;
+    const scrollWhenReady = () => {
+      attempts += 1;
+      if (scrollToDownloadAppSection() || attempts >= 20) {
+        sessionStorage.removeItem(APP_DOWNLOAD_SCROLL_KEY);
+        return;
+      }
+      window.setTimeout(scrollWhenReady, 100);
+    };
+
+    window.setTimeout(scrollWhenReady, 100);
+  }, [pathname, scrollToDownloadAppSection]);
 
   // ============================================
   // SCROLL HANDLERS
@@ -357,23 +400,33 @@ export default function Navbar() {
                   }
                   if (item.type === "link") {
                     if (!isValidLink(item.link)) return null;
+                    const isDownloadApp = isDownloadMobileAppItem(item);
 
                     return (
-                      <Link
-                        key={`top-link-${index}`}
-                        href={item.link || "#"}
-                         target="_blank"
-                        className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
-                      >
-                        {item.name === "Download Mobile App" && (
+                      isDownloadApp ? (
+                        <button
+                          key={`top-link-${index}`}
+                          type="button"
+                          onClick={handleDownloadAppClick}
+                          className="hover:text-[#fff] transition-colors text-md flex items-center gap-1 cursor-pointer"
+                        >
                           <FaMobileScreen size={14} />
-                        )}
-                        {item.name === "Blogs" && <FaRegNewspaper size={14} />}
-                        {item.name === "Find My Course" && (
-                          <FaSearch size={14} />
-                        )}
-                        {item.name}
-                      </Link>
+                          {item.name}
+                        </button>
+                      ) : (
+                        <Link
+                          key={`top-link-${index}`}
+                          href={item.link}
+                          target="_blank"
+                          className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
+                        >
+                          {item.name === "Blogs" && <FaRegNewspaper size={14} />}
+                          {item.name === "Find My Course" && (
+                            <FaSearch size={14} />
+                          )}
+                          {item.name}
+                        </Link>
+                      )
                     );
                   }
                   return null;
@@ -812,7 +865,7 @@ export default function Navbar() {
                             <Link
                               href="/course"
                               onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center justify-center gap-2 p-3 mt-1 border border-[#2a619d] rounded-lg text-[#2a619d] hover:bg-[#2a619d] hover:text-white transition-colors font-semibold text-sm"
+                              className="flex items-center justify-center gap-2 p-3 mt-1 border border-[#2a619d] rounded-lg text-[#2a619d] hover:bg-[#2a619d] hover:text-white transition-colors font-semibold text-xs"
                             >
                               <span>Know More</span>
                               <MdArrowForwardIos className="text-xs" />
@@ -913,33 +966,37 @@ export default function Navbar() {
 
                 if (item.type === "link" || (item.link && !item.type)) {
                   if (!isValidLink(item.link)) return null;
-                  const isDownloadApp =
-                    item.name?.toLowerCase().includes("download") &&
-                    item.link?.startsWith("http");
+                  const isDownloadApp = isDownloadMobileAppItem(item);
                   return isDownloadApp ? (
-                    <a
+                    <button
                       key={`mobile-top-link-${index}`}
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 p-2 font-semibold hover:bg-gray-50 rounded text-sm text-gray-700"
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleDownloadAppClick();
+                      }}
+                      className="w-full flex items-center justify-start gap-2 p-2 hover:bg-gray-50 rounded text-sm font-semibold text-gray-700 text-left"
                     >
-                      <FaMobileScreen size={15} />
+                      <FaMobileScreen size={15} className="shrink-0" />
                       <span>{item.name}</span>
-                    </a>
+                    </button>
                   ) : (
                     <Link
                       key={`top-link-${index}`}
                       href={item.link || "#"}
-                       target="_blank"
-                      className="hover:text-[#fff] transition-colors text-md flex items-center gap-1"
+                      target="_blank"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full flex items-center justify-start gap-2 p-2 hover:bg-gray-50 rounded text-sm font-semibold text-gray-700 text-left"
                     >
                       {item.name === "Download Mobile App" && (
-                        <FaMobileScreen size={14} />
+                        <FaMobileScreen size={15} className="shrink-0" />
                       )}
-                      {item.name === "Blogs" && <FaRegNewspaper size={14} />}
-                      {item.name === "Find My Course" && <FaSearch size={14} />}
+                      {item.name === "Blogs" && (
+                        <FaRegNewspaper size={15} className="shrink-0" />
+                      )}
+                      {item.name === "Find My Course" && (
+                        <FaSearch size={15} className="shrink-0" />
+                      )}
                       {item.name}
                     </Link>
                   );

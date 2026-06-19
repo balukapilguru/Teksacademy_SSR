@@ -65,24 +65,24 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
               )}
 
               {/* Logos */}
-{image?.length > 0 && (
-  <div className="  md:hidden  grid grid-cols-2 gap-4">
-    {image.map((uni, index) => (
-      <div
-        key={index}
-        className="flex justify-center items-center bg-white rounded-lg p-2 shadow"
-      >
-        <Image
-          src={GetData({ url: uni.src })}
-          alt={uni.alt || "Partner Logo"}
-          width={150}
-          height={70}
-          className="w-28 h-14 sm:w-32 sm:h-16 object-contain"
-        />
-      </div>
-    ))}
-  </div>
-)}
+              {image?.length > 0 && (
+                <div className="  md:hidden  grid grid-cols-2 gap-4">
+                  {image.map((uni, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-center items-center bg-white rounded-lg p-2 shadow"
+                    >
+                      <Image
+                        src={GetData({ url: uni.src })}
+                        alt={uni.alt || "Partner Logo"}
+                        width={150}
+                        height={70}
+                        className="w-28 h-14 sm:w-32 sm:h-16 object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {image?.length > 0 && (
                 <div className="overflow-hidden hidden md:block">
@@ -108,7 +108,7 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
               {/* Course Benefits */}
               {benefits?.length > 0 && (
                 <div className="mt-8">
-                  <CoursepageHeading data={benefitsHeading}/>
+                  <CoursepageHeading data={benefitsHeading} />
                   {/* <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                     {benefitsHeading}
                   </h3> */}

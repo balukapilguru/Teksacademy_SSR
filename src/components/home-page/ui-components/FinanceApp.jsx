@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const FinanceApp = () => {
   return (
-    <div className="main_container    lg:pb-6">
+    <div id="download-mobile-app" className="main_container scroll-mt-32 lg:pb-6">
       <div className="flex flex-col lg:flex-row gap-y-2 items-center justify-between">
         {/* Left Section */}
         <div className="text-center w-full md:text-left xl:w-[60%] space-y-3 md:space-x-0 ">
@@ -47,12 +47,12 @@ const FinanceApp = () => {
               <div className='flex items-center gap-1'><TiStar className='text-[#fe543d]' /> Certification & placement support</div>
             </div>
           </div>
-          <div className="flex items-start lg:items-start xl:flex-row space-y-4 xl:space-y-0 xl:space-x-6 mt-6">
-            <Link href='https://apps.apple.com/in/app/teks-academy/id6741759994' target='_blank' className="flex items-center w-fit justify-center border md:gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] hover:border-[#2A619D]">
+          <div className="flex flex-col sm:flex-row items-start gap-3 xl:gap-6 mt-6">
+            <Link href='https://apps.apple.com/in/app/teks-academy/id6741759994' target='_blank' className="flex items-center w-fit max-w-full justify-center border gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] hover:border-[#2A619D]">
               <FaApple className='h-6 w-6' />
               <div className='flex justify-center font-semibold items-center text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1rem]'>Download for iOS</div>
             </Link>
-            <Link href='https://play.google.com/store/apps/details?id=com.teksacademystudentmobile&pcampaignid=web_share' target='_blank' className="flex items-center w-fit justify-center md:gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] border  hover:border-[#2A619D]">
+            <Link href='https://play.google.com/store/apps/details?id=com.teksacademystudentmobile&pcampaignid=web_share' target='_blank' className="flex items-center w-fit max-w-full justify-center gap-x-2 px-2 2xl:px-6 2xl:py-3 py-2 bg-[#2A619D] text-white rounded-lg shadow hover:bg-white hover:text-[#2A619D] border  hover:border-[#2A619D]">
               <BsAndroid className='h-6 w-6' />
               <div className='flex justify-center items-center font-semibold text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1rem]'>Download for Android</div>
             </Link>
