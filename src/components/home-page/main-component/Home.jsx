@@ -40,6 +40,8 @@ export default async function Home() {
   // #fbf5f6 : pink
   // #fff : white
  console.log(homeData.gallery,"homegallery")
+   const schemaData = homeData?.meta?.schemaCode;
+
   const sectionsConfig = [
     {
       component: (
@@ -102,6 +104,18 @@ export default async function Home() {
 console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (
     <>
+     {schemaData && (
+        <script
+          id="home-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof schemaData === "string"
+                ? schemaData
+                : JSON.stringify(schemaData),
+          }}
+        />
+      )}
       <div>
         <HomepageBanner bannerData={homeData?.banner} />
         <Topscroll data={homeData?.topScroll} />
