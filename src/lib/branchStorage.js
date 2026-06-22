@@ -36,11 +36,11 @@ export const branchDataMap = {
     mapLink: "https://maps.app.goo.gl/xsxXrR3icySgjRer6",
     address: "Mehdipatnam, Hyderabad, Telangana",
   },
-  Salem: {
-    name: "Salem",
-    mapLink: "https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8",
-    address: "Salem, Tamil Nadu",
-  },
+  // Salem: {
+  //   name: "Salem",
+  //   mapLink: "https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8",
+  //   address: "Salem, Tamil Nadu",
+  // },
   Secunderabad: {
     name: "Secunderabad",
     mapLink: "https://maps.app.goo.gl/NHgBnjTc11wp2WUQ7",

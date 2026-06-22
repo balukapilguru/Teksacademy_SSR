@@ -40,11 +40,11 @@ export const BRANCHES = [
     value: "Visakhapatnam",
     phone: "+91 91333 08352",
   },
-  {
-    name: "Salem",
-    value: "Salem",
-    phone: "+91 97885 77788",
-  },
+  // {
+  //   name: "Salem",
+  //   value: "Salem",
+  //   phone: "+91 97885 77788",
+  // },
   {
     name: "Kompally",
     value: "Kompally",

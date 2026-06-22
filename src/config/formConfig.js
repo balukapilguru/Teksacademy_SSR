@@ -46,7 +46,7 @@ const BRANCH_OPTIONS = [
   "Dilsukhnagar",
   "Bangalore",
   "Visakhapatnam",
-  "Salem",
+  // "Salem",
   "Kompally",
 ];
 

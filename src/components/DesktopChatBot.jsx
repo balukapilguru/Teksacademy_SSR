@@ -38,7 +38,7 @@ const branches = [
   "Dilsukhnagar",
   "Bangalore",
   "Visakhapatnam",
-  "Salem",
+  // "Salem",
   "Kompally",
 ];
 
