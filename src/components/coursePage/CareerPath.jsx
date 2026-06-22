@@ -25,6 +25,7 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [hoveredCardId, setHoveredCardId] = useState(null);
 
   const [visibleCount, setVisibleCount] = useState(2);
   const [expanded, setExpanded] = useState(false);
@@ -47,6 +48,14 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
 
   const toggleFlip = (id) => {
     setFlippedCardId((prev) => (prev === id ? null : id));
+  };
+
+  const handleHover = (id) => {
+    setHoveredCardId(id);
+  };
+
+  const handleHoverLeave = () => {
+    setHoveredCardId(null);
   };
 
   const IconRenderer = ({ role }) => {
@@ -133,13 +142,19 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {jobsToShow.map((job, index) => {
           const isFlipped = flippedCardId === job.role;
+          const isHovered = hoveredCardId === job.role;
           const colors = getRoleColors(index);
 
           return (
-            <div key={job.role} className="group perspective cursor-pointer">
+            <div 
+              key={job.role} 
+              className="group perspective cursor-pointer"
+              onMouseEnter={() => handleHover(job.role)}
+              onMouseLeave={handleHoverLeave}
+            >
               <div
                 className={`card-3d relative h-56 w-full rounded-lg transition-transform duration-700 ${
-                  isFlipped ? 'rotate-y-180' : ''
+                  isFlipped || isHovered ? 'rotate-y-180' : ''
                 }`}
                 onClick={() => toggleFlip(job.role)}
               >
@@ -156,45 +171,44 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
                 </div>
 
                 {/* BACK */}
-  <div
-  className={`backface-hidden rotate-y-180 rounded-lg p-4 ${colors.bg} shadow-md flex flex-col`}
->
-  {/* Title */}
-  <h4 className="text-white text-center font-semibold mb-3">
-    Salary Package (LPA)
-  </h4>
+                <div
+                  className={`backface-hidden rotate-y-180 rounded-lg p-2 ${colors.bg} shadow-md flex flex-col`}
+                >
+                  {/* Title */}
+                  <h4 className="text-white text-center font-semibold mb-3">
+                    Salary Package (LPA)
+                  </h4>
 
-  {/* Table Wrapper */}
- <div className=" rounded-md overflow-hidden">
-  
-  {/* Header */}
-  <div className="grid grid-cols-2 text-sm font-semibold text-gray-700 border border-white borderwhite">
-    <div className="px-4 py-2 border-r border-white text-white">
-      Experience
-    </div>
-    <div className="px-4 py-2 text-white">
-      Package
-    </div>
-  </div>
+                  {/* Table Wrapper */}
+                  <div className="rounded-md overflow-hidden">
+                    {/* Header */}
+                    <div className="grid grid-cols-2 text-sm font-semibold text-gray-700 border border-white borderwhite">
+                      <div className="px-4 py-2 border-r border-white text-white">
+                        Experience
+                      </div>
+                      <div className="px-4 py-2 text-white">
+                        Package
+                      </div>
+                    </div>
 
-  {/* Body */}
-  <div className="max-h-[140px] overflow-y-auto">
-    {job.onHover?.table?.map((row, i) => (
-      <div
-        key={i}
-        className="grid grid-cols-2 text-sm text-gray-700 border-b border-white last:border-none"
-      >
-        <div className="px-6 py-2  lg:w-[8.9rem]  border-r border-white text-white border-l">
-          {row.label}
-        </div>
-        <div className="px-4 py-2 text-white">
-          {row.value}
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-</div>
+                    {/* Body */}
+                    <div className="max-h-[140px] overflow-y-auto">
+                      {job.onHover?.table?.map((row, i) => (
+                        <div
+                          key={i}
+                          className="grid grid-cols-2 text-sm text-gray-700 border-b border-white last:border-none"
+                        >
+                          <div className="px-6 py-2 lg:w-[8.9rem] border-r border-white text-white border-l">
+                            {row.label}
+                          </div>
+                          <div className="px-4 py-2 text-white">
+                            {row.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           );
