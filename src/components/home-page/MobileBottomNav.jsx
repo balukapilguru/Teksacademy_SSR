@@ -783,7 +783,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                 disabled={submitting}
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#FE543D] px-4 py-3 text-sm font-bold text-white disabled:bg-gray-400"
               >
-                <Send className="h-4 w-4" />
+                {/* <Send className="h-4 w-4" /> */}
                 {submitting ? "Submitting..." : "Start Chat"}
               </button>
             </div>
