@@ -27,7 +27,7 @@ const branchURL = [
   { url: 'best-software-training-institute-hiteccity', address: 'Hitec City', contact: '+91 78159 24622', mapLink: 'https://maps.app.goo.gl/uDTBbgm23Meb4ZYTA' },
   { url: 'best-software-training-institute-kukatpally', address: 'Kukatpally', contact: '+91 86884 08352', mapLink: 'https://maps.app.goo.gl/rqc7zPPy5uFn718AA' },
   { url: 'best-software-training-institute-mehdipatnam', address: 'Mehdipatnam', contact: '+91 98660 47567', mapLink: 'https://maps.app.goo.gl/xsxXrR3icySgjRer6' },
-  { url: 'best-software-training-institute-salem', address: 'Salem', contact: '+91 97885 77788', mapLink: 'https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8' },
+  // { url: 'best-software-training-institute-salem', address: 'Salem', contact: '+91 97885 77788', mapLink: 'https://maps.app.goo.gl/NtBxRhe4qP3c1LRX8' },
   { url: 'best-software-training-institute-secunderabad', address: 'Secunderabad', contact: '+91 92814 66365', mapLink: 'https://maps.app.goo.gl/NHgBnjTc11wp2WUQ7' },
   { url: 'best-software-training-institute-visakhapatnam', address: 'Visakhapatnam', contact: '+91 91333 08352', mapLink: 'https://maps.app.goo.gl/KKTvLKe9hmEgBhtF8' },
   { url: 'best-software-training-institute-kompally', address: 'Kompally', contact: '+91 7207657474', mapLink: 'https://www.google.com/maps/place/Teks+Academy+-+Kompally/@17.5413837,78.4867287,985m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3bcb8543ed304b91:0x85fb983df3a2d364!8m2!3d17.5413837!4d78.4867287!16s%2Fg%2F11z51zgrn5!5m1!1e2?hl=en-GB&entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D' },

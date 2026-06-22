@@ -33,7 +33,7 @@ const BRANCH_LABELS = {
   dilsukhnagar: "Dilsukhnagar",
   bangalore: "Bangalore",
   visakhapatnam: "Visakhapatnam",
-  salem: "Salem",
+  // salem: "Salem",
   kompally: "Kompally",
   
 };
