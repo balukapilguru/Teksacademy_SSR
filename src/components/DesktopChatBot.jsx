@@ -19,6 +19,7 @@ import {
 import { MobileOtpField } from "@/components/MobileOtpField";
 import { coursesList } from "@/data/courses";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { toast } from "react-hot-toast";
 
 const PHONE_DISPLAY = "1800-120-4748";
 const PHONE_HREF = "tel:18001204748";
@@ -349,9 +350,9 @@ function BrochureModal({ onClose }) {
         course_branch: values.branch,
         city: values.city.trim(),
         course: selectedCourse.shortTitle,
-        source: "'Download Syllabus—Website",
-        crm_source: "'Download Syllabus—Website",
-        form_type: "'Download Syllabus—Website",
+        source: "Download Syllabus—Website",
+        crm_source: "Download Syllabus—Website",
+        form_type: "Download Syllabus—Website",
         referredby: "website",
       });
 
@@ -363,11 +364,11 @@ function BrochureModal({ onClose }) {
         );
       }
 
-      alert("Form submitted. Thank you!");
+      toast.success("Form submitted successfully! Thank you. 🎉");
       onClose();
     } catch (error) {
       console.error("Curriculum form submission error:", error);
-      alert(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -536,6 +537,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
   const [profileSaved, setProfileSaved] = useState(false);
   const [typing, setTyping] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showFormAlert, setShowFormAlert] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -621,22 +623,32 @@ function ChatPanel({ onClose, onOpenBrochure }) {
         userMessage(cleanProfile.name),
         greet(cleanProfile.name),
       ]);
-      alert("Form submitted. Thank you!");
+      
+      toast.success("Thank you for submitting the form! 🎉");
     } catch (error) {
       console.error("Chat lead submission error:", error);
-      alert(error.message || "Submission failed. Please try again.");
+      toast.error(error.message || "Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleAction = (action) => {
-    setMessages((prev) => [...prev, userMessage(action.label)]);
-
-    if (action.href) {
-      window.location.href = action.href;
+    // Check if profile is not saved and action is not a link
+    if (!profileSaved && !action.href) {
+      setShowFormAlert(true);
+      setTimeout(() => setShowFormAlert(false), 3000);
       return;
     }
+
+    // If action has href, navigate and close chat
+    if (action.href) {
+      window.location.href = action.href;
+      onClose();
+      return;
+    }
+
+    setMessages((prev) => [...prev, userMessage(action.label)]);
 
     if (action.next === "brochure") {
       onOpenBrochure();
@@ -657,6 +669,15 @@ function ChatPanel({ onClose, onOpenBrochure }) {
       ]);
       setTyping(false);
     }, 500);
+  };
+
+  const handleMenuClick = () => {
+    if (!profileSaved) {
+      setShowFormAlert(true);
+      setTimeout(() => setShowFormAlert(false), 3000);
+      return;
+    }
+    handleAction({ label: "Menu", next: "menu" });
   };
 
   return (
@@ -722,7 +743,14 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                     <button
                       key={`${action.label}-${action.next || action.href}`}
                       type="button"
-                      onClick={() => handleAction(action)}
+                      onClick={() => {
+                        if (action.href) {
+                          window.location.href = action.href;
+                          onClose();
+                        } else {
+                          handleAction(action);
+                        }
+                      }}
                       className="rounded-full border border-gray-200 bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-blue-600 hover:text-white"
                     >
                       {action.label}
@@ -738,6 +766,15 @@ function ChatPanel({ onClose, onOpenBrochure }) {
             )}
           </div>
         ))}
+
+        {/* Form Alert Message */}
+        {showFormAlert && (
+          <div className="flex justify-center">
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-lg text-sm max-w-[80%] animate-pulse">
+              ⚠️ Please fill the form first to access the menu and chat features.
+            </div>
+          </div>
+        )}
 
         {typing && (
           <div className="flex gap-2">
@@ -829,7 +866,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
         </a>
         <button
           type="button"
-          onClick={() => handleAction({ label: "Menu", next: "menu" })}
+          onClick={handleMenuClick}
           className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
         >
           Menu
@@ -868,7 +905,6 @@ export const DesktopChatBot = () => {
           aria-label="Open chat"
         >
           <MessageCircle className="h-6 w-6" />
-          {/* <span className="text-sm font-medium hidden md:inline"> </span> */}
         </button>
       </div>
 
