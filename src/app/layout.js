@@ -1,20 +1,12 @@
 // app/layout.jsx
 
-import { Suspense } from "react";
 import Script from "next/script";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { Toaster } from "react-hot-toast";
-import { ToastContainer } from "react-toastify";
-import SpinWheel from "@/components/SpinWheel/SpinWheel";
 import { SelectedCourseProvider } from "@/context/SelectedCourseContext";
 import { NavbarProvider } from "@/components/coursePage/NavbarContext";
-import AppLoader from "@/components/AppLoader";
-import { MobileBottomNav } from "@/components/home-page/MobileBottomNav";
 import LayoutWrapper from "@/components/clientcomponents/LayoutWrapper";
-import { DesktopChatBot } from "@/components/DesktopChatBot";
+import GlobalClientWidgets from "@/components/clientcomponents/GlobalClientWidgets";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -130,60 +122,13 @@ export default async function RootLayout({ children }) {
 
         <SelectedCourseProvider>
           <NavbarProvider>
-
-            <ToastContainer autoClose={1000} />
-
-            <AppLoader />
+            <GlobalClientWidgets />
 
             <LayoutWrapper>
               {children}
             </LayoutWrapper>
-
-            <Toaster
-              position="top-right"
-              containerStyle={{
-                position: "fixed",
-                zIndex: 999999,
-                top: 0,
-                right: 0,
-              }}
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  zIndex: 999999,
-                },
-
-                success: {
-                  duration: 3000,
-                  style: {
-                    background: "#10b981",
-                    color: "#fff",
-                    zIndex: 999999,
-                  },
-                },
-
-                error: {
-                  duration: 4000,
-                  style: {
-                    background: "#ef4444",
-                    color: "#fff",
-                    zIndex: 999999,
-                  },
-                },
-              }}
-            />
-
-            {/* <Suspense fallback={null}>
-              <SpinWheel />
-            </Suspense> */}
-
           </NavbarProvider>
         </SelectedCourseProvider>
-
-        <MobileBottomNav />
-
-        <DesktopChatBot />
-
       </body>
     </html>
   );
