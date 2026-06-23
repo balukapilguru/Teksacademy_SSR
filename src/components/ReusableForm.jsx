@@ -596,7 +596,7 @@ export default function ReusableForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full py-2 px-4 rounded-md font-semibold text-white transition-all shadow-md
+        className={`w-full py-2.5 px-4 rounded-md font-semibold text-white transition-all shadow-md
           ${isSubmitting
             ? "bg-gray-400 cursor-not-allowed"
             : "bg-[#2a619d] hover:bg-[#214d7d] active:scale-[0.98]"}`}
