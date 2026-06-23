@@ -207,7 +207,7 @@ const ApplyForJobs = () => {
     setPlacementsError(null);
 
     try {
-      const url = `${apiUrl}/studentplace/placed-students?page=${page}&pageSize=10&shuffle=true`;
+      const url = `${apiUrl}/studentplace/placed-students?isVerifiedStudent=VERIFIED&page=${page}&pageSize=10&shuffle=true`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
