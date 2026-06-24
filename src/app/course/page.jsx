@@ -29,7 +29,7 @@ export async function generateMetadata() {
       openGraph: {
         title: data?.meta?.title,
         description: data?.meta?.description,
-        url: "https://teksversity.com/course",
+        url: "https://teksacademy.com/course",
         type: "website",
       },
 
@@ -40,7 +40,7 @@ export async function generateMetadata() {
       },
 
       alternates: {
-        canonical: "https://teksversity.com/course",
+        canonical: "https://teksacademy.com/course",
       },
     };
   } catch (error) {

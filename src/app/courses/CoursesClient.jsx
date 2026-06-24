@@ -59,7 +59,7 @@ const formatLabel = (str = "") => {
 const SUBCATEGORY_LABELS = {
   dualCertification: "Dual Certification",
   postGraduationCertification: "Post Graduation Certification",
-  certification: "Teksversity Certification",
+  certification: "Teksacademy Certification",
   fastTrack: "Fast Track Courses",
 
   ug: "Under Graduation",

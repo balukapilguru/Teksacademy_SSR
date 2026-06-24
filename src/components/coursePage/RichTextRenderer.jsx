@@ -11,10 +11,10 @@ const RichTextRenderer = ({ content = [] }) => {
         if (item.type === "link") {
           const isInternal =
             item.url.startsWith("/") ||
-            item.url.includes("teksversity.com");
+            item.url.includes("teksacademy.com");
 
           // Convert absolute internal URL to relative
-          const href = item.url.replace("https://teksversity.com", "");
+          const href = item.url.replace("https://teksacademy.com", "");
 
           return isInternal ? (
             <Link
