@@ -651,10 +651,10 @@ export default function Navbar() {
                         <Link
                           href="/course"
                           onClick={() => setShowMenu(null)}
-                          className="flex items-center gap-2 text-[#2a619d] hover:text-[#2a619d] font-semibold text-sm transition-colors group"
+                          className="flex items-center gap-2 text-[#2a619d] hover:text-[#2a619d] font-semibold text-xs transition-colors group"
                         >
                           <span>Know More</span>
-                          <MdArrowForwardIos className="text-xs mt-1" />
+                          <MdArrowForwardIos size={10} />
                         </Link>
                       </div>
                     </div>
