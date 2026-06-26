@@ -9,83 +9,97 @@ const BLOGS_API_URL = (
 
 export const revalidate = 86400;
 
-const staticRoutes = [
+/**
+ * 🔴 HARD SOURCE OF TRUTH (DO NOT TOUCH RANDOMLY)
+ * If SEO matters, this is where control lives.
+ */
+const FIXED_SITEMAP_ROUTES = [
   "/",
   "/course",
-  "/courses",
-  "/branch",
+
+  "/courses/best-full-stack-python-development-course-training-institute",
+  "/courses/best-full-stack-java-development-course-training-institute",
+  "/courses/best-data-science-course-training-institute",
+  "/courses/best-awsplusdevops-course-training-institute",
+  "/courses/best-digital-marketing-course-training-institute",
+  "/courses/best-data-analytics-course-training-institute",
+  "/courses/best-multimedia-course-training-institute",
+  "/courses/best-bim-building-information-modeling-course-training-institute",
+  "/courses/best-sap-fico-finance-and-controlling-course-training-institute",
+  "/courses/best-medical-coding-course-training-institute",
+  "/courses/best-testingtools-course-training-institute",
+  "/courses/best-advance-excel-course-training-institute",
+  "/courses/best-autocad-course-training-institute",
+  "/courses/best-revit-mep-course-training-institute",
+  "/courses/best-business-analytics-course-training-institute",
+  "/courses/best-generative-ai-course-training-institute",
+  "/courses/best-sapmm-course-training-institute",
+  "/courses/best-cyber-security-course-training-institute",
+
+  "/branch/best-software-training-institute-ameerpet",
+  "/branch/best-software-training-institute-hiteccity",
+  "/branch/best-software-training-institute-secunderabad",
+  "/branch/best-software-training-institute-dilsukhnagar",
+  "/branch/best-software-training-institute-mehdipatnam",
+  "/branch/best-software-training-institute-kukatpally",
+  "/branch/best-software-training-institute-bangalore",
+  "/branch/best-software-training-institute-visakhapatnam",
+  "/branch/best-software-training-institute-kompally",
+
   "/success-stories",
   "/resources/ebook",
   "/resources/interview-questions",
+
+  "/interview-questions/python-interview-questions",
+  "/interview-questions/java-interview-questions",
+  "/interview-questions/data-science-interview-questions",
+  "/interview-questions/digital-marketing-interview-questions",
+  "/interview-questions/aws-dev-interview-questions",
+  "/interview-questions/bim-interview-questions",
+  "/interview-questions/software-testing-interview-questions",
+  "/interview-questions/sap-interview-questions",
+  "/interview-questions/multimedia-interview-questions",
+  "/interview-questions/medical-coding-interview-questions",
+  "/interview-questions/advanced-excel-interview-questions",
+  "/interview-questions/auto-cad-interview-questions",
+  "/interview-questions/revit-interview-questions",
+  "/interview-questions/data-analytics-interview-questions",
+  "/interview-questions/sap-mm-interview-questions",
+  "/interview-questions/cyber-security-interview-questions",
+  "/interview-questions/generative-ai-interview-questions",
+  "/interview-questions/business-analytics-interview-questions",
+
   "/discover/about-us",
   "/discover/gallery",
   "/discover/media",
   "/discover/contact-us",
   "/discover/support",
+
   "/placements/alumni",
   "/placements/recruiters",
+
   "/apply-for-jobs",
   "/blogs",
-  "/ebook",
-  "/find-my-course",
 ];
 
-const courseSlugs = [
-  ...localCourses.map((course) => course.slug),
-  "best-multimedia-course-training-institute",
-  "best-advance-excel-course-training-institute",
-  "best-revit-mep-course-training-institute",
-  "best-generative-ai-course-training-institute",
-];
-
-const branchSlugs = [
-  "best-software-training-institute-ameerpet",
-  "best-software-training-institute-hiteccity",
-  "best-software-training-institute-secunderabad",
-  "best-software-training-institute-dilsukhnagar",
-  "best-software-training-institute-mehdipatnam",
-  "best-software-training-institute-kukatpally",
-  "best-software-training-institute-bangalore",
-  "best-software-training-institute-visakhapatnam",
-  "best-software-training-institute-kompally",
-];
-
-const interviewQuestionSlugs = [
-  "python-interview-questions",
-  "java-interview-questions",
-  "data-science-interview-questions",
-  "digital-marketing-interview-questions",
-  "aws-dev-interview-questions",
-  "bim-interview-questions",
-  "software-testing-interview-questions",
-  "sap-interview-questions",
-  "multimedia-interview-questions",
-  "medical-coding-interview-questions",
-  "advanced-excel-interview-questions",
-  "auto-cad-interview-questions",
-  "revit-interview-questions",
-  "data-analytics-interview-questions",
-  "sap-mm-interview-questions",
-  "cyber-security-interview-questions",
-  "generative-ai-interview-questions",
-  "business-analytics-interview-questions",
-];
-
+/**
+ * Optional: dynamic blog routes
+ */
 const getBlogRoutes = async () => {
   if (!BLOGS_API_URL) return [];
 
   try {
-    const response = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
+    const res = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
       next: { revalidate },
     });
 
-    if (!response.ok) return [];
+    if (!res.ok) return [];
 
-    const data = await response.json();
+    const data = await res.json();
     const posts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
 
     return posts
-      .map((post) => post?.meta_url)
+      .map((p) => p?.meta_url)
       .filter(Boolean)
       .map((slug) => `/blogs/${slug}`);
   } catch {
@@ -93,47 +107,49 @@ const getBlogRoutes = async () => {
   }
 };
 
+/**
+ * Exact metadata control
+ */
+const EXACT_META = {
+  "/": { changeFrequency: "daily", priority: 1 },
+  "/course": { changeFrequency: "daily", priority: 0.9 },
+  "/blogs": { changeFrequency: "daily", priority: 0.8 },
+};
+
 const getRouteMeta = (route) => {
-  if (route === "/") {
-    return { changeFrequency: "daily", priority: 1 };
-  }
+  if (EXACT_META[route]) return EXACT_META[route];
 
-  if (route === "/course" || route === "/courses" || route.startsWith("/courses/")) {
+  if (route.startsWith("/courses") || route.startsWith("/branch")) {
     return { changeFrequency: "daily", priority: 0.9 };
-  }
-
-  if (route === "/branch" || route.startsWith("/branch/")) {
-    return { changeFrequency: "daily", priority: 0.85 };
-  }
-
-  if (route.startsWith("/blogs/")) {
-    return { changeFrequency: "weekly", priority: 0.7 };
   }
 
   return { changeFrequency: "weekly", priority: 0.8 };
 };
 
+/**
+ * Safety normalization (prevents duplicates like // or trailing /)
+ */
 const normalizeRoute = (route) => {
   if (!route || route === "/") return "/";
   return `/${route}`.replace(/\/+/g, "/").replace(/\/$/, "");
 };
 
+/**
+ * MAIN EXPORT
+ */
 export default async function sitemap() {
   const blogRoutes = await getBlogRoutes();
+
   const routes = [
-    ...staticRoutes,
-    ...courseSlugs.map((slug) => `/courses/${slug}`),
-    ...branchSlugs.map((slug) => `/branch/${slug}`),
-    ...interviewQuestionSlugs.map((slug) => `/interview-questions/${slug}`),
-    ...blogRoutes,
+    ...FIXED_SITEMAP_ROUTES,
+    ...blogRoutes, // only dynamic part allowed
   ];
 
   const uniqueRoutes = [...new Set(routes.map(normalizeRoute))];
-  const lastModified = new Date();
 
   return uniqueRoutes.map((route) => ({
     url: `${SITE_URL}${route === "/" ? "" : route}`,
-    lastModified,
+    lastModified: new Date(),
     ...getRouteMeta(route),
   }));
 }
