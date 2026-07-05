@@ -85,27 +85,27 @@ const FIXED_SITEMAP_ROUTES = [
 /**
  * Optional: dynamic blog routes
  */
-// const getBlogRoutes = async () => {
-//   if (!BLOGS_API_URL) return [];
+const getBlogRoutes = async () => {
+  if (!BLOGS_API_URL) return [];
 
-//   try {
-//     const res = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
-//       next: { revalidate },
-//     });
+  try {
+    const res = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
+      next: { revalidate },
+    });
 
-//     if (!res.ok) return [];
+    if (!res.ok) return [];
 
-//     const data = await res.json();
-//     const posts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
+    const data = await res.json();
+    const posts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
 
-//     return posts
-//       .map((p) => p?.meta_url)
-//       .filter(Boolean)
-//       .map((slug) => `/blogs/${slug}`);
-//   } catch {
-//     return [];
-//   }
-// };
+    return posts
+      .map((p) => p?.meta_url)
+      .filter(Boolean)
+      .map((slug) => `/blogs/${slug}`);
+  } catch {
+    return [];
+  }
+};
 
 /**
  * Exact metadata control
