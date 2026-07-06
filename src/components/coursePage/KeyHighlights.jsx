@@ -86,7 +86,7 @@ const Page = ({ data }) => {
       </h2>
 
       {/* Desktop View */}
-      <div className="hidden md:flex gap-6">
+      <div className="hidden md:flex gap-6 mb-10">
         <div className="w-1/3">
           <div className="sticky top-24 bg-white shadow-md rounded-xl p-4">
             <div className="text-lg font-bold mb-4">Navigate Sections</div>

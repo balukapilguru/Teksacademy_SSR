@@ -75,14 +75,14 @@ const CoursesOffered = ({ data, branchData }) => {
     fetchCourses();
   }, [data, branchData, pathname]);
 
-  const handleSubmit = async (formValues, mappedPayload) => {
+ const handleSubmit = async (formValues, payload) => {
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(mappedPayload),
+        body: JSON.stringify(payload),
       });
 
       const responseData = await response.json();
@@ -109,7 +109,7 @@ const CoursesOffered = ({ data, branchData }) => {
     selectedCourse?.title ||
     selectedCourse?.name ||
     "";
-
+{console.log("Courses rendered:",courses.length, courses.map(c => c.heading || c.programName || c.title || c.name))}
   if (loading) {
     return (
       <section>
@@ -156,6 +156,7 @@ const CoursesOffered = ({ data, branchData }) => {
                 onGetDetailsClick={() => handleOpenModal(course)}
               />
             ))}
+            
           </div>
         ) : (
           <p className="flex justify-center h-40 w-full">No courses available.</p>

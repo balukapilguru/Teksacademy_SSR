@@ -9,7 +9,9 @@ const normalizeCourseValue = (value) => {
   if (!value) return "";
   if (typeof value === "string") return value;
   if (Array.isArray(value)) {
-    const firstValue = value.find((item) => item !== undefined && item !== null);
+    const firstValue = value.find(
+      (item) => item !== undefined && item !== null,
+    );
     return normalizeCourseValue(firstValue);
   }
   if (typeof value === "object") {
@@ -69,25 +71,28 @@ const Popupform = ({
   }, [show]);
 
   // Handle form submission from ReusableForm
-  const handleFormSubmit = async (formValues) => {
+  const handleFormSubmit = async (formValues,mappedValues) => {
     if (onSubmit) {
+      console.log("On Submit True");
       setIsSubmitting(true);
       try {
-        const result = await onSubmit(formValues);
-        
+        const result = await onSubmit(formValues,mappedValues);
+
         // If submission successful and redirect is enabled
         if (result?.success !== false && redirectToThankYou) {
           // Check for pending syllabus URL
-          const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+          const pendingUrl =
+            sessionStorage.getItem("pendingSyllabusUrl") ||
+            extraData?.syllabusUrl;
           if (pendingUrl) {
             // Open syllabus in new tab
             window.open(pendingUrl, "_blank", "noopener,noreferrer");
-            sessionStorage.removeItem('pendingSyllabusUrl');
+            sessionStorage.removeItem("pendingSyllabusUrl");
           }
-          
+
           // Redirect to thank you page
           router.push("/thankyou");
-          
+
           // Close popup after redirect
           setTimeout(() => {
             onClose();
@@ -100,32 +105,34 @@ const Popupform = ({
         setIsSubmitting(false);
       }
     }
+    console.log("On Submit False");
   };
 
   // Listen for form submission success event from ReusableForm
   useEffect(() => {
     const handleFormSuccess = (event) => {
       // Check for pending syllabus URL
-      const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+      const pendingUrl =
+        sessionStorage.getItem("pendingSyllabusUrl") || extraData?.syllabusUrl;
       if (pendingUrl) {
         // Open syllabus in new tab
         window.open(pendingUrl, "_blank", "noopener,noreferrer");
-        sessionStorage.removeItem('pendingSyllabusUrl');
+        sessionStorage.removeItem("pendingSyllabusUrl");
       }
 
       if (redirectToThankYou) {
         router.push("/thankyou");
       }
-      
+
       setTimeout(() => {
         onClose();
       }, 100);
     };
 
-    window.addEventListener('formSubmissionSuccess', handleFormSuccess);
-    
+    window.addEventListener("formSubmissionSuccess", handleFormSuccess);
+
     return () => {
-      window.removeEventListener('formSubmissionSuccess', handleFormSuccess);
+      window.removeEventListener("formSubmissionSuccess", handleFormSuccess);
     };
   }, [redirectToThankYou, router, onClose, extraData]);
 
@@ -149,7 +156,7 @@ const Popupform = ({
           ${show ? "opacity-50" : "opacity-0"}`}
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div
         style={{
@@ -170,14 +177,26 @@ const Popupform = ({
             aria-label="Close"
             disabled={isSubmitting}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
 
           {/* Header */}
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-800">{title || "Enroll Now"}</h3>
+            <h3 className="text-2xl font-bold text-gray-800">
+              {title || "Enroll Now"}
+            </h3>
             {subtitle && (
               <p className="text-gray-600 text-sm mt-2">{subtitle}</p>
             )}
@@ -193,17 +212,19 @@ const Popupform = ({
             onSubmit={onSubmit ? handleFormSubmit : undefined}
             onSuccess={() => {
               // This will be called by ReusableForm on success
-              const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+              const pendingUrl =
+                sessionStorage.getItem("pendingSyllabusUrl") ||
+                extraData?.syllabusUrl;
               if (pendingUrl) {
                 window.open(pendingUrl, "_blank", "noopener,noreferrer");
-                sessionStorage.removeItem('pendingSyllabusUrl');
+                sessionStorage.removeItem("pendingSyllabusUrl");
               }
             }}
           />
         </div>
       </div>
     </>,
-    portalTarget
+    portalTarget,
   );
 };
 

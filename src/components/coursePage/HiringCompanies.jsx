@@ -1,6 +1,6 @@
 "use client";
 
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import React from "react";
 import GetData from "@/utility/GetData";
 import Image from "next/image";
@@ -37,7 +37,7 @@ const LogoMarquee = ({ hiringData }) => {
   return (
     <div className=" px-3 py-4 md:px-8 rounded-xl bg-[#fbf5f6] overflow-hidden mt-5">
       <div className="pt-5 md:pt-0">
-        <Heading data={heading} />
+        <CoursepageHeading data={heading} />
       </div>
 
       <div className="flex flex-col gap-5">

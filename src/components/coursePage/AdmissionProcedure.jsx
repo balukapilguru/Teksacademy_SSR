@@ -9,11 +9,21 @@ import Popupform from "../clientcomponents/forms/Popupform";
 import { useRouter } from "next/navigation";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-const Admission = ({ data }) => {
+const Admission = ({  data,
+  formDetails,
+  courseLabel = "",
+  branch = "", }) => {
+
+    
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const router = useRouter();
+  const courseDisplayName =
+  courseLabel ||
+  formDetails?.courseName ||
+  formDetails?.course ||
+  "";
 
   if (!data) return null;
 
@@ -85,12 +95,12 @@ const Admission = ({ data }) => {
   };
 
   const handleOpenModal = () => {
-    setSelectedCourse(data?.name || "");
-    setShowModal(true);
-  };
+setSelectedCourse(courseDisplayName);
+  setShowModal(true);
+};
 
   return (
-    <section id="OnlineAdmissionProcedure">
+    <section id="OnlineAdmissionProcedure main_container" className="py-4  md:mt-12  relative rounded-lg">
       {/* Modal */}
       {showModal && (
         <Popupform
@@ -99,6 +109,7 @@ const Admission = ({ data }) => {
           course={selectedCourse}
           courseName={selectedCourse}
           source={30}
+          university={branch}
           title="Enroll Now"
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleSubmit}

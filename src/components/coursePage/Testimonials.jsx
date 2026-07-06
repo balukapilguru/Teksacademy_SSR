@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import GetData from "@/utility/GetData";
 import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from "react-icons/io";
 import { FaPlay } from "react-icons/fa";
@@ -162,7 +162,7 @@ export default function Testimonials({ data }) {
     >
       <div className="max-w-7xl mx-auto text-center">
         <div className="mb-6">
-          <Heading data={data?.heading} />
+          <CoursepageHeading data={data?.heading} />
         </div>
 
         <div className="flex justify-center gap-4 mb-5">

@@ -9,16 +9,29 @@ import ReusableForm from "@/components/ReusableForm";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source }) => {
+const ReserveYourSpot = ({  data,
+  formDetails,
+  course,
+  courseName = "",
+  courseLabel = "",
+  branch = "",
+  source,}) => {
   const router = useRouter();
 
   if (!data) return null;
 
   const courseDisplayName =
-    courseName || course || formDetails?.courseName || formDetails?.course || "";
-  const initialValues = {
-    course: courseDisplayName,
-  };
+  courseLabel ||
+  courseName ||
+  course ||
+  formDetails?.courseName ||
+  formDetails?.course ||
+  "";
+
+const initialValues = {
+  course: courseDisplayName,
+  branch: branch || "",
+};
 
   const {
     heading = [],

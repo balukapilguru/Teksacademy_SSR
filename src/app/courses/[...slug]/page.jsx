@@ -17,124 +17,92 @@ import OverViewOfOnline from "@/components/coursePage/OverViewOfOnline";
 import CourseScrollBar from "@/components/coursePage/CourseScrollBar";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
-export async function generateMetadata({ params }) {
-  const { coursename, specialization } = await params;
 
-  try {
-    const res = await fetch(
-      `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`, // ✅ plural "courses"
-      { next: { revalidate: 60 } }
-    );
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const json = await res.json();
-    const meta = json?.data?.meta;
-
-    return {
-      title: meta?.title || "Tekacademy Courses",
-      description: meta?.description || "Explore online courses at Tekacademy.",
-      openGraph: {
-        title: meta?.title || "Tekacademy Courses",
-        description: meta?.description || "Explore online courses at Tekacademy.",
-      },
-      twitter: {
-        title: meta?.title || "Tekacademy Courses",
-        description: meta?.description || "Explore online courses at Tekacademy.",
-      },
-    };
-  } catch {
-    // Return fallback metadata (not an empty object)
-    return {
-      title: "Tekacademy Courses",
-      description: "Explore online courses at Tekacademy.",
-      openGraph: {
-        title: "Tekacademy Courses",
-        description: "Explore online courses at Tekacademy.",
-      },
-      twitter: {
-        title: "Tekacademy Courses",
-        description: "Explore online courses at Tekacademy.",
-      },
-    };
-  }
-}
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
-const isGenericCourseLabel = (value) => {
-  const label = typeof value === "string" ? value.trim().toLowerCase() : "";
-  return !label || label === "course" || label === "course enquiry" || label === "course details";
-};
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
 
-const getCourseLabelValue = (value) => {
-  if (!value) return "";
-  if (typeof value === "string") {
-    return isGenericCourseLabel(value) ? "" : value.trim();
+  let branch = null;
+  let coursename = null;
+
+  if (slug.length === 1) {
+    coursename = slug[0];
+  } else if (slug.length === 2) {
+    branch = slug[0];
+    coursename = slug[1];
+  } else {
+    return {};
   }
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const label = getCourseLabelValue(item);
-      if (label) return label;
-    }
-    return "";
-  }
-  if (typeof value === "object") {
-    const directValue =
-      value.mainHeading ||
-      value.heading ||
-      value.programName ||
-      value.courseName ||
-      value.course ||
-      value.title ||
-      value.name ||
-      value.text;
 
-    const directLabel = getCourseLabelValue(directValue);
-    if (directLabel) return directLabel;
+  const api = branch
+    ? `${baseUrl}/api/v1/courses/${branch}/${coursename}`
+    : `${baseUrl}/api/v1/courses/${coursename}`;
 
-    for (const item of Object.values(value)) {
-      const label = getCourseLabelValue(item);
-      if (label) return label;
-    }
-  }
-  return "";
-};
+  const res = await fetch(api, {
+    next: { revalidate: 60 },
+  });
 
-const getCourseLabelFromSlug = (slug = "") => {
-  return slug
-    .replace(/^best-/, "")
-    .replace(/-course-training-institute$/, "")
-    .replace(/-training-institute$/, "")
-    .replace(/-certification-program$/, "")
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-};
+  if (!res.ok) return {};
 
+  const json = await res.json();
+  const meta = json?.data?.meta;
 
+  if (!meta) return {};
+
+  return {
+    title: meta.title,
+    description: meta.description,
+  };
+}
 export default async function Page({ params }) {
- const { coursename, specialization } = await params;
+  const { slug } = await params;
+  console.log("slug:", slug);
+  let branch = null;
+  let coursename = null;
 
+  if (slug.length === 1) {
+    coursename = slug[0];
+  } else if (slug.length === 2) {
+    branch = slug[0];
+    coursename = slug[1];
+  } else {
+    notFound();
+  }
+  console.log("branch", branch, coursename);
   let courseData;
 
   try {
-    const res = await fetch(
-      `${baseUrl}/api/v1/courses/${coursename}/specializations/${specialization}`,
-      { next: { revalidate: 60 } }
-    );
+    const api = branch
+      ? `${baseUrl}/api/v1/courses/${branch}/${coursename}`
+      : `${baseUrl}/api/v1/courses/${coursename}`;
+    console.log("API URL:", api);
+    const res = await fetch(api, {
+      next: { revalidate: 60 },
+    });
 
-    if (res.status === 404) notFound();
+    console.log("status =", res.status);
+
+    if (res.status === 404) {
+      console.log("API RETURNED 404");
+      notFound();
+    }
 
     if (!res.ok) {
       throw new Error(`API error: ${res.status}`);
     }
 
     const json = await res.json();
+    console.log(json, "json");
     courseData = json?.data;
-console.log(courseData,"coursedataaa")
-    if (!courseData) notFound();
+    console.log("courseData:", courseData);
+    if (!courseData) {
+      console.log("courseData is empty");
+      notFound();
+    }
   } catch (error) {
     console.error("Course fetch failed:", error);
-    throw error;
+    throw error; // let Next handle real errors
   }
 
   const {
@@ -157,14 +125,6 @@ console.log(courseData,"coursedataaa")
     meta,
   } = courseData || {};
 
-  const courseLabel =
-    getCourseLabelValue(banner?.mainHeading) ||
-    getCourseLabelValue(courseData?.mainHeading) ||
-    getCourseLabelValue(courseData?.name) ||
-    getCourseLabelValue(banner?.name) ||
-    getCourseLabelFromSlug(specialization) ||
-    getCourseLabelFromSlug(coursename);
-
   // Create a component that wraps all CourseFlow-dependent components
   const CourseFlowSection = () => (
     <>
@@ -179,16 +139,18 @@ console.log(courseData,"coursedataaa")
               offeringUniversity: offeringUniversity,
               formDetails: formDetails,
             }}
+            courseName={coursename}
+  branch={branch}
           />
         </div>
       )}
 
       {OnlineAdmissionProcedure && (
-        <div
-          className="rounded-lg border main_container"
-          style={{ backgroundColor: "#fbf5f6", borderColor: "#fbf5f6" }}
-        >
-          <Admission data={OnlineAdmissionProcedure} />
+        <div className=" px-14">
+          <Admission data={OnlineAdmissionProcedure}
+          formDetails={formDetails}
+      courseLabel={coursename}
+      branch={branch} />
         </div>
       )}
 
@@ -211,14 +173,14 @@ console.log(courseData,"coursedataaa")
       )}
 
       {/* Programfee */}
-      {offeringUniversity && formDetails && (
+      {/* {offeringUniversity && formDetails && (
         <div
           className="rounded-lg border main_container"
           style={{ backgroundColor: "#ffffff", borderColor: "#ffffff" }}
         >
           <Programfee data={offeringUniversity} universityLsit={formDetails} />
         </div>
-      )}
+      )} */}
     </>
   );
 
@@ -226,35 +188,28 @@ console.log(courseData,"coursedataaa")
 
   return (
     <>
-{
-      schemaData && (
+      {schemaData && (
         <script
-          id="course-schema"      
-
+          id="course-schema"
           type="application/ld+json"
-
-
           dangerouslySetInnerHTML={{
             __html:
               typeof schemaData === "string"
-
                 ? schemaData
                 : JSON.stringify(schemaData),
           }}
         />
-      )
-}
+      )}
 
       <div className="mt-5">
-        
-
         {banner && (
           <Banner
             data={banner}
             formDetails={formDetails}
-            courseLabel={courseLabel}
             category={true}
             source={29}
+            courseLabel={coursename}
+            branch={branch}
           />
         )}
         {offeredBy && (
@@ -262,8 +217,9 @@ console.log(courseData,"coursedataaa")
             data={offeredBy}
             source={31}
             formDetails={formDetails}
-            courseName={courseLabel}
             category={true}
+            courseLabel={coursename}
+            branch={branch}
           />
         )}
 
@@ -284,8 +240,9 @@ console.log(courseData,"coursedataaa")
             <OverViewOfOnline
               data={overViewOfOnline}
               formDetails={formDetails}
-              courseName={courseLabel}
               category={true}
+              courseLabel={coursename}
+            branch={branch}
             />
           </div>
         )}
@@ -301,7 +258,7 @@ console.log(courseData,"coursedataaa")
 
         {keyHighlights && (
           <div
-            className="rounded-lg border main_container pt-5 "
+            className="rounded-lg border main_container pt-5"
             style={{ backgroundColor: "#ffffff", borderColor: "#ffffff" }}
           >
             <KeyHighLights data={keyHighlights} />
@@ -310,15 +267,15 @@ console.log(courseData,"coursedataaa")
 
         {downloadOurCourseBrochure && (
           <div
-            className="rounded-lg border main_container pt-5"
+            className="rounded-lg border main_container pt-2"
             style={{ backgroundColor: "#e5e7eb", borderColor: "#e5e7eb" }}
           >
             <DownloadCourseBrochure
               data={downloadOurCourseBrochure}
               formDetails={formDetails}
-              courseName={courseLabel}
-              courseSlug={coursename}
               category={true}
+              courseLabel={coursename}
+            branch={branch}
             />
           </div>
         )}

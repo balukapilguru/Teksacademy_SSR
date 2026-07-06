@@ -23,7 +23,7 @@ const Banner = ({
     if (typeof value === "string") return value;
     if (Array.isArray(value)) {
       const firstValue = value.find(
-        (item) => item !== undefined && item !== null,
+        (item) => item !== undefined && item !== null
       );
       return normalizeCourseLabel(firstValue);
     }
@@ -55,7 +55,6 @@ const Banner = ({
       normalizeCourseLabel(formDetails) ||
       branch ||
       "";
-
     setSelectedCourse(courseObj);
     setShowModal(true);
   };
@@ -72,13 +71,11 @@ const Banner = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(mappedPayload),
-        },
+        }
       );
 
       const responseData = await response.json();
-      {
-        console.log(mappedPayload, "mappedPayload:");
-      }
+
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
@@ -92,8 +89,8 @@ const Banner = ({
       setIsSubmitting(false);
     }
   };
-  const rating = parseFloat(data?.bannerrating);
-  const review = parseFloat(data?.bannerRiview);
+const rating = parseFloat(data?.bannerrating);
+const review = parseFloat(data?.bannerRiview)
   return (
     <div className="relative main_container rounded-2xl text-white overflow-hidden">
       {/* Popup */}
@@ -101,19 +98,21 @@ const Banner = ({
         <Popupform
           show={showModal}
           onClose={() => !isSubmitting && setShowModal(false)}
-          course={selectedCourse}
-          courseName={selectedCourse}
-          university={branch}
+          course={normalizeCourseLabel(
+            selectedCourse || courseLabel || formDetails || branch
+          )}
+          courseName={normalizeCourseLabel(
+            selectedCourse || courseLabel || formDetails
+          )}
           source={30}
-          title="Request a Demo"
+          title={"Request a Demo"}
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleFormSubmit}
           formType="RequestDemo"
-          buttonText="Request a Demo"
+          buttonText={"Request a Demo"}
           successMessage="Thank you! We'll contact you soon."
         />
       )}
-      {console.log(formDetails, courseLabel, branch, "courseLabel:")}
 
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] z-0" />
@@ -134,6 +133,7 @@ const Banner = ({
       <div className="relative z-10 max-w-8xl pl-4 pr-2 lg:pr-0 grid grid-cols-1 lg:grid-cols-2 lg:gap-10 items-center">
         {/* LEFT */}
         <div className="md:pl-8 mt-2">
+        
           <Bannerheading
             text={data.mainHeading}
             data={data?.mainHeading}
@@ -155,20 +155,22 @@ const Banner = ({
           )}
 
           {/* ⭐ FIXED: Rating OUTSIDE condition */}
-          {!isNaN(rating) && rating > 0 && (
-            <div className="mt-4 flex items-center gap-2 text-white font-medium">
-              <span className="text-lg">{rating.toFixed(1)}</span>
+         {!isNaN(rating) && rating > 0 && (
+  <div className="mt-4 flex items-center gap-2 text-white font-medium">
+    <span className="text-lg">{rating.toFixed(1)}</span>
 
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i}>★</span>
-                ))}
-              </div>
-              {!isNaN(review) && review > 0 && (
-                <span className="text-gray-300 text-sm">{review} Reviews</span>
-              )}
-            </div>
-          )}
+    <div className="flex text-yellow-400">
+      {[...Array(5)].map((_, i) => (
+        <span key={i}>★</span>
+      ))}
+    </div>
+{!isNaN(review) && review > 0 && (
+    <span className="text-gray-300 text-sm">
+      {review} Reviews
+    </span>
+)}
+  </div>
+)}
 
           {/* CTA */}
           {data.button && !category && !isSelfPaced && (

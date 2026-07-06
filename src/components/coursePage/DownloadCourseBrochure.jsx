@@ -69,21 +69,28 @@ const getPdfLink = (value) => {
 };
 
 const DownloadCourseBrochure = ({
-  data,
+ data,
   formDetails,
+  courseLabel = "",
   courseName = "",
   courseSlug = "",
   category = false,
-  branch = "course",
+  branch = "",
   isSelfPaced = false,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+const courseDisplayName =
+  courseLabel ||
+  courseName ||
+  formDetails?.courseName ||
+  formDetails?.course ||
+  "";
+
+const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
   const router = useRouter();
 
   if (!data) return null;
 
-  const courseDisplayName = courseName || selectedCourse || formDetails || "";
 
   const getBrochureUrl = () => {
     const brochureUrl =
@@ -101,8 +108,8 @@ const DownloadCourseBrochure = ({
       : brochureUrl;
   };
 
-  const handleOpenModal = (details) => {
-    setSelectedCourse(details);
+  const handleOpenModal = () => {
+    setSelectedCourse(courseDisplayName);
     setShowModal(true);
   };
 
@@ -160,6 +167,7 @@ const DownloadCourseBrochure = ({
             title="Download Curriculum"
             subtitle="Fill in your details to download the course brochure."
             onSubmit={handleSubmit}
+            university={branch}
             formType="syllabus"
             buttonText={data?.button?.name || "Download Brochure"}
             successMessage="Thank you! Your brochure download will start shortly."

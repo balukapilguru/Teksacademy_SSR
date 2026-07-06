@@ -156,7 +156,9 @@ function SectionHeading({ parts = [], className = "" }) {
 }
 
 // ─── 1. HERO SECTION ──────────────────────────────────────────────────────
-function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
+function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,courses }) {
+  
+  console.log("HeroSection data:", courses);
   if (!data) return null;
   const branchLabel = getBranchLabel({ branchName, branchLocation, heroData: data });
 
@@ -243,6 +245,7 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick }) {
               formType="enquiry"
               onSubmit={handleSubmit}
               initialValues={branchLabel ? { branch: branchLabel } : {}}
+               courses={courses}
               buttonText="Submit"
               className="w-full"
               successMessage="Thank you! We'll contact you soon."
@@ -466,6 +469,7 @@ function SuccessStories({ data }) {
 // ─── ROOT CLIENT COMPONENT ────────────────────────────────────────────────
 export default function BranchClient({ data: initialData = null, branchName = "" }) {
   const [data, setData] = useState(initialData);
+  const [courses, setCourses] = useState([]);
   const [pageLoading, setPageLoading] = useState(!initialData);
   const [error, setError] = useState(null);
   const [showEnrollPopup, setShowEnrollPopup] = useState(false);
@@ -515,7 +519,32 @@ export default function BranchClient({ data: initialData = null, branchName = ""
 
     return () => controller.abort();
   }, [api, branchApiPath, initialData]);
+  console.log("BranchClient rendered with data:", data);
+useEffect(() => {
+  const fetchCourses = async () => {
+    try {
+      const branchSlug = branchName
+        .replace("best-software-training-institute-", "")
+        .replace("-branch", "");
 
+      const res = await fetch(
+        `${api}1`
+      );
+
+      const json = await res.json();
+
+      if (json.success) {
+        setCourses(json.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (branchName) {
+    fetchCourses();
+  }
+}, [branchName]);
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center bg-white h-100">
@@ -535,11 +564,14 @@ export default function BranchClient({ data: initialData = null, branchName = ""
   return (
     <main className="min-h-screen font-sans bg-white text-gray-800">
       <HeroSection
-        data={data.heroSection}
-        branchName={branchName}
-        branchLocation={data.branchLocation}
-        onEnrollClick={() => setShowEnrollPopup(true)}
+       data={data.heroSection}
+   branchName={branchName}
+   branchLocation={data.branchLocation}
+   courses={courses}
+   
+   onEnrollClick={() => setShowEnrollPopup(true)}
       />
+      {}
       <Popupform
         show={showEnrollPopup}
         onClose={() => setShowEnrollPopup(false)}

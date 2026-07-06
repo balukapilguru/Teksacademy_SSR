@@ -9,19 +9,98 @@ import { COURSE_OPTIONS, BRANCH_OPTIONS } from "@/config/formConfig";
 
 // Complete field configuration
 const ALL_FIELDS = {
-  name: { id: "name", label: "Name", type: "text", required: true, placeholder: "Enter your name" },
-  email: { id: "email", label: "Email", type: "email", required: true, placeholder: "Enter your email" },
-  phone: { id: "phone", label: "Mobile Number", type: "phone", required: true, placeholder: "10-digit mobile number" },
+  name: {
+    id: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter your name",
+  },
+  email: {
+    id: "email",
+    label: "Email",
+    type: "email",
+    required: true,
+    placeholder: "Enter your email",
+  },
+  phone: {
+    id: "phone",
+    label: "Mobile Number",
+    type: "phone",
+    required: true,
+    placeholder: "10-digit mobile number",
+  },
   course: { id: "course", label: "Course", type: "course", required: true },
-  career: { id: "career", label: "I want a career in", type: "select", required: true, options: COURSE_OPTIONS },
-  qualification: { id: "qualification", label: "My qualification is", type: "select", placeholder: "select qualification", required: true, options: ["Fresher / Student", "Working IT Professional", "Career Switcher"] },
-  prefferd: { id: "prefferd", label: "Preferred mode", type: "select", required: true, options: ["Online (Live)", "Offline (Classroom)", "Hybrid"] },
-  branch: { id: "branch", label: "Branch", type: "select", required: true, options: BRANCH_OPTIONS },
-  city: { id: "city", label: "City", type: "text", required: false, placeholder: "Enter your city" },
-  message: { id: "message", label: "Message", type: "textarea", required: false, placeholder: "Your message here...", rows: 4 },
-  companyName: { id: "companyName", label: "Company Name", type: "text", required: true, placeholder: "Enter company name" },
-  designation: { id: "designation", label: "Designation", type: "text", required: true, placeholder: "Your designation" },
-  issue: { id: "issue", label: "Issue / Query", type: "textarea", required: true, placeholder: "Describe your issue...", rows: 3 }
+  career: {
+    id: "career",
+    label: "I want a career in",
+    type: "select",
+    required: true,
+    options: COURSE_OPTIONS,
+  },
+  qualification: {
+    id: "qualification",
+    label: "My qualification is",
+    type: "select",
+    placeholder: "select qualification",
+    required: true,
+    options: [
+      "Fresher / Student",
+      "Working IT Professional",
+      "Career Switcher",
+    ],
+  },
+  prefferd: {
+    id: "prefferd",
+    label: "Preferred mode",
+    type: "select",
+    required: true,
+    options: ["Online (Live)", "Offline (Classroom)", "Hybrid"],
+  },
+  branch: {
+    id: "branch",
+    label: "Branch",
+    type: "select",
+    required: true,
+    options: BRANCH_OPTIONS,
+  },
+  city: {
+    id: "city",
+    label: "City",
+    type: "text",
+    required: false,
+    placeholder: "Enter your city",
+  },
+  message: {
+    id: "message",
+    label: "Message",
+    type: "textarea",
+    required: false,
+    placeholder: "Your message here...",
+    rows: 4,
+  },
+  companyName: {
+    id: "companyName",
+    label: "Company Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter company name",
+  },
+  designation: {
+    id: "designation",
+    label: "Designation",
+    type: "text",
+    required: true,
+    placeholder: "Your designation",
+  },
+  issue: {
+    id: "issue",
+    label: "Issue / Query",
+    type: "textarea",
+    required: true,
+    placeholder: "Describe your issue...",
+    rows: 3,
+  },
 };
 
 const normalizeText = (text) =>
@@ -48,7 +127,9 @@ const normalizeCourseInput = (value) => {
   if (!value) return "";
 
   if (Array.isArray(value)) {
-    const firstValue = value.find((item) => item !== undefined && item !== null);
+    const firstValue = value.find(
+      (item) => item !== undefined && item !== null,
+    );
     return normalizeCourseInput(firstValue);
   }
 
@@ -100,16 +181,21 @@ const formatFixedLabel = (value) => {
 
 export default function ReusableForm({
   formType = "default",
+  courses = [],
   onSubmit,
   initialValues = {},
   buttonText = "Submit",
   successMessage = "Form submitted successfully!",
   className = "",
   disableCourseField = false,
-  redirectToThankYou = true
+  redirectToThankYou = true,
 }) {
   const router = useRouter();
+  const courseOptions = courses.map((course) => ({
+    label: course.heading || course.programName || course.title || course.name,
 
+    value: course.heading || course.programName || course.title || course.name,
+  }));
   const getFieldsForType = useCallback(() => {
     const formFields = {
       default: ["name", "email", "phone", "course", "branch"],
@@ -126,14 +212,14 @@ export default function ReusableForm({
       requestCallback: ["name", "email", "phone", "course", "branch"],
       reserveSpot: ["name", "email", "phone", "course", "branch"],
       Enquirynow: ["name", "email", "phone", "course", "branch"],
-      RequestDemo: ["name", "email", "phone", "course", "branch"]
+      RequestDemo: ["name", "email", "phone", "course", "branch"],
     };
     return formFields[formType] || formFields.default;
   }, [formType]);
 
   const [formValues, setFormValues] = useState(() => {
     const initial = {};
-    getFieldsForType().forEach(fieldId => {
+    getFieldsForType().forEach((fieldId) => {
       initial[fieldId] = normalizeInitialValue(fieldId, initialValues[fieldId]);
     });
     return initial;
@@ -164,12 +250,12 @@ export default function ReusableForm({
     const prevKeys = Object.keys(prev);
     const nextKeys = Object.keys(next);
     if (prevKeys.length !== nextKeys.length) return false;
-    return prevKeys.every(key => prev[key] === next[key]);
+    return prevKeys.every((key) => prev[key] === next[key]);
   };
 
   useEffect(() => {
     const initial = {};
-    getFieldsForType().forEach(fieldId => {
+    getFieldsForType().forEach((fieldId) => {
       initial[fieldId] = normalizeInitialValue(fieldId, initialValues[fieldId]);
     });
 
@@ -201,9 +287,9 @@ export default function ReusableForm({
       default: "Website",
       career: "Career Guidance",
       Enquirynow: "Enquirynow",
-      RequestDemo: "Request Demo - Website"
+      RequestDemo: "Request Demo - Website",
     };
-    
+
     return {
       name: values.name || "",
       email: values.email || "",
@@ -222,7 +308,7 @@ export default function ReusableForm({
       source: sourceMap[formType] || "Website",
       crm_source: sourceMap[formType] || "Website",
       form_type: formType,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   };
 
@@ -234,7 +320,11 @@ export default function ReusableForm({
       return `${field.label} is required`;
     }
 
-    if (fieldId === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    if (
+      fieldId === "email" &&
+      value &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+    ) {
       return "Please enter a valid email address";
     }
 
@@ -253,7 +343,7 @@ export default function ReusableForm({
     const newErrors = {};
     const fields = getFieldsForType();
 
-    fields.forEach(fieldId => {
+    fields.forEach((fieldId) => {
       const error = validateField(fieldId, formValues[fieldId]);
       if (error) newErrors[fieldId] = error;
     });
@@ -267,11 +357,11 @@ export default function ReusableForm({
   };
 
   const handleChange = (fieldId, value) => {
-    setFormValues(prev => ({ ...prev, [fieldId]: value }));
+    setFormValues((prev) => ({ ...prev, [fieldId]: value }));
     if (errors[fieldId]) {
-      setErrors(prev => ({ ...prev, [fieldId]: "" }));
+      setErrors((prev) => ({ ...prev, [fieldId]: "" }));
     }
-    
+
     if (fieldId === "phone") {
       setIsOtpVerified(false);
     }
@@ -279,7 +369,7 @@ export default function ReusableForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const fields = getFieldsForType();
     if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
       setErrors((prev) => ({
@@ -289,11 +379,11 @@ export default function ReusableForm({
 
       toast.error("Please verify your mobile number with OTP", {
         duration: 4000,
-        icon: '🔒',
+        icon: "🔒",
         style: {
-          background: '#fee2e2',
-          color: '#991b1b',
-          border: '1px solid #fecaca',
+          background: "#fee2e2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
         },
       });
       return;
@@ -305,45 +395,48 @@ export default function ReusableForm({
     try {
       const payload = mapToApiPayload(formValues);
       console.log("Submitting payload:", payload);
-      
+
       if (onSubmit) {
+        console.log("On Submit True Reusable true");
+
         await onSubmit(formValues, payload);
       } else {
+        console.log("On Submit True Reusable false");
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || "Submission failed");
         }
-        
+
         const result = await response.json();
         console.log("Submission success:", result);
-        
+
         toast.success(successMessage, {
           duration: 3000,
-          icon: '🎉',
+          icon: "🎉",
           style: {
-            background: '#dcfce7',
-            color: '#166534',
-            border: '1px solid #bbf7d0',
+            background: "#dcfce7",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
           },
         });
-        
-        window.dispatchEvent(new CustomEvent('formSubmissionSuccess'));
+
+        window.dispatchEvent(new CustomEvent("formSubmissionSuccess"));
       }
     } catch (error) {
       console.error("Submission error:", error);
       toast.error(error.message || "Submission failed. Please try again.", {
         duration: 4000,
-        icon: '❌',
+        icon: "❌",
         style: {
-          background: '#fee2e2',
-          color: '#991b1b',
-          border: '1px solid #fecaca',
+          background: "#fee2e2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
         },
       });
     } finally {
@@ -364,13 +457,14 @@ export default function ReusableForm({
           <MobileOtpField
             value={value || ""}
             onChange={(e) => {
-              const v = typeof e === "string" ? e : (e && e.target ? e.target.value : "");
+              const v =
+                typeof e === "string" ? e : e && e.target ? e.target.value : "";
               handleChange(fieldId, v);
             }}
             onVerified={(verified) => {
               setIsOtpVerified(verified);
               if (verified && errors.phone) {
-                setErrors(prev => ({ ...prev, phone: "" }));
+                setErrors((prev) => ({ ...prev, phone: "" }));
               }
             }}
             error={error}
@@ -382,7 +476,7 @@ export default function ReusableForm({
     if (fieldId === "course") {
       const fixedCourseValue = normalizeCourseInput(initialValues.course || "");
       const shouldDisable = disableCourseField || fixedCourseValue;
-      
+
       if (shouldDisable && (fixedCourseValue || value)) {
         return (
           <div key={fieldId} className="mb-4">
@@ -399,15 +493,23 @@ export default function ReusableForm({
         );
       }
 
-      const filteredCourses = COURSE_OPTIONS.filter(c =>
-        c.toLowerCase().includes(courseSearchTerm.toLowerCase())
+      const availableCourses =
+        courseOptions.length > 0
+          ? courseOptions
+          : COURSE_OPTIONS.map((course) => ({
+              label: course,
+              value: course,
+            }));
+
+      const filteredCourses = availableCourses.filter((course) =>
+        course.label.toLowerCase().includes(courseSearchTerm.toLowerCase()),
       );
 
       // Clear search input handler
       const handleClearSearch = () => {
         setCourseSearchTerm("");
         // Focus the search input after clearing
-        const searchInput = document.getElementById('course-search-input');
+        const searchInput = document.getElementById("course-search-input");
         if (searchInput) {
           searchInput.focus();
         }
@@ -427,9 +529,18 @@ export default function ReusableForm({
             <span className={value ? "text-gray-900" : "text-gray-400"}>
               {value || "Select a course"}
             </span>
-            <svg className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
-              fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform ${showCourseDropdown ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
 
@@ -454,30 +565,46 @@ export default function ReusableForm({
                       className="absolute right-2 cursor-pointer top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                       aria-label="Clear search"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
                   )}
                 </div>
               </div>
               {filteredCourses.length > 0 ? (
-                filteredCourses.map(course => (
+                filteredCourses.map((course) => (
                   <div
-                    key={course}
+                    key={course.value}
                     onClick={() => {
-                      handleChange(fieldId, course);
-                      setCourseSearchTerm(course);
+                      handleChange(fieldId, course.value);
+                      setCourseSearchTerm(course.label);
                       setShowCourseDropdown(false);
                     }}
                     className={`px-4 py-1 text-sm cursor-pointer hover:bg-blue-50
-                      ${value === course ? "bg-blue-50 text-blue-600 font-semibold" : "text-gray-700"}`}
+      ${
+        value === course.value
+          ? "bg-blue-50 text-blue-600 font-semibold"
+          : "text-gray-700"
+      }`}
                   >
-                    {course}
+                    {course.label}
                   </div>
                 ))
               ) : (
-                <div className="px-4 py-2 text-sm text-gray-500">No courses found</div>
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  No courses found
+                </div>
               )}
             </div>
           )}
@@ -486,7 +613,11 @@ export default function ReusableForm({
       );
     }
 
-    if (fieldId === "career" || fieldId === "qualification" || fieldId === "prefferd") {
+    if (
+      fieldId === "career" ||
+      fieldId === "qualification" ||
+      fieldId === "prefferd"
+    ) {
       return (
         <div key={fieldId} className="mb-4">
           <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -498,9 +629,13 @@ export default function ReusableForm({
             className={`w-full px-2 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
-            <option value="" className="text-gray-400">{field.label}</option>
-            {field.options.map(opt => (
-              <option key={opt} value={opt}>{opt}</option>
+            <option value="" className="text-gray-400">
+              {field.label}
+            </option>
+            {field.options.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
             ))}
           </select>
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -509,7 +644,10 @@ export default function ReusableForm({
     }
 
     if (fieldId === "branch") {
-      const isBranchFixed = initialValues && initialValues.branch && initialValues.branch.toString().trim() !== "";
+      const isBranchFixed =
+        initialValues &&
+        initialValues.branch &&
+        initialValues.branch.toString().trim() !== "";
 
       if (isBranchFixed) {
         return (
@@ -540,7 +678,7 @@ export default function ReusableForm({
               ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
           >
             <option value="">Select Branch</option>
-            {field.options.map(opt => (
+            {field.options.map((opt) => (
               <option key={opt} value={opt}>
                 {opt.charAt(0).toUpperCase() + opt.slice(1)}
               </option>
@@ -555,7 +693,8 @@ export default function ReusableForm({
       return (
         <div key={fieldId} className="mb-4">
           <label className="block text-xs font-medium text-gray-700 mb-1">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
+            {field.label}{" "}
+            {field.required && <span className="text-red-500">*</span>}
           </label>
           <textarea
             rows={field.rows}
@@ -573,7 +712,8 @@ export default function ReusableForm({
     return (
       <div key={fieldId} className="mb-4">
         <label className="block text-xs font-medium text-gray-700 mb-1">
-          {field.label} {field.required && <span className="text-red-500">*</span>}
+          {field.label}{" "}
+          {field.required && <span className="text-red-500">*</span>}
         </label>
         <input
           type={field.type}
@@ -597,19 +737,38 @@ export default function ReusableForm({
         type="submit"
         disabled={isSubmitting}
         className={`w-full py-2.5 px-4 rounded-md font-semibold text-white transition-all shadow-md
-          ${isSubmitting
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-[#2a619d] hover:bg-[#214d7d] active:scale-[0.98]"}`}
+          ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#2a619d] hover:bg-[#214d7d] active:scale-[0.98]"
+          }`}
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            <svg
+              className="animate-spin w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8z"
+              />
             </svg>
             Submitting...
           </span>
-        ) : buttonText}
+        ) : (
+          buttonText
+        )}
       </button>
     </form>
   );

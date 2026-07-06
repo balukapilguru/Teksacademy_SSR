@@ -274,9 +274,28 @@ export default function CoursesClient() {
     setShowModal(true);
   };
 
-  const handleSubmit = useCallback(async (formValues, mappedPayload) => {
-    // ... your existing submit logic ...
-  }, [router]);
+   const handleSubmit = async (formValues, payload) => {
+      try {
+        const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+  
+        const responseData = await response.json();
+  
+        if (!response.ok) {
+          throw new Error(responseData.message || "Submission failed");
+        }
+  
+        router.push("/thankyou");
+      } catch (error) {
+        console.error("Submission error:", error);
+        throw error;
+      }
+    };
 
   const renderPageButtons = () => {
     let pages = [];

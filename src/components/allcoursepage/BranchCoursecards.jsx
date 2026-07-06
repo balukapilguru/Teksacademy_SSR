@@ -39,7 +39,8 @@ const BranchCoursecards = ({ course, onGetDetailsClick }) => {
     course.programName ||
     "Course";
   const imageSrc = getImageUrl(course.image);
-  const feeRange = course.feeRange || course.fees || course.price || "Contact us";
+  const feeRange =
+    course.feeRange || course.fees || course.price || "Contact us";
   const duration = course.duration || course.courseDuration || "Flexible";
   const batchTitle = course.batchInfo?.title || "New Batch Starts On";
   const batchDate =
@@ -47,21 +48,20 @@ const BranchCoursecards = ({ course, onGetDetailsClick }) => {
     course.batchStartDate ||
     course.batchDate ||
     course.nextBatchDate;
-  const buttons = course.button || course.buttons || [
-    { name: "Get Details", form: true },
-    { name: "View Course", link: getCourseLink(course) },
-  ];
+  const buttons = course.button ||
+    course.buttons || [
+      { name: "Get Details", form: true },
+      { name: "View Course", link: getCourseLink(course) },
+    ];
   const isSingle = buttons.length === 1;
 
   const openEnquiryPopup = () => {
     onGetDetailsClick?.(title, course);
   };
-
+  // console.log(course.button, "button");
   return (
     <div>
-      <div
-        className="group rounded-xl bg-white overflow-hidden shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-transparent hover:border-[#2a619d] transition-all duration-300"
-      >
+      <div className="group rounded-xl bg-white overflow-hidden shadow-[0_4px_14px_rgba(0,0,0,0.08)] border border-transparent hover:border-[#2a619d] transition-all duration-300">
         <div className="relative w-full h-48 overflow-hidden">
           <Image
             src={getResolvedImageUrl(imageSrc)}
@@ -115,16 +115,25 @@ const BranchCoursecards = ({ course, onGetDetailsClick }) => {
               isSingle ? "justify-center" : "justify-between"
             }`}
           >
-            {buttons.slice().reverse().map((btn, index) => (
-              <PrimaryButton
-                key={index}
-                variant={btn.form ? "filled" : "outline"}
-                label={btn.name || btn.text}
-                href={btn.link || null}
-                className={isSingle ? "w-full" : "flex-1"}
-                onClick={() => btn.form && openEnquiryPopup()}
-              />
-            ))}
+            {buttons
+              .slice()
+              .reverse()
+              .map((btn, index) => (
+                <PrimaryButton
+                  key={index}
+                  variant={btn.form ? "filled" : "outline"}
+                  label={btn.name || btn.text}
+                  href={
+                    btn.link
+                      ? btn.link.startsWith("/") || btn.link.startsWith("http")
+                        ? btn.link
+                        : `/${btn.link}`
+                      : null
+                  }
+                  className={isSingle ? "w-full" : "flex-1"}
+                  onClick={() => btn.form && openEnquiryPopup()}
+                />
+              ))}
           </div>
         </div>
       </div>

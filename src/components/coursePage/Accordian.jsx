@@ -1,5 +1,7 @@
 "use client";
 import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
+
 import React, { useState } from "react";
 import {
   FiCalendar,
@@ -63,7 +65,7 @@ const FAQ = ({ faq }) => {
     <section id="questionSection">
       <div className="">
         <div className="py-4">
-          <Heading data={faq?.heading} />
+          <CoursepageHeading data={faq?.heading} />
         </div>
 
         <div className="rounded-lg border-gray-200 border shadow-md mb-4">

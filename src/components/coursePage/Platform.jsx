@@ -11,7 +11,7 @@ import { FiTarget } from "react-icons/fi";
 import { FaBuilding } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu";
 
-import Heading from "@/utility/Heading";
+import CoursepageHeading from "@/utility/CoursepageHeading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import GetData from "@/utility/GetData";
 
@@ -122,7 +122,7 @@ const [scrollY, setScrollY] = useState(0);
   return (
     <section className="py-10">
       <div className="text-left">
-        <Heading data={heading} />
+        <CoursepageHeading data={heading} />
       </div>
 
       {/* Service List */}

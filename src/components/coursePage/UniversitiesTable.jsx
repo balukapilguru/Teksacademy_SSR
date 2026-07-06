@@ -3,8 +3,23 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Heading from "../../utility/Heading";
-import { Star, Calendar, IndianRupee, Award, ChevronRight, Building2, Users, Clock, GraduationCap, Trophy, Briefcase, Zap, Shield, BookOpen } from "lucide-react";
+import CoursepageHeading from "../../utility/CoursepageHeading";
+import {
+  Star,
+  Calendar,
+  IndianRupee,
+  Award,
+  ChevronRight,
+  Building2,
+  Users,
+  Clock,
+  GraduationCap,
+  Trophy,
+  Briefcase,
+  Zap,
+  Shield,
+  BookOpen,
+} from "lucide-react";
 import GetData from "../../utility/GetData";
 import PrimaryButton from "@/utility/PrimaryButton";
 import { useCourseFlow } from "./CourseFlowProvider";
@@ -16,7 +31,7 @@ import Popupform from "../clientcomponents/forms/Popupform";
 const COURSE_SLUG_MAP = {
   "full-stack-java": "Full Stack Java",
   "full-stack-python": "Full Stack Python",
-  "cybersecurity": "Cybersecurity",
+  cybersecurity: "Cybersecurity",
   "gen-ai": "Gen AI",
   "aws-devops": "AWS+ DevOps",
   "data-science": "Data Science",
@@ -25,12 +40,12 @@ const COURSE_SLUG_MAP = {
   "bim-revit-mep-navis": "BIM- Revit MEP, NAVIS",
   "bim-building-information-modeling": "BIM- Revit MEP, NAVIS",
   "revit-mep": "BIM- Revit MEP, NAVIS",
-  "autocad": "AutoCAD",
+  autocad: "AutoCAD",
   "medical-coding": "Medical Coding",
   "sap-fico": "SAP FICO",
   "sap-mm": "SAP MM",
   "testing-automation": "Testing-Automation",
-  "multimedia": "Multimedia",
+  multimedia: "Multimedia",
   "advanced-excel": "Advanced Excel",
   "revit-mep-certification": "Revit MEP Certification",
   "business-analytics": "Business Analytics",
@@ -46,7 +61,7 @@ const extractSlug = (url = "") => {
     .replace("-development-course-training-institute", "")
     .replace("-training-institute", "")
     .trim();
-  
+
   return slug;
 };
 
@@ -61,7 +76,9 @@ const findBestCourseMatch = (slug, courseSlugMap) => {
     const mapParts = mapSlug.split("-");
     if (
       slugParts.some((part) => mapParts.some((mapPart) => part === mapPart)) &&
-      (slug.includes("bim") || slug.includes("revit") || slug.includes("autocad"))
+      (slug.includes("bim") ||
+        slug.includes("revit") ||
+        slug.includes("autocad"))
     ) {
       if (mapSlug.includes("bim") || mapSlug.includes("revit")) {
         return courseName;
@@ -83,7 +100,7 @@ const handleSubmit = async (formValues, mappedPayload, router) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(mappedPayload),
-      }
+      },
     );
 
     const responseData = await response.json();
@@ -108,22 +125,26 @@ export default function CourseInfoTable({
   const router = useRouter();
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
-  const [courseNameFromUrl, setCourseNameFromUrl] = useState("");
+  // const [courseNameFromUrl, setCourseNameFromUrl] = useState("");
   const { handleCourseSelect } = useCourseFlow();
   const [showGetDetailsModal, setShowGetDetailsModal] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const currentUrl = window.location.pathname;
-      const slug = extractSlug(currentUrl);
-      const mappedCourseName =
-        findBestCourseMatch(slug, COURSE_SLUG_MAP) || courseName || slug;
-      setCourseNameFromUrl(mappedCourseName);
-    }
-  }, [courseName]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const currentUrl = window.location.pathname;
+  //     const slug = extractSlug(currentUrl);
+  //     const mappedCourseName =
+  //       findBestCourseMatch(slug, COURSE_SLUG_MAP) || courseName || slug;
+  //     setCourseNameFromUrl(mappedCourseName);
+  //   }
+  // }, [courseName]);
 
   if (!data) return null;
-
+  const courseDisplayName =
+    courseName ||
+    data?.formDetails?.courseName ||
+    data?.formDetails?.course ||
+    "";
   const heading = data?.offeringUniversity?.heading || ["Offering", ""];
 
   const columns = data?.offeringUniversity?.columns || [
@@ -136,18 +157,17 @@ export default function CourseInfoTable({
     "Action",
   ];
 
-  const universities =
-    data?.universities?.length
-      ? data.universities
-      : data?.offeringUniversity?.universityOfferings?.map((item) => ({
-          universityName: item.program,
-          image: item.image,
-          accreditations: item.trainingMode,
-          rating: item.rating,
-          duration: item.duration,
-          courseFee: item.courseFee,
-          button: item.button,
-        })) || [];
+  const universities = data?.universities?.length
+    ? data.universities
+    : data?.offeringUniversity?.universityOfferings?.map((item) => ({
+        universityName: item.program,
+        image: item.image,
+        accreditations: item.trainingMode,
+        rating: item.rating,
+        duration: item.duration,
+        courseFee: item.courseFee,
+        button: item.button,
+      })) || [];
 
   if (universities.length === 0) {
     return (
@@ -168,8 +188,7 @@ export default function CourseInfoTable({
   const getCourseFee = (row) =>
     row.courseFee?.range ? `₹${row.courseFee.range}` : "Contact";
 
-  const getCourseFeeNote = (row) =>
-    row.courseFee?.note || "Total program fee";
+  const getCourseFeeNote = (row) => row.courseFee?.note || "Total program fee";
 
   const getButtonText = (row) =>
     row?.button?.text || (isSelfPaced ? "Enroll for Free" : "Get Details");
@@ -177,18 +196,21 @@ export default function CourseInfoTable({
   return (
     <section id="offeringUniversity" className="px-4 sm:px-0">
       <div className="my-8 md:my-10">
-        <Heading data={heading} />
+        <CoursepageHeading data={heading} />
 
         {showGetDetailsModal && selectedUniversity && (
           <Popupform
             show={showGetDetailsModal}
             onClose={() => setShowGetDetailsModal(false)}
-            course={courseNameFromUrl || selectedUniversity?.universityName || courseName || branch}
-            courseName={courseNameFromUrl || selectedUniversity?.universityName || courseName}
+            course={courseDisplayName}
+            courseName={courseDisplayName}
+            university={branch}
             source="Enrollnow"
             title="Enroll Now"
             subtitle="Fill in your details to get course guidance and a callback from our team."
-            onSubmit={(formValues, mappedPayload) => handleSubmit(formValues, mappedPayload, router)}
+            onSubmit={(formValues, mappedPayload) =>
+              handleSubmit(formValues, mappedPayload, router)
+            }
             formType="EnrollNow"
             buttonText="Enroll Now"
             successMessage="Thank you! We'll contact you soon."
@@ -197,19 +219,32 @@ export default function CourseInfoTable({
         )}
 
         <div className="mt-6 md:mt-10">
-
           {/* DESKTOP TABLE - FULL WIDTH WITH PROPER BORDERS */}
           <div className="hidden lg:block w-full overflow-hidden">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="text-white text-xs md:text-sm bg-[#47557c]">
-                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">Offering Program</th>
-                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">University/Institute</th>
-                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">Training Mode</th>
-                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">Rating</th>
-                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">Duration</th>
-                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">Course Fee</th>
-                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">Action</th>
+                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">
+                    Offering Program
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">
+                    University/Institute
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">
+                    Training Mode
+                  </th>
+                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">
+                    Rating
+                  </th>
+                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">
+                    Duration
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold whitespace-nowrap border border-white/30">
+                    Course Fee
+                  </th>
+                  <th className="px-4 py-3 text-center font-semibold whitespace-nowrap border border-white/30">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -218,24 +253,34 @@ export default function CourseInfoTable({
                   // Check if this is the second row (index 1)
                   const isSecondRow = index === 1;
                   return (
-                    <tr key={index} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       {/* Program Name */}
                       <td className="px-4 py-3 border border-gray-300">
-                        <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">{row.universityName}</span>
+                        <span className="text-sm font-semibold text-gray-800 whitespace-nowrap">
+                          {row.universityName}
+                        </span>
                       </td>
 
                       {/* Images - Different sizes based on row */}
                       <td className="px-4 py-3 border border-gray-300">
                         <div className="flex flex-row items-center justify-start gap-3">
                           {images.slice(0, 3).map((img, i) => (
-                            <div key={i} className="relative flex-shrink-0 bg-white rounded-lg border border-gray-200 p-1 shadow-sm hover:shadow-md transition-all duration-200">
+                            <div
+                              key={i}
+                              className="relative flex-shrink-0 bg-white rounded-lg border border-gray-200 p-1 shadow-sm hover:shadow-md transition-all duration-200"
+                            >
                               <Image
                                 src={GetData({ url: img?.src })}
                                 alt={img?.alt || `Institute ${i + 1}`}
                                 width={isSecondRow ? 220 : 140}
                                 height={isSecondRow ? 90 : 60}
-                                className={`object-contain w-auto ${isSecondRow ? 'h-20' : 'h-12'}`}
-                                onError={() => handleImageError(`${index}-${i}`)}
+                                className={`object-contain w-auto ${isSecondRow ? "h-20" : "h-12"}`}
+                                onError={() =>
+                                  handleImageError(`${index}-${i}`)
+                                }
                                 priority={i === 0}
                               />
                             </div>
@@ -247,7 +292,10 @@ export default function CourseInfoTable({
                       <td className="px-4 py-3 border border-gray-300">
                         <div className="flex flex-col gap-1">
                           {row.accreditations?.map((mode, i) => (
-                            <span key={i} className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100 whitespace-nowrap text-center">
+                            <span
+                              key={i}
+                              className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100 whitespace-nowrap text-center"
+                            >
                               {mode}
                             </span>
                           ))}
@@ -259,13 +307,15 @@ export default function CourseInfoTable({
                         <div className="flex flex-col items-center gap-0.5">
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 flex-shrink-0" />
-                            <span className="font-bold text-base">{row.rating}</span>
+                            <span className="font-bold text-base">
+                              {row.rating}
+                            </span>
                           </div>
                           <div className="flex gap-0.5">
                             {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`w-3 h-3 ${i < Math.floor(row.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${i < Math.floor(row.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
                               />
                             ))}
                           </div>
@@ -274,13 +324,19 @@ export default function CourseInfoTable({
 
                       {/* Duration */}
                       <td className="px-4 py-3 text-center border border-gray-300">
-                        <span className="text-sm font-medium whitespace-nowrap">{row.duration}</span>
+                        <span className="text-sm font-medium whitespace-nowrap">
+                          {row.duration}
+                        </span>
                       </td>
 
                       {/* Course Fee */}
                       <td className="px-4 py-3 border border-gray-300">
-                        <div className="font-bold text-base text-gray-900 whitespace-nowrap">{getCourseFee(row)}</div>
-                        <div className="text-xs text-gray-500 whitespace-nowrap">{getCourseFeeNote(row)}</div>
+                        <div className="font-bold text-base text-gray-900 whitespace-nowrap">
+                          {getCourseFee(row)}
+                        </div>
+                        <div className="text-xs text-gray-500 whitespace-nowrap">
+                          {getCourseFeeNote(row)}
+                        </div>
                       </td>
 
                       {/* Action Button */}
@@ -309,25 +365,25 @@ export default function CourseInfoTable({
               const images = getImageSrcList(row);
               const isSecondRow = index === 1;
               return (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                 >
                   {/* Gradient Header with Program Name */}
                   <div className="bg-gradient-to-br from-[#47557c] via-[#5a6a94] to-[#6b7cae] px-6 py-5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
-                    
+
                     {/* Badge */}
                     <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white/90 text-xs font-medium mb-3">
                       <GraduationCap className="w-3.5 h-3.5" />
                       <span>Premium Program</span>
                     </div>
-                    
+
                     <h3 className="text-white font-bold text-xl leading-tight mb-2 relative z-10">
                       {row.universityName}
                     </h3>
-                    
+
                     {row.tagline && (
                       <p className="text-white/80 text-sm mt-1 relative z-10">
                         {row.tagline}
@@ -342,12 +398,14 @@ export default function CourseInfoTable({
                       <div className="border-b border-gray-100 pb-4">
                         <div className="flex items-center gap-2 mb-3">
                           <Building2 className="w-4 h-4 text-gray-500" />
-                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Partner Institutions</span>
+                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Partner Institutions
+                          </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-3">
                           {images.slice(0, 3).map((img, i) => (
-                            <div 
-                              key={i} 
+                            <div
+                              key={i}
                               className="bg-white rounded-xl p-2 border border-gray-200 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-300"
                             >
                               <Image
@@ -355,8 +413,10 @@ export default function CourseInfoTable({
                                 alt={img?.alt || `Provider ${i + 1}`}
                                 width={isSecondRow ? 140 : 100}
                                 height={isSecondRow ? 80 : 60}
-                                className={`object-contain ${isSecondRow ? 'w-32 h-18' : 'w-24 h-14'}`}
-                                onError={() => handleImageError(`${index}-${i}`)}
+                                className={`object-contain ${isSecondRow ? "w-32 h-18" : "w-24 h-14"}`}
+                                onError={() =>
+                                  handleImageError(`${index}-${i}`)
+                                }
                               />
                             </div>
                           ))}
@@ -369,12 +429,14 @@ export default function CourseInfoTable({
                       <div className="border-b border-gray-100 pb-4">
                         <div className="flex items-center gap-2 mb-3">
                           <Shield className="w-4 h-4 text-emerald-600" />
-                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Training Mode</span>
+                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Training Mode
+                          </span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {row.accreditations.map((mode, i) => (
-                            <span 
-                              key={i} 
+                            <span
+                              key={i}
                               className="text-xs font-medium bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-100"
                             >
                               {mode}
@@ -389,18 +451,22 @@ export default function CourseInfoTable({
                       {/* Rating Card */}
                       <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3 border border-amber-100">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-medium text-amber-700 uppercase tracking-wide">Rating</span>
+                          <span className="text-xs font-medium text-amber-700 uppercase tracking-wide">
+                            Rating
+                          </span>
                           <Trophy className="w-3.5 h-3.5 text-amber-600" />
                         </div>
                         <div className="flex items-baseline gap-1">
-                          <span className="text-2xl font-bold text-gray-800">{row.rating}</span>
+                          <span className="text-2xl font-bold text-gray-800">
+                            {row.rating}
+                          </span>
                           <span className="text-xs text-gray-500">/5</span>
                         </div>
                         <div className="flex items-center gap-0.5 mt-1">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-3 h-3 ${i < Math.floor(row.rating) ? 'text-amber-500 fill-amber-500' : 'text-gray-300'}`} 
+                            <Star
+                              key={i}
+                              className={`w-3 h-3 ${i < Math.floor(row.rating) ? "text-amber-500 fill-amber-500" : "text-gray-300"}`}
                             />
                           ))}
                         </div>
@@ -409,11 +475,17 @@ export default function CourseInfoTable({
                       {/* Duration Card */}
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-3 border border-blue-100">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-medium text-blue-700 uppercase tracking-wide">Duration</span>
+                          <span className="text-xs font-medium text-blue-700 uppercase tracking-wide">
+                            Duration
+                          </span>
                           <Clock className="w-3.5 h-3.5 text-blue-600" />
                         </div>
-                        <div className="text-lg font-bold text-gray-800">{row.duration}</div>
-                        <div className="text-xs text-gray-500 mt-1">Program Length</div>
+                        <div className="text-lg font-bold text-gray-800">
+                          {row.duration}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          Program Length
+                        </div>
                       </div>
                     </div>
 
@@ -422,15 +494,21 @@ export default function CourseInfoTable({
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                           <IndianRupee className="w-4 h-4 text-green-600" />
-                          <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Investment</span>
+                          <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            Investment
+                          </span>
                         </div>
                         {row.originalFee && (
                           <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                            Save ₹{row.originalFee - parseInt(getCourseFee(row).replace(/[^0-9]/g, ''))}
+                            Save ₹
+                            {row.originalFee -
+                              parseInt(
+                                getCourseFee(row).replace(/[^0-9]/g, ""),
+                              )}
                           </span>
                         )}
                       </div>
-                      
+
                       <div className="flex items-baseline gap-2 mb-1">
                         <span className="text-3xl font-bold text-gray-900">
                           {getCourseFee(row)}
@@ -441,7 +519,7 @@ export default function CourseInfoTable({
                           </span>
                         )}
                       </div>
-                      
+
                       <p className="text-xs text-gray-500 mb-3">
                         {getCourseFeeNote(row)}
                       </p>
@@ -460,11 +538,16 @@ export default function CourseInfoTable({
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <Briefcase className="w-4 h-4 text-purple-600" />
-                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Program Highlights</span>
+                          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Program Highlights
+                          </span>
                         </div>
                         <div className="space-y-1.5">
                           {row.highlights.slice(0, 3).map((highlight, i) => (
-                            <div key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                            <div
+                              key={i}
+                              className="flex items-start gap-2 text-sm text-gray-600"
+                            >
                               <ChevronRight className="w-3.5 h-3.5 text-purple-500 mt-0.5 flex-shrink-0" />
                               <span>{highlight}</span>
                             </div>
