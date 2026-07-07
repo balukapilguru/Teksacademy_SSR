@@ -12,6 +12,7 @@ const COURSE_OPTIONS = [
   "Medical Coding",
   "SAP FICO",
   "SAP MM",
+  "Sap SD",
   "Testing-Automation",
   "Multimedia",
   "Advanced Excel",

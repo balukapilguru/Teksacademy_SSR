@@ -50,6 +50,7 @@ Teks Academy helps students, fresh graduates, career switchers, and working prof
 - Salesforce
 - SAP FICO
 - SAP MM
+-SAP SD
 - Medical Coding
 - BIM
 - AutoCAD
