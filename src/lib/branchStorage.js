@@ -84,7 +84,7 @@ export const storeBranchData = (branchName) => {
   
   if (branchData) {
     sessionStorage.setItem(BRANCH_STORAGE_KEY, JSON.stringify(branchData));
-    console.log("Branch data stored:", branchData);
+    // console.log("Branch data stored:", branchData);
   } else {
     console.warn("No branch data found for:", branchName);
     // Store basic info as fallback
@@ -111,7 +111,7 @@ export const getBranchData = () => {
     const data = sessionStorage.getItem(BRANCH_STORAGE_KEY);
     if (data) {
       const parsed = JSON.parse(data);
-      console.log("Branch data retrieved:", parsed);
+      // console.log("Branch data retrieved:", parsed);
       return parsed;
     }
     return null;
@@ -131,7 +131,7 @@ export const clearBranchData = () => {
 
   try {
     sessionStorage.removeItem(BRANCH_STORAGE_KEY);
-    console.log("Branch data cleared from sessionStorage");
+    // console.log("Branch data cleared from sessionStorage");
   } catch (error) {
     console.error("Error clearing branch data from sessionStorage:", error);
   }

@@ -275,8 +275,8 @@ export default function CourseInfoTable({
                               <Image
                                 src={GetData({ url: img?.src })}
                                 alt={img?.alt || `Institute ${i + 1}`}
-                                width={isSecondRow ? 220 : 140}
-                                height={isSecondRow ? 90 : 60}
+                                width={isSecondRow ? 170 : 140}
+                                height={isSecondRow ? 60 : 60}
                                 className={`object-contain w-auto ${isSecondRow ? "h-20" : "h-12"}`}
                                 onError={() =>
                                   handleImageError(`${index}-${i}`)

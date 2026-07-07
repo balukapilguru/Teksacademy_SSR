@@ -14,7 +14,7 @@ const AboutTeks = ({ data }) => {
   if (!data) return null;
 
   const { title, heading, description, statistics, button, image } = data;
-console.log(data,"aboutbrach")
+// console.log(data,"aboutbrach")
   const headingParts = Array.isArray(heading)
     ? heading
     : typeof heading === "string"

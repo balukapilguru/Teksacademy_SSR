@@ -207,7 +207,7 @@ export default function Navbar() {
           next: { revalidate: 60 },
         });
         const data = await response.json();
-        console.log(data, "navbar data");
+        // console.log(data, "navbar data");
         setNavData(data?.data?.navbar || null);
       } catch (err) {
         console.error("Navbar fetch error:", err);

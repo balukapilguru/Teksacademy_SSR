@@ -124,7 +124,7 @@ const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
       });
 
       const responseData = await response.json();
-      console.log(responseData,"responsee")
+      // console.log(responseData,"responsee")
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }

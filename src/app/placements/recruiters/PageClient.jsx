@@ -74,7 +74,7 @@ const Recruiters = () => {
   const title = data?.title || "Recruiters";
   const hero = data?.heroSection || {};
   const recruiterCards = data?.recruitersCardsSection?.cards || [];
-console.log(recruiterCards,"cards")
+// console.log(recruiterCards,"cards")
   return (
     <>
       {/* TITLE */}

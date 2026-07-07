@@ -142,7 +142,7 @@ export default async function Page({ params }) {
 
   const formDetails =
     isCertification || isSelfPaced ? data?.formDetails : data?.specializations;
-  console.log(data?.advancedTools, "data.ToolsAndFeatures");
+  // console.log(data?.advancedTools, "data.ToolsAndFeatures");
   /* =====================================================
      DATA MAPPING (UNCHANGED)
   ===================================================== */
@@ -169,7 +169,7 @@ export default async function Page({ params }) {
   const mostSearchedTerms = data?.mostSearchedTerms && {
   courses: data.mostSearchedTerms.courses,
 };
-  console.log(mostSearchedTerms,"mst")
+  // console.log(mostSearchedTerms,"mst")
 
   const excelSectionData = data?.excel || data?.Excel;
 
@@ -258,7 +258,7 @@ export default async function Page({ params }) {
           courseName={courseLabel}
         />
       )}
-      {console.log(data,"career")}
+      {/* {console.log(data,"career")} */}
 
       {data?.OnlineAdmissionProcedure && (
         <Admission data={data.OnlineAdmissionProcedure} />
@@ -439,7 +439,7 @@ export default async function Page({ params }) {
         )}
 
        
-        {console.log(careerServicesData, "careerServicesData")}
+        {/* {console.log(careerServicesData, "careerServicesData")} */}
 
         {reserveSpotData &&
           (isCertification || isSelfPaced ? (

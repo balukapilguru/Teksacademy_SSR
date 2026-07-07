@@ -59,8 +59,8 @@ const Admission = ({  data,
 
   // Handle form submission - matching OverViewOfOnline pattern
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Form values:", formValues);
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Form values:", formValues);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       setIsLoading(true);
@@ -74,7 +74,7 @@ const Admission = ({  data,
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");

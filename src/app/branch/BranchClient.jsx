@@ -66,7 +66,7 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
 
 // ─── Submit Handler with SessionStorage (NO URL PARAMETERS) ───────────────
 const handleSubmit = async (formValues, mappedPayload) => {
-  console.log("Mapped payload being sent:", mappedPayload);
+  // console.log("Mapped payload being sent:", mappedPayload);
 
   try {
     const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
@@ -78,7 +78,7 @@ const handleSubmit = async (formValues, mappedPayload) => {
     });
 
     const responseData = await response.json();
-    console.log("API Response:", responseData);
+    // console.log("API Response:", responseData);
 
     if (!response.ok) {
       throw new Error(responseData.message || "Submission failed");
@@ -158,7 +158,7 @@ function SectionHeading({ parts = [], className = "" }) {
 // ─── 1. HERO SECTION ──────────────────────────────────────────────────────
 function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,courses }) {
   
-  console.log("HeroSection data:", courses);
+  // console.log("HeroSection data:", courses);
   if (!data) return null;
   const branchLabel = getBranchLabel({ branchName, branchLocation, heroData: data });
 
@@ -246,6 +246,7 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,cour
               onSubmit={handleSubmit}
               initialValues={branchLabel ? { branch: branchLabel } : {}}
                courses={courses}
+               course_branch={branchName}
               buttonText="Submit"
               className="w-full"
               successMessage="Thank you! We'll contact you soon."
@@ -504,7 +505,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
 
         const json = await res.json();
         setData(json?.data || null);
-        console.log("Fetching branch data from:", json?.data);
+        // console.log("Fetching branch data from:", json?.data);
       } catch (err) {
         if (err.name !== "AbortError") {
           console.error("Branch page data fetch error:", err);
@@ -519,7 +520,7 @@ export default function BranchClient({ data: initialData = null, branchName = ""
 
     return () => controller.abort();
   }, [api, branchApiPath, initialData]);
-  console.log("BranchClient rendered with data:", data);
+  // console.log("BranchClient rendered with data:", data);
 useEffect(() => {
   const fetchCourses = async () => {
     try {

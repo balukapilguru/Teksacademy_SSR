@@ -28,7 +28,7 @@ const InterviewQuestionDetailPage = () => {
       try {
         setLoading(true);
         const apiUrl = `${api}/api/v1/interview-questions/${slug}`;
-        console.log("Fetching from:", apiUrl);
+        // console.log("Fetching from:", apiUrl);
         
         const response = await fetch(apiUrl);
         

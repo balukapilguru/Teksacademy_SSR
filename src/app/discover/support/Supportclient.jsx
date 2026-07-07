@@ -7,7 +7,7 @@ export default function SupportPage() {
   const router = useRouter();
 
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       const response = await fetch("https://apierp.infozit.com/lead/create", {
@@ -19,7 +19,7 @@ export default function SupportPage() {
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");

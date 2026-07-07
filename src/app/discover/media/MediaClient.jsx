@@ -41,7 +41,7 @@ const Media = () => {
       try {
         const res = await fetch(`${baseUrl}/api/v1/discover/media`);
         const data = await res.json();
-        console.log(data,"mediaa")
+        // console.log(data,"mediaa")
         if (data.success && data.data?.mediaSection) {
           const section = data.data.mediaSection;
           setMediaData(section);

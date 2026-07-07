@@ -29,7 +29,7 @@ export default async function Home() {
     }
     const data = await res.json();
     homeData = data?.data;
-    console.log(homeData,"homedata")
+    // console.log(homeData,"homedata")
   } catch (err) {
     console.error("Failed to fetch home page data:", err);
     homeData = null;
@@ -39,7 +39,7 @@ export default async function Home() {
   }
   // #fbf5f6 : pink
   // #fff : white
- console.log(homeData.gallery,"homegallery")
+//  console.log(homeData.gallery,"homegallery")
    const schemaData = homeData?.meta?.schemaCode;
 
   const sectionsConfig = [
@@ -101,7 +101,7 @@ export default async function Home() {
       border: "#fff",
     },
   ];
-console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
+// console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (
     <>
      {schemaData && (

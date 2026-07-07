@@ -16,7 +16,7 @@ const Thankyou = () => {
   useEffect(() => {
     // Get branch data from sessionStorage only if coming from a branch page
     const storedBranchData = getBranchData();
-    console.log("Stored branch data on thankyou page:", storedBranchData);
+    // console.log("Stored branch data on thankyou page:", storedBranchData);
     setBranchData(storedBranchData);
 
     // Clear the stored branch data after reading

@@ -451,7 +451,7 @@ export default function RegistrationForm() {
 
         const data = await res.json();
         setFormData(data?.data);
-        console.log(data, "Verifieddata");
+        // console.log(data, "Verifieddata");
         validateFormWindow(data);
       } catch {
         setStatus((prev) => ({
@@ -518,22 +518,22 @@ export default function RegistrationForm() {
     const end = new Date(data?.data?.activeTo);
 
     if (today >= start && today <= end) {
-      console.log("OkayData");
+      // console.log("OkayData");
       setStatus((prev) => ({ ...prev, formActive: true }));
     } else if (today < start) {
-      console.log("OkayData 2");
+      // console.log("OkayData 2");
       setStatus((prev) => ({
         ...prev,
         message: `Form opens on ${start.toDateString()}`,
       }));
     } else {
       console.log(
-        "OkayData 3",
+       
         today >= start,
         today <= end,
         today,
         end,
-        "fsfs",
+       
         data,
       );
       setStatus((prev) => ({
@@ -1475,7 +1475,7 @@ export default function RegistrationForm() {
     const stored = JSON.parse(localStorage.getItem("verifiedUserData"));
 
     if (stored?.data) {
-      console.log(formData, "kjfslkdfjlskdjfl");
+      // console.log(formData, "kjfslkdfjlskdjfl");
       const mapped = mapBackendToForm(formData?.fieldsList, stored.data);
       setFormValues(mapped);
     }

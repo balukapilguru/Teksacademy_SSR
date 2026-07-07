@@ -22,7 +22,7 @@ import { SelectedCourseContext } from "@/context/SelectedCourseContext";
 import ReusableForm from "@/components/ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {

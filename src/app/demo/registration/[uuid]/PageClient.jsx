@@ -146,7 +146,7 @@ export default function RegistrationForm() {
             })) || [],
         });
         setFormData(data?.data);
-        console.log(data.data, "Registration Form Data");
+        // console.log(data.data, "Registration Form Data");
         validateFormWindow(data);
 
         // Find email field key
@@ -458,7 +458,7 @@ export default function RegistrationForm() {
   // ==================== INPUT HANDLER ====================
   const [selectedSlot, setSelectedSlot] = useState();
   const handleChange = (key, value) => {
-    console.log(key, "SelecetChange", value);
+    // console.log(key, "SelecetChange", value);
     if (key === emailFieldKey) {
       setIsEmailVerified(false);
     }
@@ -629,7 +629,7 @@ export default function RegistrationForm() {
     try {
       const payload = buildPayload();
 
-      console.log("Submitting payload:", payload);
+      // console.log("Submitting payload:", payload);
 
       const res = await fetch(`${apiUrl}/demo-enrollment/registrations`, {
         method: "POST",
@@ -855,7 +855,7 @@ export default function RegistrationForm() {
                 const fieldLabel = field.label || field.key;
                 const getPlaceholder = (field) => {
                   const label = (field.label == undefined || field.label == null) ? field.key?.toLowerCase() : field.label?.toLowerCase() || "";
-                  console.log(label, field, field.key, "treurywueyi")
+                  // console.log(label, field, field.key, "treurywueyi")
 
                   if (label.includes("email"))
                     return "Enter your email address";

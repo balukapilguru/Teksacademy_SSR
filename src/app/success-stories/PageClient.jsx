@@ -48,7 +48,7 @@ const SuccessStories = () => {
   const videoCards = currentTab?.videoCards || [];
   const cards = currentTab?.cards || [];
   const alumniCards = currentTab?.alumniCards || [];
-console.log(currentTab,"tab")
+// console.log(currentTab,"tab")
   // ✅ DO NOT include alumni here
   const allItems = useMemo(() => {
     const items = [];

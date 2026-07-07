@@ -208,6 +208,7 @@ export default async function Page({ params }) {
             formDetails={formDetails}
             category={true}
             source={29}
+            
             courseLabel={coursename}
             branch={branch}
           />
@@ -235,7 +236,7 @@ export default async function Page({ params }) {
         {overViewOfOnline && (
           <div
             className="rounded-lg border main_container pt-5"
-            style={{ backgroundColor: "#fbf5f6", borderColor: "#fbf5f6" }}
+            style={{ backgroundColor: "#fff", borderColor: "#" }}
           >
             <OverViewOfOnline
               data={overViewOfOnline}

@@ -21,7 +21,7 @@ const InterviewQuestionsPage = () => {
         setLoading(true);
         const response = await fetch(`${baseUrl}/api/v1/resources/interview-questions`);
        
-        console.log("Fetching URL:", `${baseUrl}/api/v1/resources/interview-questions`);
+        // console.log("Fetching URL:", `${baseUrl}/api/v1/resources/interview-questions`);
  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -38,7 +38,7 @@ const InterviewQuestionsPage = () => {
               metaDescription.content = result.data.meta.description;
             }
           }
-          console.log(result.data,"interviewque")
+          // console.log(result.data,"interviewque")
         } else {
           setError("No data received from API");
         }

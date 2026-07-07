@@ -24,7 +24,7 @@ const Alumni = () => {
       try {
         const response = await fetch(`${baseUrl}/api/v1/placements/alumni`);
         const result = await response.json();
-        console.log(result, "alumni");
+        // console.log(result, "alumni");
         
         if (result.success && result.data?.alumniSection) {
           setAlumniData(result.data.alumniSection);

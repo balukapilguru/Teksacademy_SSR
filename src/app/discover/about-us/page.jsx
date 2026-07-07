@@ -48,7 +48,7 @@ const Home = async () => {
     const result = await res.json();
     
     aboutusdata = result?.data;
-    console.log(aboutusdata,"aboutuss")
+    // console.log(aboutusdata,"aboutuss")
 
   } catch (err) {
     console.error("API Error:", err);

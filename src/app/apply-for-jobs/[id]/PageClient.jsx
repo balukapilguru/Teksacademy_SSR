@@ -14,7 +14,9 @@ import { PiBuildingsFill } from "react-icons/pi";
 import Swal from "sweetalert2";
 import { useParams, useRouter } from "next/navigation";
 
-const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
+const apiUrl =
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||
+  process.env.NEXT_BLOGS_APPLY_API_URL;
 
 const JobDetail = () => {
   const [open, setOpen] = useState(false);
@@ -47,7 +49,7 @@ const JobDetail = () => {
   const [errors, setErrors] = useState({});
   const [jobDetails, setJobDetails] = useState(null);
   const [link, setLink] = useState(
-    "https://teksacademy.com/203/young-soft-india/qa-engineers"
+    "https://teksacademy.com/203/young-soft-india/qa-engineers",
   );
   const [customQuestionId, setCustomQuestionId] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -107,13 +109,13 @@ const JobDetail = () => {
     formData.append("current_location", formDat?.location);
     formData.append(
       "applicant_teksenrollmentid",
-      formDat?.applicant_teksenrollmentid || ""
+      formDat?.applicant_teksenrollmentid || "",
     );
     formData.append("highest_qualification", formDat?.qualification || "");
     formData.append("stream", formDat?.stream);
     formData.append(
       "highest_degree_percentage",
-      formDat?.qualificationPercentage
+      formDat?.qualificationPercentage,
     );
     formData.append("twelve_percentage", formDat?.twelfthPercentage);
     formData.append("tenth_percentage", formDat?.tenthPercentage);
@@ -146,7 +148,7 @@ const JobDetail = () => {
           throw new Error(errorData.message || "Failed to submit application");
         }
         const responseData = await response.json();
-        console.log("Application submitted successfully:", responseData);
+        // console.log("Application submitted successfully:", responseData);
         router.push("/thankyou");
       })
       .catch((error) => {
@@ -157,86 +159,87 @@ const JobDetail = () => {
   };
 
   // Handle Apply button click - Check eligibility before applying
- const handleApply = () => {
-  // Check if user is logged in and eligible
-  if (!mailValidation) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Not Logged In',
-      text: 'Please verify your email to access job applications.',
-      confirmButtonColor: '#405189',
-    });
-    return;
-  }
+  const handleApply = () => {
+    const jobType = jobData?.jobPosting?.job_verified_type;
 
-  // Check if it's a public job
-  const isPublicJob = jobData?.jobPosting?.job_type === 'public';
-  
-  // For public jobs, navigate to verified_job_link
-  if (isPublicJob) {
-    const verifiedJobLink = jobData?.jobPosting?.verified_job_link;
-    if (verifiedJobLink) {
-      window.open(verifiedJobLink, '_blank');
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Link Not Available',
-        text: 'The application link for this job is not available.',
-        confirmButtonColor: '#405189',
-      });
-    }
-    return;
-  }
+    // ============================
+    // PUBLIC JOB
+    // ============================
+    if (jobType === "PUBLIC_JOBS") {
+      const link = jobData?.jobPosting?.verified_job_link;
 
-  // For non-public jobs, check eligibility based on the payload
-  const isEligible = mailValidation.eligible_for_application === true && mailValidation.jobready === true;
-  
-  if (!isEligible) {
-    const errorMessage = mailValidation.message || "You are not eligible to apply for this job. Please complete your training requirements.";
-    Swal.fire({
-      icon: 'error',
-      title: 'Not Eligible',
-      text: errorMessage,
-      confirmButtonColor: '#405189',
-    });
-    return;
-  }
-
-  // If eligible, prepare and open the application form
-  jobData?.jobPosting?.customQuestions?.forEach((question) => {
-    setCustomQuestionId((prev) => {
-      if (!prev.includes(question?.id)) {
-        return [...prev, question?.id];
+      if (link) {
+        window.open(link, "_blank", "noopener,noreferrer");
+        return;
       }
-      return prev;
+
+      Swal.fire({
+        icon: "info",
+        title: "Walk-In Drive",
+        text: "This is a Walk-In Drive. Please visit the venue on the mentioned date and time.",
+        confirmButtonColor: "#405189",
+      });
+
+      return;
+    }
+
+    // ============================
+    // TEKS VERIFIED
+    // ============================
+
+    if (!mailValidation) {
+      Swal.fire({
+        icon: "error",
+        title: "Verification Required",
+        text: "Please verify your registered email to apply.",
+        confirmButtonColor: "#405189",
+      });
+
+      return;
+    }
+
+    if (!mailValidation.eligible_for_application || !mailValidation.jobready) {
+      Swal.fire({
+        icon: "error",
+        title: "Not Eligible",
+        text:
+          mailValidation.message ||
+          "You are not eligible to apply for this job.",
+        confirmButtonColor: "#405189",
+      });
+
+      return;
+    }
+
+    jobData?.jobPosting?.customQuestions?.forEach((question) => {
+      setCustomQuestionId((prev) =>
+        prev.includes(question.id) ? prev : [...prev, question.id],
+      );
     });
-  });
 
-  setApplyModel(true);
-  const db = mailValidation;
+    const db = mailValidation;
+    const student = db.students?.[db.students.length - 1] || {};
 
-  let index = db?.students?.length - 1;
-  if (index < 0) index = 0;
+    setFormDat({
+      qualification: student.highest_qualification || "",
+      stream: student.stream || "",
+      yearPassOut: student.year_of_passout || "",
+      qualificationPercentage: student.highest_degree_percentage || "",
+      twelfthPercentage: student.twelve_percentage || "",
+      tenthPercentage: student.tenth_percentage || "",
+      location: student.current_location || "",
+      resume: student.resume || null,
 
-  const student = db?.students?.[index] || {};
-  setFormDat((prev) => ({
-    ...prev,
-    qualification: student?.highest_qualification || "",
-    stream: student?.stream || "",
-    yearPassOut: student?.year_of_passout || "",
-    qualificationPercentage: student?.highest_degree_percentage || "",
-    twelfthPercentage: student?.twelve_percentage || "",
-    tenthPercentage: student?.tenth_percentage || "",
-    location: student?.current_location || "",
-    resume: student?.resume || null,
-    type: "submitStudentApplication",
-    job_posting_id: jobData?.jobPosting?.id,
-    applicant_name: db?.name || "",
-    applicant_email: db?.email || "",
-    applicant_phone: db?.mobilenumber || "",
-    applicant_teksenrollmentid: db?.registrationnumber || "",
-  }));
-};
+      job_posting_id: jobData.jobPosting.id,
+
+      applicant_name: db.name,
+      applicant_email: db.email,
+      applicant_phone: db.mobilenumber,
+      applicant_teksenrollmentid: db.registrationnumber,
+    });
+
+    setApplyModel(true);
+  };
   // Helper functions
   const dateValidation = (givenDate) => {
     const currentDate = new Date();
@@ -245,12 +248,12 @@ const JobDetail = () => {
     const currentDateOnly = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
-      currentDate.getDate()
+      currentDate.getDate(),
     );
     const targetDateOnly = new Date(
       targetDate.getFullYear(),
       targetDate.getMonth(),
-      targetDate.getDate()
+      targetDate.getDate(),
     );
 
     if (targetDateOnly >= currentDateOnly) {
@@ -414,11 +417,11 @@ const JobDetail = () => {
     }`;
 
   // Check if this is a public job and redirect to external link
-  useEffect(() => {
-    if (jobData?.jobPosting?.job_verified_type === "PUBLIC_JOBS" && jobData?.jobPosting?.verified_job_link) {
-      window.location.href = jobData.jobPosting.verified_job_link;
-    }
-  }, [jobData]);
+  // useEffect(() => {
+  //   if (jobData?.jobPosting?.job_verified_type === "PUBLIC_JOBS" && jobData?.jobPosting?.verified_job_link) {
+  //     window.location.href = jobData.jobPosting.verified_job_link;
+  //   }
+  // }, [jobData]);
 
   // Render
   if (isLoading) {
@@ -426,22 +429,22 @@ const JobDetail = () => {
   }
 
   // If public job, redirect happens in useEffect, so show loading or return null
-  if (jobData?.jobPosting?.job_verified_type === "PUBLIC_JOBS") {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Redirecting to job application...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (jobData?.jobPosting?.job_verified_type === "PUBLIC_JOBS") {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+  //         <p className="mt-4 text-gray-600">Redirecting to job application...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   // Check if user is logged in, if not redirect to main jobs page
-  if (!mailValidation) {
-    router.push('/apply-for-jobs');
-    return null;
-  }
+  // if (!mailValidation) {
+  //   router.push('/apply-for-jobs');
+  //   return null;
+  // }
 
   return (
     <>
@@ -456,7 +459,8 @@ const JobDetail = () => {
                 {/* Qualification */}
                 <div>
                   <label className="block text-gray-600 font-medium mb-1">
-                    Highest Qualification<span className="text-red-500 ml-1 text-sm">*</span>
+                    Highest Qualification
+                    <span className="text-red-500 ml-1 text-sm">*</span>
                   </label>
                   <input
                     type="text"
@@ -466,7 +470,9 @@ const JobDetail = () => {
                     className={inputClass("qualification")}
                   />
                   {errors.qualification && (
-                    <p className="text-red-500 text-sm pt-1">{errors.qualification}</p>
+                    <p className="text-red-500 text-sm pt-1">
+                      {errors.qualification}
+                    </p>
                   )}
                 </div>
 
@@ -500,14 +506,17 @@ const JobDetail = () => {
                     className={inputClass("yearPassOut")}
                   />
                   {errors.yearPassOut && (
-                    <p className="text-red-500 text-sm pt-1">{errors.yearPassOut}</p>
+                    <p className="text-red-500 text-sm pt-1">
+                      {errors.yearPassOut}
+                    </p>
                   )}
                 </div>
 
                 {/* Qualification Percentage */}
                 <div>
                   <label className="block text-gray-600 font-medium mb-1">
-                    Highest Qualification Percentage<span className="text-red-500 ml-1">*</span>
+                    Highest Qualification Percentage
+                    <span className="text-red-500 ml-1">*</span>
                   </label>
                   <input
                     type="text"
@@ -517,7 +526,9 @@ const JobDetail = () => {
                     className={inputClass("qualificationPercentage")}
                   />
                   {errors.qualificationPercentage && (
-                    <p className="text-red-500 text-sm pt-1">{errors.qualificationPercentage}</p>
+                    <p className="text-red-500 text-sm pt-1">
+                      {errors.qualificationPercentage}
+                    </p>
                   )}
                 </div>
 
@@ -525,7 +536,8 @@ const JobDetail = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-gray-600 font-medium mb-1">
-                      12th Percentage<span className="text-red-500 ml-1">*</span>
+                      12th Percentage
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="text"
@@ -535,12 +547,15 @@ const JobDetail = () => {
                       className={inputClass("twelfthPercentage")}
                     />
                     {errors.twelfthPercentage && (
-                      <p className="text-red-500 text-sm pt-1">{errors.twelfthPercentage}</p>
+                      <p className="text-red-500 text-sm pt-1">
+                        {errors.twelfthPercentage}
+                      </p>
                     )}
                   </div>
                   <div>
                     <label className="block text-gray-600 font-medium mb-1">
-                      10th Percentage<span className="text-red-500 ml-1">*</span>
+                      10th Percentage
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="text"
@@ -550,7 +565,9 @@ const JobDetail = () => {
                       className={inputClass("tenthPercentage")}
                     />
                     {errors.tenthPercentage && (
-                      <p className="text-red-500 text-sm pt-1">{errors.tenthPercentage}</p>
+                      <p className="text-red-500 text-sm pt-1">
+                        {errors.tenthPercentage}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -568,7 +585,9 @@ const JobDetail = () => {
                     className={inputClass("location")}
                   />
                   {errors.location && (
-                    <p className="text-red-500 text-sm pt-1">{errors.location}</p>
+                    <p className="text-red-500 text-sm pt-1">
+                      {errors.location}
+                    </p>
                   )}
                 </div>
 
@@ -626,7 +645,9 @@ const JobDetail = () => {
                     <div key={question.id} className="mb-4">
                       <label className="block font-medium text-gray-700 mb-1">
                         {question.title}
-                        {isRequired && <span className="text-red-500 ml-1">*</span>}
+                        {isRequired && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
 
                       {(() => {
@@ -635,7 +656,9 @@ const JobDetail = () => {
                           case "number":
                           case "date":
                           case "time":
-                            return <input type={question.type} {...commonProps} />;
+                            return (
+                              <input type={question.type} {...commonProps} />
+                            );
                           case "select":
                             return (
                               <select {...commonProps} value={fieldValue || ""}>
@@ -655,7 +678,9 @@ const JobDetail = () => {
                       })()}
 
                       {errors[question.id] && (
-                        <p className="text-red-500 text-sm mt-1">{errors[question.id]}</p>
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors[question.id]}
+                        </p>
                       )}
                     </div>
                   );
@@ -730,7 +755,8 @@ const JobDetail = () => {
                     <FaShareSquare className="mt-1" />
                   </button>
 
-                  {dateValidation(jobData?.jobPosting?.closing_date) !== "Expired" && (
+                  {dateValidation(jobData?.jobPosting?.closing_date) !==
+                    "Expired" && (
                     <button
                       className="flex focus:outline-none active:outline-1 active:outline-blue-400 bg-[#2a619d] rounded-md w-20 h-10 justify-center pt-1 text-white cursor-pointer"
                       onClick={handleApply}
@@ -749,7 +775,9 @@ const JobDetail = () => {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex justify-between items-center">
-                          <h5 className="text-xl font-semibold">Share This Job</h5>
+                          <h5 className="text-xl font-semibold">
+                            Share This Job
+                          </h5>
                           <button
                             onClick={() => setIsOpen(false)}
                             className="text-gray-500"
@@ -762,30 +790,45 @@ const JobDetail = () => {
                         <div className="flex justify-around items-center my-4">
                           <a
                             href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                              currentShareUrl
+                              currentShareUrl,
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Image src={whatsapp} alt="WhatsApp" width="28" height="28" />
+                            <Image
+                              src={whatsapp}
+                              alt="WhatsApp"
+                              width="28"
+                              height="28"
+                            />
                           </a>
                           <a
                             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                              currentShareUrl
+                              currentShareUrl,
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Image src={Facebook} alt="facebook" width="28" height="28" />
+                            <Image
+                              src={Facebook}
+                              alt="facebook"
+                              width="28"
+                              height="28"
+                            />
                           </a>
                           <a
                             href={`https://www.instagram.com/?url=${encodeURIComponent(
-                              currentShareUrl
+                              currentShareUrl,
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Image src={instagram} alt="instagram" width="28" height="28" />
+                            <Image
+                              src={instagram}
+                              alt="instagram"
+                              width="28"
+                              height="28"
+                            />
                           </a>
                         </div>
 
@@ -796,13 +839,18 @@ const JobDetail = () => {
                             readOnly
                             className="flex-1 border p-2 rounded"
                           />
-                          <button onClick={copyLink} className="text-black p-2 rounded">
+                          <button
+                            onClick={copyLink}
+                            className="text-black p-2 rounded"
+                          >
                             <IoMdCopy />
                           </button>
                         </div>
 
                         {copied && (
-                          <p className="text-green-500 mt-2">Link copied to clipboard!</p>
+                          <p className="text-green-500 mt-2">
+                            Link copied to clipboard!
+                          </p>
                         )}
                       </div>
                     </div>
@@ -828,7 +876,8 @@ const JobDetail = () => {
                     Share
                     <FaShareSquare className="mt-1" />
                   </button>
-                  {dateValidation(jobData?.jobPosting?.closing_date) !== "Expired" && (
+                  {dateValidation(jobData?.jobPosting?.closing_date) !==
+                    "Expired" && (
                     <button
                       className="flex focus:outline-none active:outline-1 active:outline-blue-400 bg-[#2a619d] rounded-md w-20 h-10 justify-center pt-1 text-white cursor-pointer"
                       onClick={handleApply}

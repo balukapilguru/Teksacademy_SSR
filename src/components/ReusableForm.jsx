@@ -188,8 +188,9 @@ export default function ReusableForm({
   successMessage = "Form submitted successfully!",
   className = "",
   disableCourseField = false,
-  redirectToThankYou = true,
+   redirectToThankYou = true,
 }) {
+ 
   const router = useRouter();
   const courseOptions = courses.map((course) => ({
     label: course.heading || course.programName || course.title || course.name,
@@ -214,6 +215,7 @@ export default function ReusableForm({
       Enquirynow: ["name", "email", "phone", "course", "branch"],
       RequestDemo: ["name", "email", "phone", "course", "branch"],
     };
+    // console.log(formType,formValues,formFields,"popupforom")
     return formFields[formType] || formFields.default;
   }, [formType]);
 
@@ -297,7 +299,7 @@ export default function ReusableForm({
       course: values.course || values.career || "",
       city: values.city || "",
       branch: values.branch || "",
-      course_branch: values.prefferd || "",
+      course_branch: values.branch || "",
       referredby: "website",
       qualification: values.qualification || "",
       source_id: "home_form",
@@ -394,14 +396,14 @@ export default function ReusableForm({
     setIsSubmitting(true);
     try {
       const payload = mapToApiPayload(formValues);
-      console.log("Submitting payload:", payload);
+      // console.log("Submitting payload:", payload);
 
       if (onSubmit) {
-        console.log("On Submit True Reusable true");
+        // console.log("On Submit True Reusable true");
 
         await onSubmit(formValues, payload);
       } else {
-        console.log("On Submit True Reusable false");
+        // console.log("On Submit True Reusable false");
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },

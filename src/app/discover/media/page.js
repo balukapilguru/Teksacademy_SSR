@@ -16,7 +16,7 @@ export async function generateMetadata() {
 
     const result = await res.json();
     const meta = result?.data?.meta;
-console.log(result,"media")
+// console.log(result,"media")
     return {
       title: meta?.title || "Default Title",
       description: meta?.description || "Default Description",

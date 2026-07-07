@@ -73,7 +73,7 @@ const Popupform = ({
   // Handle form submission from ReusableForm
   const handleFormSubmit = async (formValues,mappedValues) => {
     if (onSubmit) {
-      console.log("On Submit True");
+      // console.log("valuess payload",mappedValues);
       setIsSubmitting(true);
       try {
         const result = await onSubmit(formValues,mappedValues);
@@ -105,7 +105,7 @@ const Popupform = ({
         setIsSubmitting(false);
       }
     }
-    console.log("On Submit False");
+    // console.log("On Submit False");
   };
 
   // Listen for form submission success event from ReusableForm

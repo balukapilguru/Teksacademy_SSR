@@ -11,7 +11,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
   const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
@@ -23,7 +23,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");

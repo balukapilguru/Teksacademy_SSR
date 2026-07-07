@@ -13,6 +13,7 @@ const CertificationCourse = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCourseName, setSelectedCourseName] = useState(null);
+  const [branch, setBranch] = useState(null); // New state for branch
 
   // Mobile carousel index
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -22,7 +23,7 @@ const CertificationCourse = ({ data }) => {
       data?.courses || data?.courseList || data?.coursesList || [];
 
     if (propCourses && propCourses.length > 0) {
-      console.log("Using courses from prop:", propCourses);
+      // console.log("Using courses from prop:", propCourses);
       setCourses(propCourses);
       setLoading(false);
       return;
@@ -45,7 +46,7 @@ const CertificationCourse = ({ data }) => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
 
         const result = await res.json();
-        console.log(result?.data, "CertificationCourse API DATA");
+        // console.log(result?.data, "CertificationCourse API DATA");
 
         setCourses(result?.data || result?.courses || []);
       } catch (error) {
@@ -62,6 +63,7 @@ const CertificationCourse = ({ data }) => {
   const handleOpenModal = (courseName, course) => {
     setSelectedCourse(courseName);
     setSelectedCourseName(course);
+    setBranch(course.branch); // Set the branch state
     setShowModal(true);
   };
 
@@ -102,7 +104,8 @@ const CertificationCourse = ({ data }) => {
           onClose={() => setShowModal(false)}
           course={selectedCourse}
           courseName={selectedCourseName}
-          university={null}
+          university={branch} // Pass the branch state to the Popupform
+          course_branch={branch} // Pass the branch state to the Popupform
         />
 
         {/* Loading State */}

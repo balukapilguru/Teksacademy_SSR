@@ -62,7 +62,7 @@ const Banner = ({
 
   const handleFormSubmit = async (formValues, mappedPayload) => {
     setIsSubmitting(true);
-
+// console.log(mappedPayload,"branchcoure")
     try {
       const response = await fetch(
         buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
@@ -76,9 +76,9 @@ const Banner = ({
       );
 
       const responseData = await response.json();
-      {
-        console.log(mappedPayload, "mappedPayload:");
-      }
+      // {
+      //   console.log(mappedPayload, "mappedPayload:");
+      // }
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
@@ -104,6 +104,7 @@ const Banner = ({
           course={selectedCourse}
           courseName={selectedCourse}
           university={branch}
+          course_branch={branch}
           source={30}
           title="Request a Demo"
           subtitle="Fill in your details to get course guidance and a callback from our team."
@@ -113,7 +114,7 @@ const Banner = ({
           successMessage="Thank you! We'll contact you soon."
         />
       )}
-      {console.log(formDetails, courseLabel, branch, "courseLabel:")}
+      {/* {console.log(formDetails, courseLabel, branch, "courseLabel:")} */}
 
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a0028] via-[#011338] to-[#1a0033] z-0" />

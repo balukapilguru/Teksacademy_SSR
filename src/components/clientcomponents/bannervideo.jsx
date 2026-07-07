@@ -42,7 +42,7 @@ const BannerVideo = () => {
         }
 
         const result = await response.json();
-        console.log("Banner API Response:", result);
+        // console.log("Banner API Response:", result);
 
         // Extract banner data from the response
         const banner = result?.data?.banner;

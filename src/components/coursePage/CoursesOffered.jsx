@@ -109,7 +109,7 @@ const CoursesOffered = ({ data, branchData }) => {
     selectedCourse?.title ||
     selectedCourse?.name ||
     "";
-{console.log("Courses rendered:",courses.length, courses.map(c => c.heading || c.programName || c.title || c.name))}
+// {console.log("Courses rendered:",courses.length, courses.map(c => c.heading || c.programName || c.title || c.name))}
   if (loading) {
     return (
       <section>
@@ -177,6 +177,7 @@ const CoursesOffered = ({ data, branchData }) => {
         course={courseName}
         courseName={courseName}
         branch={currentBranch}
+        course_branch={currentBranch}
         title="Enquire Now"
         subtitle="Share your details and our counselor will reach out to you."
         formType="default"

@@ -5,7 +5,7 @@ export default function Topscroll({data}) {
   if (!data) return null;
  
   const topscroll = data?.list
-  console.log( data?.list,"topscroll")
+  // console.log( data?.list,"topscroll")
   return (
     <div>
       <div className="container-fluid mx-auto lg:mt-0">
