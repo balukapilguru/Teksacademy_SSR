@@ -27,9 +27,9 @@ import placed from "../../../public/images/placed.png";
 import metadata from "../../app/metadata.json";
 import Loader from "@/components/Loader";
 
-
-const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
-
+const apiUrl =
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
 
 const PUBLIC_API_KEY =
   "aea23b3fa4fcfe4c64e9c714729fc06d2f00aef9ebb52b6e28aef92796f56713";
@@ -155,17 +155,16 @@ const ApplyForJobs = () => {
         searchParam = `PUBLIC_JOBS ${debouncedSearchTerm}`;
       }
 
-    const queryParams = new URLSearchParams({
-  page: currentPage,
-  pageSize: itemsPerPage,
-  search: debouncedSearchTerm || "",
- job_verified_type: jobTab === "public"
-  ? "PUBLIC_JOBS"
-  : "TEKS_VERIFIED", // 👈 clean separation instead of mixing into search
-  "filter[job_type]": filters.job_type,
-  "filter[workplace_type]": filters.workplace_type,
-  "filter[experience]": filters.experience,
-});
+      const queryParams = new URLSearchParams({
+        page: currentPage,
+        pageSize: itemsPerPage,
+        search: debouncedSearchTerm || "",
+        job_verified_type:
+          jobTab === "public" ? "PUBLIC_JOBS" : "TEKS_VERIFIED", // 👈 clean separation instead of mixing into search
+        "filter[job_type]": filters.job_type,
+        "filter[workplace_type]": filters.workplace_type,
+        "filter[experience]": filters.experience,
+      });
       const response = await fetch(
         `${apiUrl}/jobs/job-postings?${queryParams}`,
         authFetchOptions(),
@@ -173,13 +172,9 @@ const ApplyForJobs = () => {
       if (response.ok) {
         const data = await response.json();
         setJobs({
-  ...data,
-  reversedjobs:
-    data?.reversedjobs ||
-    data?.jobs ||
-    data?.data ||
-    [],
-});
+          ...data,
+          reversedjobs: data?.reversedjobs || data?.jobs || data?.data || [],
+        });
       } else {
         const errorText = await response.text();
         console.error("Job fetch error:", response.status, errorText);
@@ -449,19 +444,9 @@ const ApplyForJobs = () => {
   const handleViewDetails = async (jobId, job) => {
     // For Public Jobs, directly open verified_job_link in new tab
     if (jobTab === "public") {
-      if (job?.verified_job_link) {
-        window.open(job.verified_job_link, "_blank", "noopener,noreferrer");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Link Not Available",
-          text: "The job link is not available for this position.",
-          confirmButtonColor: "#405189",
-        });
-      }
+      router.push(`/apply-for-jobs/${jobId}`);
       return;
     }
-
     // For Teks Verified Jobs, proceed with email verification
     if (mailValidation) {
       if (
@@ -785,7 +770,7 @@ const ApplyForJobs = () => {
                 </div>
               ) : (
                 <Image
-                fill
+                  fill
                   src={imageUrl}
                   alt={student.name}
                   className="w-full h-full object-cover object-top rounded-full border border-gray-300"

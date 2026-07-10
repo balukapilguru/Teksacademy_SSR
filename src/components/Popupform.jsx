@@ -73,7 +73,7 @@ const Popupform = ({
   // Handle form submission from ReusableForm
   const handleFormSubmit = async (formValues,mappedValues) => {
     if (onSubmit) {
-      // console.log("valuess payload",mappedValues);
+      console.log("valuess payload",mappedValues);
       setIsSubmitting(true);
       try {
         const result = await onSubmit(formValues,mappedValues);
@@ -91,7 +91,7 @@ const Popupform = ({
           }
 
           // Redirect to thank you page
-          router.push("/thankyou");
+          // router.push("/thankyou");
 
           // Close popup after redirect
           setTimeout(() => {

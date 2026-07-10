@@ -236,7 +236,7 @@ export default async function Page({ params }) {
         {overViewOfOnline && (
           <div
             className="rounded-lg border main_container pt-5"
-            style={{ backgroundColor: "#fff", borderColor: "#" }}
+            style={{ backgroundColor: "#fff", borderColor: "#fff" }}
           >
             <OverViewOfOnline
               data={overViewOfOnline}

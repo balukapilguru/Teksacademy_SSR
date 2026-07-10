@@ -746,7 +746,7 @@ const JobDetail = () => {
                 <div className="flex w-full text-[#474d6a] text-[15px] font-normal">
                   {dateValidation(jobData?.jobPosting?.closing_date)}
                 </div>
-                <div className="flex justify-end xs:ml-2 sm:ml-7 md:ml-16 gap-2">
+                {/* <div className="flex justify-end xs:ml-2 sm:ml-7 md:ml-16 gap-2">
                   <button
                     className="flex focus:outline-none active:outline-1 active:outline-blue-400 bg-[#2a619d] rounded-md gap-3 h-10 w-24 justify-center pt-1 text-white cursor-pointer"
                     onClick={() => shareUrl(jobData?.jobPosting)}
@@ -855,7 +855,7 @@ const JobDetail = () => {
                       </div>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 

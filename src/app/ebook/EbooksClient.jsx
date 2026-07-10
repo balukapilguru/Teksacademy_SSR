@@ -9,6 +9,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 export default function EbookClient({ source }) {
   const [selectedCard, setSelectedCard] = useState(null);
+  const [branch,setBranch] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
@@ -58,7 +59,7 @@ export default function EbookClient({ source }) {
         sourceId: selectedCard?.sourceId,
       }),
     });
-
+console.log("response", payload,"payload");
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || "Submission failed");
@@ -245,6 +246,8 @@ export default function EbookClient({ source }) {
         onClose={() => setSelectedCard(null)}
         course={selectedCard?.title || ""}
         courseName={selectedCard?.title || ""}
+        branch={branch}
+      course_branch={branch}
         title="Book a live demo for free"
         formType="ebook"
         buttonText="Download E-Book"

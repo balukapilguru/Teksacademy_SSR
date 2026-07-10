@@ -82,6 +82,81 @@ const FIXED_SITEMAP_ROUTES = [
   "/blogs",
 ];
 
+const BRANCH_COURSE_ROUTES = [
+  // Ameerpet
+  "/courses/ameerpet/best-full-stack-python-development-course-training",
+  "/courses/ameerpet/best-java-full-stack-developer-course",
+  "/courses/ameerpet/best-data-science-training",
+  "/courses/ameerpet/best-data-analytics-course-training",
+  "/courses/ameerpet/best-cyber-security-course",
+  "/courses/ameerpet/best-autocad-course",
+  "/courses/ameerpet/best-revit-course",
+
+  // Hitech City
+  "/courses/hiteccity/best-data-science-course",
+  "/courses/hiteccity/best-java-full-stack-course",
+  "/courses/hiteccity/best-python-full-stack-course",
+  "/courses/hiteccity/best-cyber-security-course",
+  "/courses/hiteccity/best-aws-devops-course",
+  "/courses/hiteccity/best-data-analytics-course",
+  "/courses/hiteccity/best-business-analytics-course",
+
+  // Secunderabad
+  "/courses/secunderabad/best-data-science-course",
+  "/courses/secunderabad/best-java-full-stack-course",
+  "/courses/secunderabad/best-python-full-stack-course",
+  "/courses/secunderabad/sap-fico-training",
+  "/courses/secunderabad/best-data-analytics-course-training",
+  "/courses/secunderabad/sap-mm-training",
+  "/courses/secunderabad/sap-sd-training",
+
+  // Dilsukhnagar
+  "/courses/dilsukhnagar/best-data-science-course",
+  "/courses/dilsukhnagar/best-java-full-stack-course",
+  "/courses/dilsukhnagar/best-python-full-stack-course",
+  "/courses/dilsukhnagar/best-digital-marketing-course",
+  "/courses/dilsukhnagar/best-aws-devops-course",
+  "/courses/dilsukhnagar/best-data-analytics-course",
+  "/courses/dilsukhnagar/best-business-analytics-course",
+
+  // Mehdipatnam
+  "/courses/mehdipatnam/best-data-science-course",
+  "/courses/mehdipatnam/best-bim-course",
+  "/courses/mehdipatnam/best-java-full-stack-course",
+  "/courses/mehdipatnam/best-python-full-stack-course",
+
+  // Kukatpally
+  "/courses/kukatpally/best-data-science-course",
+  "/courses/kukatpally/best-java-full-stack-course",
+  "/courses/kukatpally/best-python-full-stack-course",
+  "/courses/kukatpally/best-aws-devops-course",
+  "/courses/kukatpally/best-data-analytics-course",
+
+  // Bangalore
+  "/courses/bangalore/best-data-science-course",
+  "/courses/bangalore/best-data-analytics-course",
+  "/courses/bangalore/best-java-full-stack-course",
+  "/courses/bangalore/best-python-full-stack-course",
+
+  // Kompally
+  "/courses/kompally/best-data-science-course",
+  "/courses/kompally/best-java-full-stack-course",
+  "/courses/kompally/best-python-full-stack-course",
+  "/courses/kompally/data-analytics-course-training",
+
+  // Visakhapatnam
+  "/courses/visakhapatnam/best-data-science-course",
+  "/courses/visakhapatnam/best-java-full-stack-course",
+  "/courses/visakhapatnam/best-python-full-stack-course",
+  "/courses/visakhapatnam/best-digital-marketing-course",
+  "/courses/visakhapatnam/best-bim-course",
+  "/courses/visakhapatnam/best-data-analytics-course",
+  "/courses/visakhapatnam/best-autocad-course",
+  "/courses/visakhapatnam/best-medical-coding-course",
+];
+
+
+
 /**
  * Optional: dynamic blog routes
  */
@@ -140,10 +215,11 @@ const normalizeRoute = (route) => {
 export default async function sitemap() {
   const blogRoutes = await getBlogRoutes();
 
-  const routes = [
-    ...FIXED_SITEMAP_ROUTES,
-     // only dynamic part allowed
-  ];
+ const routes = [
+  ...FIXED_SITEMAP_ROUTES,
+  ...BRANCH_COURSE_ROUTES,
+  ...blogRoutes,
+];
 
   const uniqueRoutes = [...new Set(routes.map(normalizeRoute))];
 
