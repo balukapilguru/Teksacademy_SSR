@@ -438,31 +438,49 @@ export default function RegistrationForm() {
   };
 
   // ==================== FORM FETCHING ====================
-
+// Add this after toPascalCaseWithSpaces or wherever you keep your helpers
+const getKeyFromLabel = (label) => {
+  const map = {
+    'Name': 'name',
+    'Email': 'email',
+    'Phone': 'phone',
+    'Registration Number': 'registrationnumber',
+    'Courses': 'courses',
+  };
+  return map[label] || label.toLowerCase().replace(/\s/g, '');
+};
   useEffect(() => {
     if (!urlid) return;
 
-    const fetchForm = async () => {
-      try {
-        const res = await fetch(
-          `${apiUrl}/placement-preparation/forms/${urlid}`,
-        );
-        if (!res.ok) throw new Error();
+   const fetchForm = async () => {
+  try {
+    const res = await fetch(`${apiUrl}/placement-preparation/forms/${urlid}`);
+    if (!res.ok) throw new Error();
 
-        const data = await res.json();
-        setFormData(data?.data);
-        // console.log(data, "Verifieddata");
-        validateFormWindow(data);
-      } catch {
-        setStatus((prev) => ({
-          ...prev,
-          message: "Failed to load form",
-        }));
-      } finally {
-        setStatus((prev) => ({ ...prev, loading: false }));
-      }
-    };
-
+    const data = await res.json();
+    const rawData = data?.data;
+    if (rawData?.fieldsList) {
+      // Normalize each field: add 'key' and 'uuid'
+      const normalizedFields = rawData.fieldsList.map((field, index) => ({
+        ...field,
+        key: getKeyFromLabel(field.label),
+        uuid: field.uuid || `field-${index}`,
+      }));
+      setFormData({ ...rawData, fieldsList: normalizedFields });
+    } else {
+      setFormData(rawData);
+    }
+    console.log(data, "Verifieddata");
+    validateFormWindow(data);
+  } catch {
+    setStatus((prev) => ({
+      ...prev,
+      message: "Failed to load form",
+    }));
+  } finally {
+    setStatus((prev) => ({ ...prev, loading: false }));
+  }
+};
     fetchForm();
   }, [urlid]);
 
@@ -490,32 +508,34 @@ export default function RegistrationForm() {
   // }, [otpModal.open]);
   // ==================== INITIALIZE FORM VALUES ====================
 
-  useEffect(() => {
-    if (!formData) return;
+ useEffect(() => {
+  if (!formData) return;
 
-    const stored = localStorage.getItem("verifiedUserData");
-    if (!stored) return;
+  const stored = localStorage.getItem("verifiedUserData");
+  if (!stored) return;
 
-    try {
-      const parsed = JSON.parse(stored)?.data;
-      if (!parsed) return;
+  try {
+    const parsed = JSON.parse(stored)?.data;
+    if (!parsed) return;
 
-      const mapped = mapUserDataToFormFields(parsed, formData.fieldsList);
+    const mapped = mapUserDataToFormFields(parsed, formData.fieldsList);
 
-      setFormValues((prev) => ({
-        ...prev,
-        ...mapped,
-      }));
-    } catch (err) {
-      console.error("Mapping error:", err);
-    }
-  }, [formData]);
+    setFormValues((prev) => ({
+      ...prev,
+      ...mapped,
+    }));
+    console.log(mapped, ...prev,"mapped");   // ❌ This line causes error
+  } catch (err) {
+    console.error("Mapping error:", err);
+  }
+}, [formData]);
   // ==================== FORM VALIDATION ====================
 
   const validateFormWindow = (data) => {
     const today = new Date();
     const start = new Date(data?.data?.activeFrom);
     const end = new Date(data?.data?.activeTo);
+
 
     if (today >= start && today <= end) {
       // console.log("OkayData");
