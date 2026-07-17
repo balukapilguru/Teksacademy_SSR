@@ -102,7 +102,7 @@ const CertificationCourse = ({ data }) => {
           source={28}
           show={showModal}
           onClose={() => setShowModal(false)}
-          course={selectedCourse}
+          course={selectedCourseName}
           courseName={selectedCourseName}
           university={branch} // Pass the branch state to the Popupform
           course_branch={branch} // Pass the branch state to the Popupform

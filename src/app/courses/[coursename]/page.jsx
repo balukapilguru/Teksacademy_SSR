@@ -47,6 +47,7 @@ import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
 import Hiring from "@/components/home-page/ui-components/Hiring";
 import TopFiveSuccesstories from "@/components/home-page/ui-components/TopFiveSuccesstories";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 const isGenericCourseLabel = (value) => {
   const label = typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -169,10 +170,14 @@ export default async function Page({ params }) {
 
   const mostSearchedTerms = data?.mostSearchedTerms && {
   courses: data.mostSearchedTerms.courses,
+
+
+  
 };
   // console.log(mostSearchedTerms,"mst")
 
   const excelSectionData = data?.excel || data?.Excel;
+const contactBar = data?.contactBar || data?.contactBar ;
 
   const courseLabel =
     getCourseLabelValue(data?.banner?.mainHeading) ||
@@ -220,7 +225,6 @@ export default async function Page({ params }) {
         alt: "Career Services",
       },
     };
-
   // console.log(data?.car`eerService, "data?.careerServices");
   /* =====================================================
      COURSE FLOW (UNCHANGED)
@@ -489,6 +493,11 @@ export default async function Page({ params }) {
         )}
 
         {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
+        <div>
+                  <FooterAdressbar
+                       branchData={contactBar}
+                      />
+                </div>
       </div>
     </>
   );

@@ -11,6 +11,7 @@ const getCourseLabel = (value) => {
     return getCourseLabel(firstValue);
   }
   if (typeof value === "object") {
+    // Prefer human-readable fields; programName is usually a URL slug so use it last
     return (
       value.programName ||
       value.heading ||
@@ -22,6 +23,16 @@ const getCourseLabel = (value) => {
     );
   }
   return "";
+};
+
+// Convert a hyphenated slug into a readable Title Case string
+const formatSlugToLabel = (value = "") => {
+  if (!value || typeof value !== "string") return value;
+  // If the value contains a hyphen and no spaces it's likely a slug
+  if (!value.includes("-") || value.includes(" ")) return value;
+  return value
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 };
 
 const isMeaningfulCourseLabel = (label) => {
@@ -38,7 +49,9 @@ const isMeaningfulCourseLabel = (label) => {
 
 const normalizeCourseInput = (value) => {
   const label = getCourseLabel(value);
-  return isMeaningfulCourseLabel(label) ? label : "";
+  const cleaned = isMeaningfulCourseLabel(label) ? label : "";
+  // If it still looks like a slug, convert it to readable text
+  return formatSlugToLabel(cleaned);
 };
 
 export default function Popupform({
@@ -64,7 +77,7 @@ export default function Popupform({
     () => ({ course: initialCourse, branch: university || "" }),
     [initialCourse, university]
   );
-  
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
