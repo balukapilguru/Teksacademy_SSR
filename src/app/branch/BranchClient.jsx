@@ -21,8 +21,10 @@ import ReusableForm from "@/components/ReusableForm";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import { storeBranchData } from "@/lib/branchStorage";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+const baseUrl =
+  process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
 
 const BRANCH_LABELS = {
   ameerpet: "Ameerpet",
@@ -35,7 +37,6 @@ const BRANCH_LABELS = {
   visakhapatnam: "Visakhapatnam",
   // salem: "Salem",
   kompally: "Kompally",
-  
 };
 
 const getBranchNameFromSlug = (value = "") => {
@@ -58,8 +59,10 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
     branchLocation?.name ||
     "";
 
-  const fromHeroTitle = heroData?.title || heroData?.heading || heroData?.mainHeading || "";
-  const branchFromHero = fromHeroTitle.match(/in\s+([A-Za-z\s-]+)$/i)?.[1] || "";
+  const fromHeroTitle =
+    heroData?.title || heroData?.heading || heroData?.mainHeading || "";
+  const branchFromHero =
+    fromHeroTitle.match(/in\s+([A-Za-z\s-]+)$/i)?.[1] || "";
 
   return branchFromHero || fromLocation || "Secunderabad";
 };
@@ -69,13 +72,16 @@ const handleSubmit = async (formValues, mappedPayload) => {
   // console.log("Mapped payload being sent:", mappedPayload);
 
   try {
-    const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mappedPayload),
       },
-      body: JSON.stringify(mappedPayload),
-    });
+    );
 
     const responseData = await response.json();
     // console.log("API Response:", responseData);
@@ -87,7 +93,7 @@ const handleSubmit = async (formValues, mappedPayload) => {
     // Store branch data in sessionStorage before redirect
     const branchName = formValues.branch || "Secunderabad";
     storeBranchData(branchName);
-    
+
     // Redirect to thank you page WITHOUT query parameters
     window.location.href = "/thankyou";
   } catch (error) {
@@ -146,29 +152,47 @@ function SectionHeading({ parts = [], className = "" }) {
     <h2 className={`text-3xl font-bold text-center mb-8 ${className}`}>
       {parts.map((p, i) =>
         i === 0 ? (
-          <span key={i} className="text-[#003366]">{p}</span>
+          <span key={i} className="text-[#003366]">
+            {p}
+          </span>
         ) : (
-          <span key={i} className="text-[#e84c1f]">{p}</span>
-        )
+          <span key={i} className="text-[#e84c1f]">
+            {p}
+          </span>
+        ),
       )}
     </h2>
   );
 }
 
 // ─── 1. HERO SECTION ──────────────────────────────────────────────────────
-function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,courses }) {
-  
+function HeroSection({
+  data,
+  branchName = "",
+  branchLocation,
+  onEnrollClick,
+  courses,
+}) {
   // console.log("HeroSection data:", courses);
   if (!data) return null;
-  const branchLabel = getBranchLabel({ branchName, branchLocation, heroData: data });
+  const branchLabel = getBranchLabel({
+    branchName,
+    branchLocation,
+    heroData: data,
+  });
 
   const branchData = {
     Rating: data.Rating || data.rating || data.ratingText,
     Reviews: data.Reviews || data.reviews || data.reviewText,
     title: data.title || data.heading || data.mainHeading,
-    subtitle: data.subtitle || data.subTitle || data.label || "learn IT courses",
+    subtitle:
+      data.subtitle || data.subTitle || data.label || "learn IT courses",
     about: data.about || data.description || data.desc,
-    buttonText: data.button?.text || data.button?.name || data.ctaText || "Get Directions",
+    buttonText:
+      data.button?.text ||
+      data.button?.name ||
+      data.ctaText ||
+      "Get Directions",
     buttonLink: data.button?.link || data.ctaLink || "/discover/contact-us",
     background:
       data.backgroundImage?.src ||
@@ -197,7 +221,9 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,cour
           <div className="flex-[60%] 2xl:flex-[70%] text-[#f5f6f7] pb-5">
             {(branchData.Rating || branchData.Reviews) && (
               <div className="flex items-center space-x-1 text-[0.68rem] 2xl:text-base 3xl:text-lg">
-                {branchData.Rating && <span className="font-medium">{branchData.Rating}</span>}
+                {branchData.Rating && (
+                  <span className="font-medium">{branchData.Rating}</span>
+                )}
                 <span className="flex flex-row items-center">
                   <IoStar className="text-[#FCD503]" />
                   <IoStar className="text-[#FCD503]" />
@@ -245,8 +271,8 @@ function HeroSection({ data, branchName = "", branchLocation, onEnrollClick,cour
               formType="enquiry"
               onSubmit={handleSubmit}
               initialValues={branchLabel ? { branch: branchLabel } : {}}
-               courses={courses}
-               course_branch={branchName}
+              courses={courses}
+              course_branch={branchName}
               buttonText="Submit"
               className="w-full"
               successMessage="Thank you! We'll contact you soon."
@@ -273,9 +299,11 @@ function BranchAboutSection({ data }) {
   const aboutImage = image?.url || image?.src || aboutFallbackImage;
   const tagline = data.tagline || title || "Teks - Making Job Cracking Easier!";
   const [taglinePrefix, ...taglineRest] = tagline.split("-");
-  const missionTitle = description?.subHeading1 || data.mission?.title || "OUR MISSION :";
+  const missionTitle =
+    description?.subHeading1 || data.mission?.title || "OUR MISSION :";
   const missionText = description?.text1 || data.mission?.description;
-  const visionTitle = description?.subHeading2 || data.vision?.title || "OUR VISION :";
+  const visionTitle =
+    description?.subHeading2 || data.vision?.title || "OUR VISION :";
   const visionText = description?.text2 || data.vision?.description;
   const aboutButton = button || data.cta || {};
   const stats = statistics?.length ? statistics : data.stats || [];
@@ -289,44 +317,84 @@ function BranchAboutSection({ data }) {
               <h2 className="text-[#2A619D]">{firstHeading}&nbsp;</h2>
               <h2>{secondHeading}</h2>
             </div>
-            <svg className="absolute top-8 w-[110%] h-auto" viewBox="0 0 110 12">
-              <path d="M0 10 Q80 -2 190 27" stroke="orangered" strokeWidth="0.4" fill="transparent" strokeLinecap="square" />
+            <svg
+              className="absolute top-8 w-[110%] h-auto"
+              viewBox="0 0 110 12"
+            >
+              <path
+                d="M0 10 Q80 -2 190 27"
+                stroke="orangered"
+                strokeWidth="0.4"
+                fill="transparent"
+                strokeLinecap="square"
+              />
             </svg>
           </div>
         </div>
         <div className="grid grid-cols-10 xl:grid-cols-11 px-6 gap-y-4 xl:px-0 2xl:mt-4 3xl:mt-0">
           <div className="col-span-10 xl:col-span-6">
-            <Image src={aboutImage} width={920} height={520} alt={image?.alt || "Teks Academy About Block"} className="border rounded-md h-40 sm:h-48 md:h-56 lg:h-[380px] xl:h-[340px] 2xl:h-[480px] 3xl:h-[500px] w-[900px] object-cover" />
+            <Image
+              src={aboutImage}
+              width={920}
+              height={520}
+              alt={image?.alt || "Teks Academy About Block"}
+              className="border rounded-md h-40 sm:h-48 md:h-56 lg:h-[380px] xl:h-[340px] 2xl:h-[480px] 3xl:h-[500px] w-[900px] object-cover"
+            />
           </div>
           <div className="col-span-10 xl:col-span-5 flex w-full justify-center items-center xl:px-4">
             <div className="text-[#FE543D] flex flex-col justify-center items-start xl:gap-y-3 2xl:w-[90%] 2xl:mx-auto">
               <div className="text-[1rem] lg:text-[1.5rem] xl:text-[1.24rem] 2xl:text-[2rem] 3xl:text-[2.4rem] text-black font-semibold">
-                <Link rel="preconnect" href={aboutButton.link || "/discover/about-us"}>
+                <Link
+                  rel="preconnect"
+                  href={aboutButton.link || "/discover/about-us"}
+                >
                   <div>
                     {taglinePrefix.trim()} -&nbsp;
-                    <span className="text-[#FE543D]">{taglineRest.join("-").trim() || "Making Job Cracking Easier!"}</span>
+                    <span className="text-[#FE543D]">
+                      {taglineRest.join("-").trim() ||
+                        "Making Job Cracking Easier!"}
+                    </span>
                   </div>
                 </Link>
               </div>
               <div className="flex flex-col gap-y-4 my-4 2xl:mt-2">
                 {missionText && (
                   <div className="w-full font-semibold text-black">
-                    <div className="pb-1 text-[0.68rem] lg:text-[0.75rem] 2xl:text-[1.1rem] 3xl:text-[1.2rem]">{missionTitle}</div>
-                    <div className="text-[10px] lg:text-[0.8rem] xl:text-[12px] text-justify 2xl:text-[0.84rem] 3xl:text-[1rem] 2xl:leading-relaxed 3xl:leading-loose font-normal text-black">{missionText}</div>
+                    <div className="pb-1 text-[0.68rem] lg:text-[0.75rem] 2xl:text-[1.1rem] 3xl:text-[1.2rem]">
+                      {missionTitle}
+                    </div>
+                    <div className="text-[10px] lg:text-[0.8rem] xl:text-[12px] text-justify 2xl:text-[0.84rem] 3xl:text-[1rem] 2xl:leading-relaxed 3xl:leading-loose font-normal text-black">
+                      {missionText}
+                    </div>
                   </div>
                 )}
                 {visionText && (
                   <div className="w-full font-semibold text-black">
-                    <div className="pb-1 text-[0.68rem] lg:text-[0.75rem] 2xl:text-[1.1rem] 3xl:text-[1.2rem]">{visionTitle}</div>
-                    <div className="text-[10px] lg:text-[0.8rem] text-justify xl:text-[12px] 2xl:text-[0.84rem] 3xl:text-[1rem] 2xl:leading-relaxed 3xl:leading-loose font-normal text-black">{visionText}</div>
+                    <div className="pb-1 text-[0.68rem] lg:text-[0.75rem] 2xl:text-[1.1rem] 3xl:text-[1.2rem]">
+                      {visionTitle}
+                    </div>
+                    <div className="text-[10px] lg:text-[0.8rem] text-justify xl:text-[12px] 2xl:text-[0.84rem] 3xl:text-[1rem] 2xl:leading-relaxed 3xl:leading-loose font-normal text-black">
+                      {visionText}
+                    </div>
                   </div>
                 )}
               </div>
               <div className="w-full flex justify-center 2xl:justify-start">
-                <Link rel="preconnect" href={aboutButton.link || "/discover/about-us"}>
+                <Link
+                  rel="preconnect"
+                  href={aboutButton.link || "/discover/about-us"}
+                >
                   <button className="min-w-[48px] min-h-[48px] mt-3 flex bg-[#FE543D] justify-center items-center rounded-full text-white text-[0.84rem] lg:text-[0.8rem] xl:text-[1rem] w-[140px] h-10 xl:h-12 xl:w-[180px] 3xl:h-14 3xl:w-[220px] relative">
-                    <span className="text-center -translate-x-1/4">{aboutButton.text || "Learn More"}</span>
-                    <Image src={aboutArrow} width={240} height={15} alt="learn more arrow" className="absolute right-0 top-0 h-full w-auto" />
+                    <span className="text-center -translate-x-1/4">
+                      {aboutButton.text || "Learn More"}
+                    </span>
+                    <Image
+                      src={aboutArrow}
+                      width={240}
+                      height={15}
+                      alt="learn more arrow"
+                      className="absolute right-0 top-0 h-full w-auto"
+                    />
                   </button>
                 </Link>
               </div>
@@ -338,15 +406,31 @@ function BranchAboutSection({ data }) {
         <div className="main_container py-4 lg:py-6 xl:py-8 2xl:py-12">
           <div className="border w-11/12 xl:w-4/5 2xl:w-2/3 h-16 lg:h-24 2xl:h-28 3xl:h-36 mx-auto rounded-full bg-[#2A619D] flex items-center justify-around text-white">
             {stats.slice(0, 4).map((stat, index) => {
-              const statIcon = stat.image?.src || stat.image?.url || stat.icon?.src || stat.icon?.url || aboutStatIcons[index];
+              const statIcon =
+                stat.image?.src ||
+                stat.image?.url ||
+                stat.icon?.src ||
+                stat.icon?.url ||
+                aboutStatIcons[index];
               return (
-                <div key={stat.id || index} className="flex justify-center items-center gap-x-1 lg:gap-x-2">
+                <div
+                  key={stat.id || index}
+                  className="flex justify-center items-center gap-x-1 lg:gap-x-2"
+                >
                   <div className="border w-7 h-7 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 3xl:w-[72px] 3xl:h-[72px] flex justify-center items-center rounded-full bg-white">
-                    <Image src={statIcon} width={74} height={74} alt={stat.label || stat.title || "teks academy statistic"} className="w-2/3 h-2/3 object-contain" />
+                    <Image
+                      src={statIcon}
+                      width={74}
+                      height={74}
+                      alt={stat.label || stat.title || "teks academy statistic"}
+                      className="w-2/3 h-2/3 object-contain"
+                    />
                   </div>
                   <div className="text-justify font-semibold text-[8px] md:text-[9px] lg:text-[0.84rem] xl:text-[0.9rem] 2xl:text-[1rem] 3xl:text-[1.34rem]">
                     <div>{stat.count || stat.value}</div>
-                    <div className="font-normal">{stat.label || stat.title}</div>
+                    <div className="font-normal">
+                      {stat.label || stat.title}
+                    </div>
                   </div>
                 </div>
               );
@@ -371,7 +455,10 @@ function CareerServices({ data }) {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
             {data.services?.map((s, i) => (
-              <div key={i} className="flex items-center gap-4 bg-white/10 rounded-xl px-5 py-4 hover:bg-white/20 transition">
+              <div
+                key={i}
+                className="flex items-center gap-4 bg-white/10 rounded-xl px-5 py-4 hover:bg-white/20 transition"
+              >
                 <div className="w-10 h-10 rounded-full bg-[#e84c1f] flex items-center justify-center shrink-0">
                   <span className="text-white font-bold text-sm">{i + 1}</span>
                 </div>
@@ -422,10 +509,11 @@ function SuccessStories({ data }) {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition ${tab === t.key
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
+                tab === t.key
                   ? "bg-[#003366] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+              }`}
             >
               {t.label}
             </button>
@@ -433,32 +521,55 @@ function SuccessStories({ data }) {
         </div>
 
         {/* Video cards */}
-        <p className="text-xs font-bold text-gray-500 uppercase mb-3">Video Testimonials</p>
+        <p className="text-xs font-bold text-gray-500 uppercase mb-3">
+          Video Testimonials
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          {(current?.cards?.videoCards || current?.Cards?.videoCards || []).map((v, i) => (
-            <div key={i} className="relative rounded-xl overflow-hidden aspect-video bg-gray-100 shadow">
-              <Image
-                src={v.thumbnail?.src || v.thumbnail}
-                alt={v.thumbnail?.alt || v.name}
-                fill
-                style={{ objectFit: "cover" }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-[#e84c1f]/90 flex items-center justify-center">
-                  <span className="text-white text-lg">▶</span>
+          {(current?.cards?.videoCards || current?.Cards?.videoCards || []).map(
+            (v, i) => (
+              <div
+                key={i}
+                className="relative rounded-xl overflow-hidden aspect-video bg-gray-100 shadow"
+              >
+                <Image
+                  src={v.thumbnail?.src || v.thumbnail}
+                  alt={v.thumbnail?.alt || v.name}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-[#e84c1f]/90 flex items-center justify-center">
+                    <span className="text-white text-lg">▶</span>
+                  </div>
                 </div>
+                <p className="absolute bottom-2 left-2 text-white text-xs font-bold drop-shadow">
+                  {v.name}
+                </p>
               </div>
-              <p className="absolute bottom-2 left-2 text-white text-xs font-bold drop-shadow">{v.name}</p>
-            </div>
-          ))}
+            ),
+          )}
         </div>
 
         {/* Placement cards */}
-        <p className="text-xs font-bold text-gray-500 uppercase mb-3">Placement Cards</p>
+        <p className="text-xs font-bold text-gray-500 uppercase mb-3">
+          Placement Cards
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {(current?.cards?.placementCards || current?.Cards?.placementCards || []).map((p, i) => (
-            <div key={i} className="relative rounded-xl overflow-hidden aspect-[3/4] bg-gray-100 shadow">
-              <Image src={p.image?.src || p.image} alt={p.image?.alt || p.name} fill style={{ objectFit: "cover" }} />
+          {(
+            current?.cards?.placementCards ||
+            current?.Cards?.placementCards ||
+            []
+          ).map((p, i) => (
+            <div
+              key={i}
+              className="relative rounded-xl overflow-hidden aspect-[3/4] bg-gray-100 shadow"
+            >
+              <Image
+                src={p.image?.src || p.image}
+                alt={p.image?.alt || p.name}
+                fill
+                style={{ objectFit: "cover" }}
+              />
             </div>
           ))}
         </div>
@@ -468,14 +579,19 @@ function SuccessStories({ data }) {
 }
 
 // ─── ROOT CLIENT COMPONENT ────────────────────────────────────────────────
-export default function BranchClient({ data: initialData = null, branchName = "" }) {
+export default function BranchClient({
+  data: initialData = null,
+  branchName = "",
+}) {
   const [data, setData] = useState(initialData);
   const [courses, setCourses] = useState([]);
   const [pageLoading, setPageLoading] = useState(!initialData);
   const [error, setError] = useState(null);
   const [showEnrollPopup, setShowEnrollPopup] = useState(false);
 
-  const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const api =
+    process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+    process.env.NEXT_TEKS_SSR_API_URL;
   const branchApiPath = branchName
     ? `/api/v1/branch/${encodeURIComponent(branchName)}`
     : "/api/v1/branch";
@@ -521,31 +637,35 @@ export default function BranchClient({ data: initialData = null, branchName = ""
     return () => controller.abort();
   }, [api, branchApiPath, initialData]);
   // console.log("BranchClient rendered with data:", data);
-useEffect(() => {
-  const fetchCourses = async () => {
-    try {
-      const branchSlug = branchName
-        .replace("best-software-training-institute-", "")
-        .replace("-branch", "");
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        // Strip branch slug the same way CoursesOffered does
+        const branchSlug = branchName
+          .replace(/^best-software-training-institute-/, "")
+          .replace(/^software-training-institute-/, "")
+          .replace(/-branch$/, "")
+          .toLowerCase();
+        const branchValue =
+          branchSlug.charAt(0).toUpperCase() + branchSlug.slice(1);
 
-      const res = await fetch(
-        `${api}1`
-      );
+        const res = await fetch(
+          `${api}/api/v1/course?branches=${branchValue}`
+        );
+        const json = await res.json();
 
-      const json = await res.json();
-
-      if (json.success) {
-        setCourses(json.data);
+        if (json.success && Array.isArray(json.data)) {
+          setCourses(json.data);
+        }
+      } catch (err) {
+        console.error("Branch courses fetch error:", err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    };
 
-  if (branchName) {
-    fetchCourses();
-  }
-}, [branchName]);
+    if (branchName && api) {
+      fetchCourses();
+    }
+  }, [branchName, api]);
   if (pageLoading) {
     return (
       <div className="flex items-center justify-center bg-white h-100">
@@ -562,21 +682,28 @@ useEffect(() => {
     );
   }
 
+  // Compute the human-readable branch label once, shared across all sections
+  const branchLabel = getBranchLabel({
+    branchName,
+    branchLocation: data.branchLocation,
+    heroData: data.heroSection,
+  });
+
   return (
     <main className="min-h-screen font-sans bg-white text-gray-800">
       <HeroSection
-       data={data.heroSection}
-   branchName={branchName}
-   branchLocation={data.branchLocation}
-   courses={courses}
-   
-   onEnrollClick={() => setShowEnrollPopup(true)}
+        data={data.heroSection}
+        branchName={branchName}
+        branchLocation={data.branchLocation}
+        courses={courses}
+        onEnrollClick={() => setShowEnrollPopup(true)}
       />
       {}
       <Popupform
         show={showEnrollPopup}
         onClose={() => setShowEnrollPopup(false)}
-        university={getBranchLabel({ branchName, branchLocation: data.branchLocation, heroData: data.heroSection })}
+        university={branchLabel}
+        courses={courses}
         formType="enquiry"
         title="Get Directions to Our Branch"
         subtitle="Fill in your details and verify your mobile number to reserve your seat."
@@ -586,13 +713,15 @@ useEffect(() => {
       <Topscroll data={data.topScroll} />
       <CoursesOffered data={data.courseOffered || data.CoursesOffered} />
       <section className="md:py-4 xl:py-0 bg-[#fbf5f6]">
-        <Excel data={data.Excel} />
+        {/* Pass branch + branch-specific courses so form dropdowns are pre-filled */}
+        <Excel data={{ ...data.Excel, branch: branchLabel }} courses={courses} />
       </section>
       {/* <section className="bg-[#eaf0f6] rounded-lg">
         <AboutTeks data={data.AboutTeks} />
       </section> */}
       <section className="md:py-4 xl:py-0 bg-white">
-        <Nutshell data={data.careerServices} />
+        {/* Pass branch + branch-specific courses to NutShell popup */}
+        <Nutshell data={data.careerServices} university={branchLabel} courses={courses} />
       </section>
       <section className="md:py-4 xl:py-6 bg-[#eaf0f6]">
         <SuccessStoriesComponent successStoriesData={data.ourSuccessStories} />
@@ -606,6 +735,11 @@ useEffect(() => {
       <FeaturedIn featuredIn={data.featuredIn || data.featuredin} />
       <ExploreBranch data={data.branchLocation} />
       <Faq data={data.faq} />
+       <div className="bg-[#0E2849]">
+       <FooterAdressbar
+       branchData={data.contactBar|| data.contactBar}
+      />
+        </div>
     </main>
   );
 }

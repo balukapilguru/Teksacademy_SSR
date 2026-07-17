@@ -111,6 +111,7 @@ export default async function Page({ params }) {
   let data;
   try {
     data = await getCourseData(coursename);
+    console.log(data.downloadOurCourseBrochure, "datadownloadOurCourseBrochure");
   } catch {
     return (
       <div className="p-6 text-red-600 text-center">
@@ -261,7 +262,10 @@ export default async function Page({ params }) {
       {/* {console.log(data,"career")} */}
 
       {data?.OnlineAdmissionProcedure && (
-        <Admission data={data.OnlineAdmissionProcedure} />
+        <Admission
+          data={data.OnlineAdmissionProcedure}
+          courseLabel={courseLabel}
+        />
       )}
 
       {data?.platFormSupport && <Platform data={data.platFormSupport} />}
@@ -381,6 +385,7 @@ export default async function Page({ params }) {
               />
             ),
           },
+          
           {
             key: "course-specializations",
             component: data?.specializations && (

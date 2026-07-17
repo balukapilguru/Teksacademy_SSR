@@ -49,17 +49,22 @@ export default function EbookClient({ source }) {
   const section = data?.ebookSection || {};
   const courses = section.items || [];
 
-  const handleEbookSubmit = async (formValues, payload) => {
+  const handleEbookSubmit = async (formValues, mappedValues) => {
+    console.log("formValues", formValues);
+    console.log("mappedValues", mappedValues);
     const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...payload,
+        ...mappedValues,
+        mappedValues,
+        formValues,
         productId: selectedCard?.productId,
-        sourceId: selectedCard?.sourceId,
+        course_branch: formValues?.branch || mappedValues?.course_branch || "",
+        // sourceId: selectedCard?.sourceId,
       }),
     });
-console.log("response", payload,"payload");
+console.log("response", response,"payload");
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || "Submission failed");

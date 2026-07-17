@@ -377,7 +377,7 @@ export default function Navbar() {
         <div className="hidden md:block bg-[#2a619d] text-white text-xs py-2">
           <div className="main_container flex items-center justify-between">
             {/* LEFT SIDE - Topbar Items */}
-            <div className="flex items-center w-full gap-6">
+            <div className="flex items-center w-full gap-6 whitespace-nowrap">
               {topbarItems
                 .filter(
                   (item) =>
@@ -554,7 +554,7 @@ export default function Navbar() {
           </div>
 
           {/* DESKTOP NAVIGATION MENU */}
-          <ul className="hidden lg:flex items-center text-md sm:text-sm md:text-md xl:text-md 2xl:text-sm 3xl:text-sm lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
+          <ul className="hidden lg:flex items-center text-md sm:text-sm md:text-md xl:text-md whitespace-nowrap 2xl:text-sm 3xl:text-sm lg:gap-3 xl:gap-6 2xl:gap-6 3xl:gap-6 4xl:gap-6">
             {elements.map((item, index) => (
               <li
                 key={`desktop-nav-${index}`}
@@ -578,7 +578,7 @@ export default function Navbar() {
                   {item.link && isValidLink(item.link) ? (
                     <Link
                       href={item.link}
-                      className="flex items-center gap-1 transition-colors"
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     >
                       {item.name}
                     </Link>

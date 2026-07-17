@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { MobileOtpField } from "./MobileOtpField";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
-import { COURSE_OPTIONS, BRANCH_OPTIONS } from "@/config/formConfig";
+import {
+  COURSE_OPTIONS,
+  BRANCH_OPTIONS,
+  getFormConfig,
+  buildPayload,
+} from "@/config/formConfig";
 
 // Complete field configuration
 const ALL_FIELDS = {
@@ -188,9 +193,8 @@ export default function ReusableForm({
   successMessage = "Form submitted successfully!",
   className = "",
   disableCourseField = false,
-   redirectToThankYou = true,
+  redirectToThankYou = true,
 }) {
- 
   const router = useRouter();
   const courseOptions = courses.map((course) => ({
     label: course.heading || course.programName || course.title || course.name,
@@ -273,46 +277,46 @@ export default function ReusableForm({
     setShowCourseDropdown(false);
   }, [formType, initialValues, getFieldsForType]);
 
-  const mapToApiPayload = (values) => {
-    const sourceMap = {
-      contact: "Contact Us - Website",
-      support: "enquiryform",
-      recruiter: "formdata",
-      ebook: "Ebook—Website",
-      home: "Website",
-      excel: "Request Callback—Website",
-      syllabus: "Download Syllabus—Website",
-      banner: "Enrollnow",
-      Enrollnow: "Enrollnow",
-      requestCallback: "Request Callback—Website",
-      reserveSpot: "Website",
-      default: "Website",
-      career: "Career Guidance",
-      Enquirynow: "Enquirynow",
-      RequestDemo: "Request Demo - Website",
-    };
+  // const mapToApiPayload = (values) => {
+  //   const sourceMap = {
+  //     contact: "Contact Us - Website",
+  //     support: "enquiryform",
+  //     recruiter: "formdata",
+  //     ebook: "Ebook—Website",
+  //     home: "Website",
+  //     excel: "Request Callback—Website",
+  //     syllabus: "Download Syllabus—Website",
+  //     banner: "Enrollnow",
+  //     Enrollnow: "Enrollnow",
+  //     requestCallback: "Request Callback—Website",
+  //     reserveSpot: "Website",
+  //     default: "Website",
+  //     career: "Career Guidance",
+  //     Enquirynow: "Enquirynow",
+  //     RequestDemo: "Request Demo - Website",
+  //   };
 
-    return {
-      name: values.name || "",
-      email: values.email || "",
-      number: values.phone || "",
-      course: values.course || values.career || "",
-      city: values.city || "",
-      branch: values.branch || "",
-      course_branch: values.branch || "",
-      referredby: "website",
-      qualification: values.qualification || "",
-      source_id: "home_form",
-      company: values.companyName || "",
-      designation: values.designation || "",
-      message: values.message || "",
-      issue: values.issue || "",
-      source: sourceMap[formType] || "Website",
-      crm_source: sourceMap[formType] || "Website",
-      form_type: formType,
-      timestamp: new Date().toISOString(),
-    };
-  };
+  //   return {
+  //     name: values.name || "",
+  //     email: values.email || "",
+  //     number: values.phone || "",
+  //     course: values.course || values.career || "",
+  //     city: values.city || "",
+  //     branch: values.branch || "",
+  //     course_branch: values.branch || "",
+  //     referredby: "website",
+  //     qualification: values.qualification || "",
+  //     source_id: "home_form",
+  //     company: values.companyName || "",
+  //     designation: values.designation || "",
+  //     message: values.message || "",
+  //     issue: values.issue || "",
+  //     source: sourceMap[formType] || "Website",
+  //     crm_source: sourceMap[formType] || "Website",
+  //     form_type: formType,
+  //     timestamp: new Date().toISOString(),
+  //   };
+  // };
 
   const validateField = (fieldId, value) => {
     const field = ALL_FIELDS[fieldId];
@@ -395,7 +399,9 @@ export default function ReusableForm({
 
     setIsSubmitting(true);
     try {
-      const payload = mapToApiPayload(formValues);
+      const config = getFormConfig(formType);
+      const payload = buildPayload(formValues, config);
+      payload.course_branch = formValues.branch;
       // console.log("Submitting payload:", payload);
 
       if (onSubmit) {

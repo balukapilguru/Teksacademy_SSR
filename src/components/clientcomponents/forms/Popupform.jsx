@@ -55,6 +55,7 @@ export default function Popupform({
   buttonText = "Submit",
   successMessage = "Thank you! We'll contact you soon.",
   disableCourseField = false,
+  courses = [],
 }) {
   if (!show) return null;
 
@@ -86,6 +87,7 @@ export default function Popupform({
             buttonText={buttonText}
             successMessage={successMessage}
             disableCourseField={disableCourseField}
+            courses={courses}
           />
         </div>
       </div>

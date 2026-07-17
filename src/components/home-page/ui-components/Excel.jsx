@@ -157,7 +157,7 @@ function DesktopFeatureRow({ imgSrc, alt, title, description, accent }) {
 }
 
 /* ─── Main Component ──────────────────────────────────────── */
-export default function Excel({ data, courseName }) {
+export default function Excel({ data, courseName, courses = [] }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   // console.log(data, "data in excel");
@@ -331,9 +331,9 @@ export default function Excel({ data, courseName }) {
 
               <div className="px-3 pb-5">
                 <ReusableForm
-                
                   formType="requestCallback"
-                 initialValues={initialValues}
+                  initialValues={initialValues}
+                  courses={courses}
                   buttonText={buttonText}
                   onSubmit={handleSubmit}
                   className="bg-white rounded-2xl p-4"
@@ -430,6 +430,7 @@ export default function Excel({ data, courseName }) {
                       <ReusableForm
                         formType="requestCallback"
                         initialValues={initialValues}
+                        courses={courses}
                         buttonText={buttonText}
                         onSubmit={handleSubmit}
                         className="bg-white rounded-xl p-4"

@@ -61,13 +61,19 @@ const Page = ({ data }) => {
 
     const activeBtn = container.querySelector(`[data-id="${active}"]`);
     if (activeBtn) {
-      activeBtn.scrollIntoView({
+      const containerWidth = container.offsetWidth;
+      const btnWidth = activeBtn.offsetWidth;
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const relativeLeft = btnRect.left - containerRect.left + container.scrollLeft;
+
+      container.scrollTo({
+        left: relativeLeft - containerWidth / 2 + btnWidth / 2,
         behavior: "smooth",
-        inline: "center",
-        block: "nearest",
       });
     }
   }, [active]);
+
 
   if (!sections.length) {
     return (

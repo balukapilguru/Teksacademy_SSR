@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import FooterAdressbar from "../FooterAdressbar";
 
 const MostSearchedTerms = ({ data }) => {
   // Only require courses (locations are optional)
@@ -40,6 +41,7 @@ const MostSearchedTerms = ({ data }) => {
             );
           })}
         </div>
+        {/* <FooterAdressbar branchData={data.branches} /> */}
       </div>
     </section>
   );

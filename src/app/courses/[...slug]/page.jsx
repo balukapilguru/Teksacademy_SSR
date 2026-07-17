@@ -17,6 +17,7 @@ import OverViewOfOnline from "@/components/coursePage/OverViewOfOnline";
 import CourseScrollBar from "@/components/coursePage/CourseScrollBar";
 import CourseFlowProvider from "@/components/coursePage/CourseFlowProvider";
 import Programfee from "@/components/coursePage/Programfee";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL;
 
@@ -122,6 +123,7 @@ export default async function Page({ params }) {
     letsTalk,
     mostSearchedTerms,
     formDetails,
+    contactBar,
     meta,
   } = courseData || {};
 
@@ -205,10 +207,9 @@ export default async function Page({ params }) {
         {banner && (
           <Banner
             data={banner}
+             source={30}
             formDetails={formDetails}
             category={true}
-            source={29}
-            
             courseLabel={coursename}
             branch={branch}
           />
@@ -304,7 +305,9 @@ export default async function Page({ params }) {
           >
             <Accordian faq={questionSection} />
           </div>
+
         )}
+         
 
         {letsTalk && (
           <div
@@ -316,6 +319,11 @@ export default async function Page({ params }) {
         )}
 
         {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
+        <div>
+          <FooterAdressbar
+               branchData={contactBar}
+              />
+        </div>
       </div>
     </>
   );

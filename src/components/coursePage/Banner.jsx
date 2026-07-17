@@ -71,7 +71,7 @@ const Banner = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(mappedPayload),
+          body: JSON.stringify(mappedPayload,formValues),
         },
       );
 

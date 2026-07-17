@@ -21,10 +21,10 @@ const Admission = ({  data,
   const router = useRouter();
   const courseDisplayName =
   courseLabel ||
-  formDetails?.courseName ||
-  formDetails?.course ||
+  data.formDetails?.courseName ||
+  data.formDetails?.course ||
   "";
-
+console.log(courseDisplayName,"coursename")
   if (!data) return null;
 
   const description =

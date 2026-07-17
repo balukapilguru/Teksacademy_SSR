@@ -309,19 +309,37 @@ const FORM_CONFIGS = {
   // Pages / Components: src/app/resources/ebook/page.jsx, src/app/ebook/EbooksClient.jsx
   // Route examples: /resources/ebook
   // Source: Ebook—Website
+  // ebook: {
+  //   fields: ["name", "email", "phone", "course", "branch"],
+  //   buttonText: "Download E-Book",
+  //   successMessage: "Your e-book is opening in a new tab.",
+  //   payloadMap: DEFAULT_PAYLOAD_MAP,
+  //   staticPayload: {
+  //    source: EBOOK_SOURCES[0],          // "Ebook—Website"
+  //   crm_source: EBOOK_SOURCES[0],
+  //   sourceId: EBOOK_SOURCES[0],  
+  //     form_type: "ebook",
+  //     referredby: "ebook",
+  //     timestamp: () => new Date().toISOString(),
+  //   },
+  // },
+
   ebook: {
-    fields: ["name", "email", "phone", "course", "branch"],
-    buttonText: "Download E-Book",
-    successMessage: "Your e-book is opening in a new tab.",
-    payloadMap: DEFAULT_PAYLOAD_MAP,
-    staticPayload: {
-      source: "Ebook—Website",
-      crm_source: "Ebook—Website",
-      form_type: "ebook",
-      referredby: "ebook",
-      timestamp: () => new Date().toISOString(),
-    },
+  fields: ["name", "email", "phone", "course", "branch"],
+  buttonText: "Download E-Book",
+  successMessage: "Your e-book is opening in a new tab.",
+  payloadMap: DEFAULT_PAYLOAD_MAP,
+  staticPayload: {
+    source: EBOOK_SOURCES[0],
+    crm_source: EBOOK_SOURCES[0],
+    sourceId: EBOOK_SOURCES[0],
+    form_type: "ebook",
+    referredby: "ebook",
+    timestamp: () => new Date().toISOString(),
   },
+},
+
+
   // Form: home
   // Button: Submit
   // Pages / Components: src/components/home-page/ui-components/HomepageBanner.jsx and other homepage widgets
@@ -392,6 +410,21 @@ const FORM_CONFIGS = {
       timestamp: () => new Date().toISOString(),
     },
   },
+
+  // In formConfig.js, inside FORM_CONFIGS
+RequestDemo: {
+  fields: ["name", "email", "phone", "course", "branch"],
+  buttonText: "Request a Demo",
+  successMessage: "Thank you! We'll contact you soon.",
+  payloadMap: DEFAULT_PAYLOAD_MAP,
+  staticPayload: {
+    source: "Request Demo - Website",
+    crm_source: "Request Demo - Website",
+    form_type: "RequestDemo",
+    referredby: "RequestDemo",
+    timestamp: () => new Date().toISOString(),
+  },
+},
   // Form: banner
   // Button: Enroll Now
   // Pages / Components: src/components/home-page/ui-components/HomepageBanner.jsx, course page banners
@@ -535,6 +568,11 @@ export const buildPayload = (formValues, formConfig) => {
       payload[payloadKey] = formValues[fieldKey];
     }
   });
+
+  // Add this
+  if (formValues.branch) {
+    payload.course_branch = formValues.branch;
+  }
 
   if (formConfig?.staticPayload) {
     Object.entries(formConfig.staticPayload).forEach(([key, value]) => {

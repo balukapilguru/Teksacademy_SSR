@@ -204,7 +204,7 @@ export default function CourseInfoTable({
             onClose={() => setShowGetDetailsModal(false)}
             course={courseDisplayName}
             courseName={courseDisplayName}
-            university={branch}
+            // university={branch}
             source="Enrollnow"
             title="Enroll Now"
             subtitle="Fill in your details to get course guidance and a callback from our team."
@@ -275,8 +275,11 @@ export default function CourseInfoTable({
                               <Image
                                 src={GetData({ url: img?.src })}
                                 alt={img?.alt || `Institute ${i + 1}`}
-                                width={isSecondRow ? 170 : 140}
-                                height={isSecondRow ? 60 : 60}
+                                
+                                width={100}
+                                height={100}
+                                // width={isSecondRow ? 170 : 140}
+                                // height={isSecondRow ? 60 : 60}
                                 className={`object-contain w-auto ${isSecondRow ? "h-20" : "h-12"}`}
                                 onError={() =>
                                   handleImageError(`${index}-${i}`)

@@ -94,6 +94,7 @@ const Ebook = () => {
         email: formValues.email?.trim() || "",
         number: formValues.phone?.trim() || "",
         branch: formValues.branch || "",
+        course_branch: formValues.branch || "",
         city: formValues.city || "",
         course: selectedCard.title || "",
         productId: selectedCard.productId || "",
