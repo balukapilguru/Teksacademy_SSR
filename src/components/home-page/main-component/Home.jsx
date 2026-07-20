@@ -12,6 +12,7 @@ import Hiring from "../ui-components/Hiring";
 import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
 import CertificationCourse from "@/components/allcoursepage/CertificationCourse";
 import MostSearchedTerms from "@/components/coursePage/Mostsearchedterms";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 export default async function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
@@ -29,7 +30,7 @@ export default async function Home() {
     }
     const data = await res.json();
     homeData = data?.data;
-    // console.log(homeData,"homedata")
+    console.log(homeData.contactBar,"homedata")
   } catch (err) {
     console.error("Failed to fetch home page data:", err);
     homeData = null;
@@ -100,6 +101,12 @@ export default async function Home() {
       bg: "#fff",
       border: "#fff",
     },
+    {
+      component: <FooterAdressbar branchData={homeData?.contactBar} />,
+      bg: "#fbf5f6",
+      border: "#fbf5f6",
+    },
+       
   ];
 // console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (

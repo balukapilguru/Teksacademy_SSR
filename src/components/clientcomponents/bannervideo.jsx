@@ -202,7 +202,7 @@ const BannerVideo = () => {
           </div>
         </div>
       )}
-      <div className="flex justify-end mt-3 font-bold text-xs text-gray-300 ">*TIH partnerships via Edzor CAITE</div>
+      <div className="flex justify-end mt-3 font-bold text-xs text-gray-400 ">*TIH partnerships via Edzor CAITE</div>
     </div>
   );
 };

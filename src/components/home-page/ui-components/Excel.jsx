@@ -40,7 +40,7 @@ const orangeItems = [
   {
     imgSrc: orange2,
     alt: "Approved Curriculum",
-    title: "IIT",
+    title: "TIH IIT",
     description: "Approved Curriculum",
   },
   {
@@ -292,7 +292,7 @@ export default function Excel({ data, courseName, courses = [] }) {
 
               {/* Trust badges */}
               <div className="flex items-center gap-4 mt-1">
-                {["IIT Approved", "100% Placement", "Live Classes"].map(
+                {["TIH IIT Approved", "100% Placement", "Live Classes"].map(
                   (badge) => (
                     <div key={badge} className="flex items-center gap-1">
                       <span className="text-teal-400 text-xs">✓</span>
