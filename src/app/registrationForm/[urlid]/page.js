@@ -13,7 +13,11 @@ import { MdOutlineEmail } from "react-icons/md";
 
 import { useParams } from "next/navigation";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const rawApiUrl =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+  "https://teksacademy.com";
+const apiUrl = rawApiUrl.replace(/\/$/, "");
 
 function RegistrationForm() {
   const [isFormActive, setIsFormActive] = useState(false);
