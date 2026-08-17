@@ -1,5 +1,7 @@
 import React from "react";
 
+export const dynamic = "force-dynamic";
+
 // Fetch API
 async function getPrivacyPolicy() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;

@@ -84,7 +84,7 @@ const handleSubmit = async (formValues, mappedPayload) => {
     );
 
     const responseData = await response.json();
-    // console.log("API Response:", responseData);
+    console.log("API Response:", responseData);
 
     if (!response.ok) {
       throw new Error(responseData.message || "Submission failed");
@@ -210,8 +210,23 @@ function HeroSection({
     ? branchData.background
     : GetData({ url: branchData.background });
 
+  //  const schemaData = data?.meta?.schemaCode;
+// console.log(schemaData,"schemadata")
   return (
-    <div
+    <>
+     {/* {schemaData && (
+        <script
+          id="course-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof schemaData === "string"
+                ? schemaData
+                : JSON.stringify(schemaData),
+          }}
+        />
+      )} */}
+     <div
       className="bg-cover bg-center bg-[#04264d]"
       style={{ backgroundImage: `url("${backgroundImage}")` }}
     >
@@ -281,6 +296,8 @@ function HeroSection({
         </div>
       </div>
     </div>
+    </>
+   
   );
 }
 

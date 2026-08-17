@@ -14,6 +14,8 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
   description:

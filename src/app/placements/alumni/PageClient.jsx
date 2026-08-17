@@ -3,6 +3,8 @@ import Loader from "@/components/Loader";
 import GetData from "@/utility/GetData";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import FooterAdressbar from "@/components/FooterAdressbar";
+import MostSearchedTerms from "@/components/coursePage/Mostsearchedterms";
 
 const circle_80_alumni =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/alumni/circle_80_alumni.webp";
@@ -15,6 +17,8 @@ const uil_comment =
 
 const Alumni = () => {
   const [alumniData, setAlumniData] = useState(null);
+  const [contactBar, setContactBar] = useState(null);
+  const [mostSearchedTerms, setMostSearchedTerms] = useState(null);
   const [loading, setLoading] = useState(true);
   const [alumniImages, setAlumniImages] = useState([]);
 
@@ -26,11 +30,16 @@ const Alumni = () => {
         const result = await response.json();
         // console.log(result, "alumni");
         
-        if (result.success && result.data?.alumniSection) {
-          setAlumniData(result.data.alumniSection);
+        if (result.success && result.data) {
+          setContactBar(result.data.contactBar || null);
+          setMostSearchedTerms(result.data.mostSearchedTerms || null);
+
+          if (result.data?.alumniSection) {
+            setAlumniData(result.data.alumniSection);
+          }
           
           // ✅ FIX: alumniCards is an array of arrays, flatten it
-          const cards = result.data.alumniSection.networkSection.alumniCards || [];
+          const cards = result.data?.alumniSection?.networkSection?.alumniCards || [];
           const flattenedCards = cards.flat(); // Flatten nested arrays
           
           // ✅ Transform to match expected format with imgUrl
@@ -254,6 +263,9 @@ const Alumni = () => {
           </div>
         </div>
       </div>
+
+      {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
+      <FooterAdressbar branchData={contactBar} />
     </>
   );
 };

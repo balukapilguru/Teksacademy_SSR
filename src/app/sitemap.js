@@ -6,6 +6,7 @@ const BLOGS_API_URL = (
   process.env.NEXT_BLOGS_APPLY_API_URL ||
   ""
 ).replace(/\/$/, "");
+const FIXED_LAST_MODIFIED = "2026-08-10T06:45:30+00:00";
 
 export const revalidate = 86400;
 
@@ -215,17 +216,22 @@ const normalizeRoute = (route) => {
 export default async function sitemap() {
   const blogRoutes = await getBlogRoutes();
 
- const routes = [
-  ...FIXED_SITEMAP_ROUTES,
-  ...BRANCH_COURSE_ROUTES,
-  ...blogRoutes,
-];
+  const routes = [
+    ...FIXED_SITEMAP_ROUTES,
+    ...BRANCH_COURSE_ROUTES,
+    ...blogRoutes,
+  ];
 
   const uniqueRoutes = [...new Set(routes.map(normalizeRoute))];
 
-  return uniqueRoutes.map((route) => ({
-    url: `${SITE_URL}${route === "/" ? "" : route}`,
-    lastModified: new Date(),
-    ...getRouteMeta(route),
-  }));
+  return uniqueRoutes.map((route) => {
+    const meta = getRouteMeta(route);
+
+    return {
+      url: `${SITE_URL}${route === "/" ? "" : route}`,
+      lastModified: FIXED_LAST_MODIFIED,
+      changeFrequency: meta.changeFrequency,
+      priority: meta.priority,
+    };
+  });
 }

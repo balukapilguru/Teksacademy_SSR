@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { FaHome, FaArrowRight, FaExclamationCircle } from "react-icons/fa";
 
+export const dynamic = "force-dynamic";
+
 export default function GonePage() {
   return (
     <main className="bg-slate-950 text-white min-h-screen flex items-center justify-center p-6 relative overflow-hidden">

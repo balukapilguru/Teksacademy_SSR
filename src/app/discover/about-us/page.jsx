@@ -3,6 +3,8 @@ import Heading from '@/utility/Heading';
 import Aboutmission from '@/components/discoverycomponents/Aboutmission';
 import Locationcards from '@/components/discoverycomponents/Locationcards';
 import Successteam from '@/components/discoverycomponents/Successteam';
+import FooterAdressbar from '@/components/FooterAdressbar';
+import MostSearchedTerms from '@/components/coursePage/Mostsearchedterms';
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata() {
@@ -54,20 +56,24 @@ const Home = async () => {
     console.error("API Error:", err);
   }
   return (
-    <div className="main_container">
-      <div className="justify-items-center">
-        <Heading
-          data={aboutusdata?.title}
-          text={aboutusdata?.title}
-        />
+    <>
+      <div className="main_container">
+        <div className="justify-items-center">
+          <Heading
+            data={aboutusdata?.title}
+            text={aboutusdata?.title}
+          />
+        </div>
+
+        <Aboutbanner data={aboutusdata} />
+        <Aboutmission data={aboutusdata} />
+        <Successteam data={aboutusdata}/>
+        <Locationcards data={aboutusdata} />
       </div>
 
-      <Aboutbanner data={aboutusdata} />
-      <Aboutmission data={aboutusdata} />
-       <Successteam data={aboutusdata}/>
-      <Locationcards data={aboutusdata} />
-     
-    </div>
+      {aboutusdata?.mostSearchedTerms && <MostSearchedTerms data={aboutusdata.mostSearchedTerms} />}
+      <FooterAdressbar branchData={aboutusdata?.contactBar} />
+    </>
   );
 };
 

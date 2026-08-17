@@ -1,10 +1,29 @@
 "use client";
 
 import ReusableForm from "@/components/ReusableForm";
+import FooterAdressbar from "@/components/FooterAdressbar";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SupportPage() {
   const router = useRouter();
+  const [contactBar, setContactBar] = useState(null);
+
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+
+    const fetchSupportContactBar = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/v1/discover/support`);
+        const json = await res.json();
+        setContactBar(json?.data?.contactBar || null);
+      } catch (err) {
+        console.error("Failed to fetch support contact bar", err);
+      }
+    };
+
+    fetchSupportContactBar();
+  }, []);
 
   const handleSubmit = async (formValues, mappedPayload) => {
     // console.log("Mapped payload being sent:", mappedPayload);
@@ -125,59 +144,63 @@ export default function SupportPage() {
   ];
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 min-h-screen">
-      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
+    <>
+      <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 min-h-screen">
+        <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
 
-        {/* LEFT PANEL - Contact Info */}
-        <div className="relative w-full lg:w-[50%] bg-[#2a619d] flex flex-col p-7 lg:p-8 overflow-hidden">
-          <h1 className="text-2xl font-bold text-white mb-2">Support Center</h1>
-          <p className="text-sm text-white mb-6">
-            Fill in your details and we&apos;ll get back to you shortly.
-          </p>
-          {/* Support Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 mb-8">
+          {/* LEFT PANEL - Contact Info */}
+          <div className="relative w-full lg:w-[50%] bg-[#2a619d] flex flex-col p-7 lg:p-8 overflow-hidden">
+            <h1 className="text-2xl font-bold text-white mb-2">Support Center</h1>
+            <p className="text-sm text-white mb-6">
+              Fill in your details and we&apos;ll get back to you shortly.
+            </p>
+            {/* Support Categories Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 mb-8">
 
-            {supportCategories.map((category, index) => (
-              <div
-                key={index}
-                className={`${category.bgColor} rounded-xl p-4 border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group`}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0">
-                    {category.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                      {category.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-2">
-                      {category.description}
-                    </p>
-                    <p className="text-xs font-medium text-[#2a619d] group-hover:text-[#214d7d]">
-                      {category.action}
-                    </p>
+              {supportCategories.map((category, index) => (
+                <div
+                  key={index}
+                  className={`${category.bgColor} rounded-xl p-4 border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      {category.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 text-sm mb-1">
+                        {category.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 mb-2">
+                        {category.description}
+                      </p>
+                      <p className="text-xs font-medium text-[#2a619d] group-hover:text-[#214d7d]">
+                        {category.action}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* RIGHT PANEL - Support Categories & Form */}
-        <div className="w-full lg:w-[50%] flex flex-col p-6 lg:p-8">
-          {/* Contact Form */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Submit Your Query</h2>
-            <ReusableForm
-              formType="support"
-              onSubmit={handleSubmit}
-              buttonText="Submit Request"
-              className="w-full"
-              successMessage="Thank you! We'll contact you soon."
-            />
+          {/* RIGHT PANEL - Support Categories & Form */}
+          <div className="w-full lg:w-[50%] flex flex-col p-6 lg:p-8">
+            {/* Contact Form */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Submit Your Query</h2>
+              <ReusableForm
+                formType="support"
+                onSubmit={handleSubmit}
+                buttonText="Submit Request"
+                className="w-full"
+                successMessage="Thank you! We'll contact you soon."
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {contactBar && <FooterAdressbar branchData={contactBar} />}
+    </>
   );
 }

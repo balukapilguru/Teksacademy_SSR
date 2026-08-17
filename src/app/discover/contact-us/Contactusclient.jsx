@@ -1,9 +1,28 @@
 "use client";
 import ReusableForm from "@/components/ReusableForm";
+import FooterAdressbar from "@/components/FooterAdressbar";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ContactUsPage() {
   const router = useRouter();
+  const [contactBar, setContactBar] = useState(null);
+
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+
+    const fetchContactBar = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/v1/discover/contact-us`);
+        const json = await res.json();
+        setContactBar(json?.data?.contactBar || null);
+      } catch (err) {
+        console.error("Failed to fetch contact bar for contact-us", err);
+      }
+    };
+
+    fetchContactBar();
+  }, []);
 
   const handleSubmit = async (formValues, mappedPayload) => {
     // console.log("Mapped payload being sent:", mappedPayload);
@@ -71,71 +90,75 @@ export default function ContactUsPage() {
   ];
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
+    <>
+      <div className="bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
 
-        {/* ── LEFT PANEL ── */}
-        <div className="relative w-full lg:w-[48%] bg-[#2a619d] flex flex-col p-7 lg:p-8 overflow-hidden">
+          {/* ── LEFT PANEL ── */}
+          <div className="relative w-full lg:w-[48%] bg-[#2a619d] flex flex-col p-7 lg:p-8 overflow-hidden">
 
-          {/* Decorative circles */}
-          <div className="absolute bottom-[-80px] right-[-80px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
-          <div className="absolute top-[-40px] right-[30px] w-40 h-40 rounded-full bg-white/[0.06] pointer-events-none" />
+            {/* Decorative circles */}
+            <div className="absolute bottom-[-80px] right-[-80px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+            <div className="absolute top-[-40px] right-[30px] w-40 h-40 rounded-full bg-white/[0.06] pointer-events-none" />
 
-          {/* Brand icon */}
-          <div className="w-11 h-11 rounded-xl bg-white/[0.15] flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m-4-4h8" />
-            </svg>
+            {/* Brand icon */}
+            <div className="w-11 h-11 rounded-xl bg-white/[0.15] flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m-4-4h8" />
+              </svg>
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-xl lg:text-[22px] font-bold text-white leading-snug mb-2">
+              Start your learning journey today
+            </h2>
+            <p className="text-xs text-white/60 leading-relaxed mb-4">
+              Reach out to us and our team will guide you to the right course for your goals.
+            </p>
+
+            {/* Divider */}
+            <div className="w-8 h-[3px] bg-[#4e9af1] rounded-full mb-8" />
+
+            {/* Info items */}
+            <div className="flex flex-col gap-6">
+              {infoItems.map(({ icon, label, value }) => (
+                <div key={label} className="flex items-start gap-3">
+                  <div className="w-9 h-9 min-w-[36px] mt-0.5 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                    {icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[9px] uppercase tracking-widest text-white/50 mb-0.5 font-medium">
+                      {label}
+                    </p>
+                    <p className="text-sm font-medium text-white leading-[1.6] whitespace-pre-line break-words">
+                      {value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Heading */}
-          <h2 className="text-xl lg:text-[22px] font-bold text-white leading-snug mb-2">
-            Start your learning journey today
-          </h2>
-          <p className="text-xs text-white/60 leading-relaxed mb-4">
-            Reach out to us and our team will guide you to the right course for your goals.
-          </p>
+          {/* ── RIGHT PANEL ── */}
+          <div className="w-full lg:w-[58%] flex flex-col p-4 lg:p-8">
+            <h1 className="text-xl font-bold text-gray-900 mb-0.5">Contact Us</h1>
+            <p className="text-xs text-gray-500 mb-4">
+              Fill in your details and we&apos;ll get back to you shortly.
+            </p>
 
-          {/* Divider */}
-          <div className="w-8 h-[3px] bg-[#4e9af1] rounded-full mb-8" />
-
-          {/* Info items */}
-          <div className="flex flex-col gap-6">
-            {infoItems.map(({ icon, label, value }) => (
-              <div key={label} className="flex items-start gap-3">
-                <div className="w-9 h-9 min-w-[36px] mt-0.5 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                  {icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[9px] uppercase tracking-widest text-white/50 mb-0.5 font-medium">
-                    {label}
-                  </p>
-                  <p className="text-sm font-medium text-white leading-[1.6] whitespace-pre-line break-words">
-                    {value}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <ReusableForm
+              formType="contact"
+              onSubmit={handleSubmit}
+              buttonText="Submit"
+              className="w-full"
+              successMessage="Thank you! We'll contact you soon."
+            />
           </div>
+
         </div>
-
-        {/* ── RIGHT PANEL ── */}
-        <div className="w-full lg:w-[58%] flex flex-col p-4 lg:p-8">
-          <h1 className="text-xl font-bold text-gray-900 mb-0.5">Contact Us</h1>
-          <p className="text-xs text-gray-500 mb-4">
-            Fill in your details and we&apos;ll get back to you shortly.
-          </p>
-
-          <ReusableForm
-            formType="contact"
-            onSubmit={handleSubmit}
-            buttonText="Submit"
-            className="w-full"
-            successMessage="Thank you! We'll contact you soon."
-          />
-        </div>
-
       </div>
-    </div>
+
+      {contactBar && <FooterAdressbar branchData={contactBar} />}
+    </>
   );
 }

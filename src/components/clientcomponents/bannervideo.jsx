@@ -127,25 +127,27 @@ const BannerVideo = () => {
           className="relative cursor-pointer group"
           onClick={() => setPlay(true)}
         >
-          <Image
-            src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp"
-            alt="Homepage Banner"
-            width={600}
-            height={300}
-            className="block md:hidden rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
-            unoptimized
-            priority
-          />
-
-          <Image
-            src={banner_image}
-            alt="Homepage Banner"
-            width={600}
-            height={300}
-            className="hidden md:block rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
-            unoptimized
-            priority
-          />
+          {isMobile ? (
+            <Image
+              src="https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/Teksacademy_SSR/Mobile_Thubnail_02.webp"
+              alt="Homepage Banner"
+              width={600}
+              height={300}
+              className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
+              unoptimized
+              priority
+            />
+          ) : (
+            <Image
+              src={banner_image}
+              alt="Homepage Banner"
+              width={600}
+              height={300}
+              className="rounded-lg shadow-lg object-cover w-full border border-[#2a619d]"
+              unoptimized
+              priority
+            />
+          )}
           {/* Play Button */}
           <div className="absolute top-4 right-4">
             <div className="relative">

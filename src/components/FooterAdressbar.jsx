@@ -15,7 +15,7 @@ export default function FooterAdressbar({ branchData }) {
                   <FaLocationDot className="w-5 h-5 text-[#fff]" />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-[14px] text-[#FE543D] mb-1">
+                  <span className="text-[14px] font-semibold text-[#FE543D] mb-1">
                     Address:
                   </span>
 
@@ -24,7 +24,7 @@ export default function FooterAdressbar({ branchData }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <span className="font-normal text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white hover:text-[#FE543D] transition-colors">
+                    <span className="font-semibold text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white hover:text-[#FE543D] transition-colors">
                       {branchData?.address?.title}
                     </span>
                   </Link>
@@ -38,11 +38,11 @@ export default function FooterAdressbar({ branchData }) {
                   <IoIosCall className="w-5 h-5 text-[#fff]" />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-[14px] text-[#FE543D] mb-1">
+                  <span className="text-[14px] font-semibold text-[#FE543D] mb-1">
                     Phone:
                   </span>
 
-                  <span className="font-medium text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white whitespace-nowrap">
+                  <span className="font-semibold text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white whitespace-nowrap">
                     {branchData?.phone}
                   </span>
                 </div>
@@ -56,14 +56,14 @@ export default function FooterAdressbar({ branchData }) {
                 </span>
 
                 <div className="flex flex-col">
-                  <span className="text-[14px] text-[#FE543D] mb-1">
+                  <span className="text-[14px] font-semibold text-[#FE543D] mb-1">
                     Email:
                   </span>
 
                   <div className="break-keep whitespace-nowrap">
                     <a
                       href={`mailto:${branchData?.email}`}
-                      className="font-normal text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white hover:text-[#FE543D] transition-colors"
+                      className="font-semibold text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white hover:text-[#FE543D] transition-colors"
                     >
                       {branchData?.email}
                     </a>
