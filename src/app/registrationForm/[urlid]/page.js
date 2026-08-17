@@ -15,8 +15,7 @@ import { useParams } from "next/navigation";
 
 const rawApiUrl =
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_UR ||
-  "https://teksacademy.com";
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL
 const apiUrl = rawApiUrl.replace(/\/$/, "");
 
 function RegistrationForm() {
