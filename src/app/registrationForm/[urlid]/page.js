@@ -14,8 +14,8 @@ import { MdOutlineEmail } from "react-icons/md";
 import { useParams } from "next/navigation";
 
 const rawApiUrl =
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||NEXT_PUBLIC_BLOGS_APPLY_API_URL || 
+  "https://l5h16h96-5060.inc1.devtunnels.ms";
 const apiUrl = rawApiUrl.replace(/\/$/, "");
 
 function RegistrationForm() {
@@ -158,6 +158,9 @@ function RegistrationForm() {
   }, [isResendDisabled, resendTimer]);
 
   const handleResendOtp = async () => {
+    setOtp(["", "", "", "", "", ""]);
+    setEnteredOtp("");
+
     try {
       const response = await fetch(`${apiUrl}/student/sendotp`, {
         method: "POST",
@@ -741,7 +744,7 @@ function RegistrationForm() {
                 </label>
                 {field.type === "select" ? (
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm custom-question-field"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm custom-question-field h-10"
                     value={userDetails?.[field.label] || ""}
                     onChange={(e) =>
                       handleInputChange(field.label, e.target.value)
@@ -782,7 +785,7 @@ function RegistrationForm() {
                 ) : (
                   <input
                     type={field.type}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm custom-question-field"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm custom-question-field h-10 pl-2"
                     placeholder={`Enter your ${field.label.toLowerCase()}`}
                     value={userDetails?.[field.label] || ""}
                     onChange={(e) =>

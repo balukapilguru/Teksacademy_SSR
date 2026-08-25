@@ -299,3 +299,108 @@ table {
     width: 90%;
   }
 }
+
+
+/* student exam */
+.verification-container {
+  background-color: #fbfbfb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.verification-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1.5rem;
+}
+
+.verification-icon-wrapper {
+  background-color: #e7e7e7;
+  /* bg-primary with opacity */
+  border-radius: 50%;
+  display: inline-flex;
+  padding: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.verification-icon {
+  color: black;
+  /* Bootstrap primary color */
+}
+
+.verification-title {
+  text-align: center;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.verification-text {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+  /* Bootstrap's text-muted */
+}
+
+.verification-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.verification-button {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.verification-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.custom-question-field:focus {
+  border-bottom: 2px solid #000000;
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-question-field {
+  font-size: 15px;
+}
+/* studnet exam */
+.border-anim.hovered {
+  opacity: 1;
+  animation: gradient-move 3s linear infinite;
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 100% center;
+  }
+}
+
+.swal-title-small {
+  font-size: 20px;
+  /* adjust to your desired size */
+}
+
