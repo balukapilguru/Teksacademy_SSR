@@ -335,7 +335,7 @@ export default function CourseInfoTable({
                       {/* Course Fee */}
                       <td className="px-4 py-3 border border-gray-300">
                         <div className="font-bold text-base text-gray-900 whitespace-nowrap">
-                          {getCourseFee(row)}
+                          {getCourseFee(row)} <span className="text-[10px] font-normal text-gray-500">+ GST</span>
                         </div>
                         <div className="text-xs text-gray-500 whitespace-nowrap">
                           {getCourseFeeNote(row)}
