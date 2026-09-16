@@ -58,7 +58,7 @@ export async function generateMetadata({ params }) {
 }
 export default async function Page({ params }) {
   const { slug } = await params;
-  console.log("slug:", slug);
+  // console.log("slug:", slug);
   let branch = null;
   let coursename = null;
 
@@ -70,22 +70,22 @@ export default async function Page({ params }) {
   } else {
     notFound();
   }
-  console.log("branch", branch, coursename);
+  // console.log("branch", branch, coursename);
   let courseData;
 
   try {
     const api = branch
       ? `${baseUrl}/api/v1/courses/${branch}/${coursename}`
       : `${baseUrl}/api/v1/courses/${coursename}`;
-    console.log("API URL:", api);
+    // console.log("API URL:", api);
     const res = await fetch(api, {
       next: { revalidate: 60 },
     });
 
-    console.log("status =", res.status);
+    // console.log("status =", res.status);
 
     if (res.status === 404) {
-      console.log("API RETURNED 404");
+      // console.log("API RETURNED 404");
       notFound();
     }
 
@@ -94,11 +94,11 @@ export default async function Page({ params }) {
     }
 
     const json = await res.json();
-    console.log(json, "json");
+    // console.log(json, "json");
     courseData = json?.data;
-    console.log("courseData:", courseData);
+    // console.log("courseData:", courseData);
     if (!courseData) {
-      console.log("courseData is empty");
+      // console.log("courseData is empty");
       notFound();
     }
   } catch (error) {

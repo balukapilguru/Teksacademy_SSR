@@ -6,6 +6,7 @@ const fallbackRobots = `User-agent: *
 Disallow: /*?ref=
 Disallow: /privacy-policy
 Disallow: /policyagreements/terms-of-service
+Disallow: /verifyCertificate/
 Allow: /
 Sitemap: ${siteUrl}/sitemap.xml
 `;

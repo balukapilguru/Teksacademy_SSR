@@ -21,7 +21,7 @@ async function getBranchData(branchname) {
     }
 
     const json = await res.json();
-    console.log("Fetched branch data:", json?.data);
+    // console.log("Fetched branch data:", json?.data);
     return json?.data || null;
   } catch (error) {
     console.error("Branch detail fetch failed:", error);

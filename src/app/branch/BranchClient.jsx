@@ -84,7 +84,7 @@ const handleSubmit = async (formValues, mappedPayload) => {
     );
 
     const responseData = await response.json();
-    console.log("API Response:", responseData);
+    // console.log("API Response:", responseData);
 
     if (!response.ok) {
       throw new Error(responseData.message || "Submission failed");

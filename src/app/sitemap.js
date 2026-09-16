@@ -6,7 +6,7 @@ const BLOGS_API_URL = (
   process.env.NEXT_BLOGS_APPLY_API_URL ||
   ""
 ).replace(/\/$/, "");
-const FIXED_LAST_MODIFIED = "2026-08-10T06:45:30+00:00";
+const FIXED_LAST_MODIFIED = "2026-09-08T08:56:37+00:00";
 
 export const revalidate = 86400;
 
@@ -81,6 +81,7 @@ const FIXED_SITEMAP_ROUTES = [
 
   "/apply-for-jobs",
   "/blogs",
+  "/find-my-course"
 ];
 
 const BRANCH_COURSE_ROUTES = [
@@ -107,9 +108,9 @@ const BRANCH_COURSE_ROUTES = [
   "/courses/secunderabad/best-java-full-stack-course",
   "/courses/secunderabad/best-python-full-stack-course",
   "/courses/secunderabad/sap-fico-training",
-  "/courses/secunderabad/best-data-analytics-course-training",
+  "/courses/secunderabad/data-analytics-course-training",
   "/courses/secunderabad/sap-mm-training",
-  "/courses/secunderabad/sap-sd-training",
+  "/courses/secunderabad/sap-sd-course",
 
   // Dilsukhnagar
   "/courses/dilsukhnagar/best-data-science-course",
@@ -135,7 +136,7 @@ const BRANCH_COURSE_ROUTES = [
 
   // Bangalore
   "/courses/bangalore/best-data-science-course",
-  "/courses/bangalore/best-data-analytics-course",
+  "/courses/bangalore/data-analytics-course-training",
   "/courses/bangalore/best-java-full-stack-course",
   "/courses/bangalore/best-python-full-stack-course",
 
@@ -143,7 +144,7 @@ const BRANCH_COURSE_ROUTES = [
   "/courses/kompally/best-data-science-course",
   "/courses/kompally/best-java-full-stack-course",
   "/courses/kompally/best-python-full-stack-course",
-  "/courses/kompally/data-analytics-course-training",
+  "/courses/kompally/best-data-analytics-course",
 
   // Visakhapatnam
   "/courses/visakhapatnam/best-data-science-course",

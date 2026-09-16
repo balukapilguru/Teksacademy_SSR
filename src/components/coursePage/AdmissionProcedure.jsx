@@ -24,7 +24,7 @@ const Admission = ({  data,
   data.formDetails?.courseName ||
   data.formDetails?.course ||
   "";
-console.log(courseDisplayName,"coursename")
+// console.log(courseDisplayName,"coursename")
   if (!data) return null;
 
   const description =

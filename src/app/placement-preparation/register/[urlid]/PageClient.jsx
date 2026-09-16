@@ -470,7 +470,7 @@ const getKeyFromLabel = (label) => {
     } else {
       setFormData(rawData);
     }
-    console.log(data, "Verifieddata");
+    // console.log(data, "Verifieddata");
     validateFormWindow(data);
   } catch {
     setStatus((prev) => ({
@@ -524,7 +524,7 @@ const getKeyFromLabel = (label) => {
       ...prev,
       ...mapped,
     }));
-    console.log(mapped, ...prev,"mapped");   // ❌ This line causes error
+    // console.log(mapped, ...prev,"mapped");   // ❌ This line causes error
   } catch (err) {
     console.error("Mapping error:", err);
   }

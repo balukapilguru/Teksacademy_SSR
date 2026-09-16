@@ -1,6 +1,0 @@
-User-agent: *
-Disallow: /*?ref=
-Disallow: /privacy-policy
-Disallow: /policyagreements/terms-of-service
-Allow: /
-Sitemap: https://teksacademy.com/sitemap.xml

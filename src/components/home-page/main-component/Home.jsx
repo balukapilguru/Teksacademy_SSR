@@ -30,7 +30,7 @@ export default async function Home() {
     }
     const data = await res.json();
     homeData = data?.data;
-    console.log(homeData.contactBar,"homedata")
+    // console.log(homeData.contactBar,"homedata")
   } catch (err) {
     console.error("Failed to fetch home page data:", err);
     homeData = null;

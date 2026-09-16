@@ -25,7 +25,7 @@ const SuccessStories = () => {
 
         if (response.success && response.data) {
           setData(response.data);
-console.log(response.data,"successtories")
+// console.log(response.data,"successtories")
           if (response.data.meta) {
             document.title = response.data.meta.title;
             const metaDescription = document.querySelector(
