@@ -21,6 +21,7 @@ export default async function Home() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
     const res = await fetch(`${baseUrl}/api/v1/home`, {
+      headers: { "Connection": "close" },
       next: { revalidate: 60 },
       signal: controller.signal,
     });

@@ -88,10 +88,11 @@ const ExcelForm = () => {
             return;
         }
 
-        if (!isOtpVerified) {
-    toast.error("Please verify OTP");
-    return;
-  }
+        // commented for as of now
+        // if (!isOtpVerified) {
+        //     toast.error("Please verify OTP");
+        //     return;
+        // }
 
 
         {/*API*/ }
@@ -188,15 +189,29 @@ const ExcelForm = () => {
                     </div>
                     {/* phone number */}
 
-<MobileOtpField
-    value={formValues.number}
-    onChange={(e) => {
-        handleChange(e);
-        setIsOtpVerified(false);
-    }}
-    onVerified={setIsOtpVerified}
-    error={formErrors.number}
-/>
+                    {/* commented for as of now
+                    <MobileOtpField
+                        value={formValues.number}
+                        onChange={(e) => {
+                            handleChange(e);
+                            setIsOtpVerified(false);
+                        }}
+                        onVerified={setIsOtpVerified}
+                        error={formErrors.number}
+                    />
+                    */}
+                    <div className="relative group col-span-12 sm:col-span-5 h-[3rem]">
+                        <input
+                            type="tel"
+                            id="number"
+                            name="number"
+                            value={formValues.number}
+                            onChange={(e) => handleChange({ target: { name: 'number', value: e.target.value.slice(0, 10) } })}
+                            className="w-full text-sm h-full px-4 peer bg-white text-black outline-none border border-[#e0e0e0] rounded-xl focus:border-[#4B84CB] focus:ring-1 focus:ring-[#4B84CB] transition-colors"
+                            placeholder="Mobile Number"
+                        />
+                        <div className="text-red-600 min-h-4 text-xs ml-3">{formErrors.number != ' ' && formErrors.number}</div>
+                    </div>
                  
 
 

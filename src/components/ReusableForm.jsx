@@ -354,9 +354,10 @@ export default function ReusableForm({
       if (error) newErrors[fieldId] = error;
     });
 
-    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
-      newErrors.phone = "Please verify your mobile number with OTP";
-    }
+    // commented for as of now
+    // if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
+    //   newErrors.phone = "Please verify your mobile number with OTP";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -377,23 +378,24 @@ export default function ReusableForm({
     e.preventDefault();
 
     const fields = getFieldsForType();
-    if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
-      setErrors((prev) => ({
-        ...prev,
-        phone: "Please verify your mobile number with OTP",
-      }));
-
-      toast.error("Please verify your mobile number with OTP", {
-        duration: 4000,
-        icon: "🔒",
-        style: {
-          background: "#fee2e2",
-          color: "#991b1b",
-          border: "1px solid #fecaca",
-        },
-      });
-      return;
-    }
+    // commented for as of now
+    // if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
+    //   setErrors((prev) => ({
+    //     ...prev,
+    //     phone: "Please verify your mobile number with OTP",
+    //   }));
+    // 
+    //   toast.error("Please verify your mobile number with OTP", {
+    //     duration: 4000,
+    //     icon: "🔒",
+    //     style: {
+    //       background: "#fee2e2",
+    //       color: "#991b1b",
+    //       border: "1px solid #fecaca",
+    //     },
+    //   });
+    //   return;
+    // }
 
     if (!validateForm()) return;
 
@@ -462,6 +464,7 @@ export default function ReusableForm({
     if (fieldId === "phone") {
       return (
         <div key={fieldId} className="mb-4">
+          {/* commented for as of now
           <MobileOtpField
             value={value || ""}
             onChange={(e) => {
@@ -477,6 +480,18 @@ export default function ReusableForm({
             }}
             error={error}
           />
+          */}
+          <label className="block text-xs font-medium text-gray-700 mb-1">
+            Mobile Number <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="tel"
+            placeholder="Enter mobile number"
+            value={value || ""}
+            onChange={(e) => handleChange(fieldId, e.target.value)}
+            className={`w-full px-4 py-2 border rounded-md text-sm ${error ? "border-red-500" : "border-gray-300"}`}
+          />
+          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
       );
     }
