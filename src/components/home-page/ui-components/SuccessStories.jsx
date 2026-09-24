@@ -80,7 +80,7 @@ const SuccessStories = ({ successStoriesData }) => {
   return (
     <div className="main_container">
       {/* Heading */}
-      <div className="justify-items-center mb-8">
+      <div className="justify-items-center mb-8 pt-5">
         <Heading data={heading} />
       </div>
 

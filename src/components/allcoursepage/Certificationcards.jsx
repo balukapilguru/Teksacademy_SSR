@@ -6,7 +6,7 @@ import PrimaryButton from "@/utility/PrimaryButton";
 import ReusableForm from "../ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
@@ -18,7 +18,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");

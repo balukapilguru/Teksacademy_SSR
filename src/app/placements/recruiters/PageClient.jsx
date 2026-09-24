@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import ReusableForm from "@/components/ReusableForm";
+import FooterAdressbar from "@/components/FooterAdressbar";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 import { useRouter } from "next/navigation";
 import Heading from "@/utility/Heading";
 
 const Recruiters = () => {
   const [data, setData] = useState(null);
+  const [contactBar, setContactBar] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -58,6 +60,7 @@ const Recruiters = () => {
 
         // IMPORTANT: correct mapping
         setData(json?.data?.recruitersSection || {});
+        setContactBar(json?.data?.contactBar || null);
       } catch (err) {
         console.error("Fetch failed:", err);
       } finally {
@@ -74,7 +77,7 @@ const Recruiters = () => {
   const title = data?.title || "Recruiters";
   const hero = data?.heroSection || {};
   const recruiterCards = data?.recruitersCardsSection?.cards || [];
-console.log(recruiterCards,"cards")
+// console.log(recruiterCards,"cards")
   return (
     <>
       {/* TITLE */}
@@ -193,6 +196,8 @@ console.log(recruiterCards,"cards")
           </div>
         </div>
       )}
+
+      {contactBar && <FooterAdressbar branchData={contactBar} />}
     </>
   );
 };

@@ -61,13 +61,19 @@ const Page = ({ data }) => {
 
     const activeBtn = container.querySelector(`[data-id="${active}"]`);
     if (activeBtn) {
-      activeBtn.scrollIntoView({
+      const containerWidth = container.offsetWidth;
+      const btnWidth = activeBtn.offsetWidth;
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const relativeLeft = btnRect.left - containerRect.left + container.scrollLeft;
+
+      container.scrollTo({
+        left: relativeLeft - containerWidth / 2 + btnWidth / 2,
         behavior: "smooth",
-        inline: "center",
-        block: "nearest",
       });
     }
   }, [active]);
+
 
   if (!sections.length) {
     return (
@@ -86,7 +92,7 @@ const Page = ({ data }) => {
       </h2>
 
       {/* Desktop View */}
-      <div className="hidden md:flex gap-6">
+      <div className="hidden md:flex gap-6 mb-10">
         <div className="w-1/3">
           <div className="sticky top-24 bg-white shadow-md rounded-xl p-4">
             <div className="text-lg font-bold mb-4">Navigate Sections</div>

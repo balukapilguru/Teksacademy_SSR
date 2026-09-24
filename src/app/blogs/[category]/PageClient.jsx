@@ -23,7 +23,7 @@ const BlogDetails = () => {
 
   const api = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL || process.env.NEXT_BLOGS_APPLY_API_URL;
 
-  console.log("dsgfsdhfj", category);
+  // console.log("dsgfsdhfj", category);
 
   const [blogData, setBlogData] = useState(null);
   const [blogDetailes, setBlogDetailes] = useState(null);
@@ -203,7 +203,7 @@ const BlogDetails = () => {
     fetchData();
   }, [api, category]);
 
-  console.log("djfhsjk", comments);
+  // console.log("djfhsjk", comments);
 
   const setBlogItem = (blog) => {
     localStorage.setItem("blog", JSON.stringify(blog));
@@ -263,7 +263,7 @@ const BlogDetails = () => {
       html = html.replace(new RegExp(quillClass, "g"), tailwindClass);
     });
 
-    console.log("sdjhfsjdf", html);
+    // console.log("sdjhfsjdf", html);
 
     return html;
   };

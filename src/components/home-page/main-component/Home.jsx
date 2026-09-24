@@ -12,6 +12,7 @@ import Hiring from "../ui-components/Hiring";
 import SuccessStories from "@/components/home-page/ui-components/SuccessStories";
 import CertificationCourse from "@/components/allcoursepage/CertificationCourse";
 import MostSearchedTerms from "@/components/coursePage/Mostsearchedterms";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 export default async function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
@@ -20,6 +21,7 @@ export default async function Home() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
     const res = await fetch(`${baseUrl}/api/v1/home`, {
+      headers: { "Connection": "close" },
       next: { revalidate: 60 },
       signal: controller.signal,
     });
@@ -29,7 +31,7 @@ export default async function Home() {
     }
     const data = await res.json();
     homeData = data?.data;
-    console.log(homeData,"homedata")
+    // console.log(homeData.contactBar,"homedata")
   } catch (err) {
     console.error("Failed to fetch home page data:", err);
     homeData = null;
@@ -39,7 +41,7 @@ export default async function Home() {
   }
   // #fbf5f6 : pink
   // #fff : white
- console.log(homeData.gallery,"homegallery")
+//  console.log(homeData.gallery,"homegallery")
    const schemaData = homeData?.meta?.schemaCode;
 
   const sectionsConfig = [
@@ -100,8 +102,14 @@ export default async function Home() {
       bg: "#fff",
       border: "#fff",
     },
+    {
+      component: <FooterAdressbar branchData={homeData?.contactBar} />,
+      bg: "#fbf5f6",
+      border: "#fbf5f6",
+    },
+       
   ];
-console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
+// console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (
     <>
      {schemaData && (

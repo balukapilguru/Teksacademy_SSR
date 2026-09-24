@@ -4,11 +4,12 @@ import GetData from "@/utility/GetData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-export default function Nutshell({ data, courseData, courseName = "" }) {
+export default function Nutshell({ data, courseData, courseName = "", university = "", courses = [] }) {
   const { title, services, button, image } = data || {};
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +23,7 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
     "";
 
   const handleSubmit = async (_formValues, mappedPayload) => {
-    
+
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
@@ -30,7 +31,15 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         body: JSON.stringify(mappedPayload),
       });
       const responseData = await response.json();
-      if (!response.ok) throw new Error(responseData.message || "Submission failed");
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "🎉",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       setShowModal(false);
       router.push("/thankyou");
     } catch (error) {
@@ -47,6 +56,8 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
           onClose={() => setShowModal(false)}
           course={selectedCourse}
           courseName={selectedCourse}
+          university={university}
+          courses={courses}
           title="Request Callback"
           subtitle="Fill in your details and our team will call you back shortly."
           onSubmit={handleSubmit}
@@ -65,23 +76,23 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         <div className="text-center mb-5">
           <h2 className="text-xl font-bold text-gray-900">
             {title?.[0]}
-           
-             <span className="relative inline-block text-[#2A619D]">
-                  {title?.[1]}
-                  <svg
-                    className="absolute left-0 -bottom-2 w-full h-[14px]"
-                    viewBox="0 0 100 12"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 10 Q50 0 98 10"
-                      stroke="orangered"
-                      strokeWidth="2"
-                      fill="transparent"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
+
+            <span className="relative inline-block text-[#2A619D]">
+              {title?.[1]}
+              <svg
+                className="absolute left-0 -bottom-2 w-full h-[14px]"
+                viewBox="0 0 100 12"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M2 10 Q50 0 98 10"
+                  stroke="orangered"
+                  strokeWidth="2"
+                  fill="transparent"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
           </h2>
         </div>
 
@@ -111,20 +122,18 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
                 >
                   {/* LEFT — Number badge */}
                   <div
-                    className={`w-[26px] h-[26px] rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 ${
-                      isLast ? "bg-[#2A619D]" : "bg-[#FE543D]"
-                    }`}
+                    className={`w-[26px] h-[26px] rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 ${isLast ? "bg-[#2A619D]" : "bg-[#FE543D]"
+                      }`}
                   >
                     {index + 1}
                   </div>
 
                   {/* RIGHT — Icon + content chip, full width */}
                   <div
-                    className={`flex items-center gap-2 rounded-[10px] px-3 py-[10px] border w-full ${
-                      isLast
+                    className={`flex items-center gap-2 rounded-[10px] px-3 py-[10px] border w-full ${isLast
                         ? "bg-[#EDF3FA] border-[#2A619D33]"
                         : "bg-[#FFF0EE] border-[#FE543D33]"
-                    }`}
+                      }`}
                   >
                     <Image
                       src={GetData({ url: item.icon.url })}
@@ -145,13 +154,12 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
                         return (
                           <span
                             key={i}
-                            className={`mr-[3px] ${
-                              highlight
+                            className={`mr-[3px] ${highlight
                                 ? isLast
                                   ? "text-[#2A619D] font-bold"
                                   : "text-[#FE543D] font-bold"
                                 : ""
-                            }`}
+                              }`}
                           >
                             {word}
                           </span>
@@ -199,23 +207,23 @@ export default function Nutshell({ data, courseData, courseName = "" }) {
         <div className="my-6 text-center">
           <h2 className="text-xl md:text-3xl font-semibold">
             {title?.[0]}
-           
-             <span className="relative inline-block text-[#2A619D]">
-                 {title?.[1]}
-                  <svg
-                    className="absolute left-0 -bottom-2 w-full h-[14px]"
-                    viewBox="0 0 100 12"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 10 Q50 0 98 10"
-                      stroke="orangered"
-                      strokeWidth="2"
-                      fill="transparent"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
+
+            <span className="relative inline-block text-[#2A619D]">
+              {title?.[1]}
+              <svg
+                className="absolute left-0 -bottom-2 w-full h-[14px]"
+                viewBox="0 0 100 12"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M2 10 Q50 0 98 10"
+                  stroke="orangered"
+                  strokeWidth="2"
+                  fill="transparent"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
           </h2>
         </div>
 

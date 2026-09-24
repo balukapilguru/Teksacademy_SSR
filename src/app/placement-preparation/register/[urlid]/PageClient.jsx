@@ -18,6 +18,13 @@ import {
   Trash2,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import ReCAPTCHA from "react-google-recaptcha";
+import {
+  RECAPTCHA_SITE_KEY,
+  validateIndianMobileNumber,
+  fetchOtpHandshake,
+  computeDynamicClientHash,
+} from "@/lib/otpSecurity";
 
 const apiUrl = process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL;
 
@@ -32,7 +39,75 @@ export default function RegistrationForm() {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [emailForVerification, setEmailForVerification] = useState("");
   const [showEmailInput, setShowEmailInput] = useState(true);
+  const [emailInputError, setEmailInputError] = useState("");
   const [verifiedUserData, setVerifiedUserData] = useState(null); // Store verified user data from OTP
+  const emailRecaptchaRef = useRef(null);
+  const modalRecaptchaRef = useRef(null);
+  const [emailCaptchaToken, setEmailCaptchaToken] = useState(null);
+  const [emailHoneypot, setEmailHoneypot] = useState("");
+  const [handshakeData, setHandshakeData] = useState(null);
+  const [resendCaptchaToken, setResendCaptchaToken] = useState(null);
+  const [resendHandshakeData, setResendHandshakeData] = useState(null);
+  const [otpVerificationData, setOtpVerificationData] = useState({
+    token: "",
+    email: "",
+  });
+
+  const handleEmailCaptchaSuccess = async (token) => {
+    setEmailCaptchaToken(token);
+    if (token) {
+      try {
+        const hs = await fetchOtpHandshake(apiUrl);
+        setHandshakeData(hs);
+      } catch (err) {
+        // Handshake pre-flight error silently handled
+      }
+    }
+  };
+
+  const handleEmailCaptchaExpired = () => {
+    setEmailCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      emailRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleEmailCaptchaError = () => {
+    setEmailCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      emailRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleResendCaptchaSuccess = async (token) => {
+    setResendCaptchaToken(token);
+    if (token) {
+      try {
+        const hs = await fetchOtpHandshake(apiUrl);
+        setResendHandshakeData(hs);
+      } catch (err) {
+        // Resend handshake error silently handled
+      }
+    }
+  };
+
+  const handleResendCaptchaExpired = () => {
+    setResendCaptchaToken(null);
+    setResendHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleResendCaptchaError = () => {
+    setResendCaptchaToken(null);
+    setResendHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
 
   const [formData, setFormData] = useState(null);
   const [formValues, setFormValues] = useState({});
@@ -57,8 +132,9 @@ export default function RegistrationForm() {
   // OTP States
   const [otpModal, setOtpModal] = useState({ open: false, email: "" });
   const OTP_LENGTH = 6;
-  const [otpValue, setOtpValue] = useState("");
-  const otpRefs = useRef([]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [enteredOtp, setEnteredOtp] = useState("");
+  const otpInputRefs = useRef([]);
   const [otpStatus, setOtpStatus] = useState({
     loading: false,
     verified: false,
@@ -67,6 +143,14 @@ export default function RegistrationForm() {
     timer: 0,
   });
   const [verifiedEmails, setVerifiedEmails] = useState({});
+
+  useEffect(() => {
+    if (otpModal.open) {
+      setTimeout(() => {
+        otpInputRefs.current[0]?.focus();
+      }, 50);
+    }
+  }, [otpModal.open]);
 
   // UI States
   const [toastMessages, setToastMessages] = useState([]);
@@ -121,7 +205,7 @@ export default function RegistrationForm() {
           return parsed.data;
         }
       } catch (e) {
-        console.error("Error parsing stored user data:", e);
+        // Stored user data parsing error silently handled
       }
     }
     return null;
@@ -204,7 +288,7 @@ export default function RegistrationForm() {
           return parsed;
         }
       } catch (e) {
-        console.error("Error parsing stored autofill data:", e);
+        // Stored autofill data parsing error silently handled
       }
     }
     return null;
@@ -380,9 +464,7 @@ export default function RegistrationForm() {
     try {
       const token = localStorage.getItem("token");
 
-      // ❌ Don't call API if no token
       if (!token) {
-        console.warn("No token found, skipping autofill API");
         return;
       }
       const response = await fetch(
@@ -432,37 +514,57 @@ export default function RegistrationForm() {
         }
       }
     } catch (error) {
-      console.error("Autofill error:", error);
       showToast(error.message || "Autofill failed", "error", 4000);
     }
   };
 
   // ==================== FORM FETCHING ====================
-
+// Add this after toPascalCaseWithSpaces or wherever you keep your helpers
+const getKeyFromLabel = (label) => {
+  const map = {
+    'Name': 'name',
+    'Email': 'email',
+    'Phone': 'phone',
+    'Registration Number': 'registrationnumber',
+    'Courses': 'courses',
+  };
+  return map[label] || label.toLowerCase().replace(/\s/g, '');
+};
   useEffect(() => {
     if (!urlid) return;
 
     const fetchForm = async () => {
       try {
-        const res = await fetch(
-          `${apiUrl}/placement-preparation/forms/${urlid}`,
-        );
-        if (!res.ok) throw new Error();
+        const res = await fetch(`${apiUrl}/placement-preparation/forms/${urlid}`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.message || "No more accepting the registrations");
+        }
 
         const data = await res.json();
-        setFormData(data?.data);
-        console.log(data, "Verifieddata");
+        const rawData = data?.data;
+        if (rawData?.fieldsList) {
+          // Normalize each field: add 'key' and 'uuid'
+          const normalizedFields = rawData.fieldsList.map((field, index) => ({
+            ...field,
+            key: getKeyFromLabel(field.label),
+            uuid: field.uuid || `field-${index}`,
+          }));
+          setFormData({ ...rawData, fieldsList: normalizedFields });
+        } else {
+          setFormData(rawData);
+        }
         validateFormWindow(data);
-      } catch {
+      } catch (error) {
         setStatus((prev) => ({
           ...prev,
-          message: "Failed to load form",
+          formActive: false,
+          message: error?.message || "No more accepting the registrations",
         }));
       } finally {
         setStatus((prev) => ({ ...prev, loading: false }));
       }
     };
-
     fetchForm();
   }, [urlid]);
 
@@ -490,57 +592,71 @@ export default function RegistrationForm() {
   // }, [otpModal.open]);
   // ==================== INITIALIZE FORM VALUES ====================
 
-  useEffect(() => {
-    if (!formData) return;
+ useEffect(() => {
+  if (!formData) return;
 
-    const stored = localStorage.getItem("verifiedUserData");
-    if (!stored) return;
+  const stored = localStorage.getItem("verifiedUserData");
+  if (!stored) return;
 
-    try {
-      const parsed = JSON.parse(stored)?.data;
-      if (!parsed) return;
+  try {
+    const parsed = JSON.parse(stored)?.data;
+    if (!parsed) return;
 
-      const mapped = mapUserDataToFormFields(parsed, formData.fieldsList);
+    const mapped = mapUserDataToFormFields(parsed, formData.fieldsList);
 
-      setFormValues((prev) => ({
-        ...prev,
-        ...mapped,
-      }));
-    } catch (err) {
-      console.error("Mapping error:", err);
-    }
-  }, [formData]);
+    setFormValues((prev) => ({
+      ...prev,
+      ...mapped,
+    }));
+  } catch (err) {
+    // Mapping error silently handled
+  }
+}, [formData]);
   // ==================== FORM VALIDATION ====================
 
   const validateFormWindow = (data) => {
-    const today = new Date();
-    const start = new Date(data?.data?.activeFrom);
-    const end = new Date(data?.data?.activeTo);
+    const formRecord = data?.data;
 
-    if (today >= start && today <= end) {
-      console.log("OkayData");
-      setStatus((prev) => ({ ...prev, formActive: true }));
-    } else if (today < start) {
-      console.log("OkayData 2");
+    // Check if form is inactive
+    const isInactive =
+      formRecord?.isActive === 0 ||
+      formRecord?.isActive === false ||
+      formRecord?.isActive === "0" ||
+      formRecord?.status === false ||
+      formRecord?.status === "inactive";
+
+    if (isInactive) {
       setStatus((prev) => ({
         ...prev,
+        formActive: false,
+        message: "No more accepting the registrations",
+      }));
+      return;
+    }
+
+    const today = new Date();
+    const start = formRecord?.activeFrom ? new Date(formRecord.activeFrom) : null;
+    const end = formRecord?.activeTo ? new Date(formRecord.activeTo) : null;
+
+    if (start && !isNaN(start.getTime()) && today < start) {
+      setStatus((prev) => ({
+        ...prev,
+        formActive: false,
         message: `Form opens on ${start.toDateString()}`,
       }));
-    } else {
-      console.log(
-        "OkayData 3",
-        today >= start,
-        today <= end,
-        today,
-        end,
-        "fsfs",
-        data,
-      );
+      return;
+    }
+
+    if (end && !isNaN(end.getTime()) && today > end) {
       setStatus((prev) => ({
         ...prev,
-        message: "Registration closed",
+        formActive: false,
+        message: "No more accepting the registrations",
       }));
+      return;
     }
+
+    setStatus((prev) => ({ ...prev, formActive: true }));
   };
 
   // ==================== EMAIL VALIDATION ====================
@@ -553,13 +669,36 @@ export default function RegistrationForm() {
   // ==================== SEND OTP ====================
 
   const sendOTP = async (email) => {
+    setEmailInputError("");
     setOtpStatus((prev) => ({ ...prev, loading: true, error: "" }));
 
     try {
-      const response = await fetch(`${apiUrl}/student/sendotp`, {
+      let hs = handshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(apiUrl);
+        setHandshakeData(hs);
+      }
+
+      const clientHash = await computeDynamicClientHash(
+        email.trim().toLowerCase(),
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      const response = await fetch(`${apiUrl}/otp/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, isAutofill: true }),
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          recaptchaToken: emailCaptchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash,
+          website_verification_code: emailHoneypot || "",
+          isAutofill: true,
+          formId: urlid,
+        }),
       });
 
       const contentType = response.headers.get("content-type");
@@ -569,9 +708,14 @@ export default function RegistrationForm() {
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (!response.ok || !data.success) {
         throw new Error(data.message || "Failed to send OTP");
       }
+
+      setOtpVerificationData({
+        email: email.trim().toLowerCase(),
+        token: data.token,
+      });
 
       setOtpStatus((prev) => ({
         ...prev,
@@ -579,16 +723,29 @@ export default function RegistrationForm() {
         timer: 60,
         resentCount: prev.resentCount + 1,
       }));
-      setOtpModal({ open: true, email: emailForVerification });
+      setOtp(["", "", "", "", "", ""]);
+      setEnteredOtp("");
+      setResendCaptchaToken(null);
+      setResendHandshakeData(null);
+      setOtpModal({ open: true, email: email.trim().toLowerCase() });
 
       showToast(`OTP sent to ${email}`, "info", 3000);
     } catch (error) {
+      const errMsg = error.message || "Failed to send OTP. Please try again.";
+      setEmailInputError(errMsg);
       setOtpStatus((prev) => ({
         ...prev,
         loading: false,
-        error: error.message || "Failed to send OTP. Please try again.",
+        error: errMsg,
       }));
-      showToast(error.message || "Failed to send OTP", "error", 4000);
+      showToast(errMsg, "error", 4000);
+    } finally {
+      try {
+        emailRecaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+      setEmailCaptchaToken(null);
     }
   };
 
@@ -598,27 +755,14 @@ export default function RegistrationForm() {
       // Validate all fields have required properties
       const invalidFields = formData.fieldsList.filter((field) => !field.key);
       if (invalidFields.length > 0) {
-        console.error("Fields missing key property:", invalidFields);
         showToast("Form configuration error. Please contact support.", "error");
       }
     }
   }, [formData]);
 
-  useEffect(() => {
-    if (formData?.fieldsList) {
-      console.log(
-        "Fields List:",
-        formData.fieldsList.map((f) => ({
-          uuid: f.uuid,
-          key: f.key,
-          label: f.label,
-        })),
-      );
-    }
-  }, [formData]);
 
   const verifyOTP = async (autoSubmit = false, otpOverride = null) => {
-    const finalOtp = otpOverride || otpValue; // otpValue is a string
+    const finalOtp = otpOverride || enteredOtp || otp.join("");
 
     if (finalOtp.length !== 6) {
       if (!autoSubmit) {
@@ -633,12 +777,14 @@ export default function RegistrationForm() {
     setOtpStatus((prev) => ({ ...prev, loading: true, error: "" }));
 
     try {
-      const response = await fetch(`${apiUrl}/student/validateotp`, {
+      const email = (otpVerificationData.email || otpModal.email).trim().toLowerCase();
+      const response = await fetch(`${apiUrl}/otp/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: otpModal.email,
-          emailOtp: finalOtp,
+          email,
+          otp: finalOtp,
+          token: otpVerificationData.token,
           isAutofill: true,
         }),
       });
@@ -656,12 +802,12 @@ export default function RegistrationForm() {
         data = null;
       }
 
-      if (!response.ok) {
+      if (!response.ok || !data?.success) {
         throw new Error(data?.message || "Invalid OTP");
       }
 
       // Store verified user data in state and localStorage
-      if (data.success && data.data) {
+      if (data.data) {
         setVerifiedUserData(data.data);
         storeVerifiedUserData(data.data);
 
@@ -678,12 +824,14 @@ export default function RegistrationForm() {
         }
       }
 
+      setOtpStatus((prev) => ({ ...prev, loading: false, verified: true }));
       showToast("Email verified successfully!", "success", 3000);
 
       // Close modal and show form
       setTimeout(() => {
         setOtpModal({ open: false, email: "" });
-        setOtpValue("");
+        setOtp(["", "", "", "", "", ""]);
+        setEnteredOtp("");
         setOtpStatus({
           loading: false,
           verified: false,
@@ -695,10 +843,7 @@ export default function RegistrationForm() {
         // Set email as verified and show the form
         setIsEmailVerified(true);
         setShowEmailInput(false);
-
-        // Fetch autofill details after successful verification
-        fetchAutoFillDetails();
-      }, 1500);
+      }, 1000);
     } catch (error) {
       setOtpStatus((prev) => ({
         ...prev,
@@ -711,78 +856,181 @@ export default function RegistrationForm() {
 
   // ==================== RESEND OTP ====================
 
-  const resendOTP = () => {
-    if (otpStatus.timer > 0) return;
-    sendOTP(otpModal.email);
+  const resendOTP = async () => {
+    if (otpStatus.timer > 0 || otpStatus.loading) return;
+
+    if (!resendCaptchaToken) {
+      showToast("Please check 'I am not a robot' to resend OTP", "warning", 3000);
+      return;
+    }
+
+    setOtpStatus((prev) => ({ ...prev, loading: true, error: "" }));
+
+    try {
+      let hs = resendHandshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(apiUrl);
+        setResendHandshakeData(hs);
+      }
+
+      const email = (otpVerificationData.email || otpModal.email).trim().toLowerCase();
+      const clientHash = await computeDynamicClientHash(
+        email,
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      const response = await fetch(`${apiUrl}/otp/resend-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          token: otpVerificationData.token,
+          recaptchaToken: resendCaptchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash,
+          website_verification_code: emailHoneypot || "",
+          isAutofill: true,
+          formId: urlid,
+        }),
+      });
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server error. Please try again later.");
+      }
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to resend OTP");
+      }
+
+      setOtpVerificationData((prev) => ({
+        ...prev,
+        token: data.token,
+      }));
+
+      setOtpStatus((prev) => ({
+        ...prev,
+        loading: false,
+        timer: 60,
+        resentCount: prev.resentCount + 1,
+      }));
+      setOtp(["", "", "", "", "", ""]);
+      setEnteredOtp("");
+      setResendCaptchaToken(null);
+      setResendHandshakeData(null);
+      try {
+        modalRecaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+
+      showToast("OTP resent successfully!", "info", 3000);
+    } catch (error) {
+      setOtpStatus((prev) => ({
+        ...prev,
+        loading: false,
+        error: error.message || "Failed to resend OTP",
+      }));
+      showToast(error.message || "Failed to resend OTP", "error", 4000);
+    }
   };
 
   // ==================== HANDLE EMAIL SUBMIT ====================
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
+    if (emailHoneypot && emailHoneypot.trim().length > 0) {
+      showToast(`OTP sent to ${emailForVerification}`, "info", 3000);
+      return;
+    }
     if (!validateEmail(emailForVerification)) {
+      setEmailInputError("Please enter a valid email address");
       showToast("Please enter a valid email address", "warning", 3000);
       return;
     }
-    // setOtpModal({ open: true, email: emailForVerification });
+    if (!emailCaptchaToken) {
+      setEmailInputError("Please click 'I'm not a robot' before requesting OTP.");
+      showToast("Please click 'I'm not a robot' before requesting OTP.", "warning", 3000);
+      return;
+    }
+    setEmailInputError("");
     sendOTP(emailForVerification);
   };
 
   // ==================== HANDLE OTP INPUT CHANGE ====================
-  const handleOtpChange = (index, e) => {
-    const val = e.target.value.replace(/\D/g, "");
-    const newOtp = [...otpValue];
-
-    if (val.length > 1) {
-      // handle autofill/paste
-      const digits = val.slice(0, OTP_LENGTH).split("");
-      newOtp.splice(0, digits.length, ...digits);
-      setOtpValue(newOtp);
-      otpRefs.current[digits.length - 1]?.focus();
-
-      if (digits.length === OTP_LENGTH) verifyOTP(true, newOtp.join(""));
+  const handleOtpChange = (index, value) => {
+    const sanitized = value.replace(/\D/g, "");
+    if (!sanitized) {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      setEnteredOtp(newOtp.join(""));
       return;
     }
 
-    newOtp[index] = val;
-    setOtpValue(newOtp);
-
-    if (val && index < OTP_LENGTH - 1) {
-      otpRefs.current[index + 1]?.focus();
+    if (sanitized.length > 1) {
+      const digits = sanitized.slice(0, 6).split("");
+      const newOtp = [...otp];
+      digits.forEach((d, i) => {
+        newOtp[i] = d;
+      });
+      setOtp(newOtp);
+      setEnteredOtp(newOtp.join(""));
+      const nextIdx = Math.min(digits.length, 5);
+      otpInputRefs.current[nextIdx]?.focus();
+      if (digits.length === 6) {
+        verifyOTP(true, digits.join(""));
+      }
+      return;
     }
 
-    if (newOtp.every((d) => d !== "")) verifyOTP(true, newOtp.join(""));
+    const newOtp = [...otp];
+    newOtp[index] = sanitized;
+    setOtp(newOtp);
+    setEnteredOtp(newOtp.join(""));
+
+    if (index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+
+    if (newOtp.every((d) => d !== "") && newOtp.join("").length === 6) {
+      verifyOTP(true, newOtp.join(""));
+    }
   };
 
   const handleOtpKeyDown = (index, e) => {
-    if (e.key !== "Backspace") return;
-
-    const newOtp = [...otpValue];
-
-    if (newOtp[index]) {
-      newOtp[index] = "";
-      setOtpValue(newOtp);
-    } else if (index > 0) {
-      otpRefs.current[index - 1]?.focus();
-      newOtp[index - 1] = "";
-      setOtpValue(newOtp);
+    if (e.key === "Backspace") {
+      if (!otp[index] && index > 0) {
+        otpInputRefs.current[index - 1]?.focus();
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      otpInputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
     }
   };
+
   const handleOtpPaste = (e) => {
-    const paste = e.clipboardData
-      .getData("text")
-      .replace(/\D/g, "")
-      .slice(0, OTP_LENGTH);
-    if (!paste) return;
-
-    const newOtp = paste.split("");
-    while (newOtp.length < OTP_LENGTH) newOtp.push("");
-
-    setOtpValue(newOtp);
-
-    // focus last filled input
-    const focusIndex = Math.min(paste.length, OTP_LENGTH - 1);
-    otpRefs.current[focusIndex]?.focus();
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pasted) return;
+    const digits = pasted.split("");
+    const newOtp = ["", "", "", "", "", ""];
+    digits.forEach((d, i) => {
+      newOtp[i] = d;
+    });
+    setOtp(newOtp);
+    setEnteredOtp(newOtp.join(""));
+    const nextIdx = Math.min(digits.length, 5);
+    otpInputRefs.current[nextIdx]?.focus();
+    if (digits.length === 6) {
+      verifyOTP(true, newOtp.join(""));
+    }
   };
 
   // // Focus on the next empty field or last field
@@ -878,9 +1126,13 @@ export default function RegistrationForm() {
     if (keyLower.includes("phone") || keyLower.includes("mobile")) {
       updatedValue = value.replace(/\D/g, "").slice(0, 10);
 
-      if (updatedValue && !/^[6-9]\d{9}$/.test(updatedValue)) {
-        newErrors[key] =
-          "Must be a valid 10-digit mobile number starting with 6-9";
+      if (updatedValue) {
+        const phoneCheck = validateIndianMobileNumber(updatedValue);
+        if (!phoneCheck.valid) {
+          newErrors[key] = phoneCheck.message;
+        } else {
+          delete newErrors[key];
+        }
       } else {
         delete newErrors[key];
       }
@@ -959,9 +1211,9 @@ export default function RegistrationForm() {
 
       // Phone validation
       if (labelLower.includes("phone") || labelLower.includes("mobile")) {
-        if (!/^[6-9]\d{9}$/.test(value)) {
-          newErrors[field.key] =
-            "Must be a valid 10-digit mobile number starting with 6-9";
+        const phoneCheck = validateIndianMobileNumber(value);
+        if (!phoneCheck.valid) {
+          newErrors[field.key] = phoneCheck.message;
         }
       }
 
@@ -1052,7 +1304,7 @@ export default function RegistrationForm() {
 
   // ==================== AUTO FILL MODAL COMPONENT ====================
 
-  const AutoFillModal = () => {
+  const renderAutoFillModal = () => {
     if (!showAutoFillModal || !autoFillData) return null;
 
     const getTimeAgo = (timestamp) => {
@@ -1067,7 +1319,10 @@ export default function RegistrationForm() {
     };
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+      >
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
           <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
             <div className="flex items-center gap-2">
@@ -1142,11 +1397,14 @@ export default function RegistrationForm() {
 
   // ==================== AUTO FILL HISTORY MODAL ====================
 
-  const AutoFillHistoryModal = () => {
+  const renderAutoFillHistoryModal = () => {
     if (!showAutoFillHistory) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+      >
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] flex flex-col">
           <div className="flex justify-between items-center p-4 border-b">
             <div className="flex items-center gap-2">
@@ -1218,22 +1476,15 @@ export default function RegistrationForm() {
 
   // ==================== OTP MODAL COMPONENT ====================
 
-  const OTPSection = () => {
-    const inputRefOTP = useRef(null);
-
-   useEffect(() => {
-  inputRefOTP.current?.focus();
-}, []);
+  const renderOTPSection = () => {
 
     if (!otpModal.open) return null;
 
-    const handleChange = (e) => {
-      const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-      setOtpValue(value);
-    };
-
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+      >
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
           <div className="flex justify-between items-center p-4 border-b">
             <div className="flex items-center gap-2">
@@ -1243,7 +1494,8 @@ export default function RegistrationForm() {
             <button
               onClick={() => {
                 setOtpModal({ open: false, email: "" });
-                setOtpValue("");
+                setOtp(["", "", "", "", "", ""]);
+                setEnteredOtp("");
                 setOtpStatus({
                   loading: false,
                   verified: false,
@@ -1251,6 +1503,8 @@ export default function RegistrationForm() {
                   resentCount: 0,
                   timer: 0,
                 });
+                setResendCaptchaToken(null);
+                setResendHandshakeData(null);
                 if (autoSubmitTimeoutRef.current)
                   clearTimeout(autoSubmitTimeoutRef.current);
               }}
@@ -1263,37 +1517,33 @@ export default function RegistrationForm() {
           <div className="p-4">
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
               <p className="text-sm text-blue-700">
-                <strong>Important:</strong> Please verify your email first to
-                continue with the registration.
+                We&apos;ve sent a 6-digit verification code to{" "}
+                <span className="font-semibold">
+                  {otpModal.email || otpVerificationData?.email}
+                </span>
               </p>
             </div>
 
-            {/* <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              maxLength={10}
-              placeholder="Enter 6-digit OTP"
-              value={otpValue || ""}
-              onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
-              className="w-full h-12 text-center text-xl border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-              autoFocus
-              disabled={!!otpStatus?.error}
-            /> */}
-
-            <input
-              ref={inputRefOTP}
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              placeholder="Enter 6-digit OTP"
-              value={otpValue}
-              onChange={handleChange}
-              // onPaste={handlePaste}
-              maxLength={6}
-              className="w-full h-12 text-center text-xl border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-              disabled={otpStatus?.loading} // ONLY loading disables
-            />
+            {/* 6-digit OTP input boxes */}
+            <div className="flex justify-center space-x-2 my-5">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (otpInputRefs.current[index] = el)}
+                  type="text"
+                  inputMode="numeric"
+                  name={`otp-${index}`}
+                  maxLength={6}
+                  value={digit}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => handleOtpChange(index, e.target.value)}
+                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                  onPaste={handleOtpPaste}
+                  disabled={otpStatus?.loading}
+                  className="w-11 h-12 sm:w-12 sm:h-12 text-center text-2xl font-bold border-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition disabled:bg-gray-100"
+                />
+              ))}
+            </div>
 
             {otpStatus?.error && (
               <div className="mb-4 mt-2 bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded-md flex items-center gap-2">
@@ -1309,15 +1559,31 @@ export default function RegistrationForm() {
               </div>
             )}
 
+            {/* Modal ReCAPTCHA for Resend */}
+            {otpStatus.timer === 0 && !otpStatus.verified && (
+              <div className="my-4 flex justify-center scale-90 sm:scale-100">
+                <ReCAPTCHA
+                  ref={modalRecaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  onChange={handleResendCaptchaSuccess}
+                  onExpired={handleResendCaptchaExpired}
+                  onErrored={handleResendCaptchaError}
+                />
+              </div>
+            )}
+
             <div className="flex justify-between items-center pt-2">
               <button
                 type="button"
                 onClick={resendOTP}
                 disabled={
-                  otpStatus.timer > 0 || otpStatus.loading || otpStatus.verified
+                  otpStatus.timer > 0 ||
+                  !resendCaptchaToken ||
+                  otpStatus.loading ||
+                  otpStatus.verified
                 }
                 className={`text-sm flex items-center gap-1 ${
-                  otpStatus.timer > 0 || otpStatus.verified
+                  otpStatus.timer > 0 || !resendCaptchaToken || otpStatus.verified
                     ? "text-gray-400 cursor-not-allowed"
                     : "text-blue-600 hover:text-blue-700"
                 }`}
@@ -1334,7 +1600,7 @@ export default function RegistrationForm() {
                 disabled={
                   otpStatus.loading ||
                   otpStatus.verified ||
-                  otpValue.length !== 6
+                  (enteredOtp || otp.join("")).length !== 6
                 }
                 className="bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center gap-2"
               >
@@ -1362,7 +1628,7 @@ export default function RegistrationForm() {
   //   }
   // }, [otpModal.open]);
 
-  const EmailInputScreen = () => {
+  const renderEmailInputScreen = () => {
     return (
       <div className="min-h-screen bg-gray-100 py-8 px-4">
         <div className="max-w-md mx-auto">
@@ -1379,6 +1645,20 @@ export default function RegistrationForm() {
 
             <div className="p-6">
               <form onSubmit={handleEmailSubmit}>
+                {/* Honeypot field */}
+                <div style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none', height: 0, width: 0, overflow: 'hidden' }} aria-hidden="true" tabIndex={-1}>
+                  <label htmlFor="website_verification_code_student">Do not fill this</label>
+                  <input
+                    type="text"
+                    id="website_verification_code_student"
+                    name="website_verification_code"
+                    value={emailHoneypot}
+                    onChange={(e) => setEmailHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -1386,14 +1666,39 @@ export default function RegistrationForm() {
                   <input
                     type="email"
                     value={emailForVerification}
-                    onChange={(e) => setEmailForVerification(e.target.value)}
+                    onChange={(e) => {
+                      setEmailForVerification(e.target.value);
+                      if (emailInputError) setEmailInputError("");
+                    }}
                     placeholder="Enter your email address"
-                    className="w-full h-11 px-3 text-sm rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                    className={`w-full h-11 px-3 text-sm rounded-md border ${
+                      emailInputError
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    } focus:ring-1 outline-none transition-colors`}
                     autoFocus
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    We&apos;ll send a 6-digit OTP to verify your email{" "}
-                  </p>
+                  {emailInputError ? (
+                    <div className="mt-1.5 flex items-center gap-1.5 text-xs text-red-600 font-medium">
+                      <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 text-red-500" />
+                      <span>{emailInputError}</span>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-1">
+                      We&apos;ll send a 6-digit OTP to verify your email{" "}
+                    </p>
+                  )}
+                </div>
+
+                {/* Google reCAPTCHA v2 Checkbox right above Send OTP button */}
+                <div className="mb-4 flex justify-center scale-90 sm:scale-100">
+                  <ReCAPTCHA
+                    ref={emailRecaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    onChange={handleEmailCaptchaSuccess}
+                    onExpired={handleEmailCaptchaExpired}
+                    onErrored={handleEmailCaptchaError}
+                  />
                 </div>
 
                 <button
@@ -1412,7 +1717,7 @@ export default function RegistrationForm() {
 
   // ==================== TOAST NOTIFICATION COMPONENT ====================
 
-  const ToastNotification = () => {
+  const renderToastNotification = () => {
     if (toastMessages.length === 0) return null;
 
     return (
@@ -1462,8 +1767,6 @@ export default function RegistrationForm() {
   const mapBackendToForm = (fieldsList, userData) => {
     const mappedValues = {};
 
-    // console.log(fieldsList, "kjfskdfjsldfjls");
-
     fieldsList?.forEach((field) => {
       mappedValues[field.key] = userData[field.key] || "";
     });
@@ -1475,7 +1778,6 @@ export default function RegistrationForm() {
     const stored = JSON.parse(localStorage.getItem("verifiedUserData"));
 
     if (stored?.data) {
-      console.log(formData, "kjfslkdfjlskdjfl");
       const mapped = mapBackendToForm(formData?.fieldsList, stored.data);
       setFormValues(mapped);
     }
@@ -1545,14 +1847,18 @@ export default function RegistrationForm() {
 
   if (!status?.formActive) {
     return (
-      <div className="min-h-screen bg-gray-100 py-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden p-12 text-center">
-            <Info className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Form Unavailable
+      <div className="min-h-screen bg-gray-100 py-12 px-4 flex items-center justify-center">
+        <div className="max-w-md w-full mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden p-8 sm:p-10 text-center">
+            <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Info className="h-8 w-8 text-amber-500" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+              Registration Closed
             </h2>
-            <p className="text-gray-600">{status?.message}</p>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+              {status?.message || "No more accepting the registrations"}
+            </p>
           </div>
         </div>
       </div>
@@ -1662,9 +1968,9 @@ export default function RegistrationForm() {
   if (!isEmailVerified) {
     return (
       <>
-        <ToastNotification />
-        <OTPSection />
-        <EmailInputScreen />
+        {renderToastNotification()}
+        {renderOTPSection()}
+        {renderEmailInputScreen()}
       </>
     );
   }
@@ -1672,9 +1978,9 @@ export default function RegistrationForm() {
   // Show the actual form after email verification
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-3">
-      <ToastNotification />
-      <AutoFillModal />
-      <AutoFillHistoryModal />
+      {renderToastNotification()}
+      {renderAutoFillModal()}
+      {renderAutoFillHistoryModal()}
 
       <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -1702,9 +2008,7 @@ export default function RegistrationForm() {
           <form onSubmit={handleSubmit} className="p-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {formData.fieldsList?.map((field) => {
-                // Add this safety check at the beginning
                 if (!field || !field.key) {
-                  console.warn("Invalid field object:", field);
                   return null;
                 }
 

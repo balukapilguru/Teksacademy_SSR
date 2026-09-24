@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import LegacyCard from "../coursePage/LegacyCard";
-import Heading from "../../utility/Heading";
+import CoursepageHeading from "../../utility/CoursepageHeading";
 import Image from "next/image";
 import RichTextRenderer from "./RichTextRenderer";
 
@@ -18,7 +18,7 @@ const WhyOnline = ({ data }) => {
         <div className="text-left">
           {/* Heading Section */}
           <div className="mb-8">
-            <Heading data={data?.heading} />
+            <CoursepageHeading data={data?.heading} />
           </div>
 
           {/* Legacy Cards Section */}

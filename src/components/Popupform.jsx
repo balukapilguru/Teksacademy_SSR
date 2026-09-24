@@ -4,12 +4,15 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import ReusableForm from "./ReusableForm";
+import { storeBranchData } from "@/lib/branchStorage";
 
 const normalizeCourseValue = (value) => {
   if (!value) return "";
   if (typeof value === "string") return value;
   if (Array.isArray(value)) {
-    const firstValue = value.find((item) => item !== undefined && item !== null);
+    const firstValue = value.find(
+      (item) => item !== undefined && item !== null,
+    );
     return normalizeCourseValue(firstValue);
   }
   if (typeof value === "object") {
@@ -69,29 +72,41 @@ const Popupform = ({
   }, [show]);
 
   // Handle form submission from ReusableForm
-  const handleFormSubmit = async (formValues) => {
+  const handleFormSubmit = async (formValues,mappedValues) => {
     if (onSubmit) {
+      console.log("valuess payload",mappedValues);
       setIsSubmitting(true);
       try {
-        const result = await onSubmit(formValues);
-        
+        const result = await onSubmit(formValues,mappedValues);
+
         // If submission successful and redirect is enabled
         if (result?.success !== false && redirectToThankYou) {
           // Check for pending syllabus URL
-          const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+          const pendingUrl =
+            sessionStorage.getItem("pendingSyllabusUrl") ||
+            extraData?.syllabusUrl;
           if (pendingUrl) {
-            // Open syllabus in new tab
             window.open(pendingUrl, "_blank", "noopener,noreferrer");
-            sessionStorage.removeItem('pendingSyllabusUrl');
+            sessionStorage.removeItem("pendingSyllabusUrl");
           }
-          
-          // Redirect to thank you page
+
+          const branchVal = branch || formValues?.branch || mappedValues?.branch || mappedValues?.course_branch;
+          if (branchVal) {
+            storeBranchData(branchVal);
+          }
+
+          toast.success("Thank you! We'll contact you soon.", {
+            duration: 4000,
+            icon: "🎉",
+            style: {
+              background: "#dcfce7",
+              color: "#166534",
+              border: "1px solid #bbf7d0",
+            },
+          });
+
           router.push("/thankyou");
-          
-          // Close popup after redirect
-          setTimeout(() => {
-            onClose();
-          }, 100);
+          return;
         }
       } catch (error) {
         console.error("Form submission error:", error);
@@ -106,26 +121,40 @@ const Popupform = ({
   useEffect(() => {
     const handleFormSuccess = (event) => {
       // Check for pending syllabus URL
-      const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+      const pendingUrl =
+        sessionStorage.getItem("pendingSyllabusUrl") || extraData?.syllabusUrl;
       if (pendingUrl) {
-        // Open syllabus in new tab
         window.open(pendingUrl, "_blank", "noopener,noreferrer");
-        sessionStorage.removeItem('pendingSyllabusUrl');
+        sessionStorage.removeItem("pendingSyllabusUrl");
+      }
+
+      if (branch) {
+        storeBranchData(branch);
       }
 
       if (redirectToThankYou) {
+        toast.success("Thank you! We'll contact you soon.", {
+          duration: 4000,
+          icon: "🎉",
+          style: {
+            background: "#dcfce7",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
+          },
+        });
         router.push("/thankyou");
+        return;
       }
-      
+
       setTimeout(() => {
         onClose();
       }, 100);
     };
 
-    window.addEventListener('formSubmissionSuccess', handleFormSuccess);
-    
+    window.addEventListener("formSubmissionSuccess", handleFormSuccess);
+
     return () => {
-      window.removeEventListener('formSubmissionSuccess', handleFormSuccess);
+      window.removeEventListener("formSubmissionSuccess", handleFormSuccess);
     };
   }, [redirectToThankYou, router, onClose, extraData]);
 
@@ -149,7 +178,7 @@ const Popupform = ({
           ${show ? "opacity-50" : "opacity-0"}`}
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div
         style={{
@@ -170,14 +199,26 @@ const Popupform = ({
             aria-label="Close"
             disabled={isSubmitting}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
 
           {/* Header */}
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-800">{title || "Enroll Now"}</h3>
+            <h3 className="text-2xl font-bold text-gray-800">
+              {title || "Enroll Now"}
+            </h3>
             {subtitle && (
               <p className="text-gray-600 text-sm mt-2">{subtitle}</p>
             )}
@@ -193,17 +234,19 @@ const Popupform = ({
             onSubmit={onSubmit ? handleFormSubmit : undefined}
             onSuccess={() => {
               // This will be called by ReusableForm on success
-              const pendingUrl = sessionStorage.getItem('pendingSyllabusUrl') || extraData?.syllabusUrl;
+              const pendingUrl =
+                sessionStorage.getItem("pendingSyllabusUrl") ||
+                extraData?.syllabusUrl;
               if (pendingUrl) {
                 window.open(pendingUrl, "_blank", "noopener,noreferrer");
-                sessionStorage.removeItem('pendingSyllabusUrl');
+                sessionStorage.removeItem("pendingSyllabusUrl");
               }
             }}
           />
         </div>
       </div>
     </>,
-    portalTarget
+    portalTarget,
   );
 };
 

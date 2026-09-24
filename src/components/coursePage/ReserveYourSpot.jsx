@@ -2,23 +2,36 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import GetData from "@/utility/GetData";
 import CoursepageHeading from "@/utility/CoursepageHeading";
 import ReusableForm from "@/components/ReusableForm";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source }) => {
+const ReserveYourSpot = ({  data,
+  formDetails,
+  course,
+  courseName = "",
+  courseLabel = "",
+  branch = "",
+  source,}) => {
   const router = useRouter();
 
   if (!data) return null;
 
   const courseDisplayName =
-    courseName || course || formDetails?.courseName || formDetails?.course || "";
-  const initialValues = {
-    course: courseDisplayName,
-  };
+  courseLabel ||
+  courseName ||
+  course ||
+  formDetails?.courseName ||
+  formDetails?.course ||
+  "";
+
+const initialValues = {
+  course: courseDisplayName,
+  branch: branch || "",
+};
 
   const {
     heading = [],
@@ -42,6 +55,7 @@ const ReserveYourSpot = ({ data, formDetails, course, courseName = "", source })
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       toast.error(error.message || "Submission failed. Please try again.");

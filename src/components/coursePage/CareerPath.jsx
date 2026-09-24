@@ -14,6 +14,7 @@ import {
   Cloud,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import Heading from '@/utility/Heading';
 import Popupform from '../clientcomponents/forms/Popupform';
 import { blogsApplyBaseUrl, buildApiUrl } from '@/lib/apiBaseUrls';
@@ -107,7 +108,10 @@ const CareerPath = ({ data, formDetails, courseName = '' }) => {
       if (!res.ok) throw new Error('Submission failed');
 
       setShowModal(false);
+      toast.success("Thank you! We'll contact you soon.");
       router.push('/thankyou');
+    } catch (error) {
+      toast.error(error.message || 'Submission failed');
     } finally {
       setIsSubmitting(false);
     }

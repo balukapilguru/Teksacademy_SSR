@@ -1,16 +1,10 @@
 "use client";
 import React from "react";
+import FooterAdressbar from "../FooterAdressbar";
 
 const MostSearchedTerms = ({ data }) => {
-  // Only require courses (locations are optional)
   if (!data || !data.courses?.length) {
-    return (
-      <section className="bg-[#0E2849] border border-[#2a619d] rounded-lg py-6 flex justify-center items-center">
-        <div className="text-white text-center text-sm md:text-base">
-          No most searched terms available
-        </div>
-      </section>
-    );
+    return null;
   }
 
   const { courses } = data;
@@ -40,6 +34,7 @@ const MostSearchedTerms = ({ data }) => {
             );
           })}
         </div>
+        {/* <FooterAdressbar branchData={data.branches} /> */}
       </div>
     </section>
   );

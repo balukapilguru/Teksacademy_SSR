@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import Loader from "../Loader";
@@ -33,12 +34,17 @@ const CoursesOffered = ({ data, branchData }) => {
   const [currentBranch, setCurrentBranch] = useState("");
 
   useEffect(() => {
-    const propCourses = data?.courses || data?.courseList || data?.coursesList || [];
-    const branchValue =
+    const propCourses =
+      data?.courses || data?.courseList || data?.coursesList || [];
+    const capitalizeFirstLetter = (str = "") =>
+      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+    const branchValue = capitalizeFirstLetter(
       branchData?.slug ||
       branchData?.branchSlug ||
       branchData?.name ||
-      getBranchFromPath(pathname);
+      getBranchFromPath(pathname),
+    );
 
     setCurrentBranch(branchValue);
 
@@ -57,12 +63,17 @@ const CoursesOffered = ({ data, branchData }) => {
         const baseUrl =
           process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
           process.env.NEXT_TEKS_SSR_API_URL;
-        const response = await fetch(`${baseUrl}/api/v1/course?branches=${branchValue}`);
+        const response = await fetch(
+          `${baseUrl}/api/v1/course?branches=${branchValue}`,
+        );
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
 
         const result = await response.json();
-        setCourses(result.success && Array.isArray(result.data) ? result.data : []);
+        setCourses(
+          result.success && Array.isArray(result.data) ? result.data : [],
+        );
       } catch (err) {
         console.error("Error fetching courses:", err);
         setError(err.message);
@@ -75,15 +86,18 @@ const CoursesOffered = ({ data, branchData }) => {
     fetchCourses();
   }, [data, branchData, pathname]);
 
-  const handleSubmit = async (formValues, mappedPayload) => {
+  const handleSubmit = async (formValues, payload) => {
     try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(mappedPayload),
-      });
+      );
 
       const responseData = await response.json();
 
@@ -91,6 +105,7 @@ const CoursesOffered = ({ data, branchData }) => {
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);
@@ -109,7 +124,7 @@ const CoursesOffered = ({ data, branchData }) => {
     selectedCourse?.title ||
     selectedCourse?.name ||
     "";
-
+  // {console.log("Courses rendered:",courses.length, courses.map(c => c.heading || c.programName || c.title || c.name))}
   if (loading) {
     return (
       <section>
@@ -158,7 +173,9 @@ const CoursesOffered = ({ data, branchData }) => {
             ))}
           </div>
         ) : (
-          <p className="flex justify-center h-40 w-full">No courses available.</p>
+          <p className="flex justify-center h-40 w-full">
+            No courses available.
+          </p>
         )}
 
         <div className="flex justify-center pt-5">
@@ -176,10 +193,12 @@ const CoursesOffered = ({ data, branchData }) => {
         course={courseName}
         courseName={courseName}
         branch={currentBranch}
+        course_branch={currentBranch}
         title="Enquire Now"
         subtitle="Share your details and our counselor will reach out to you."
         formType="default"
         buttonText="Submit"
+        source="Batch Request"
         successMessage="Thanks! We will get in touch shortly."
         onSubmit={handleSubmit}
       />

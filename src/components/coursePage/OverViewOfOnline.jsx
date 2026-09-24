@@ -10,12 +10,14 @@ import { GiPentarrowsTornado } from "react-icons/gi";
 import RichTextRenderer from "../coursePage/RichTextRenderer";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 const OverViewOfOnline = ({
-  data,
+   data,
   formDetails,
+  courseLabel = "",
   courseName = "",
   category = false,
-  branch = "course",
+  branch = "",
   isSelfPaced = false,
+
 }) => {
   const router = useRouter();
 
@@ -29,21 +31,26 @@ const OverViewOfOnline = ({
     button,
     overViewImage = {},
   } = data;
-  const courseDisplayName = courseName || formDetails?.courseName || formDetails?.course || formDetails || "";
-  const [showModal, setShowModal] = useState(false);
+const courseDisplayName =
+  courseLabel ||
+  courseName ||
+  formDetails?.courseName ||
+  formDetails?.course ||
+  "";
+    const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
 
   const imageSrc =
     overViewImage?.src && overViewImage.src !== "" ? overViewImage.src : mba;
   const imageAlt = overViewImage?.alt || subHeading || "Overview image";
 
-  const handleOpenModal = (details) => {
-    setSelectedCourse(courseDisplayName || details);
+  const handleOpenModal = () => {
+    setSelectedCourse(courseDisplayName);
     setShowModal(true);
   };
 
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
@@ -55,7 +62,7 @@ const OverViewOfOnline = ({
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
@@ -134,6 +141,7 @@ const OverViewOfOnline = ({
             course={selectedCourse}
             courseName={selectedCourse}
             source={30}
+            university={branch}
             title="Enroll Now"
             subtitle="Fill in your details to get course guidance and a callback from our team."
             onSubmit={handleSubmit}

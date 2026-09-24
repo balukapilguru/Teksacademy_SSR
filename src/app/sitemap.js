@@ -6,6 +6,7 @@ const BLOGS_API_URL = (
   process.env.NEXT_BLOGS_APPLY_API_URL ||
   ""
 ).replace(/\/$/, "");
+const FIXED_LAST_MODIFIED = "2026-09-08T08:56:37+00:00";
 
 export const revalidate = 86400;
 
@@ -80,32 +81,108 @@ const FIXED_SITEMAP_ROUTES = [
 
   "/apply-for-jobs",
   "/blogs",
+  "/find-my-course"
 ];
+
+const BRANCH_COURSE_ROUTES = [
+  // Ameerpet
+  "/courses/ameerpet/best-full-stack-python-development-course-training",
+  "/courses/ameerpet/best-java-full-stack-developer-course",
+  "/courses/ameerpet/best-data-science-training",
+  "/courses/ameerpet/best-data-analytics-course-training",
+  "/courses/ameerpet/best-cyber-security-course",
+  "/courses/ameerpet/best-autocad-course",
+  "/courses/ameerpet/best-revit-course",
+
+  // Hitech City
+  "/courses/hiteccity/best-data-science-course",
+  "/courses/hiteccity/best-java-full-stack-course",
+  "/courses/hiteccity/best-python-full-stack-course",
+  "/courses/hiteccity/best-cyber-security-course",
+  "/courses/hiteccity/best-aws-devops-course",
+  "/courses/hiteccity/best-data-analytics-course",
+  "/courses/hiteccity/best-business-analytics-course",
+
+  // Secunderabad
+  "/courses/secunderabad/best-data-science-course",
+  "/courses/secunderabad/best-java-full-stack-course",
+  "/courses/secunderabad/best-python-full-stack-course",
+  "/courses/secunderabad/sap-fico-training",
+  "/courses/secunderabad/data-analytics-course-training",
+  "/courses/secunderabad/sap-mm-training",
+  "/courses/secunderabad/sap-sd-course",
+
+  // Dilsukhnagar
+  "/courses/dilsukhnagar/best-data-science-course",
+  "/courses/dilsukhnagar/best-java-full-stack-course",
+  "/courses/dilsukhnagar/best-python-full-stack-course",
+  "/courses/dilsukhnagar/best-digital-marketing-course",
+  "/courses/dilsukhnagar/best-aws-devops-course",
+  "/courses/dilsukhnagar/best-data-analytics-course",
+  "/courses/dilsukhnagar/best-business-analytics-course",
+
+  // Mehdipatnam
+  "/courses/mehdipatnam/best-data-science-course",
+  "/courses/mehdipatnam/best-bim-course",
+  "/courses/mehdipatnam/best-java-full-stack-course",
+  "/courses/mehdipatnam/best-python-full-stack-course",
+
+  // Kukatpally
+  "/courses/kukatpally/best-data-science-course",
+  "/courses/kukatpally/best-java-full-stack-course",
+  "/courses/kukatpally/best-python-full-stack-course",
+  "/courses/kukatpally/best-aws-devops-course",
+  "/courses/kukatpally/best-data-analytics-course",
+
+  // Bangalore
+  "/courses/bangalore/best-data-science-course",
+  "/courses/bangalore/data-analytics-course-training",
+  "/courses/bangalore/best-java-full-stack-course",
+  "/courses/bangalore/best-python-full-stack-course",
+
+  // Kompally
+  "/courses/kompally/best-data-science-course",
+  "/courses/kompally/best-java-full-stack-course",
+  "/courses/kompally/best-python-full-stack-course",
+  "/courses/kompally/best-data-analytics-course",
+
+  // Visakhapatnam
+  "/courses/visakhapatnam/best-data-science-course",
+  "/courses/visakhapatnam/best-java-full-stack-course",
+  "/courses/visakhapatnam/best-python-full-stack-course",
+  "/courses/visakhapatnam/best-digital-marketing-course",
+  "/courses/visakhapatnam/best-bim-course",
+  "/courses/visakhapatnam/best-data-analytics-course",
+  "/courses/visakhapatnam/best-autocad-course",
+  "/courses/visakhapatnam/best-medical-coding-course",
+];
+
+
 
 /**
  * Optional: dynamic blog routes
  */
-// const getBlogRoutes = async () => {
-//   if (!BLOGS_API_URL) return [];
+const getBlogRoutes = async () => {
+  if (!BLOGS_API_URL) return [];
 
-//   try {
-//     const res = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
-//       next: { revalidate },
-//     });
+  try {
+    const res = await fetch(`${BLOGS_API_URL}/blogs/getAll?pageSize=100`, {
+      next: { revalidate },
+    });
 
-//     if (!res.ok) return [];
+    if (!res.ok) return [];
 
-//     const data = await res.json();
-//     const posts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
+    const data = await res.json();
+    const posts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
 
-//     return posts
-//       .map((p) => p?.meta_url)
-//       .filter(Boolean)
-//       .map((slug) => `/blogs/${slug}`);
-//   } catch {
-//     return [];
-//   }
-// };
+    return posts
+      .map((p) => p?.meta_url)
+      .filter(Boolean)
+      .map((slug) => `/blogs/${slug}`);
+  } catch {
+    return [];
+  }
+};
 
 /**
  * Exact metadata control
@@ -142,14 +219,20 @@ export default async function sitemap() {
 
   const routes = [
     ...FIXED_SITEMAP_ROUTES,
-     // only dynamic part allowed
+    ...BRANCH_COURSE_ROUTES,
+    ...blogRoutes,
   ];
 
   const uniqueRoutes = [...new Set(routes.map(normalizeRoute))];
 
-  return uniqueRoutes.map((route) => ({
-    url: `${SITE_URL}${route === "/" ? "" : route}`,
-    lastModified: new Date(),
-    ...getRouteMeta(route),
-  }));
+  return uniqueRoutes.map((route) => {
+    const meta = getRouteMeta(route);
+
+    return {
+      url: `${SITE_URL}${route === "/" ? "" : route}`,
+      lastModified: FIXED_LAST_MODIFIED,
+      changeFrequency: meta.changeFrequency,
+      priority: meta.priority,
+    };
+  });
 }

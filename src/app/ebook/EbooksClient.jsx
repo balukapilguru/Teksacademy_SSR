@@ -9,6 +9,7 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 export default function EbookClient({ source }) {
   const [selectedCard, setSelectedCard] = useState(null);
+  const [branch,setBranch] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
@@ -48,17 +49,22 @@ export default function EbookClient({ source }) {
   const section = data?.ebookSection || {};
   const courses = section.items || [];
 
-  const handleEbookSubmit = async (formValues, payload) => {
+  const handleEbookSubmit = async (formValues, mappedValues) => {
+    // console.log("formValues", formValues);
+    // console.log("mappedValues", mappedValues);
     const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...payload,
+        ...mappedValues,
+        mappedValues,
+        formValues,
         productId: selectedCard?.productId,
-        sourceId: selectedCard?.sourceId,
+        course_branch: formValues?.branch || mappedValues?.course_branch || "",
+        // sourceId: selectedCard?.sourceId,
       }),
     });
-
+// console.log("response", response,"payload");
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || "Submission failed");
@@ -245,6 +251,8 @@ export default function EbookClient({ source }) {
         onClose={() => setSelectedCard(null)}
         course={selectedCard?.title || ""}
         courseName={selectedCard?.title || ""}
+        branch={branch}
+      course_branch={branch}
         title="Book a live demo for free"
         formType="ebook"
         buttonText="Download E-Book"

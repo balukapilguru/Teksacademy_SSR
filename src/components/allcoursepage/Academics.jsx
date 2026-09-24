@@ -9,7 +9,7 @@ import Popupform from "../clientcomponents/forms/Popupform";
 const Page = ({ data }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-console.log(data,"academimcs")
+// console.log(data,"academimcs")
   // ✅ Sort categories: PG → UG → Others
   const categories = (data?.category || []).sort((a, b) => {
     const order = ["Post Graduation", "Under Graduation"];
@@ -67,7 +67,7 @@ console.log(data,"academimcs")
           { method: "GET", next: { revalidate: 60 } }
         );
         const resData = await response.json();
-        console.log(resData?.data, "coursecardss");
+        // console.log(resData?.data, "coursecardss");
         setFilteredCourses(resData?.data || []);
         setMobileIndex(0); // reset carousel on category change
       } catch (error) {

@@ -47,6 +47,7 @@ import Excel from "@/components/home-page/ui-components/Excel";
 import Nutshell from "@/components/home-page/ui-components/NutShell";
 import Hiring from "@/components/home-page/ui-components/Hiring";
 import TopFiveSuccesstories from "@/components/home-page/ui-components/TopFiveSuccesstories";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 const isGenericCourseLabel = (value) => {
   const label = typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -111,6 +112,7 @@ export default async function Page({ params }) {
   let data;
   try {
     data = await getCourseData(coursename);
+    console.log(data.downloadOurCourseBrochure, "datadownloadOurCourseBrochure");
   } catch {
     return (
       <div className="p-6 text-red-600 text-center">
@@ -142,7 +144,7 @@ export default async function Page({ params }) {
 
   const formDetails =
     isCertification || isSelfPaced ? data?.formDetails : data?.specializations;
-  console.log(data?.advancedTools, "data.ToolsAndFeatures");
+  // console.log(data?.advancedTools, "data.ToolsAndFeatures");
   /* =====================================================
      DATA MAPPING (UNCHANGED)
   ===================================================== */
@@ -168,10 +170,14 @@ export default async function Page({ params }) {
 
   const mostSearchedTerms = data?.mostSearchedTerms && {
   courses: data.mostSearchedTerms.courses,
+
+
+  
 };
-  console.log(mostSearchedTerms,"mst")
+  // console.log(mostSearchedTerms,"mst")
 
   const excelSectionData = data?.excel || data?.Excel;
+const contactBar = data?.contactBar || data?.contactBar ;
 
   const courseLabel =
     getCourseLabelValue(data?.banner?.mainHeading) ||
@@ -219,7 +225,6 @@ export default async function Page({ params }) {
         alt: "Career Services",
       },
     };
-
   // console.log(data?.car`eerService, "data?.careerServices");
   /* =====================================================
      COURSE FLOW (UNCHANGED)
@@ -258,10 +263,13 @@ export default async function Page({ params }) {
           courseName={courseLabel}
         />
       )}
-      {console.log(data,"career")}
+      {/* {console.log(data,"career")} */}
 
       {data?.OnlineAdmissionProcedure && (
-        <Admission data={data.OnlineAdmissionProcedure} />
+        <Admission
+          data={data.OnlineAdmissionProcedure}
+          courseLabel={courseLabel}
+        />
       )}
 
       {data?.platFormSupport && <Platform data={data.platFormSupport} />}
@@ -381,6 +389,7 @@ export default async function Page({ params }) {
               />
             ),
           },
+          
           {
             key: "course-specializations",
             component: data?.specializations && (
@@ -439,7 +448,7 @@ export default async function Page({ params }) {
         )}
 
        
-        {console.log(careerServicesData, "careerServicesData")}
+        {/* {console.log(careerServicesData, "careerServicesData")} */}
 
         {reserveSpotData &&
           (isCertification || isSelfPaced ? (
@@ -484,6 +493,11 @@ export default async function Page({ params }) {
         )}
 
         {mostSearchedTerms && <MostSearchedTerms data={mostSearchedTerms} />}
+        <div>
+                  <FooterAdressbar
+                       branchData={contactBar}
+                      />
+                </div>
       </div>
     </>
   );

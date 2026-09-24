@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import confetti from "canvas-confetti";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot, FaHouse } from "react-icons/fa6";
+import { toast } from "react-hot-toast";
 import { getBranchData, clearBranchData } from "@/lib/branchStorage";
 
 const Thank_you =
@@ -14,13 +15,27 @@ const Thankyou = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Get branch data from sessionStorage only if coming from a branch page
+    // Get branch data from sessionStorage if coming from a branch page or form submission
     const storedBranchData = getBranchData();
-    console.log("Stored branch data on thankyou page:", storedBranchData);
     setBranchData(storedBranchData);
 
+    // Show success toast on immediate landing if coming from submission
+    const justSubmitted = typeof window !== "undefined" && sessionStorage.getItem("just_submitted");
+    if (justSubmitted) {
+      sessionStorage.removeItem("just_submitted");
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "🎉",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
+    }
+
     // Clear the stored branch data after reading
-    // This ensures map link won't show on direct visits to /thankyou
+    // This ensures map link won't show on subsequent direct visits to /thankyou
     clearBranchData();
 
     setIsLoaded(true);
@@ -79,27 +94,28 @@ const Thankyou = () => {
               priority
             />
 
-            {/* Get Direction Section - ONLY displayed when coming from a branch page */}
-            {branchData && branchData.mapLink && (
-              <div className="w-full mx-auto overflow-hidden mt-6">
-                <div className="flex flex-col gap-3">
-                  <p className="text-center text-gray-700 font-semibold">
-                    Visit us at our {branchData.name} branch:
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Link
-                      href={branchData.mapLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 bg-[#FE543D] hover:bg-[#e84c1f] text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md"
-                    >
-                      <FaLocationDot className="text-white" />
-                      Get Direction to Our {branchData.name} Branch
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Action Buttons: Home Button & Branch Direction */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center gap-2.5 bg-[#2A619D] hover:bg-[#214d7d] text-white font-semibold px-8 py-3.5 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md text-base"
+              >
+                <FaHouse className="text-lg" />
+                Back to Home
+              </Link>
+
+              {branchData && branchData.mapLink && (
+                <Link
+                  href={branchData.mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2.5 bg-[#FE543D] hover:bg-[#e84c1f] text-white font-semibold px-8 py-3.5 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md text-base"
+                >
+                  <FaLocationDot className="text-lg" />
+                  Get Direction to Our {branchData.name} Branch
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>

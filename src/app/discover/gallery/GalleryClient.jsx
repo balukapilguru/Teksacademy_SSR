@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Heading from "@/utility/Heading";
+import FooterAdressbar from "@/components/FooterAdressbar";
 
 export default function GalleryClient() {
   const baseUrl =
@@ -12,6 +13,7 @@ export default function GalleryClient() {
 
   const [galleryData, setGalleryData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [contactBar, setContactBar] = useState(null);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -19,6 +21,7 @@ export default function GalleryClient() {
         const res = await fetch(`${baseUrl}/api/v1/discover/gallery`);
         const data = await res.json();
         setGalleryData(data?.data?.gallery?.images || []);
+        setContactBar(data?.data?.contactBar || null);
       } catch (error) {}
     };
 
@@ -33,45 +36,49 @@ export default function GalleryClient() {
     setActiveIndex((prev) => (prev - 1 + galleryData.length) % galleryData.length);
 
   return (
-    <div className="w-full min-h-screen bg-white py-10">
-      <div className="text-center mb-10">
-        <Heading
-          data="Gallery"
-          as="h1"
-          className="!text-4xl !font-bold !mb-0"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-5 lg:px-20">
-        {galleryData.map((img, index) => (
-          <div key={`${img.id}-${index}`} onClick={() => openModal(index)}>
-            <Image
-              src={GetData({ url: img.imgsrc })}
-              alt={img.alt}
-              width={400}
-              height={300}
-              className="w-full h-60 object-cover rounded-lg shadow-md"
-            />
-          </div>
-        ))}
-      </div>
-
-      {activeIndex !== null && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[99999]">
-          <button onClick={closeModal} className="absolute top-6 right-6 text-white text-4xl">×</button>
-          <button onClick={showPrev} className="absolute left-6 text-white text-5xl">‹</button>
-
-          <Image
-            src={GetData({ url: galleryData[activeIndex]?.imgsrc })}
-            alt={galleryData[activeIndex]?.alt}
-            width={1200}
-            height={1200}
-            className="w-[300px] lg:w-[480px] rounded-lg"
+    <>
+      <div className="w-full min-h-screen bg-white py-10">
+        <div className="text-center mb-10">
+          <Heading
+            data="Gallery"
+            as="h1"
+            className="!text-4xl !font-bold !mb-0"
           />
-
-          <button onClick={showNext} className="absolute right-6 text-white text-5xl">›</button>
         </div>
-      )}
-    </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-5 lg:px-20">
+          {galleryData.map((img, index) => (
+            <div key={`${img.id}-${index}`} onClick={() => openModal(index)}>
+              <Image
+                src={GetData({ url: img.imgsrc })}
+                alt={img.alt}
+                width={400}
+                height={300}
+                className="w-full h-60 object-cover rounded-lg shadow-md"
+              />
+            </div>
+          ))}
+        </div>
+
+        {activeIndex !== null && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[99999]">
+            <button onClick={closeModal} className="absolute top-6 right-6 text-white text-4xl">×</button>
+            <button onClick={showPrev} className="absolute left-6 text-white text-5xl">‹</button>
+
+            <Image
+              src={GetData({ url: galleryData[activeIndex]?.imgsrc })}
+              alt={galleryData[activeIndex]?.alt}
+              width={1200}
+              height={1200}
+              className="w-[300px] lg:w-[480px] rounded-lg"
+            />
+
+            <button onClick={showNext} className="absolute right-6 text-white text-5xl">›</button>
+          </div>
+        )}
+      </div>
+
+      {contactBar && <FooterAdressbar branchData={contactBar} />}
+    </>
   );
 }

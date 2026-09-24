@@ -7,12 +7,13 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Heading from "@/utility/Heading";
 import Loader from "../Loader";
 import ReusableForm from "../ReusableForm";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
   const api = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const router = useRouter();
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Mapped payload being sent:", mappedPayload);
-
     try {
       const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
         method: "POST",
@@ -23,12 +24,20 @@ import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "\ud83c\udf89",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);

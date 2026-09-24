@@ -7,14 +7,25 @@ import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
-const Admission = ({ data }) => {
+const Admission = ({  data,
+  formDetails,
+  courseLabel = "",
+  branch = "", }) => {
+
+    
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const router = useRouter();
-
+  const courseDisplayName =
+  courseLabel ||
+  data.formDetails?.courseName ||
+  data.formDetails?.course ||
+  "";
+// console.log(courseDisplayName,"coursename")
   if (!data) return null;
 
   const description =
@@ -49,8 +60,8 @@ const Admission = ({ data }) => {
 
   // Handle form submission - matching OverViewOfOnline pattern
   const handleSubmit = async (formValues, mappedPayload) => {
-    console.log("Form values:", formValues);
-    console.log("Mapped payload being sent:", mappedPayload);
+    // console.log("Form values:", formValues);
+    // console.log("Mapped payload being sent:", mappedPayload);
 
     try {
       setIsLoading(true);
@@ -64,13 +75,21 @@ const Admission = ({ data }) => {
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
+      // console.log("API Response:", responseData);
 
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
 
-      // Close modal and redirect to thank you page
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "\ud83c\udf89",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       setShowModal(false);
       router.push("/thankyou");
       
@@ -85,12 +104,12 @@ const Admission = ({ data }) => {
   };
 
   const handleOpenModal = () => {
-    setSelectedCourse(data?.name || "");
-    setShowModal(true);
-  };
+setSelectedCourse(courseDisplayName);
+  setShowModal(true);
+};
 
   return (
-    <section id="OnlineAdmissionProcedure">
+    <section id="OnlineAdmissionProcedure main_container" className="py-4  md:mt-12  relative rounded-lg">
       {/* Modal */}
       {showModal && (
         <Popupform
@@ -99,6 +118,7 @@ const Admission = ({ data }) => {
           course={selectedCourse}
           courseName={selectedCourse}
           source={30}
+          university={branch}
           title="Enroll Now"
           subtitle="Fill in your details to get course guidance and a callback from our team."
           onSubmit={handleSubmit}

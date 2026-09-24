@@ -14,6 +14,13 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
+export const dynamic = "force-dynamic";
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata = {
   title: "Best Software Courses Training Institute in Hyderabad | Teks Academy",
   description:
@@ -56,6 +63,39 @@ export default async function RootLayout({ children }) {
         className={`${poppins.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
+        {/* Prevent Google reCAPTCHA internal timeout rejections from crashing Next.js dev overlay */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function isRecaptchaNoise(reason) {
+                  if (!reason) return false;
+                  var msg = typeof reason === 'string' ? reason : (reason.message || reason.reason || '');
+                  if (typeof msg !== 'string') return false;
+                  return (
+                    msg.indexOf('reCAPTCHA') !== -1 ||
+                    msg.indexOf('Timeout (b)') !== -1 ||
+                    msg.indexOf('timeout-or-duplicate') !== -1
+                  );
+                }
+                if (typeof window !== 'undefined') {
+                  window.addEventListener('unhandledrejection', function(event) {
+                    if (isRecaptchaNoise(event.reason)) {
+                      event.preventDefault();
+                      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+                    }
+                  });
+                  window.addEventListener('error', function(event) {
+                    if (isRecaptchaNoise(event.error) || isRecaptchaNoise(event.message)) {
+                      event.preventDefault();
+                      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+                    }
+                  });
+                }
+              })();
+            `,
+          }}
+        />
 
         {/* Google Tag Manager (noscript) */}
         <noscript>

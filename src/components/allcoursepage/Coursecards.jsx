@@ -99,7 +99,7 @@ const CourseCard = ({ course, onGetDetailsClick }) => {
             <div className="flex-1 bg-[#faf2ec] rounded-lg p-2">
               <div className="text-xs text-gray-500">💰 Fee</div>
               <div className="text-[#e6662a] text-sm font-bold">
-                ₹{formatIndianRupees(course.feeRange)}
+                ₹{formatIndianRupees(course.feeRange)} <span className="text-[10px] font-normal text-gray-500">+ GST</span>
               </div>
             </div>
 

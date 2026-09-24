@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { FiDownload } from "react-icons/fi";
 import Image from "next/image";
 import CoursepageHeading from "../../utility/CoursepageHeading";
@@ -19,12 +20,12 @@ const normalizeCourseText = (value) => {
   if (typeof value === "object") {
     return normalizeCourseText(
       value.slug ||
-      value.courseName ||
-      value.programName ||
-      value.title ||
-      value.name ||
-      value.heading ||
-      value.course
+        value.courseName ||
+        value.programName ||
+        value.title ||
+        value.name ||
+        value.heading ||
+        value.course,
     );
   }
   return value
@@ -55,8 +56,11 @@ const findCourseBrochureLink = ({ courseSlug, courseName, formDetails }) => {
 
     return candidates.some((candidate) =>
       searchableValues.some(
-        (value) => value === candidate || value.includes(candidate) || candidate.includes(value)
-      )
+        (value) =>
+          value === candidate ||
+          value.includes(candidate) ||
+          candidate.includes(value),
+      ),
     );
   });
 
@@ -71,53 +75,54 @@ const getPdfLink = (value) => {
 const DownloadCourseBrochure = ({
   data,
   formDetails,
+  courseLabel = "",
   courseName = "",
   courseSlug = "",
   category = false,
-  branch = "course",
+  branch = "",
   isSelfPaced = false,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(formDetails);
+  const courseDisplayName =
+    courseLabel ||
+    courseName ||
+    formDetails?.courseName ||
+    formDetails?.course ||
+    "";
+
+  const [selectedCourse, setSelectedCourse] = useState(courseDisplayName);
   const router = useRouter();
 
   if (!data) return null;
 
-  const courseDisplayName = courseName || selectedCourse || formDetails || "";
-
   const getBrochureUrl = () => {
-    const brochureUrl =
-      data?.brochure?.url ||
-      data?.brochureUrl ||
-      data?.downloadLink ||
-      findCourseBrochureLink({ courseSlug, courseName: courseDisplayName, formDetails }) ||
-      getPdfLink(data?.button?.link) ||
-      "";
+    if (!data?.button?.link) return "";
 
-    if (!brochureUrl || brochureUrl === "#") return "";
-
-    return brochureUrl && !brochureUrl.startsWith("http")
-      ? GetData({ url: brochureUrl })
-      : brochureUrl;
+    return data.button.link.startsWith("http")
+      ? data.button.link
+      : GetData({ url: data.button.link });
   };
 
-  const handleOpenModal = (details) => {
-    setSelectedCourse(details);
+  const handleOpenModal = () => {
+    setSelectedCourse(courseDisplayName);
     setShowModal(true);
   };
 
   const handleSubmit = async (_formValues, mappedPayload) => {
     try {
-      const response = await fetch(buildApiUrl(blogsApplyBaseUrl, "/lead/create"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mappedPayload),
         },
-        body: JSON.stringify(mappedPayload),
-      });
+      );
 
       const responseData = await response.json();
-      console.log(responseData,"responsee")
+      // console.log(responseData,"responsee")
       if (!response.ok) {
         throw new Error(responseData.message || "Submission failed");
       }
@@ -125,18 +130,12 @@ const DownloadCourseBrochure = ({
       const brochureUrl = getBrochureUrl();
 
       if (brochureUrl) {
-        const link = document.createElement("a");
-        link.href = brochureUrl;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.download = "";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        window.open(brochureUrl, "_blank");
       } else {
         alert("Brochure PDF is not available for this course right now.");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);
@@ -144,92 +143,89 @@ const DownloadCourseBrochure = ({
     }
   };
 
-
   return (
-   
-      <section
-        className="rounded-xl bg-[#e5e7eb]"
-        id="downloadOurCourseBrochure"
-      >
-        {showModal && (
-          <Popupform
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            course={courseDisplayName}
-            courseName={courseDisplayName}
-            title="Download Curriculum"
-            subtitle="Fill in your details to download the course brochure."
-            onSubmit={handleSubmit}
-            formType="syllabus"
-            buttonText={data?.button?.name || "Download Brochure"}
-            successMessage="Thank you! Your brochure download will start shortly."
-          />
-        )}
+    <section className="rounded-xl bg-[#e5e7eb]" id="downloadOurCourseBrochure">
+      {showModal && (
+        <Popupform
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          course={courseDisplayName}
+          courseName={courseDisplayName}
+          title="Download Curriculum"
+          subtitle="Fill in your details to download the course brochure."
+          onSubmit={handleSubmit}
+          university={branch}
+          formType="syllabus"
+          buttonText={data?.button?.name || "Download Brochure"}
+          successMessage="Thank you! Your brochure download will start shortly."
+        />
+      )}
 
-        <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
-          {/* Left Content + Button */}
-          <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
-            <h3><CoursepageHeading data={data?.heading} /></h3>
+      <div className="main_container grid lg:grid-cols-2 md:gap-1 lgLgap-0 items-center">
+        {/* Left Content + Button */}
+        <div className="py-4 backdrop-blur-sm border  rounded-l-lg border-[#e5e7eb] ">
+          <h3>
+            <CoursepageHeading data={data?.heading} />
+          </h3>
 
-
-            {/* Description */}
-            <div className="text-md md:text-lg text-gray-600 text-justify leading-relaxed mb-4">
-              {data?.description}
-            </div>
-
-            {/* Sub Heading */}
-            {data?.subHeading && (
-              <div className="text-xl md:text-22xl font-semibold text-gray-800 mb-3">
-                {data.subHeading}
-              </div>
-            )}
-
-            {/* Highlights */}
-            <ul className="space-y-3 text-gray-800 mb-6">
-              {data?.highlights?.map((point, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center text-md md:text-lg gap-3 px-3"
-                >
-                  <RiArrowRightBoxFill className="w-5 h-5 md:w-6 md:h-6 rounded-full text-[#2a619d] flex-shrink-0" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-
-            {data?.button && (
-              <PrimaryButton
-                onClick={() => handleOpenModal(formDetails)}
-                variant="filled"
-              >
-                <FiDownload className="w-5 h-5 me-1" />
-                <span>{data.button.name}</span>
-              </PrimaryButton>
-            )}
-            <div className="pl-4 font-semibold text-sm text-[#e7622c]">{data.downloadCount}</div>
+          {/* Description */}
+          <div className="text-md md:text-lg text-gray-600 text-justify leading-relaxed mb-4">
+            {data?.description}
           </div>
 
-          {/* Right Image */}
-          <div className="flex justify-center p-4 ">
-            {data?.image?.src && data.image.src !== "null" ? (
-              <Image
-                src={GetData({ url: data?.image.src })}
-                alt={data.image.alt || "Course Brochure"}
-                width={600}
-                height={400}
-                className="rounded-2xl transition-transform duration-500 bg-white/60  object-cover"
-              />
-            ) : (
-              <div className="w-full h-64 bg-white/60 rounded-2xl flex items-center justify-center">
-                <span className="text-gray-500">Brochure Image</span>
-              </div>
-            )}
+          {/* Sub Heading */}
+          {data?.subHeading && (
+            <div className="text-xl md:text-22xl font-semibold text-gray-800 mb-3">
+              {data.subHeading}
+            </div>
+          )}
+
+          {/* Highlights */}
+          <ul className="space-y-3 text-gray-800 mb-6">
+            {data?.highlights?.map((point, idx) => (
+              <li
+                key={idx}
+                className="flex items-center text-md md:text-lg gap-3 px-3"
+              >
+                <RiArrowRightBoxFill className="w-5 h-5 md:w-6 md:h-6 rounded-full text-[#2a619d] flex-shrink-0" />
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+
+          {data?.button && (
+            <PrimaryButton
+              onClick={() => handleOpenModal(formDetails)}
+              variant="filled"
+            >
+              <FiDownload className="w-5 h-5 me-1" />
+              <span>{data.button.name}</span>
+            </PrimaryButton>
+          )}
+          <div className="pl-4 font-semibold text-sm text-[#e7622c]">
+            {data.downloadCount}
           </div>
         </div>
-      </section>
-  
+
+        {/* Right Image */}
+        <div className="flex justify-center p-4 ">
+          {data?.image?.src && data.image.src !== "null" ? (
+            <Image
+              src={GetData({ url: data?.image.src })}
+              alt={data.image.alt || "Course Brochure"}
+              width={600}
+              height={400}
+              className="rounded-2xl transition-transform duration-500 bg-white/60  object-cover"
+            />
+          ) : (
+            <div className="w-full h-64 bg-white/60 rounded-2xl flex items-center justify-center">
+              <span className="text-gray-500">Brochure Image</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 };
 
 export default DownloadCourseBrochure;
-

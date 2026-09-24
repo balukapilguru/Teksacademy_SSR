@@ -21,6 +21,7 @@ async function getBranchData(branchname) {
     }
 
     const json = await res.json();
+    // console.log("Fetched branch data:", json?.data);
     return json?.data || null;
   } catch (error) {
     console.error("Branch detail fetch failed:", error);
@@ -66,5 +67,25 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { branchname } = await params;
-  return <BranchClient branchName={branchname} />;
+  const branchData = await getBranchData(branchname);
+  const schemaData = branchData?.meta?.schemaCode;
+
+  return (
+    <>
+      {schemaData && (
+        <script
+          id="course-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof schemaData === "string"
+                ? schemaData
+                : JSON.stringify(schemaData),
+          }}
+        />
+      )}
+
+      <BranchClient branchName={branchname} data={branchData} />
+    </>
+  );
 }

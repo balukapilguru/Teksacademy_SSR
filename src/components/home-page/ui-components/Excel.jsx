@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import ReusableForm from "@/components/ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { storeBranchData } from "@/lib/branchStorage";
 
 const vector =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/vector.webp";
@@ -40,7 +42,7 @@ const orangeItems = [
   {
     imgSrc: orange2,
     alt: "Approved Curriculum",
-    title: "IIT",
+    title: "TIH IIT",
     description: "Approved Curriculum",
   },
   {
@@ -157,12 +159,24 @@ function DesktopFeatureRow({ imgSrc, alt, title, description, accent }) {
 }
 
 /* ─── Main Component ──────────────────────────────────────── */
-export default function Excel({ data, courseName }) {
+export default function Excel({ data, courseName, courses = [] }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
-
+  // console.log(data, "data in excel");
   const buttonText = data?.button?.text || "Request Call Back";
   const courseDisplayName = courseName || "";
+  const branch =
+    data?.branch || data?.branchName || data?.location || data?.center || "";
+  const initialValues = {
+    ...(courseDisplayName && { course: courseDisplayName }),
+    ...(branch && { branch }),
+  };
+
+  useEffect(() => {
+    try {
+      router.prefetch("/thankyou");
+    } catch {}
+  }, [router]);
 
   const handleSubmit = async (formValues, mappedPayload) => {
     try {
@@ -184,6 +198,21 @@ export default function Excel({ data, courseName }) {
         data?.brochureUrl ||
         data?.brochure?.url ||
         "";
+
+      const branchVal = formValues?.branch || mappedPayload?.branch || mappedPayload?.course_branch || branch;
+      if (branchVal) {
+        storeBranchData(branchVal);
+      }
+
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "🎉",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
 
       if (brochureUrl) window.open(brochureUrl, "_blank");
       router.push("/thankyou");
@@ -287,7 +316,7 @@ export default function Excel({ data, courseName }) {
 
               {/* Trust badges */}
               <div className="flex items-center gap-4 mt-1">
-                {["IIT Approved", "100% Placement", "Live Classes"].map(
+                {["TIH IIT Approved", "100% Placement", "Live Classes"].map(
                   (badge) => (
                     <div key={badge} className="flex items-center gap-1">
                       <span className="text-teal-400 text-xs">✓</span>
@@ -327,9 +356,8 @@ export default function Excel({ data, courseName }) {
               <div className="px-3 pb-5">
                 <ReusableForm
                   formType="requestCallback"
-                  initialValues={
-                    courseDisplayName ? { course: courseDisplayName } : {}
-                  }
+                  initialValues={initialValues}
+                  courses={courses}
                   buttonText={buttonText}
                   onSubmit={handleSubmit}
                   className="bg-white rounded-2xl p-4"
@@ -352,21 +380,21 @@ export default function Excel({ data, courseName }) {
                 <span className="font-semibold text-[1rem] lg:text-[1.8rem] xl:text-[2rem] 2xl:text-[2rem] 3xl:text-[2.5rem] leading-[48px] tracking-[-0.014em] flex justify-center">
                   <span>Excel with&nbsp;</span>
                   <span className="relative inline-block text-[#2A619D]">
-                  Teks&nbsp;Academy
-                  <svg
-                    className="absolute left-0 -bottom-2 w-full h-[14px]"
-                    viewBox="0 0 100 12"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 10 Q50 0 98 10"
-                      stroke="orangered"
-                      strokeWidth="2"
-                      fill="transparent"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
+                    Teks&nbsp;Academy
+                    <svg
+                      className="absolute left-0 -bottom-2 w-full h-[14px]"
+                      viewBox="0 0 100 12"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M2 10 Q50 0 98 10"
+                        stroke="orangered"
+                        strokeWidth="2"
+                        fill="transparent"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </span>
                 </span>
               </div>
 
@@ -425,9 +453,8 @@ export default function Excel({ data, courseName }) {
                     <div className="bg-[#2A619D] p-1 px-6 2xl:p-10 mx-7 sm:mx-14 lg:mx-2 xl:ml-10 2xl:ml-16 3xl:ml-28 xl:mr-0 rounded-lg">
                       <ReusableForm
                         formType="requestCallback"
-                        initialValues={
-                          courseDisplayName ? { course: courseDisplayName } : {}
-                        }
+                        initialValues={initialValues}
+                        courses={courses}
                         buttonText={buttonText}
                         onSubmit={handleSubmit}
                         className="bg-white rounded-xl p-4"

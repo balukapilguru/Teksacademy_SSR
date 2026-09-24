@@ -1,5 +1,7 @@
 // app/branch/page.jsx
 
+export const dynamic = "force-dynamic";
+
 import BranchClient from "./BranchClient";
 
 export async function generateMetadata() {
