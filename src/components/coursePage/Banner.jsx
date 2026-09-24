@@ -8,6 +8,7 @@ import GetData from "@/utility/GetData";
 import Bannerheading from "@/utility/Bannerheading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import Popupform from "../clientcomponents/forms/Popupform";
+import { toast } from "react-hot-toast";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const Banner = ({
@@ -83,6 +84,18 @@ const Banner = ({
         throw new Error(responseData.message || "Submission failed");
       }
 
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("just_submitted", "true");
+      }
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "\ud83c\udf89",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       setShowModal(false);
       router.push("/thankyou");
     } catch (error) {

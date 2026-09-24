@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { FiDownload } from "react-icons/fi";
 import Image from "next/image";
 import CoursepageHeading from "../../utility/CoursepageHeading";
@@ -134,6 +135,7 @@ const DownloadCourseBrochure = ({
         alert("Brochure PDF is not available for this course right now.");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);

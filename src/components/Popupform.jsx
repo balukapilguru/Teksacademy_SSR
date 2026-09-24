@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import ReusableForm from "./ReusableForm";
+import { storeBranchData } from "@/lib/branchStorage";
 
 const normalizeCourseValue = (value) => {
   if (!value) return "";
@@ -85,18 +86,27 @@ const Popupform = ({
             sessionStorage.getItem("pendingSyllabusUrl") ||
             extraData?.syllabusUrl;
           if (pendingUrl) {
-            // Open syllabus in new tab
             window.open(pendingUrl, "_blank", "noopener,noreferrer");
             sessionStorage.removeItem("pendingSyllabusUrl");
           }
 
-          // Redirect to thank you page
-          // router.push("/thankyou");
+          const branchVal = branch || formValues?.branch || mappedValues?.branch || mappedValues?.course_branch;
+          if (branchVal) {
+            storeBranchData(branchVal);
+          }
 
-          // Close popup after redirect
-          setTimeout(() => {
-            onClose();
-          }, 100);
+          toast.success("Thank you! We'll contact you soon.", {
+            duration: 4000,
+            icon: "🎉",
+            style: {
+              background: "#dcfce7",
+              color: "#166534",
+              border: "1px solid #bbf7d0",
+            },
+          });
+
+          router.push("/thankyou");
+          return;
         }
       } catch (error) {
         console.error("Form submission error:", error);
@@ -105,7 +115,6 @@ const Popupform = ({
         setIsSubmitting(false);
       }
     }
-    // console.log("On Submit False");
   };
 
   // Listen for form submission success event from ReusableForm
@@ -115,13 +124,26 @@ const Popupform = ({
       const pendingUrl =
         sessionStorage.getItem("pendingSyllabusUrl") || extraData?.syllabusUrl;
       if (pendingUrl) {
-        // Open syllabus in new tab
         window.open(pendingUrl, "_blank", "noopener,noreferrer");
         sessionStorage.removeItem("pendingSyllabusUrl");
       }
 
+      if (branch) {
+        storeBranchData(branch);
+      }
+
       if (redirectToThankYou) {
+        toast.success("Thank you! We'll contact you soon.", {
+          duration: 4000,
+          icon: "🎉",
+          style: {
+            background: "#dcfce7",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
+          },
+        });
         router.push("/thankyou");
+        return;
       }
 
       setTimeout(() => {

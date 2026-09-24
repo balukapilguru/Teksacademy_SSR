@@ -1,13 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-hot-toast";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import {
+  RECAPTCHA_SITE_KEY,
+  validateIndianMobileNumber,
+  computeDynamicClientHash,
+  fetchOtpHandshake,
+} from "@/lib/otpSecurity";
 
 export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const prevValueRef = useRef(value);
   const onVerifiedRef = useRef(onVerified);
   const otpInputRefs = useRef([]);
+  const recaptchaRef = useRef(null);
+  const modalRecaptchaRef = useRef(null);
 
   const [showOtp, setShowOtp] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -18,8 +27,14 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [otpError, setOtpError] = useState("");
 
-  const isOtpComplete = otp.every((digit) => digit !== "");
+  // 4-Pillar Security States
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [handshakeData, setHandshakeData] = useState(null);
+  const [modalCaptchaToken, setModalCaptchaToken] = useState(null);
+  const [modalHandshakeData, setModalHandshakeData] = useState(null);
+  const [honeypotValue, setHoneypotValue] = useState("");
 
+  const isOtpComplete = otp.every((digit) => digit !== "");
   const API_URL = blogsApplyBaseUrl;
 
   // Toast options with very high z-index to appear above modal
@@ -74,6 +89,16 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
       setIsResendDisabled(true);
       setCanSendOtp(true);
       setOtpError("");
+      setCaptchaToken(null);
+      setHandshakeData(null);
+      setModalCaptchaToken(null);
+      setModalHandshakeData(null);
+      try {
+        recaptchaRef.current?.reset();
+        modalRecaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
       if (onVerifiedRef.current) onVerifiedRef.current(false);
     }
   }, [value]);
@@ -103,11 +128,81 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
       .toString()
       .padStart(2, "0")}`;
 
-  // Send OTP
+  // ==================== PILLAR 2: PRE-FLIGHT HANDSHAKE ON CAPTCHA ====================
+  const handleCaptchaSuccess = async (token) => {
+    setCaptchaToken(token);
+    if (!token) return;
+
+    try {
+      const hs = await fetchOtpHandshake(API_URL);
+      setHandshakeData(hs);
+    } catch (err) {
+      // Handshake error silently handled
+    }
+  };
+
+  const handleCaptchaExpired = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleCaptchaError = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleModalCaptchaSuccess = async (token) => {
+    setModalCaptchaToken(token);
+    if (!token) return;
+
+    try {
+      const hs = await fetchOtpHandshake(API_URL);
+      setModalHandshakeData(hs);
+    } catch (err) {
+      // Modal handshake error silently handled
+    }
+  };
+
+  const handleModalCaptchaExpired = () => {
+    setModalCaptchaToken(null);
+    setModalHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleModalCaptchaError = () => {
+    setModalCaptchaToken(null);
+    setModalHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  // ==================== SEND OTP ====================
   const handleSendOtp = useCallback(async () => {
     if (isVerified) return;
-    if (!value || !/^\d{10}$/.test(value)) {
-      toast.error("Enter a valid 10-digit mobile number", errorToastOptions);
+
+    // Pillar 4: Strict Indian mobile number format validation
+    const validation = validateIndianMobileNumber(value);
+    if (!validation.valid) {
+      toast.error(validation.message, errorToastOptions);
+      return;
+    }
+    const cleanedNumber = validation.cleaned;
+
+    // Pillar 1: Google reCAPTCHA v2 Checkbox guard
+    if (!captchaToken) {
+      toast.error(
+        "Please click 'I'm not a robot' before requesting OTP.",
+        errorToastOptions
+      );
       return;
     }
 
@@ -115,11 +210,35 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     setOtpError("");
 
     try {
+      // Pillar 2: Pre-flight handshake (use existing or fetch fresh)
+      let hs = handshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(API_URL);
+        setHandshakeData(hs);
+      }
+
+      // Compute dynamic clientHash
+      const clientHash = await computeDynamicClientHash(
+        cleanedNumber,
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      // Submit POST /lead/send-otp
       const res = await fetch(buildApiUrl(API_URL, "/lead/send-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ number: value }),
+        body: JSON.stringify({
+          number: cleanedNumber,
+          recaptchaToken: captchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash: clientHash,
+          website_verification_code: honeypotValue || "",
+        }),
       });
+
       const data = await res.json();
 
       if (data?.success) {
@@ -127,29 +246,113 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         setOtp(Array(6).fill(""));
         setIsVerified(false);
         setCanSendOtp(false);
-        setTimer(300);
+        setTimer(60);
         setIsResendDisabled(true);
         setOtpError("");
         if (onVerifiedRef.current) onVerifiedRef.current(false);
-        toast.success("OTP sent successfully!", successToastOptions);
+        toast.success("OTP sent successfully via WhatsApp!", successToastOptions);
       } else {
         toast.error(data?.message || "Failed to send OTP", errorToastOptions);
       }
     } catch (err) {
-      console.error("Send OTP error:", err);
-      toast.error("OTP send failed. Please try again.", errorToastOptions);
+      toast.error(err.message || "OTP send failed. Please try again.", errorToastOptions);
     } finally {
       setIsLoading(false);
+      // Reset reCAPTCHA after attempt so it cannot be replayed
+      try {
+        recaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+      setCaptchaToken(null);
+      setHandshakeData(null);
     }
-  }, [value, isVerified, API_URL]);
+  }, [value, isVerified, API_URL, captchaToken, handshakeData, honeypotValue]);
 
-  // Verify OTP
+  // ==================== RESEND OTP (Inside Modal) ====================
+  const handleResendOtp = useCallback(async () => {
+    if (isVerified || isResendDisabled) return;
+
+    const validation = validateIndianMobileNumber(value);
+    if (!validation.valid) {
+      toast.error(validation.message, errorToastOptions);
+      return;
+    }
+    const cleanedNumber = validation.cleaned;
+
+    if (!modalCaptchaToken) {
+      toast.error(
+        "Please click 'I'm not a robot' before resending OTP.",
+        errorToastOptions
+      );
+      return;
+    }
+
+    setIsLoading(true);
+    setOtpError("");
+
+    try {
+      let hs = modalHandshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(API_URL);
+        setModalHandshakeData(hs);
+      }
+
+      const clientHash = await computeDynamicClientHash(
+        cleanedNumber,
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      const res = await fetch(buildApiUrl(API_URL, "/lead/send-otp"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          number: cleanedNumber,
+          recaptchaToken: modalCaptchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash: clientHash,
+          website_verification_code: honeypotValue || "",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data?.success) {
+        setOtp(Array(6).fill(""));
+        setTimer(60);
+        setIsResendDisabled(true);
+        setOtpError("");
+        toast.success("OTP resent successfully via WhatsApp!", successToastOptions);
+      } else {
+        toast.error(data?.message || "Failed to resend OTP", errorToastOptions);
+      }
+    } catch (err) {
+      toast.error(err.message || "Resend failed. Please try again.", errorToastOptions);
+    } finally {
+      setIsLoading(false);
+      try {
+        modalRecaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+      setModalCaptchaToken(null);
+      setModalHandshakeData(null);
+    }
+  }, [value, isVerified, isResendDisabled, API_URL, modalCaptchaToken, modalHandshakeData, honeypotValue]);
+
+  // ==================== VERIFY OTP ====================
   const handleVerifyOtp = useCallback(async () => {
     const finalOtp = otp.join("");
     if (finalOtp.length !== 6) {
       setOtpError("Enter the complete 6-digit OTP");
       return;
     }
+
+    const validation = validateIndianMobileNumber(value);
+    const cleanedNumber = validation.valid ? validation.cleaned : value;
 
     setIsLoading(true);
     setOtpError("");
@@ -158,7 +361,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
       const res = await fetch(buildApiUrl(API_URL, "/lead/verify-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ number: value, otp: finalOtp }),
+        body: JSON.stringify({ number: cleanedNumber, otp: finalOtp }),
       });
       const data = await res.json();
 
@@ -179,7 +382,6 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         setTimeout(() => otpInputRefs.current[0]?.focus(), 100);
       }
     } catch (err) {
-      console.error("Verify OTP error:", err);
       setOtpError("Verification failed. Please try again.");
       toast.error("Verification failed. Please try again.", errorToastOptions);
     } finally {
@@ -219,11 +421,9 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     if (!pasted) return;
     setOtpError("");
     const newOtp = [...otp];
-    pasted
-      .split("")
-      .forEach((ch, i) => {
-        if (index + i < 6) newOtp[index + i] = ch;
-      });
+    pasted.split("").forEach((ch, i) => {
+      if (index + i < 6) newOtp[index + i] = ch;
+    });
     setOtp(newOtp);
     otpInputRefs.current[Math.min(index + pasted.length, 5)]?.focus();
   };
@@ -235,23 +435,71 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
     setTimer(0);
     setIsResendDisabled(true);
     setCanSendOtp(true);
+    setModalCaptchaToken(null);
+    setModalHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {
+      // ignore
+    }
     try {
       if (typeof onChange === "function") {
         onChange(value);
       }
       if (onVerifiedRef.current) onVerifiedRef.current(isVerified);
     } catch (e) {
-      console.error(e);
+      // Change callback error silently handled
     }
   };
 
   return (
     <div className="w-full">
+      {/* Pillar 3: Invisible Honeypot trap field */}
+      <div
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          opacity: 0,
+          pointerEvents: "none",
+          height: 0,
+          width: 0,
+          overflow: "hidden",
+        }}
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <label htmlFor="website_verification_code">Do not fill this</label>
+        <input
+          type="text"
+          id="website_verification_code"
+          name="website_verification_code"
+          value={honeypotValue}
+          onChange={(e) => setHoneypotValue(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <label className="block text-xs font-medium text-gray-700 mb-1">
         Mobile Number <span className="text-red-500">*</span>
       </label>
 
-      <div className="flex gap-2">
+      {/* Pillar 1: Google reCAPTCHA v2 Checkbox right above Send OTP */}
+      {!isVerified && !showOtp && (
+        <div className="mb-2 flex justify-start overflow-hidden">
+          <div className="scale-[0.85] origin-left sm:scale-95">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={handleCaptchaSuccess}
+              onExpired={handleCaptchaExpired}
+              onErrored={handleCaptchaError}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-2 items-center">
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium select-none">
             +91
@@ -279,7 +527,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
             type="button"
             onClick={handleSendOtp}
             disabled={!canSendOtp || isLoading}
-            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all whitespace-nowrap
+            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all whitespace-nowrap h-[38px]
               ${
                 (!canSendOtp || isLoading) && !showOtp
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -351,6 +599,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
         </div>
       )}
 
+      {/* OTP Verification Modal */}
       {showOtp && !isVerified && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 p-4">
           <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl">
@@ -367,7 +616,7 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
                 Verify Mobile Number
               </h3>
               <p className="mt-1 text-sm text-gray-600">
-                Enter the 6-digit OTP sent to +91 {value}
+                Enter the 6-digit OTP sent via WhatsApp to +91 {value}
               </p>
             </div>
 
@@ -406,14 +655,27 @@ export const MobileOtpField = ({ value, onChange, onVerified, error }) => {
                 ))}
               </div>
 
+              {/* Resend Captcha Checkbox if cooldown timer elapsed */}
+              {!isResendDisabled && (
+                <div className="mb-4 flex justify-center scale-[0.85] origin-center sm:scale-95">
+                  <ReCAPTCHA
+                    ref={modalRecaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    onChange={handleModalCaptchaSuccess}
+                    onExpired={handleModalCaptchaExpired}
+                    onErrored={handleModalCaptchaError}
+                  />
+                </div>
+              )}
+
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={handleSendOtp}
-                  disabled={isResendDisabled || isLoading}
+                  onClick={handleResendOtp}
+                  disabled={isResendDisabled || isLoading || !modalCaptchaToken}
                   className={`flex-1 rounded-md py-3 text-sm font-medium transition-all
                     ${
-                      isResendDisabled || isLoading
+                      isResendDisabled || isLoading || !modalCaptchaToken
                         ? "cursor-not-allowed bg-gray-100 text-gray-400"
                         : "border border-[#2a619d] bg-white text-[#2a619d] hover:bg-blue-50 active:scale-95"
                     }`}

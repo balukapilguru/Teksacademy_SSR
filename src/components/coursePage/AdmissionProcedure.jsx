@@ -7,6 +7,7 @@ import Image from "next/image";
 import GetData from "@/utility/GetData";
 import Popupform from "../clientcomponents/forms/Popupform";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const Admission = ({  data,
@@ -80,7 +81,15 @@ const Admission = ({  data,
         throw new Error(responseData.message || "Submission failed");
       }
 
-      // Close modal and redirect to thank you page
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "\ud83c\udf89",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       setShowModal(false);
       router.push("/thankyou");
       

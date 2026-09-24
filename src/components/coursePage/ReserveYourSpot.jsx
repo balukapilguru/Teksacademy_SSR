@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import GetData from "@/utility/GetData";
 import CoursepageHeading from "@/utility/CoursepageHeading";
 import ReusableForm from "@/components/ReusableForm";
@@ -55,6 +55,7 @@ const initialValues = {
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       toast.error(error.message || "Submission failed. Please try again.");

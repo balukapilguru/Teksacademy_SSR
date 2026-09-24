@@ -574,6 +574,14 @@ export const buildPayload = (formValues, formConfig) => {
     payload.course_branch = formValues.branch;
   }
 
+  if (formValues.website_verification_code !== undefined) {
+    payload.website_verification_code = formValues.website_verification_code;
+  }
+
+  if (formValues.recaptchaToken !== undefined) {
+    payload.recaptchaToken = formValues.recaptchaToken;
+  }
+
   if (formConfig?.staticPayload) {
     Object.entries(formConfig.staticPayload).forEach(([key, value]) => {
       payload[key] = typeof value === "function" ? value(formValues) : value;

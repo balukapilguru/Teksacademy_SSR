@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import Heading from "@/utility/Heading";
 import PrimaryButton from "@/utility/PrimaryButton";
 import Loader from "../Loader";
@@ -104,6 +105,7 @@ const CoursesOffered = ({ data, branchData }) => {
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);

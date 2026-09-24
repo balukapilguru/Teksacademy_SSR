@@ -333,8 +333,7 @@ function BrochureModal({ onClose }) {
     if (!values.course.trim()) nextErrors.course = "Course is required";
     if (!findCourse(values.course))
       nextErrors.course = "Please select a course from dropdown";
-    // commented for as of now
-    // if (!otpVerified) nextErrors.phone = "Please verify OTP";
+    if (!otpVerified) nextErrors.phone = "Please verify OTP";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
@@ -407,7 +406,6 @@ function BrochureModal({ onClose }) {
         </div>
 
         <div>
-          {/* commented for as of now
           <MobileOtpField
             value={values.phone}
             onChange={(event) => {
@@ -419,18 +417,6 @@ function BrochureModal({ onClose }) {
             onVerified={setOtpVerified}
             error={errors.phone}
           />
-          */}
-          <FieldLabel>Mobile Number</FieldLabel>
-          <input
-            type="tel"
-            placeholder="Enter mobile number"
-            value={values.phone || ""}
-            onChange={(e) => updateValue("phone", e.target.value.slice(0, 10))}
-            className={`w-full rounded-lg border px-4 py-3 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 ${
-              errors.phone ? "border-red-500" : "border-gray-200"
-            }`}
-          />
-          <FieldError>{errors.phone}</FieldError>
         </div>
 
         <div>
@@ -611,8 +597,7 @@ function ChatPanel({ onClose, onOpenBrochure }) {
       phone: profile.phone.trim().slice(0, 10),
     };
     const nextErrors = validateText(cleanProfile);
-    // commented for as of now
-    // if (!otpVerified) nextErrors.phone = "Please verify OTP";
+    if (!otpVerified) nextErrors.phone = "Please verify OTP";
 
     setProfileErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
@@ -835,7 +820,6 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                 <FieldError>{profileErrors.email}</FieldError>
               </div>
               <div>
-                {/* commented for as of now
                 <MobileOtpField
                   value={profile.phone}
                   onChange={(event) => {
@@ -849,18 +833,6 @@ function ChatPanel({ onClose, onOpenBrochure }) {
                   onVerified={setOtpVerified}
                   error={profileErrors.phone}
                 />
-                */}
-                <FieldLabel>Mobile Number</FieldLabel>
-                <input
-                  type="tel"
-                  placeholder="Enter mobile number"
-                  value={profile.phone || ""}
-                  onChange={(e) => updateProfile("phone", e.target.value.slice(0, 10))}
-                  className={`w-full rounded-lg border px-4 py-3 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 ${
-                    profileErrors.phone ? "border-red-500" : "border-gray-200"
-                  }`}
-                />
-                <FieldError>{profileErrors.phone}</FieldError>
               </div>
               <button
                 type="submit"

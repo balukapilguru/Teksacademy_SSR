@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CalendarDays,
   Clock,
@@ -10,11 +10,18 @@ import {
 } from "lucide-react";
 import { CgCalendarDates } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
+import ReCAPTCHA from "react-google-recaptcha";
+import {
+  RECAPTCHA_SITE_KEY,
+  validateIndianMobileNumber,
+  fetchOtpHandshake,
+  computeDynamicClientHash,
+} from "@/lib/otpSecurity";
 
 import { useParams } from "next/navigation";
 
 const rawApiUrl =
-  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||NEXT_PUBLIC_BLOGS_APPLY_API_URL || 
+  process.env.NEXT_PUBLIC_BLOGS_APPLY_API_URL ||
   "https://l5h16h96-5060.inc1.devtunnels.ms";
 const apiUrl = rawApiUrl.replace(/\/$/, "");
 
@@ -23,7 +30,7 @@ function RegistrationForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
   const [formData, setFormData] = useState(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [userDetails, setUserDetails] = useState(null);
   const [dateError, setDateError] = useState(null);
@@ -32,10 +39,24 @@ function RegistrationForm() {
   const [enteredOtp, setEnteredOtp] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]); // 6-digit OTP
   const [isResendDisabled, setIsResendDisabled] = useState(false);
-  const [resendTimer, setResendTimer] = useState(30); // 30s cooldown
+  const [resendTimer, setResendTimer] = useState(60); // 60s cooldown
   const [isVerifying, setIsVerifying] = useState(false);
   const [examDate, setEaxmDate] = useState(false);
   const [custom, setCustom] = useState([]);
+
+  // 4-Pillar Security & OTP state
+  const recaptchaRef = useRef(null);
+  const modalRecaptchaRef = useRef(null);
+  const otpInputRefs = useRef([]);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [handshakeData, setHandshakeData] = useState(null);
+  const [resendCaptchaToken, setResendCaptchaToken] = useState(null);
+  const [resendHandshakeData, setResendHandshakeData] = useState(null);
+  const [honeypotValue, setHoneypotValue] = useState("");
+  const [otpVerificationData, setOtpVerificationData] = useState({
+    token: "",
+    email: "",
+  });
 
   const { urlid } = useParams();
 
@@ -75,12 +96,7 @@ function RegistrationForm() {
 
     //   // const now = new Date().toLocaleDateString("en-US", { timeZone: "Asia/Kolkata" });
 
-    //   console.log("scbsabjcab", now);
 
-    //   const activeFrom = new Date(formData?.activeFrom);
-    //   const activeTo = new Date(formData?.activeTo);
-
-    //   console.log("xcxnmvbcmx", now , activeFrom, activeTo)
 
     //   if (now >= activeFrom && now <= activeTo) {
     //     setIsFormActive(true);
@@ -143,6 +159,62 @@ function RegistrationForm() {
 
 
 
+  const handleCaptchaSuccess = async (token) => {
+    setCaptchaToken(token);
+    if (token) {
+      try {
+        const hs = await fetchOtpHandshake(apiUrl);
+        setHandshakeData(hs);
+      } catch (err) {
+        // Handshake pre-flight error silently handled
+      }
+    }
+  };
+
+  const handleCaptchaExpired = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleCaptchaError = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleResendCaptchaSuccess = async (token) => {
+    setResendCaptchaToken(token);
+    if (token) {
+      try {
+        const hs = await fetchOtpHandshake(apiUrl);
+        setResendHandshakeData(hs);
+      } catch (err) {
+        // Resend handshake error silently handled
+      }
+    }
+  };
+
+  const handleResendCaptchaExpired = () => {
+    setResendCaptchaToken(null);
+    setResendHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleResendCaptchaError = () => {
+    setResendCaptchaToken(null);
+    setResendHandshakeData(null);
+    try {
+      modalRecaptchaRef.current?.reset();
+    } catch {}
+  };
+
   useEffect(() => {
     let timer;
     if (isResendDisabled && resendTimer > 0) {
@@ -151,46 +223,84 @@ function RegistrationForm() {
       }, 1000);
     } else if (resendTimer === 0) {
       setIsResendDisabled(false);
-      setResendTimer(30); // reset for next time
     }
 
     return () => clearTimeout(timer);
   }, [isResendDisabled, resendTimer]);
 
   const handleResendOtp = async () => {
-    setOtp(["", "", "", "", "", ""]);
-    setEnteredOtp("");
+    if (isResendDisabled || resendTimer > 0) return;
+
+    if (!resendCaptchaToken) {
+      setError("Please complete 'I am not a robot' to resend verification code.");
+      return;
+    }
+
+    setIsVerifying(true);
+    setError("");
 
     try {
-      const response = await fetch(`${apiUrl}/student/sendotp`, {
+      let hs = resendHandshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(apiUrl);
+        setResendHandshakeData(hs);
+      }
+
+      const email = otpVerificationData.email;
+      const clientHash = await computeDynamicClientHash(
+        email,
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      const response = await fetch(`${apiUrl}/otp/resend-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: userDetails?.["Email"],
+          email,
+          token: otpVerificationData.token,
+          recaptchaToken: resendCaptchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash,
+          website_verification_code: honeypotValue || "",
+          formId: urlid?.split("%")[0],
           isExam: true,
-          formId: urlid.split("%")[0],
         }),
       });
 
-      if (response.ok) {
-        console.log("OTP resent successfully");
-        setIsResendDisabled(true);
-        setResendTimer(30);
-      } else {
-        console.error("Failed to resend OTP");
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to resend OTP");
       }
+
+      setOtpVerificationData((prev) => ({
+        ...prev,
+        token: data.token,
+      }));
+
+      setOtp(["", "", "", "", "", ""]);
+      setEnteredOtp("");
+      setIsResendDisabled(true);
+      setResendTimer(60);
+      setResendCaptchaToken(null);
+      setResendHandshakeData(null);
+      try {
+        modalRecaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+      setTimeout(() => otpInputRefs.current[0]?.focus(), 100);
     } catch (err) {
-      console.error("Error resending OTP:", err);
+      setError(err.message || "Error resending OTP");
+    } finally {
+      setIsVerifying(false);
     }
   };
 
-  // const handleInputChange = (label, value) => {
-  //   console.log("hkdhakhsdjaskh", label)
-  //   setUserDetails((prev) => ({
-  //     ...prev,
-  //     [label]: value,
-  //   }));
-  // };
+
 
   const handleInputChange = (label, value) => {
     if (label === "Phone Number") {
@@ -222,7 +332,6 @@ function RegistrationForm() {
   
 
   const handleSubmit = async (e) => {
-    console.log("scjnsajcnsa");
     // e.preventDefault();
     // setIsSubmitting(true);
 
@@ -238,6 +347,8 @@ function RegistrationForm() {
       };
 
       payload.collegeName = payload.collegename;
+      payload.website_verification_code = honeypotValue || "";
+      payload.isExam = true;
 
       try {
         const response = await fetch(`${apiUrl}/registrationform/studentform`, {
@@ -250,18 +361,16 @@ function RegistrationForm() {
 
         if (response.status === 400) {
           const data = await response.json();
-          console.error("Already Registered:", data);
           setIsAlreadyRegistered(true);
+          setShowOtpVerification(false);
         } else if (!response.ok) {
           throw new Error("Failed to submit");
         } else {
           const data = await response.json();
-          console.log("Submission success:", data);
           setIsSubmitted(true);
           setShowOtpVerification(false);
         }
       } catch (error) {
-        console.error("Error submitting user details:", error);
         setError(error.message);
       } finally {
         // setIsSubmitting(false);
@@ -282,121 +391,186 @@ function RegistrationForm() {
   };
 
   const backtoRegisterForm = () => {
-    // window.location.reload();
     setIsSubmitted(false);
     setShowOtpVerification(false);
-    // setUserDetails({});
+    setError("");
+    setOtp(["", "", "", "", "", ""]);
+    setEnteredOtp("");
+    setResendCaptchaToken(null);
+    setResendHandshakeData(null);
   };
-
-
 
   const sendOtpToMail = async (e) => {
-   
-    setIsSubmitting(true);
     e.preventDefault();
-    checkExamDate();
-
-    if (userDetails) {
-      try {
-        const response = await fetch(`${apiUrl}/student/sendotp`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: userDetails?.["Email"],
-            isExam: true,
-            formId: urlid.split("%")[0],
-          }),
-        });
-
-        // You can handle the response here if needed
-        if (response.ok) {
-          console.log("OTP sent successfully");
-          setShowOtpVerification(true);
-          setIsResendDisabled(true);
-        } else {
-          setIsAlreadyRegistered(true);
-          console.error("Failed to send OTP");
-        }
-      } catch (error) {
-        console.error("Error while sending OTP:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
-  };
-
-  const handleOtpChange = (index, value) => {
-    if (value.length <= 1 && /^\d*$/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-
-      // Store joined OTP string in state
-      const currentOtp = newOtp.join("");
-      setEnteredOtp(currentOtp);
-
-      // Auto-focus next input
-      if (value && index < otp.length - 1) {
-        const nextInput = document.querySelector(
-          `input[name="otp-${index + 1}"]`
-        );
-        if (nextInput) nextInput.focus();
-      }
-    }
-  };
-
-  const handleOtpKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      const prevInput = document.querySelector(
-        `input[name="otp-${index - 1}"]`
-      );
-      if (prevInput) prevInput.focus();
-    }
-  };
-
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
-    // const enteredOtp = otp.join('');
-    setIsVerifying(true);
     setError("");
 
+    // Bot honeypot trap
+    if (honeypotValue && honeypotValue.trim().length > 0) {
+      setShowOtpVerification(true);
+      return;
+    }
+
+    const email = userDetails?.["Email"]?.trim()?.toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    const phone = userDetails?.["Phone Number"];
+    if (phone) {
+      const phoneValidation = validateIndianMobileNumber(phone);
+      if (!phoneValidation.valid) {
+        setError(phoneValidation.message);
+        return;
+      }
+    }
+
+    if (!captchaToken) {
+      setError("Please click 'I am not a robot' before submitting.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    checkExamDate();
+
     try {
-      const response = await fetch(`${apiUrl}/student/validateotp`, {
+      let hs = handshakeData;
+      if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+        hs = await fetchOtpHandshake(apiUrl);
+        setHandshakeData(hs);
+      }
+
+      const clientHash = await computeDynamicClientHash(
+        email,
+        hs.timestamp,
+        hs.handshakeId
+      );
+
+      const response = await fetch(`${apiUrl}/otp/send-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: userDetails?.["Email"],
-          emailOtp: enteredOtp,
+          email,
+          recaptchaToken: captchaToken,
+          handshakeId: hs.handshakeId,
+          timestamp: hs.timestamp,
+          signature: hs.signature,
+          clientHash,
+          website_verification_code: honeypotValue || "",
+          formId: urlid?.split("%")[0],
+          isExam: true,
         }),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          // setOtpVerified(true);
-          // setIsSubmitted(true);
-          // setShowOtpVerification(false);
-          handleSubmit(true);
-          console.log("OTP verified successfully");
-        } else {
-          setError("Enter Valid OTP");
-          console.error("Invalid OTP");
-          // Optionally show error to user
-        }
-      } else {
-        setError("Enter Valid OTP");
-        console.error("OTP verification failed");
-        setIsVerifying(false);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to send OTP");
       }
+
+      setOtpVerificationData({
+        email,
+        token: data.token,
+      });
+
+      setOtp(["", "", "", "", "", ""]);
+      setEnteredOtp("");
+      setShowOtpVerification(true);
+      setIsResendDisabled(true);
+      setResendTimer(60);
+      setResendCaptchaToken(null);
+      setResendHandshakeData(null);
+      try {
+        recaptchaRef.current?.reset();
+      } catch {
+        // ignore
+      }
+      setCaptchaToken(null);
+      setTimeout(() => otpInputRefs.current[0]?.focus(), 100);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      setIsVerifying(false);
+      setError(error.message || "Failed to send OTP. Please try again.");
     } finally {
-      // setIsVerifying(false)
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOtpChange = (index, value) => {
+    const sanitized = value.replace(/\D/g, "");
+    if (!sanitized) {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      setEnteredOtp(newOtp.join(""));
+      return;
+    }
+
+    if (sanitized.length > 1) {
+      const digits = sanitized.slice(0, 6).split("");
+      const newOtp = [...otp];
+      digits.forEach((d, i) => {
+        newOtp[i] = d;
+      });
+      setOtp(newOtp);
+      setEnteredOtp(newOtp.join(""));
+      const nextIdx = Math.min(digits.length, 5);
+      otpInputRefs.current[nextIdx]?.focus();
+      return;
+    }
+
+    const newOtp = [...otp];
+    newOtp[index] = sanitized;
+    setOtp(newOtp);
+    setEnteredOtp(newOtp.join(""));
+
+    if (index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpInputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    const fullOtp = enteredOtp || otp.join("");
+    if (fullOtp.length !== 6) {
+      setError("Please enter the complete 6-digit OTP");
+      return;
+    }
+
+    setIsVerifying(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${apiUrl}/otp/verify-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: otpVerificationData.email,
+          otp: fullOtp,
+          token: otpVerificationData.token,
+          phone: userDetails?.["Phone Number"] || "",
+          isExam: true,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Invalid verification code");
+      }
+
+      await handleSubmit(true);
+    } catch (error) {
+      setError(error.message || "Invalid OTP code");
+      setIsVerifying(false);
     }
   };
 
@@ -444,7 +618,6 @@ function RegistrationForm() {
       givenExamDate.getDate()
     );
 
-    console.log("scnsjkd", today.toDateString() == examLiveDate.toDateString());
 
     if (today.toDateString() == examLiveDate.toDateString()) {
       setEaxmDate(true);
@@ -500,28 +673,30 @@ function RegistrationForm() {
                 {otp.map((digit, index) => (
                   <input
                     key={index}
+                    ref={(el) => (otpInputRefs.current[index] = el)}
                     type="text"
+                    inputMode="numeric"
                     name={`otp-${index}`}
-                    maxLength={1}
+                    maxLength={6}
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-2xl border-2 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                    className="w-12 h-12 text-center text-2xl font-bold border-2 rounded-lg focus:border-blue-500 focus:ring-blue-500 outline-none"
                   />
                 ))}
               </div>
 
-              {/* <button
-              type="submit"
-              className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-            >
-              Verify Code
-            </button> */}
+              {error && (
+                <div className="mt-3 text-center text-xs text-red-500 font-medium">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={isVerifying}
                 className={`w-full mt-6 flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-md transition-colors
-    ${isVerifying ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"}
+    ${isVerifying ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700 cursor-pointer"}
   `}
               >
                 {isVerifying ? (
@@ -546,23 +721,36 @@ function RegistrationForm() {
                         d="M4 12a8 8 0 018-8v8H4z"
                       ></path>
                     </svg>
-                    verifying...
+                    Verifying...
                   </>
                 ) : (
                   "Verify Code"
                 )}
               </button>
-              {error && (
-                <span className="text-left text-xs text-red-500">{error}</span>
-              )}
             </form>
 
-            <div className="mt-6">
+            {/* Modal ReCAPTCHA for Resend */}
+            {!isResendDisabled && (
+              <div className="mt-4 flex justify-center">
+                <ReCAPTCHA
+                  ref={modalRecaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  onChange={handleResendCaptchaSuccess}
+                  onExpired={handleResendCaptchaExpired}
+                  onErrored={handleResendCaptchaError}
+                />
+              </div>
+            )}
+
+            <div className="mt-4">
               <button
+                type="button"
                 onClick={handleResendOtp}
-                disabled={isResendDisabled}
-                className={`text-sm text-blue-600 hover:text-blue-800 ${
-                  isResendDisabled ? "opacity-50 cursor-not-allowed" : ""
+                disabled={isResendDisabled || !resendCaptchaToken || isVerifying}
+                className={`text-sm font-medium transition-colors ${
+                  isResendDisabled || !resendCaptchaToken || isVerifying
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-blue-600 hover:text-blue-800 cursor-pointer"
                 }`}
               >
                 {isResendDisabled
@@ -573,7 +761,7 @@ function RegistrationForm() {
 
             <button
               onClick={backtoRegisterForm}
-              className="mt-4 text-sm text-gray-600 hover:text-gray-800 flex items-center justify-center"
+              className="mt-4 text-sm text-gray-600 hover:text-gray-800 flex items-center justify-center mx-auto cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to registration
@@ -854,6 +1042,36 @@ function RegistrationForm() {
 
             {/* /// add here given studentexamsQuestions based on type // */}
 
+            {/* Honeypot field for bot protection */}
+            <input
+              type="text"
+              name="website_verification_code"
+              value={honeypotValue}
+              onChange={(e) => setHoneypotValue(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              style={{ display: "none" }}
+              aria-hidden="true"
+            />
+
+            {/* Google reCAPTCHA v2 Checkbox */}
+            <div className="flex justify-center my-4">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={RECAPTCHA_SITE_KEY}
+                onChange={handleCaptchaSuccess}
+                onExpired={handleCaptchaExpired}
+                onErrored={handleCaptchaError}
+              />
+            </div>
+
+            {error && (
+              <div className="text-center text-sm text-red-500 font-medium my-2">
+                {error}
+              </div>
+            )}
+
             <div className="mt-6">
               {/* <button
                 type="submit"
@@ -863,9 +1081,9 @@ function RegistrationForm() {
               </button> */}
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !captchaToken}
                 className={`w-full flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-md transition-colors
-    ${isSubmitting ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700"}
+    ${isSubmitting || !captchaToken ? "bg-blue-400 cursor-not-allowed" : "hover:bg-blue-700 cursor-pointer"}
   `}
               >
                 {isSubmitting ? (
@@ -890,7 +1108,7 @@ function RegistrationForm() {
                         d="M4 12a8 8 0 018-8v8H4z"
                       ></path>
                     </svg>
-                    registering...
+                    Registering...
                   </>
                 ) : (
                   "Register"

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import GetData from "@/utility/GetData";
 import { PiArrowBendDoubleUpRightLight } from "react-icons/pi";
@@ -44,6 +44,7 @@ const ReserveYourSpots = ({ data, formDetails, courseName = "", branch = "Course
         throw new Error(responseData.message || "Submission failed");
       }
 
+      toast.success("Thank you! We'll contact you soon.");
       router.push("/thankyou");
     } catch (error) {
       toast.error(error.message || "Submission failed. Please try again.");

@@ -3,14 +3,22 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { MobileOtpField } from "./MobileOtpField";
+import ReCAPTCHA from "react-google-recaptcha";
+import OtpVerificationModal from "./OtpVerificationModal";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import {
+  RECAPTCHA_SITE_KEY,
+  validateIndianMobileNumber,
+  computeDynamicClientHash,
+  fetchOtpHandshake,
+} from "@/lib/otpSecurity";
 import {
   COURSE_OPTIONS,
   BRANCH_OPTIONS,
   getFormConfig,
   buildPayload,
 } from "@/config/formConfig";
+import { storeBranchData } from "@/lib/branchStorage";
 
 // Complete field configuration
 const ALL_FIELDS = {
@@ -194,6 +202,7 @@ export default function ReusableForm({
   className = "",
   disableCourseField = false,
   redirectToThankYou = true,
+  requireOtp = true,
 }) {
   const router = useRouter();
   const courseOptions = courses.map((course) => ({
@@ -219,7 +228,6 @@ export default function ReusableForm({
       Enquirynow: ["name", "email", "phone", "course", "branch"],
       RequestDemo: ["name", "email", "phone", "course", "branch"],
     };
-    // console.log(formType,formValues,formFields,"popupforom")
     return formFields[formType] || formFields.default;
   }, [formType]);
 
@@ -239,7 +247,48 @@ export default function ReusableForm({
   const dropdownRef = useRef(null);
   const prevInitialValuesRef = useRef(null);
 
+  // 4-Pillar Security & OTP Modal States
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [handshakeData, setHandshakeData] = useState(null);
+  const [honeypotValue, setHoneypotValue] = useState("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const recaptchaRef = useRef(null);
+
   const API_URL = blogsApplyBaseUrl;
+
+  useEffect(() => {
+    try {
+      router.prefetch("/thankyou");
+    } catch {}
+  }, [router]);
+
+  const handleCaptchaSuccess = async (token) => {
+    setCaptchaToken(token);
+    if (!token) return;
+    try {
+      const hs = await fetchOtpHandshake(API_URL);
+      setHandshakeData(hs);
+    } catch (err) {
+      // Handshake error silently handled
+    }
+  };
+
+  const handleCaptchaExpired = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
+
+  const handleCaptchaError = () => {
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    try {
+      recaptchaRef.current?.reset();
+    } catch {}
+  };
 
   useEffect(() => {
     const handler = (e) => {
@@ -276,6 +325,28 @@ export default function ReusableForm({
     setCourseSearchTerm(normalizeCourseInput(initial.course || ""));
     setShowCourseDropdown(false);
   }, [formType, initialValues, getFieldsForType]);
+
+  const resetForm = useCallback(() => {
+    const initial = {};
+    getFieldsForType().forEach((fieldId) => {
+      initial[fieldId] = normalizeInitialValue(fieldId, initialValues[fieldId]);
+    });
+    prevInitialValuesRef.current = initial;
+    setFormValues(initial);
+    setErrors({});
+    setIsOtpVerified(false);
+    setShowOtpModal(false);
+    setCourseSearchTerm(normalizeCourseInput(initial.course || ""));
+    setShowCourseDropdown(false);
+    setCaptchaToken(null);
+    setHandshakeData(null);
+    setHoneypotValue("");
+    try {
+      recaptchaRef.current?.reset();
+    } catch {
+      // ignore
+    }
+  }, [getFieldsForType, initialValues]);
 
   // const mapToApiPayload = (values) => {
   //   const sourceMap = {
@@ -334,8 +405,8 @@ export default function ReusableForm({
       return "Please enter a valid email address";
     }
 
-    if (fieldId === "phone" && value && !/^\d{10}$/.test(value)) {
-      return "Mobile number must be exactly 10 digits";
+    if (fieldId === "phone" && value && !/^[6-9]\d{9}$/.test(value)) {
+      return "Please enter a valid 10-digit Indian mobile number starting with 6-9";
     }
 
     if (fieldId === "name" && value && value.trim().length < 2) {
@@ -371,47 +442,25 @@ export default function ReusableForm({
 
     if (fieldId === "phone") {
       setIsOtpVerified(false);
+      setShowOtpModal(false);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const fields = getFieldsForType();
-    // commented for as of now
-    // if (fields.includes("phone") && formValues.phone && !isOtpVerified) {
-    //   setErrors((prev) => ({
-    //     ...prev,
-    //     phone: "Please verify your mobile number with OTP",
-    //   }));
-    // 
-    //   toast.error("Please verify your mobile number with OTP", {
-    //     duration: 4000,
-    //     icon: "🔒",
-    //     style: {
-    //       background: "#fee2e2",
-    //       color: "#991b1b",
-    //       border: "1px solid #fecaca",
-    //     },
-    //   });
-    //   return;
-    // }
-
-    if (!validateForm()) return;
-
+  const submitLeadData = async () => {
     setIsSubmitting(true);
     try {
       const config = getFormConfig(formType);
       const payload = buildPayload(formValues, config);
       payload.course_branch = formValues.branch;
-      // console.log("Submitting payload:", payload);
+      payload.website_verification_code = honeypotValue || "";
+      if (captchaToken) {
+        payload.recaptchaToken = captchaToken;
+      }
 
       if (onSubmit) {
-        // console.log("On Submit True Reusable true");
-
         await onSubmit(formValues, payload);
+        resetForm();
       } else {
-        // console.log("On Submit True Reusable false");
         const response = await fetch(buildApiUrl(API_URL, "/lead/create"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -424,10 +473,14 @@ export default function ReusableForm({
         }
 
         const result = await response.json();
-        console.log("Submission success:", result);
 
-        toast.success(successMessage, {
-          duration: 3000,
+        if (formValues.branch) {
+          storeBranchData(formValues.branch);
+        }
+
+        // Show success toast immediately so it appears alongside navigation
+        toast.success(successMessage || "Thank you! We'll contact you soon.", {
+          duration: 4000,
           icon: "🎉",
           style: {
             background: "#dcfce7",
@@ -436,10 +489,16 @@ export default function ReusableForm({
           },
         });
 
+        if (redirectToThankYou) {
+          router.push("/thankyou");
+          return;
+        }
+
         window.dispatchEvent(new CustomEvent("formSubmissionSuccess"));
+
+        resetForm();
       }
     } catch (error) {
-      console.error("Submission error:", error);
       toast.error(error.message || "Submission failed. Please try again.", {
         duration: 4000,
         icon: "❌",
@@ -454,6 +513,125 @@ export default function ReusableForm({
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    if (honeypotValue && honeypotValue.trim().length > 0) {
+      toast.success(successMessage);
+      if (redirectToThankYou) {
+        router.push("/thankyou");
+        return;
+      }
+      resetForm();
+      window.dispatchEvent(new CustomEvent("formSubmissionSuccess"));
+      return;
+    }
+
+    if (isOtpVerified || !requireOtp) {
+      if (!captchaToken && !isOtpVerified) {
+        toast.error("Please click 'I'm not a robot' before submitting.", {
+          duration: 4000,
+          icon: "🔒",
+          style: {
+            background: "#fee2e2",
+            color: "#991b1b",
+            border: "1px solid #fecaca",
+          },
+        });
+        return;
+      }
+      await submitLeadData();
+      return;
+    }
+
+    const fields = getFieldsForType();
+    if (fields.includes("phone")) {
+      const mobileValidation = validateIndianMobileNumber(formValues.phone);
+      if (!mobileValidation.valid) {
+        setErrors((prev) => ({ ...prev, phone: mobileValidation.message }));
+        toast.error(mobileValidation.message);
+        return;
+      }
+      const cleanedNumber = mobileValidation.cleaned;
+
+      if (!captchaToken) {
+        toast.error("Please click 'I'm not a robot' before submitting.", {
+          duration: 4000,
+          icon: "🔒",
+          style: {
+            background: "#fee2e2",
+            color: "#991b1b",
+            border: "1px solid #fecaca",
+          },
+        });
+        return;
+      }
+
+      setIsSendingOtp(true);
+      try {
+        let hs = handshakeData;
+        if (!hs?.handshakeId || !hs?.timestamp || !hs?.signature) {
+          hs = await fetchOtpHandshake(API_URL);
+          setHandshakeData(hs);
+        }
+
+        const clientHash = await computeDynamicClientHash(
+          cleanedNumber,
+          hs.timestamp,
+          hs.handshakeId
+        );
+
+        const res = await fetch(buildApiUrl(API_URL, "/lead/send-otp"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            number: cleanedNumber,
+            recaptchaToken: captchaToken,
+            handshakeId: hs.handshakeId,
+            timestamp: hs.timestamp,
+            signature: hs.signature,
+            clientHash: clientHash,
+            website_verification_code: honeypotValue || "",
+          }),
+        });
+
+        const data = await res.json();
+
+        if (data?.success) {
+          setShowOtpModal(true);
+          toast.success("OTP sent successfully via WhatsApp!", {
+            duration: 3000,
+            icon: "✅",
+          });
+        } else {
+          toast.error(data?.message || "Failed to send OTP", {
+            duration: 4000,
+            icon: "❌",
+          });
+        }
+      } catch (err) {
+        toast.error(err.message || "OTP send failed. Please try again.", {
+          duration: 4000,
+          icon: "❌",
+        });
+      } finally {
+        setIsSendingOtp(false);
+        try {
+          recaptchaRef.current?.reset();
+        } catch {
+          // ignore
+        }
+        setCaptchaToken(null);
+        setHandshakeData(null);
+      }
+      return;
+    }
+
+    await submitLeadData();
+  };
+
   const renderField = (fieldId) => {
     const field = ALL_FIELDS[fieldId];
     if (!field) return null;
@@ -464,33 +642,27 @@ export default function ReusableForm({
     if (fieldId === "phone") {
       return (
         <div key={fieldId} className="mb-4">
-          {/* commented for as of now
-          <MobileOtpField
-            value={value || ""}
-            onChange={(e) => {
-              const v =
-                typeof e === "string" ? e : e && e.target ? e.target.value : "";
-              handleChange(fieldId, v);
-            }}
-            onVerified={(verified) => {
-              setIsOtpVerified(verified);
-              if (verified && errors.phone) {
-                setErrors((prev) => ({ ...prev, phone: "" }));
-              }
-            }}
-            error={error}
-          />
-          */}
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Mobile Number <span className="text-red-500">*</span>
           </label>
-          <input
-            type="tel"
-            placeholder="Enter mobile number"
-            value={value || ""}
-            onChange={(e) => handleChange(fieldId, e.target.value)}
-            className={`w-full px-4 py-2 border rounded-md text-sm ${error ? "border-red-500" : "border-gray-300"}`}
-          />
+          <div className="relative flex items-center">
+            <span className="absolute left-3 text-gray-400 text-sm font-medium select-none pointer-events-none">
+              +91
+            </span>
+            <input
+              type="tel"
+              placeholder="Enter 10-digit mobile number"
+              value={value || ""}
+              maxLength={10}
+              onChange={(e) => {
+                const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                handleChange(fieldId, digits);
+                setIsOtpVerified(false);
+              }}
+              className={`w-full pl-12 pr-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#2a619d] transition
+                ${error ? "border-red-500 bg-red-50" : "border-gray-300 bg-white"}`}
+            />
+          </div>
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
       );
@@ -756,17 +928,80 @@ export default function ReusableForm({
   return (
     <form onSubmit={handleSubmit} className={`space-y-2 ${className}`}>
       {fields.map(renderField)}
+
+      {/* Pillar 3: Invisible Honeypot field */}
+      <div
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          opacity: 0,
+          pointerEvents: "none",
+          height: 0,
+          width: 0,
+          overflow: "hidden",
+        }}
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <label htmlFor="website_verification_code_rf">Do not fill this</label>
+        <input
+          type="text"
+          id="website_verification_code_rf"
+          name="website_verification_code"
+          value={honeypotValue}
+          onChange={(e) => setHoneypotValue(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
+      {/* Pillar 1: Google reCAPTCHA v2 Checkbox right above Submit button */}
+      {!isOtpVerified && (
+        <div className="pt-2 pb-2 flex justify-center relative z-10 w-full overflow-visible touch-manipulation">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={handleCaptchaSuccess}
+            onExpired={handleCaptchaExpired}
+            onErrored={handleCaptchaError}
+          />
+        </div>
+      )}
+
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isSendingOtp}
         className={`w-full py-2.5 px-4 rounded-md font-semibold text-white transition-all shadow-md
           ${
-            isSubmitting
+            isSubmitting || isSendingOtp
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-[#2a619d] hover:bg-[#214d7d] active:scale-[0.98]"
           }`}
       >
-        {isSubmitting ? (
+        {isSendingOtp ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg
+              className="animate-spin w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8z"
+              />
+            </svg>
+            Sending OTP...
+          </span>
+        ) : isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
             <svg
               className="animate-spin w-5 h-5"
@@ -793,6 +1028,19 @@ export default function ReusableForm({
           buttonText
         )}
       </button>
+
+      {/* OTP Verification Modal */}
+      <OtpVerificationModal
+        isOpen={showOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        phone={formValues.phone || ""}
+        onVerified={async () => {
+          setIsOtpVerified(true);
+          setShowOtpModal(false);
+          await submitLeadData();
+        }}
+        baseUrl={API_URL}
+      />
     </form>
   );
 }

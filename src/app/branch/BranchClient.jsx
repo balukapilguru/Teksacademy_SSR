@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import Image from "next/image";
 import Link from "next/link";
 import { IoStar } from "react-icons/io5";
@@ -67,40 +69,7 @@ const getBranchLabel = ({ branchName = "", branchLocation, heroData } = {}) => {
   return branchFromHero || fromLocation || "Secunderabad";
 };
 
-// ─── Submit Handler with SessionStorage (NO URL PARAMETERS) ───────────────
-const handleSubmit = async (formValues, mappedPayload) => {
-  // console.log("Mapped payload being sent:", mappedPayload);
 
-  try {
-    const response = await fetch(
-      buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      },
-    );
-
-    const responseData = await response.json();
-    // console.log("API Response:", responseData);
-
-    if (!response.ok) {
-      throw new Error(responseData.message || "Submission failed");
-    }
-
-    // Store branch data in sessionStorage before redirect
-    const branchName = formValues.branch || "Secunderabad";
-    storeBranchData(branchName);
-
-    // Redirect to thank you page WITHOUT query parameters
-    window.location.href = "/thankyou";
-  } catch (error) {
-    console.error("Submission error:", error);
-    throw error;
-  }
-};
 
 const FeaturedIn = Featuredin;
 
@@ -600,11 +569,41 @@ export default function BranchClient({
   data: initialData = null,
   branchName = "",
 }) {
+  const router = useRouter();
   const [data, setData] = useState(initialData);
   const [courses, setCourses] = useState([]);
   const [pageLoading, setPageLoading] = useState(!initialData);
   const [error, setError] = useState(null);
   const [showEnrollPopup, setShowEnrollPopup] = useState(false);
+
+  const handleSubmit = async (formValues, mappedPayload) => {
+    try {
+      const response = await fetch(
+        buildApiUrl(blogsApplyBaseUrl, "/lead/create"),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mappedPayload),
+        },
+      );
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || "Submission failed");
+      }
+
+      const branchVal = formValues.branch || "Secunderabad";
+      storeBranchData(branchVal);
+
+      toast.success("Thank you! We'll contact you soon.");
+      router.push("/thankyou");
+    } catch (error) {
+      console.error("Submission error:", error);
+      throw error;
+    }
+  };
 
   const api =
     process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||

@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import ReusableForm from "@/components/ReusableForm";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
+import { storeBranchData } from "@/lib/branchStorage";
 
 const vector =
   "https://teksacademynewwebsite.s3.ap-south-1.amazonaws.com/assets/img/vector.webp";
@@ -169,6 +171,13 @@ export default function Excel({ data, courseName, courses = [] }) {
     ...(courseDisplayName && { course: courseDisplayName }),
     ...(branch && { branch }),
   };
+
+  useEffect(() => {
+    try {
+      router.prefetch("/thankyou");
+    } catch {}
+  }, [router]);
+
   const handleSubmit = async (formValues, mappedPayload) => {
     try {
       const response = await fetch(
@@ -189,6 +198,21 @@ export default function Excel({ data, courseName, courses = [] }) {
         data?.brochureUrl ||
         data?.brochure?.url ||
         "";
+
+      const branchVal = formValues?.branch || mappedPayload?.branch || mappedPayload?.course_branch || branch;
+      if (branchVal) {
+        storeBranchData(branchVal);
+      }
+
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "🎉",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
 
       if (brochureUrl) window.open(brochureUrl, "_blank");
       router.push("/thankyou");

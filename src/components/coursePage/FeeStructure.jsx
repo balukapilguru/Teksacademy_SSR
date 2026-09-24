@@ -1,12 +1,15 @@
 "use client";
 import Heading from "@/utility/Heading";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { MdCheckCircleOutline } from "react-icons/md";
 import { X } from "lucide-react";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
 
 const FeeStructure = () => {
+  const router = useRouter();
   const [openForm, setOpenForm] = useState(false);
   const [openDiscount, setOpenDiscount] = useState(false);
 
@@ -23,7 +26,8 @@ const FeeStructure = () => {
         throw new Error(responseData.message || "Submission failed");
       }
 
-      window.location.href = "/thankyou";
+      toast.success("Thank you! We'll contact you soon.");
+      router.push("/thankyou");
     } catch (error) {
       console.error("Submission error:", error);
       throw error;

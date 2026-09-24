@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const AppLoader = dynamic(() => import("@/components/AppLoader"), {
@@ -30,6 +32,47 @@ const Toaster = dynamic(
 );
 
 export default function GlobalClientWidgets() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Immediately prefetch /thankyou so any form submission navigates with 0 latency
+    try {
+      router.prefetch("/thankyou");
+    } catch {}
+
+    const isRecaptchaNoise = (reason) => {
+      if (!reason) return false;
+      const msg = typeof reason === "string" ? reason : reason.message || reason.reason || "";
+      if (typeof msg !== "string") return false;
+      return (
+        msg.includes("reCAPTCHA") ||
+        msg.includes("Timeout (b)") ||
+        msg.includes("timeout-or-duplicate")
+      );
+    };
+
+    const handleRejection = (event) => {
+      if (isRecaptchaNoise(event.reason)) {
+        event.preventDefault();
+        event.stopImmediatePropagation?.();
+      }
+    };
+
+    const handleError = (event) => {
+      if (isRecaptchaNoise(event.error) || isRecaptchaNoise(event.message)) {
+        event.preventDefault();
+        event.stopImmediatePropagation?.();
+      }
+    };
+
+    window.addEventListener("unhandledrejection", handleRejection);
+    window.addEventListener("error", handleError);
+
+    return () => {
+      window.removeEventListener("unhandledrejection", handleRejection);
+      window.removeEventListener("error", handleError);
+    };
+  }, [router]);
   return (
     <>
       <ToastContainer autoClose={1000} />

@@ -4,6 +4,7 @@ import GetData from "@/utility/GetData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Popupform from "@/components/clientcomponents/forms/Popupform";
 import { blogsApplyBaseUrl, buildApiUrl } from "@/lib/apiBaseUrls";
@@ -30,7 +31,15 @@ export default function Nutshell({ data, courseData, courseName = "", university
         body: JSON.stringify(mappedPayload),
       });
       const responseData = await response.json();
-      if (!response.ok) throw new Error(responseData.message || "Submission failed");
+      toast.success("Thank you! We'll contact you soon.", {
+        duration: 4000,
+        icon: "🎉",
+        style: {
+          background: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        },
+      });
       setShowModal(false);
       router.push("/thankyou");
     } catch (error) {
