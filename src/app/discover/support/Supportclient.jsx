@@ -10,7 +10,9 @@ export default function SupportPage() {
   const [contactBar, setContactBar] = useState(null);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+      process.env.NEXT_TEKS_SSR_API_URL
 
     const fetchSupportContactBar = async () => {
       try {
@@ -24,32 +26,6 @@ export default function SupportPage() {
 
     fetchSupportContactBar();
   }, []);
-
-  const handleSubmit = async (formValues, mappedPayload) => {
-    // console.log("Mapped payload being sent:", mappedPayload);
-
-    try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
-
-      const responseData = await response.json();
-      // console.log("API Response:", responseData);
-
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
-
-      router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
-    }
-  };
 
   // Support categories data
   const supportCategories = [
@@ -190,7 +166,6 @@ export default function SupportPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-3">Submit Your Query</h2>
               <ReusableForm
                 formType="support"
-                onSubmit={handleSubmit}
                 buttonText="Submit Request"
                 className="w-full"
                 successMessage="Thank you! We'll contact you soon."

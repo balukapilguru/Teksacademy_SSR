@@ -1,32 +1,47 @@
 import BranchClient from "../BranchClient";
 import { notFound } from "next/navigation";
 
-const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+const baseUrl =
+  process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+  process.env.NEXT_TEKS_SSR_API_URL
+
+
+function getSlugVariants(rawName = "") {
+  try {
+    const decoded = decodeURIComponent(rawName).trim().toLowerCase();
+    const hyphenated = decoded.replace(/\s+/g, "-");
+    const variants = [hyphenated];
+    if (!hyphenated.startsWith("best-software-training-institute-")) {
+      variants.push(`best-software-training-institute-${hyphenated}`);
+    }
+    return [...new Set(variants)];
+  } catch {
+    return [rawName];
+  }
+}
 
 async function getBranchData(branchname) {
   if (!baseUrl || !branchname) return null;
 
-  try {
-    const res = await fetch(
-      `${baseUrl}/api/v1/branch/${encodeURIComponent(branchname)}`,
-      { next: { revalidate: 300 } }
-    );
+  const slugs = getSlugVariants(branchname);
 
-    if (res.status === 404) {
-      notFound();
+  for (const slug of slugs) {
+    try {
+      const res = await fetch(
+        `${baseUrl}/api/v1/branch/${encodeURIComponent(slug)}`,
+        { next: { revalidate: 300 } }
+      );
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.data) return json.data;
+      }
+    } catch (error) {
+      console.error(`Branch detail fetch failed for ${slug}:`, error);
     }
-
-    if (!res.ok) {
-      throw new Error(`Branch API error: ${res.status}`);
-    }
-
-    const json = await res.json();
-    // console.log("Fetched branch data:", json?.data);
-    return json?.data || null;
-  } catch (error) {
-    console.error("Branch detail fetch failed:", error);
-    throw error;
   }
+
+  return null;
 }
 
 export async function generateMetadata({ params }) {

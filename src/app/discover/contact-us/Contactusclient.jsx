@@ -9,7 +9,9 @@ export default function ContactUsPage() {
   const [contactBar, setContactBar] = useState(null);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+    const baseUrl =
+      process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+      process.env.NEXT_TEKS_SSR_API_URL;
 
     const fetchContactBar = async () => {
       try {
@@ -23,32 +25,6 @@ export default function ContactUsPage() {
 
     fetchContactBar();
   }, []);
-
-  const handleSubmit = async (formValues, mappedPayload) => {
-    // console.log("Mapped payload being sent:", mappedPayload);
-
-    try {
-      const response = await fetch("https://apierp.infozit.com/lead/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mappedPayload),
-      });
-
-      const responseData = await response.json();
-      // console.log("API Response:", responseData);
-
-      if (!response.ok) {
-        throw new Error(responseData.message || "Submission failed");
-      }
-
-      router.push("/thankyou");
-    } catch (error) {
-      console.error("Submission error:", error);
-      throw error;
-    }
-  };
 
   const infoItems = [
     {
@@ -148,7 +124,6 @@ export default function ContactUsPage() {
 
             <ReusableForm
               formType="contact"
-              onSubmit={handleSubmit}
               buttonText="Submit"
               className="w-full"
               successMessage="Thank you! We'll contact you soon."

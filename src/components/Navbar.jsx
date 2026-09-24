@@ -367,9 +367,8 @@ export default function Navbar() {
       {/* ============================================ */}
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${
-          scrolled ? "shadow-md" : "shadow-md"
-        }`}
+        className={`fixed top-0 left-0 w-full z-40 bg-white transition-all duration-300 ${scrolled ? "shadow-md" : "shadow-md"
+          }`}
       >
         {/* ============================================ */}
         {/* TOPBAR SECTION - Desktop Only */}
@@ -588,9 +587,8 @@ export default function Navbar() {
 
                   {item.dropdown && item.dropdown.length > 0 && (
                     <FaChevronDown
-                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${
-                        showMenu === item.name ? "rotate-180" : "rotate-0"
-                      }`}
+                      className={`transition-transform duration-150 ease-in-out text-sm mt-1 ${showMenu === item.name ? "rotate-180" : "rotate-0"
+                        }`}
                     />
                   )}
                 </div>
@@ -600,11 +598,10 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[720px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${
-                        showMenu === item.name
+                      className={`absolute left-0 top-full mt-4 w-[720px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
-                      }`}
+                        }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => {
                         setShowMenu(null);
@@ -665,11 +662,10 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-4 w-[780px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${
-                        showMenu === item.name
+                      className={`absolute left-0 top-full mt-4 w-[780px] bg-white shadow-xl rounded-lg p-3 border border-gray-100 transition-all duration-200 ${showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
-                      }`}
+                        }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
                     >
@@ -723,11 +719,10 @@ export default function Navbar() {
                   item.dropdown &&
                   item.dropdown.length > 0 && (
                     <div
-                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${
-                        showMenu === item.name
+                      className={`absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-lg min-w-[200px] p-2 z-50 border border-gray-100 transition-all duration-200 ${showMenu === item.name
                           ? "opacity-100 visible translate-y-0"
                           : "opacity-0 invisible -translate-y-1"
-                      }`}
+                        }`}
                       onMouseEnter={() => setShowMenu(item.name)}
                       onMouseLeave={() => setShowMenu(null)}
                     >
@@ -788,9 +783,8 @@ export default function Navbar() {
       {/* MOBILE MENU SIDEBAR */}
       {/* ============================================ */}
       <div
-        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex items-center justify-end p-2.5 border-b border-gray-100">
           <button onClick={toggleMobileMenu} className="p-1">

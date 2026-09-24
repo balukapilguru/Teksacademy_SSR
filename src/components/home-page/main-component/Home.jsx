@@ -15,7 +15,9 @@ import MostSearchedTerms from "@/components/coursePage/Mostsearchedterms";
 import FooterAdressbar from "@/components/FooterAdressbar";
 
 export default async function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+    process.env.NEXT_TEKS_SSR_API_URL;
   let homeData = null;
   try {
     const controller = new AbortController();
@@ -41,8 +43,8 @@ export default async function Home() {
   }
   // #fbf5f6 : pink
   // #fff : white
-//  console.log(homeData.gallery,"homegallery")
-   const schemaData = homeData?.meta?.schemaCode;
+  //  console.log(homeData.gallery,"homegallery")
+  const schemaData = homeData?.meta?.schemaCode;
 
   const sectionsConfig = [
     {
@@ -58,21 +60,21 @@ export default async function Home() {
         <Hiring hiringData={homeData?.hiringPartners} />
       ), bg: "#fff", border: "#fff"
     },
-    
+
 
     {
       component: <CertificationCourse data={homeData?.certificationCourse} />,
       bg: "#fff",
       border: "#fff",
     },
-   
+
     {
-      component: <Excel data={homeData?.excelWithTeksacademy}/>,
+      component: <Excel data={homeData?.excelWithTeksacademy} />,
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
     {
-      component: <Nutshell data={homeData?.careerServices}/>,
+      component: <Nutshell data={homeData?.careerServices} />,
       bg: "#fff",
       border: "#fff",
     },
@@ -91,13 +93,13 @@ export default async function Home() {
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
-   
+
     {
       component: <Featuredin featuredIn={homeData?.featuredIn} />,
       bg: "#fff",
       border: "#fff",
     },
-     {
+    {
       component: <MostSearchedTerms data={homeData?.mostSearchedTerms} />,
       bg: "#fff",
       border: "#fff",
@@ -107,12 +109,12 @@ export default async function Home() {
       bg: "#fbf5f6",
       border: "#fbf5f6",
     },
-       
+
   ];
-// console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
+  // console.log(homeData?.mostSearchedTerms,"homeData?.mostSearchedTerms")
   return (
     <>
-     {schemaData && (
+      {schemaData && (
         <script
           id="home-schema"
           type="application/ld+json"

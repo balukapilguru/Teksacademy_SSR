@@ -74,13 +74,15 @@ export default function Footer() {
   useEffect(() => {
     async function fetchFooterData() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL || process.env.NEXT_TEKS_SSR_API_URL;
+        const baseUrl =
+          process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+          process.env.NEXT_TEKS_SSR_API_URL;
         const res = await fetch(`${baseUrl}/api/v1/home/footer`, {
           next: { revalidate: 60 },
         });
         if (!res.ok) throw new Error('Failed to fetch footer data');
         const json = await res.json();
-        
+
         // Update LinkedIn URL in the response
         if (json.data.footer.socialMedia) {
           const linkedinIndex = json.data.footer.socialMedia.links.findIndex(
@@ -90,7 +92,7 @@ export default function Footer() {
             json.data.footer.socialMedia.links[linkedinIndex].url = 'https://www.linkedin.com/company/teks-academy';
           }
         }
-        
+
         setFooterData(json.data.footer);
       } catch (err) {
         console.error(err);
@@ -111,7 +113,7 @@ export default function Footer() {
     <footer className="relative bg-black text-white">
       <div>
         {/* Top Blue Bar – dynamic branch address/phone/email */}
-       
+
 
         {/* Main Footer Section – data from API */}
         <section className="footer-bg">

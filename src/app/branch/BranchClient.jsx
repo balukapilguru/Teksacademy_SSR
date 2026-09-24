@@ -141,6 +141,7 @@ function HeroSection({
   branchLocation,
   onEnrollClick,
   courses,
+  onSubmit,
 }) {
   // console.log("HeroSection data:", courses);
   if (!data) return null;
@@ -179,94 +180,75 @@ function HeroSection({
     ? branchData.background
     : GetData({ url: branchData.background });
 
-  //  const schemaData = data?.meta?.schemaCode;
-// console.log(schemaData,"schemadata")
   return (
     <>
-     {/* {schemaData && (
-        <script
-          id="course-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html:
-              typeof schemaData === "string"
-                ? schemaData
-                : JSON.stringify(schemaData),
-          }}
-        />
-      )} */}
-     <div
-      className="bg-cover bg-center bg-[#04264d]"
-      style={{ backgroundImage: `url("${backgroundImage}")` }}
-    >
-      <div className="main_container mx-auto flex sm:px-6 xl:px-0 3xl:py-14 2xl:py-12 xl:py-8 lg:py-6 py-4">
-        <div className="flex flex-col xl:flex-row w-full gap-2 lg:gap-4 xl:gap-8">
-          {/* Text Section - 60% */}
-          <div className="flex-[60%] 2xl:flex-[70%] text-[#f5f6f7] pb-5">
-            {(branchData.Rating || branchData.Reviews) && (
-              <div className="flex items-center space-x-1 text-[0.68rem] 2xl:text-base 3xl:text-lg">
-                {branchData.Rating && (
-                  <span className="font-medium">{branchData.Rating}</span>
-                )}
-                <span className="flex flex-row items-center">
-                  <IoStar className="text-[#FCD503]" />
-                  <IoStar className="text-[#FCD503]" />
-                  <IoStar className="text-[#FCD503]" />
-                  <IoStar className="text-[#FCD503]" />
-                  <IoStar className="text-[#FCD503]" />
-                </span>
-                {branchData.Reviews && (
-                  <span className="2xl:text-[11px] 3xl:text-[0.9rem] font-light">
-                    {branchData.Reviews}
+      <div
+        className="bg-cover bg-center bg-[#04264d]"
+        style={{ backgroundImage: `url("${backgroundImage}")` }}
+      >
+        <div className="main_container mx-auto flex sm:px-6 xl:px-0 3xl:py-14 2xl:py-12 xl:py-8 lg:py-6 py-4">
+          <div className="flex flex-col xl:flex-row w-full gap-2 lg:gap-4 xl:gap-8">
+            {/* Text Section - 60% */}
+            <div className="flex-[60%] 2xl:flex-[70%] text-[#f5f6f7] pb-5">
+              {(branchData.Rating || branchData.Reviews) && (
+                <div className="flex items-center space-x-1 text-[0.68rem] 2xl:text-base 3xl:text-lg">
+                  {branchData.Rating && (
+                    <span className="font-medium">{branchData.Rating}</span>
+                  )}
+                  <span className="flex flex-row items-center">
+                    <IoStar className="text-[#FCD503]" />
+                    <IoStar className="text-[#FCD503]" />
+                    <IoStar className="text-[#FCD503]" />
+                    <IoStar className="text-[#FCD503]" />
+                    <IoStar className="text-[#FCD503]" />
                   </span>
-                )}
-              </div>
-            )}
-            <div className="grid gap-3 lg:gap-4 2xl:gap-8">
-              {branchData.title && (
-                <h1 className="text-white text-[20px] lg:text-[32px] xl:text-[40px] 2xl:text-[48px] 3xl:text-[54px] font-Nunito,sans-serif leading-tight">
-                  {branchData.title}
-                </h1>
-              )}
-
-              {/* <div className="text-[#F24E1E] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] font-semibold xl:mt-4">
-                {branchData.subtitle} →
-              </div> */}
-
-              {branchData.about && (
-                <div className="3xl:leading-9 font-light text-justify text-[0.8rem] xl:text-lg lg:text-md lg:leading-6 2xl:text-[1.2rem] 3xl:text-[1.5rem] text-white">
-                  {branchData.about}
+                  {branchData.Reviews && (
+                    <span className="2xl:text-[11px] 3xl:text-[0.9rem] font-light">
+                      {branchData.Reviews}
+                    </span>
+                  )}
                 </div>
               )}
+              <div className="grid gap-3 lg:gap-4 2xl:gap-8">
+                {branchData.title && (
+                  <h1 className="text-white text-[20px] lg:text-[32px] xl:text-[40px] 2xl:text-[48px] 3xl:text-[54px] font-Nunito,sans-serif leading-tight">
+                    {branchData.title}
+                  </h1>
+                )}
 
-              <button
-                type="button"
-                onClick={onEnrollClick}
-                className="bg-[#FE543D] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] text-white p-2 xl:px-6 xl:py-3 rounded-md font-semibold shadow-md w-fit inline-block cursor-pointer hover:bg-[#e14b36] transition"
-              >
-                Get Directions »
-              </button>
+                {branchData.about && (
+                  <div className="3xl:leading-9 font-light text-justify text-[0.8rem] xl:text-lg lg:text-md lg:leading-6 2xl:text-[1.2rem] 3xl:text-[1.5rem] text-white">
+                    {branchData.about}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={onEnrollClick}
+                  className="bg-[#FE543D] text-[0.8rem] xl:text-lg lg:text-md 2xl:text-[1.2rem] text-white p-2 xl:px-6 xl:py-3 rounded-md font-semibold shadow-md w-fit inline-block cursor-pointer hover:bg-[#e14b36] transition"
+                >
+                  Get Directions »
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Form Section - 40% */}
-          <div className="flex-[40%] bg-white rounded-xl 2xl:flex-[25%] 3xl:mx-14 2xl:p-4 3xl:p-6 lg:p-4 mx-6 lg:mx-40 p-3 xl:mx-0">
-            <ReusableForm
-              formType="enquiry"
-              onSubmit={handleSubmit}
-              initialValues={branchLabel ? { branch: branchLabel } : {}}
-              courses={courses}
-              course_branch={branchName}
-              buttonText="Submit"
-              className="w-full"
-              successMessage="Thank you! We'll contact you soon."
-            />
+            {/* Form Section - 40% */}
+            <div className="flex-[40%] bg-white rounded-xl 2xl:flex-[25%] 3xl:mx-14 2xl:p-4 3xl:p-6 lg:p-4 mx-6 lg:mx-40 p-3 xl:mx-0">
+              <ReusableForm
+                formType="enquiry"
+                onSubmit={onSubmit}
+                initialValues={branchLabel ? { branch: branchLabel } : {}}
+                courses={courses}
+                course_branch={branchName}
+                buttonText="Submit"
+                className="w-full"
+                successMessage="Thank you! We'll contact you soon."
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
-   
   );
 }
 
@@ -495,11 +477,10 @@ function SuccessStories({ data }) {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-                tab === t.key
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition ${tab === t.key
                   ? "bg-[#003366] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+                }`}
             >
               {t.label}
             </button>
@@ -607,10 +588,18 @@ export default function BranchClient({
 
   const api =
     process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
-    process.env.NEXT_TEKS_SSR_API_URL;
-  const branchApiPath = branchName
-    ? `/api/v1/branch/${encodeURIComponent(branchName)}`
-    : "/api/v1/branch";
+    process.env.NEXT_TEKS_SSR_API_URL ||
+    "https://demo.teksacademy.com";
+
+  const getNormalizedBranchSlug = (raw = "") => {
+    const slug = (raw || "").trim().toLowerCase().replace(/\s+/g, "-");
+    if (!slug) return "best-software-training-institute-secunderabad";
+    if (slug.startsWith("best-software-training-institute-")) return slug;
+    return `best-software-training-institute-${slug}`;
+  };
+
+  const normalizedSlug = getNormalizedBranchSlug(branchName);
+  const branchApiPath = `/api/v1/branch/${encodeURIComponent(normalizedSlug)}`;
 
   useEffect(() => {
     if (initialData || !api) {
@@ -713,8 +702,9 @@ export default function BranchClient({
         branchLocation={data.branchLocation}
         courses={courses}
         onEnrollClick={() => setShowEnrollPopup(true)}
+        onSubmit={handleSubmit}
       />
-      {}
+      { }
       <Popupform
         show={showEnrollPopup}
         onClose={() => setShowEnrollPopup(false)}
@@ -730,7 +720,13 @@ export default function BranchClient({
       <CoursesOffered data={data.courseOffered || data.CoursesOffered} />
       <section className="md:py-4 xl:py-0 bg-[#fbf5f6]">
         {/* Pass branch + branch-specific courses so form dropdowns are pre-filled */}
-        <Excel data={{ ...data.Excel, branch: branchLabel }} courses={courses} />
+        <Excel
+          data={{
+            ...(data.Excel || data.excelWithTeksacademy),
+            branch: branchLabel,
+          }}
+          courses={courses}
+        />
       </section>
       {/* <section className="bg-[#eaf0f6] rounded-lg">
         <AboutTeks data={data.AboutTeks} />
@@ -751,11 +747,9 @@ export default function BranchClient({
       <FeaturedIn featuredIn={data.featuredIn || data.featuredin} />
       <ExploreBranch data={data.branchLocation} />
       <Faq data={data.faq} />
-       <div className="bg-[#0E2849]">
-       <FooterAdressbar
-       branchData={data.contactBar|| data.contactBar}
-      />
-        </div>
+      <div className="bg-[#0E2849]">
+        <FooterAdressbar branchData={data.contactBar} />
+      </div>
     </main>
   );
 }

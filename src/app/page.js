@@ -4,7 +4,9 @@ export const dynamic = "force-dynamic";
 
 
 export async function generateMetadata() {
-  const baseUrl = process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_TEKS_SSR_API_URL ||
+    process.env.NEXT_TEKS_SSR_API_URL;
 
   try {
     const controller = new AbortController();
@@ -23,14 +25,14 @@ export async function generateMetadata() {
     const meta = json?.data?.meta;
 
 
-    
+
 
     return {
       title: meta?.title || "Best Software Courses Training Institute in Hyderabad | Teks Academy",
       description:
         meta?.description ||
         "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
-     
+
     };
   } catch (error) {
     return {
