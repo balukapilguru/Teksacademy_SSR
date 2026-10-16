@@ -60,7 +60,7 @@ export async function generateMetadata() {
       },
 
       alternates: {
-        canonical: `${siteUrl}/terms-conditions`,
+        canonical: `${baseUrl}/policyagreements/terms-conditions`,
       },
 
       robots: {

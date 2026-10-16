@@ -20,6 +20,9 @@ export async function generateMetadata() {
     return {
       title: meta?.title || "Default Title",
       description: meta?.description || "Default Description",
+      alternates:{
+        canonical:`${baseUrl}/discover/media`
+      }
     };
   } catch (err) {
     return {

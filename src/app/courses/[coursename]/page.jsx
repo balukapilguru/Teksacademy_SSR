@@ -1,6 +1,8 @@
 import { getCourseData } from "@/lib/getCourseData";
 
 export async function generateMetadata({ params }) {
+      const { coursename } = await params;
+  const canonical = `https://teksacademy.com/courses/${coursename}`;
   try {
     const data = await getCourseData(params.coursename);
 
@@ -8,11 +10,13 @@ export async function generateMetadata({ params }) {
       title: data?.meta?.title || "Tekacademy Courses",
       description:
         data?.meta?.description || "Explore online courses at Tekacademy.",
-    };
+     alternates: { canonical },
+      };
   } catch {
     return {
       title: "Tekacademy Courses",
       description: "Explore online courses at Tekacademy.",
+         alternates: { canonical },
     };
   }
 }

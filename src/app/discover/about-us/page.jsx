@@ -25,6 +25,9 @@ export async function generateMetadata() {
     return {
       title: meta?.title || "Default Title",
       description: meta?.description || "Default Description",
+      alternates:{
+        canonical:`${baseUrl}/discover/about-us`
+      }
     };
   } catch (err) {
     console.error("Metadata API Error:", err);
