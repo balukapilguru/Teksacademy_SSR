@@ -20,6 +20,9 @@ export async function generateMetadata() {
     return {
       title: meta?.title || "Contact Us",
       description: meta?.description || "Get in touch with us",
+      alternates:{
+        canonical:`${baseUrl}/discover/contact-us`
+      }
     };
   } catch (err) {
     return {
