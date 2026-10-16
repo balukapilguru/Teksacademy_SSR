@@ -48,12 +48,16 @@ export async function generateMetadata({ params }) {
 
   const json = await res.json();
   const meta = json?.data?.meta;
+  
 
   if (!meta) return {};
 
   return {
     title: meta.title,
     description: meta.description,
+    alternates:{
+      canonical:`${baseUrl}/courses/${branch}/${coursename}`
+    }
   };
 }
 export default async function Page({ params }) {

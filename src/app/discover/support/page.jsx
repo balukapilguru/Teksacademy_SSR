@@ -31,6 +31,9 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Teks Academy Support - Get Assistance",
   description: "Need help? Contact the Teks Academy support team for prompt answers and assistance.",
+  alternates: {
+    canonical: "https://teksacademy.com/discover/support",
+  },
   verification: {
     google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
   },
