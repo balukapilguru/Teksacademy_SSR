@@ -42,9 +42,12 @@ export default function FooterAdressbar({ branchData }) {
                     Phone:
                   </span>
 
-                  <span className="font-semibold text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white whitespace-nowrap">
+                  <a
+                    href={`tel:${String(branchData?.phone || "").replace(/[^\d+]/g, "")}`}
+                    className="font-semibold text-[14px] lg:text-[1rem] 2xl:text-[1.2rem] text-white whitespace-nowrap hover:text-[#FE543D] transition-colors"
+                  >
                     {branchData?.phone}
-                  </span>
+                  </a>
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import PageClient from "./PageClient";
     process.env.NEXT_TEKS_SSR_API_URL;
 export const metadata = {
   alternates: {
-    canonical: `${baseUrl}/success-stories`,
+    canonical: `https://teksacademy.com/success-stories`,
   },
 };
 

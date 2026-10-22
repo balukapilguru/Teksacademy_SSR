@@ -310,6 +310,7 @@ export default function Navbar() {
       const topbar = navData.topbar || {};
       const mainbar = navData.mainbar || {};
       const elements = mainbar.elements || [];
+     
 
       const topbarItemsObj = topbar.items || {};
       const topbarItemsArray = Object.entries(topbarItemsObj).map(
@@ -387,6 +388,19 @@ export default function Navbar() {
                 )
                 .map((item, index) => {
                   if (item.type === "text") {
+                    const phoneNumber = String(item.name || "").replace(/\D/g, "");
+                    if (phoneNumber.length >= 7) {
+                      return (
+                        <a
+                          key={`top-text-${index}`}
+                          href={`tel:${phoneNumber}`}
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          <MdCall className="text-sm" />
+                          <span>{item.name}</span>
+                        </a>
+                      );
+                    }
                     return (
                       <div
                         key={`top-text-${index}`}

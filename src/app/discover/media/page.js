@@ -21,7 +21,7 @@ export async function generateMetadata() {
       title: meta?.title || "Default Title",
       description: meta?.description || "Default Description",
       alternates:{
-        canonical:`${baseUrl}/discover/media`
+        canonical:`https://teksacademy.com/discover/media`
       }
     };
   } catch (err) {

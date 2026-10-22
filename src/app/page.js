@@ -33,7 +33,7 @@ export async function generateMetadata() {
         meta?.description ||
         "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
         alternates: {
-    canonical: `${baseUrl}`,
+    canonical: `https://teksacademy.com`,
   },
     };
   } catch (error) {

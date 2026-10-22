@@ -4,7 +4,7 @@ import PageClient from "./PageClient";
     process.env.NEXT_TEKS_SSR_API_URL;
 export const metadata = {
   alternates: {
-    canonical: `${baseUrl}/resources/interview-questions`,
+    canonical: `https://teksacademy.com/resources/interview-questions`,
   },
 };
 
