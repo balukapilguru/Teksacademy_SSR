@@ -62,7 +62,7 @@ export default async function RootLayout({ children }) {
       
       <body
         className={`${poppins.variable} font-sans antialiased`}
-        // suppressHydrationWarning
+        suppressHydrationWarning
       >
           <noscript>
           <iframe
