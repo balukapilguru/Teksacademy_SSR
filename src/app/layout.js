@@ -26,8 +26,8 @@ export const metadata = {
   description:
     "Teks Academy - Best software training institute in Hyderabad offering job-oriented courses.",
   verification: {
-    google: "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ",
-  },
+    google:[ "DGdROQ13YAUnCGHr13SfPxE-_gt1TOxs0rXPNpKr_dQ","LDcn643xyRrd7VLWr6NkmDPn5LQoEWfrZh6oUzOZLbc"
+ ] },
 };
 
 async function getLetstalkAPI() {
@@ -59,10 +59,22 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
+      
       <body
         className={`${poppins.variable} font-sans antialiased`}
-        suppressHydrationWarning
+        // suppressHydrationWarning
       >
+          <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TTHG2VN8"
+            height="0"
+            width="0"
+            style={{
+              display: "none",
+              visibility: "hidden",
+            }}
+          />
+        </noscript>
         {/* Prevent Google reCAPTCHA internal timeout rejections from crashing Next.js dev overlay */}
         <script
           dangerouslySetInnerHTML={{
@@ -98,17 +110,7 @@ export default async function RootLayout({ children }) {
         />
 
         {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-TTHG2VN8"
-            height="0"
-            width="0"
-            style={{
-              display: "none",
-              visibility: "hidden",
-            }}
-          />
-        </noscript>
+      
 
         {/* Google Tag Manager */}
         <Script
