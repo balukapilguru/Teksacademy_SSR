@@ -56,7 +56,7 @@ export async function generateMetadata({ params }) {
     title: meta.title,
     description: meta.description,
     alternates:{
-      canonical:`${baseUrl}/courses/${branch}/${coursename}`
+      canonical:`https://teksacademy.com/courses/${branch}/${coursename}`
     }
   };
 }
